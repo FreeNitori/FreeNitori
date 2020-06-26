@@ -3,6 +3,6 @@
 *.test
 *.out
 /.idea/
-/nitori/utils/assets.go
+/nitori/config/assets.go
 /FreeNitori
 /nitori.conf

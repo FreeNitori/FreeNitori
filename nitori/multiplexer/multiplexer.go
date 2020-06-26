@@ -2,10 +2,11 @@ package multiplexer
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/utils"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"github.com/bwmarrin/discordgo"
 	"log"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -38,10 +39,23 @@ type Multiplexer struct {
 	Prefix  string
 }
 
+func GenerateGuildPrefix(context *Context, message *discordgo.Message) (guildID int, guildPrefix string) {
+	var gID int
+	var gPrefix string
+	if !context.IsPrivate {
+		gID, _ = strconv.Atoi(message.GuildID)
+		gPrefix = config.GetPrefix(guildID)
+	} else {
+		gID = 0
+		gPrefix = config.Prefix
+	}
+	return gID, gPrefix
+}
+
 // Returns a new message route multiplexer
 func New() *Multiplexer {
 	mux := &Multiplexer{}
-	mux.Prefix = utils.Prefix
+	mux.Prefix = config.Prefix
 	return mux
 }
 
@@ -123,9 +137,12 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	// Put the channel into context
 	if channel != nil {
 		if channel.Type == discordgo.ChannelTypeDM {
-			context.IsPrivate, context.IsTargeted = true, true
+			context.IsPrivate = true
 		}
 	}
+
+	// Get guild-specific prefix
+	_, guildPrefix := GenerateGuildPrefix(context, create.Message)
 
 	// Figure out if the Kappa got pinged
 	if !context.IsTargeted {
@@ -148,11 +165,11 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	}
 
 	// Figure out if a proper command is issued to the Kappa
-	if !context.IsTargeted && len(mux.Prefix) > 0 {
+	if !context.IsTargeted && len(guildPrefix) > 0 {
 		// TODO: Database integration
-		if strings.HasPrefix(context.Content, mux.Prefix) {
+		if strings.HasPrefix(context.Content, guildPrefix) {
 			context.IsTargeted, context.HasPrefix = true, true
-			context.Content = strings.TrimPrefix(context.Content, mux.Prefix)
+			context.Content = strings.TrimPrefix(context.Content, guildPrefix)
 		}
 	}
 
@@ -173,6 +190,8 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	if context.HasMention {
 		_, _ = session.ChannelMessageSend(channel.ID, "<a:KyoukoAngryPing:710413221927976980>")
 	} else {
-		_, _ = session.ChannelMessageSend(channel.ID, "Got your message, but this command does not exist!")
+		_, _ = session.ChannelMessageSend(channel.ID,
+			fmt.Sprintf("This command does not exist! Issue `%sman` for a list of command manuals.",
+				guildPrefix))
 	}
 }

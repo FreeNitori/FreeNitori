@@ -9,5 +9,5 @@ func init() {
 	Session.AddHandler(Router.OnMessageCreate)
 
 	// Registers the help command.
-	// Router.Route("help", "Displays the help message.", Router.Help)
+	_, _ = Router.Route("man", "An interface to the on-line reference manuals.", Router.Manuals)
 }

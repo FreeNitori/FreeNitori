@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/utils"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"github.com/bwmarrin/discordgo"
 	"log"
 	"os"
@@ -33,11 +33,18 @@ ___________                      _______  .__  __               .__
 `+"\n\n", Version)
 	flag.Parse()
 
+	// Check the database
+	_, err = config.Redis.Ping(config.RedisContext).Result()
+	if err != nil {
+		log.Printf("Unable to establish connection with database, %s", err)
+		os.Exit(1)
+	}
+
 	// Authenticate and make session
 	if Session.Token == "" {
-		configToken := utils.Config.Section("System").Key("Token").String()
+		configToken := config.Config.Section("System").Key("Token").String()
 		if configToken != "" && configToken != "INSERT_TOKEN_HERE" {
-			if utils.Debug {
+			if config.Debug {
 				log.Println("Loaded token from configuration file.")
 			}
 			Session.Token = configToken
@@ -46,7 +53,7 @@ ___________                      _______  .__  __               .__
 			os.Exit(1)
 		}
 	} else {
-		if utils.Debug {
+		if config.Debug {
 			log.Println("Loaded token from command parameter.")
 		}
 	}
@@ -62,7 +69,7 @@ ___________                      _______  .__  __               .__
 	log.Printf("User: %s | ID: %s | Prefix: %s",
 		Session.State.User.Username+"#"+Session.State.User.Discriminator,
 		Session.State.User.ID,
-		utils.Prefix)
+		config.Prefix)
 	log.Printf("FreeNitori is now running. Press Control-C to terminate.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
