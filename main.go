@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/utils"
 	"github.com/bwmarrin/discordgo"
 	"log"
 	"os"
@@ -34,9 +35,23 @@ ___________                      _______  .__  __               .__
 
 	// Authenticate and make session
 	if Session.Token == "" {
-		log.Println("Please specify a token.")
-		os.Exit(1)
+		configToken := utils.Config.Section("System").Key("Token").String()
+		if configToken != "" && configToken != "INSERT_TOKEN_HERE" {
+			if utils.Debug {
+				log.Println("Loaded token from configuration file.")
+			}
+			Session.Token = configToken
+		} else {
+			log.Println("Please specify an authorization token.")
+			os.Exit(1)
+		}
+	} else {
+		if utils.Debug {
+			log.Println("Loaded token from command parameter.")
+		}
 	}
+	Session.UserAgent = "DiscordBot (FreeNitori " + Version + ")"
+	Session.Token = "Bot " + Session.Token
 	err = Session.Open()
 	if err != nil {
 		log.Printf("An error occurred while connecting to Discord, %s \n", err)
@@ -44,12 +59,17 @@ ___________                      _______  .__  __               .__
 	}
 
 	// Regular running and signal handling
+	log.Printf("User: %s | ID: %s | Prefix: %s",
+		Session.State.User.Username+"#"+Session.State.User.Discriminator,
+		Session.State.User.ID,
+		utils.Prefix)
 	log.Printf("FreeNitori is now running. Press Control-C to terminate.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 
 	// Cleanup stuffs
+	fmt.Print("\n")
 	log.Println("Gracefully terminating...")
 	_ = Session.Close()
 }

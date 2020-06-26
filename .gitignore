@@ -2,5 +2,7 @@
 *.dylib
 *.test
 *.out
-.idea/
+/.idea/
+/nitori/utils/assets.go
 /FreeNitori
+/nitori.conf

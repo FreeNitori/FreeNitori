@@ -2,7 +2,7 @@ all: build
 
 .PHONY: assets
 assets:
-		$$GOPATH/bin/go-bindata -o src/assets.go assets/...
+		$$GOPATH/bin/go-bindata -o nitori/utils/assets.go -pkg utils assets/...
 
 .PHONY: build
 build: assets
