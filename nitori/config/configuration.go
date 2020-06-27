@@ -11,14 +11,15 @@ import (
 	"strconv"
 )
 
+// Exported variables for usage in other classes
 var Config = getConfig()
 var Prefix = Config.Section("System").Key("Prefix").String()
 var Debug = getDebug()
 var Redis = getDatabaseClient()
 var RedisContext = context.Background()
 
+// Fetch configuration file object and generate one if needed
 func getConfig() (Config *ini.File) {
-	// Parse configuration file and generate default
 	Config, err := ini.Load("/etc/nitori.conf")
 	if err != nil {
 		Config, err = ini.Load("nitori.conf")
@@ -49,6 +50,7 @@ func getConfig() (Config *ini.File) {
 	return Config
 }
 
+// Obtain a redis client using details stored in the configuration
 func getDatabaseClient() (client *redis.Client) {
 	var err error
 	db, err := strconv.Atoi(Config.Section("Redis").Key("Database").String())
@@ -65,18 +67,25 @@ func getDatabaseClient() (client *redis.Client) {
 	return redisClient
 }
 
+// Figure out if the execution mode happens to be debug
 func getDebug() (debug bool) {
-	if Config.Section("System").Key("ExecutionMode").String() == "debug" {
-		return true
-	} else if Config.Section("System").Key("ExecutionMode").String() == "production" {
-		return false
-	} else {
-		log.Printf("Unknown execution mode: %s", Config.Section("System").Key("ExecutionMode").String())
+	executionMode := Config.Section("System").Key("ExecutionMode").String()
+	var debugMode bool
+	switch {
+	case executionMode == "debug":
+		debugMode = true
+		break
+	case executionMode == "production":
+		debugMode = false
+		break
+	case true:
+		log.Printf("Unknown execution mode: %s", executionMode)
 		os.Exit(1)
 	}
-	return false
+	return debugMode
 }
 
+// Get prefix for a guild and return the default if there is none
 func GetPrefix(gid int) (prefix string) {
 	var err error
 	prefixValue, err := Redis.HGet(RedisContext, "settings."+strconv.Itoa(gid), "prefix").Result()
@@ -98,6 +107,7 @@ func GetPrefix(gid int) (prefix string) {
 	return string(prefixDecoded)
 }
 
+// Set the prefix of a guild
 func SetPrefix(gid int, prefix string) (err error) {
 	return Redis.HSet(RedisContext, "settings."+strconv.Itoa(gid), "prefix", prefix).Err()
 }
