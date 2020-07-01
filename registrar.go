@@ -8,13 +8,16 @@ import (
 var Router = multiplexer.New()
 
 func init() {
+
 	// Registers the router's handler to handle all incoming messages.
 	Session.AddHandler(Router.OnMessageCreate)
 
-	// Register commands
-	Router.Route(
-		"man",
-		"An interface to the on-line reference manuals.",
-		handlers.Handler.Manuals,
-		handlers.ManualsCategory)
+	// Register all route handlers
+	for _, handlerMeta := range handlers.AllHandlers {
+		Router.Route(
+			handlerMeta.Pattern,
+			handlerMeta.Description,
+			handlerMeta.Handler,
+			handlerMeta.Category)
+	}
 }
