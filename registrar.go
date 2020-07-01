@@ -16,6 +16,7 @@ func init() {
 	for _, handlerMeta := range handlers.AllHandlers {
 		Router.Route(
 			handlerMeta.Pattern,
+			handlerMeta.AliasPatterns,
 			handlerMeta.Description,
 			handlerMeta.Handler,
 			handlerMeta.Category)

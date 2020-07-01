@@ -85,6 +85,33 @@ func getDebug() (debug bool) {
 	return debugMode
 }
 
+// Get amount of messages totally processed
+func GetTotalMessages() (amount int) {
+	var err error
+	messageAmount, err := Redis.HGet(RedisContext, "nitori", "total_messages").Result()
+	if err != nil {
+		if err == redis.Nil {
+			return 0
+		}
+		log.Printf("Failed to obtain total amount of messages processed, %s", err)
+		return 0
+	}
+	if messageAmount == "" {
+		return 0
+	}
+	amountInteger, err := strconv.Atoi(messageAmount)
+	if err != nil {
+		log.Printf("Malformed amount of messages processed, %s", err)
+		return 0
+	}
+	return amountInteger
+}
+
+// Add one message to the counter
+func AddTotalMessages() (err error) {
+	return Redis.HSet(RedisContext, "nitori", "total_messages", strconv.Itoa(GetTotalMessages()+1)).Err()
+}
+
 // Get prefix for a guild and return the default if there is none
 func GetPrefix(gid int) (prefix string) {
 	var err error

@@ -43,11 +43,12 @@ type CommandHandler func(*Context)
 
 // Information about a handler
 type Route struct {
-	Pattern     string
-	Description string
-	Manuals     string
-	Category    CommandCategory
-	Handler     CommandHandler
+	Pattern       string
+	AliasPatterns []string
+	Description   string
+	Manuals       string
+	Category      CommandCategory
+	Handler       CommandHandler
 }
 
 // Command categories
@@ -81,12 +82,13 @@ func New() *Multiplexer {
 }
 
 // Register a route
-func (mux *Multiplexer) Route(pattern, description string, handler CommandHandler, category *CommandCategory) *Route {
+func (mux *Multiplexer) Route(pattern string, aliasPattern []string, description string, handler CommandHandler, category *CommandCategory) *Route {
 	route := Route{
-		Pattern:     pattern,
-		Description: description,
-		Handler:     handler,
-		Category:    *category,
+		Pattern:       pattern,
+		AliasPatterns: aliasPattern,
+		Description:   description,
+		Handler:       handler,
+		Category:      *category,
 	}
 	category.Routes = append(category.Routes, &route)
 	mux.Routes = append(mux.Routes, &route)
@@ -110,9 +112,16 @@ func (mux *Multiplexer) MatchRoute(message string) (*Route, []string) {
 
 	for fieldIndex, fieldIter := range fields {
 		for _, routeIter := range mux.Routes {
-			// If an exact match was found, immediately give that to the Kappa
+			// If an exact match is found, immediately give that to the kappa
 			if routeIter.Pattern == fieldIter {
 				return routeIter, fields[fieldIndex:]
+			}
+
+			// If an exact match on any alias is found, immediately give that to the kappa
+			for _, aliasPattern := range routeIter.AliasPatterns {
+				if aliasPattern == fieldIter {
+					return routeIter, fields[fieldIndex:]
+				}
 			}
 
 			// If that's not found just return some random shit
@@ -134,6 +143,12 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	// Ignore self messages
 	if create.Author.ID == session.State.User.ID {
 		return
+	}
+
+	// Add to the counter if the message is valid
+	err = config.AddTotalMessages()
+	if err != nil {
+		log.Printf("Failed to increase the message counter, %s", err)
 	}
 
 	// Figure out the message guild

@@ -59,7 +59,7 @@ func (handlers *Handlers) Manuals(context *multiplexer.Context) {
 			// Generate list of all commands in one specific category
 			embed := formatter.NewEmbed(desiredCat.Title,
 				desiredCat.Description)
-			embed.Color = 0x3492c4
+			embed.Color = KappaColor
 
 			for _, route := range desiredCat.Routes {
 
