@@ -12,6 +12,9 @@ import (
 
 // Context information passed to the handlers
 type Context struct {
+	Message           *discordgo.Message
+	Session           *discordgo.Session
+	Guild             *discordgo.Guild
 	Fields            []string
 	Content           string
 	IsPrivate         bool
@@ -21,29 +24,12 @@ type Context struct {
 	HasLeadingMention bool
 }
 
-// Function signature for functions that handle commands
-type CommandHandler func(*discordgo.Session, *discordgo.Message, *Context)
-
-// Information about a handler
-type Route struct {
-	Pattern     string
-	Description string
-	Manuals     string
-	Handler     CommandHandler
-}
-
-// Structure for all multiplexer things
-type Multiplexer struct {
-	Routes  []*Route
-	Default *Route
-	Prefix  string
-}
-
-func GenerateGuildPrefix(context *Context, message *discordgo.Message) (guildID int, guildPrefix string) {
+// Wrapper around some stuff
+func (context *Context) GenerateGuildPrefix() (guildID int, guildPrefix string) {
 	var gID int
 	var gPrefix string
 	if !context.IsPrivate {
-		gID, _ = strconv.Atoi(message.GuildID)
+		gID, _ = strconv.Atoi(context.Guild.ID)
 		gPrefix = config.GetPrefix(guildID)
 	} else {
 		gID = 0
@@ -52,21 +38,59 @@ func GenerateGuildPrefix(context *Context, message *discordgo.Message) (guildID 
 	return gID, gPrefix
 }
 
+// Function signature for functions that handle commands
+type CommandHandler func(*Context)
+
+// Information about a handler
+type Route struct {
+	Pattern     string
+	Description string
+	Manuals     string
+	Category    CommandCategory
+	Handler     CommandHandler
+}
+
+// Command categories
+type CommandCategory struct {
+	Routes      []*Route
+	Title       string
+	Description string
+}
+
+// Returns a new command category
+func NewCategory(name string, description string) *CommandCategory {
+	cat := &CommandCategory{
+		Title:       name,
+		Description: description,
+	}
+	return cat
+}
+
+// Structure for all multiplexer things
+type Multiplexer struct {
+	Routes []*Route
+	Prefix string
+}
+
 // Returns a new message route multiplexer
 func New() *Multiplexer {
-	mux := &Multiplexer{}
-	mux.Prefix = config.Prefix
+	mux := &Multiplexer{
+		Prefix: config.Prefix,
+	}
 	return mux
 }
 
 // Register a route
-func (mux *Multiplexer) Route(pattern, description string, handler CommandHandler) (*Route, error) {
-	route := Route{}
-	route.Pattern = pattern
-	route.Description = description
-	route.Handler = handler
-
-	return &route, nil
+func (mux *Multiplexer) Route(pattern, description string, handler CommandHandler, category *CommandCategory) *Route {
+	route := Route{
+		Pattern:     pattern,
+		Description: description,
+		Handler:     handler,
+		Category:    *category,
+	}
+	category.Routes = append(category.Routes, &route)
+	mux.Routes = append(mux.Routes, &route)
+	return &route
 }
 
 // This matches routes for the message
@@ -112,9 +136,22 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		return
 	}
 
-	// Make context info for route
-	context := &Context{
-		Content: strings.TrimSpace(create.Content),
+	// Figure out the message guild
+	var guild *discordgo.Guild
+	guild, err = session.State.Guild(create.GuildID)
+	if err != nil {
+		// Attempt direct API fetching
+		guild, err = session.Guild(create.GuildID)
+		if err != nil {
+			log.Printf("Failed to fetch guild from API or cache, %s", err)
+			return
+		} else {
+			// Attempt caching the channel
+			err = session.State.GuildAdd(guild)
+			if err != nil {
+				log.Printf("Failed to cache channel fetched from API, %s", err)
+			}
+		}
 	}
 
 	// Figure out the message channel
@@ -125,6 +162,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		channel, err = session.Channel(create.ChannelID)
 		if err != nil {
 			log.Printf("Failed to fetch channel from API or cache, %s", err)
+			return
 		} else {
 			// Attempt caching the channel
 			err = session.State.ChannelAdd(channel)
@@ -132,6 +170,14 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 				log.Printf("Failed to cache channel fetched from API, %s", err)
 			}
 		}
+	}
+
+	// Make context info for route
+	context := &Context{
+		Content: strings.TrimSpace(create.Content),
+		Message: create.Message,
+		Session: session,
+		Guild:   guild,
 	}
 
 	// Put the channel into context
@@ -142,7 +188,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	}
 
 	// Get guild-specific prefix
-	_, guildPrefix := GenerateGuildPrefix(context, create.Message)
+	_, guildPrefix := context.GenerateGuildPrefix()
 
 	// Figure out if the Kappa got pinged
 	if !context.IsTargeted {
@@ -182,7 +228,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	route, fields := mux.MatchRoute(context.Content)
 	if route != nil {
 		context.Fields = fields
-		route.Handler(session, create.Message, context)
+		route.Handler(context)
 		return
 	}
 
