@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 	"encoding/base64"
+	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
 	"gopkg.in/ini.v1"
 	"io/ioutil"
@@ -13,7 +14,11 @@ import (
 
 // Exported variables for usage in other classes
 var Config = getConfig()
+var SocketPath = Config.Section("System").Key("Socket").String()
 var Prefix = Config.Section("System").Key("Prefix").String()
+var Administrator = Config.Section("System").Key("Administrator").String()
+var Operator = Config.Section("System").Key("Operator").String()
+var BaseURL = Config.Section("WebServer").Key("BaseURL").String()
 var Debug = getDebug()
 var Redis = getDatabaseClient()
 var RedisContext = context.Background()
@@ -48,6 +53,11 @@ func getConfig() (Config *ini.File) {
 		}
 	}
 	return Config
+}
+
+// Fetch a user with proper caching and error handling
+func getUser() (user discordgo.User) {
+	return user
 }
 
 // Obtain a redis client using details stored in the configuration
