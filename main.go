@@ -12,6 +12,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 )
 
@@ -31,8 +32,8 @@ func main() {
 	// Some regular initialization
 	var err error
 	var SocketListener net.Listener
-	var ChatBackendProcess *os.Process
 	// var WebServerProcess os.Process
+	var ChatBackendProcess *os.Process
 	ExecPath, err := os.Executable()
 	if err != nil {
 		log.Printf("Failed to get FreeNitori's executable path, %s", err)
@@ -51,7 +52,7 @@ func main() {
 		{
 
 			// Dial the supervisor socket
-			connection, err := net.Dial("unix", config.SocketPath)
+			multiplexer.IPCConnection, err = net.Dial("unix", config.SocketPath)
 			if err != nil {
 				log.Printf("Failed to connect to the supervisor process, %s", err)
 				os.Exit(1)
@@ -81,6 +82,7 @@ func main() {
 					log.Println("Loaded token from command parameter.")
 				}
 			}
+
 			Session.UserAgent = "DiscordBot (FreeNitori " + Version + ")"
 			Session.Token = "Bot " + Session.Token
 			err = Session.Open()
@@ -88,19 +90,20 @@ func main() {
 				log.Printf("An error occurred while connecting to Discord, %s \n", err)
 				os.Exit(1)
 			}
+			if config.Shard {
+				multiplexer.MakeSessions(Session)
+			}
 
 			// Tell the supervisor we are ready to go
-			_ = multiplexer.WritePacket(connection, multiplexer.IPCPacket{
+			_ = multiplexer.WritePacket(multiplexer.IPCConnection, multiplexer.IPCPacket{
 				IssuerIdentifier:   "ChatBackendInitializer",
 				ReceiverIdentifier: "Supervisor",
 				MessageIdentifier:  "ChatBackendInitializationFinish",
-				Response:           false,
 				Body: []string{
 					Session.State.User.Username + "#" + Session.State.User.Discriminator,
 					Session.State.User.ID,
 					config.Prefix},
 			})
-			connection.Close()
 		}
 	case StartWebServer:
 		{
@@ -124,7 +127,7 @@ ___________                      _______  .__  __               .__
  |     \   |  | \/\  ___/\  ___//    |    \  ||  | (  <_> )  | \/  |
  \___  /   |__|    \___  >\___  >____|__  /__||__|  \____/|__|  |__|
      \/                \/     \/        \/    %-16s
-`+"\n\n", Version)
+`+"\n", Version)
 
 			// Check for an existing instance
 			if _, err := os.Stat(config.SocketPath); os.IsNotExist(err) {
@@ -190,23 +193,27 @@ ___________                      _______  .__  __               .__
 					os.Stderr,
 				},
 			}
-			ChatBackendProcess, err = os.StartProcess(ExecPath, []string{ExecPath, "-c"}, &processAttributes)
+
+			// Create the chat backend process
+			ChatBackendProcess, err =
+				os.StartProcess(ExecPath, []string{ExecPath, "-c", "-a", Session.Token}, &processAttributes)
 			if err != nil {
 				log.Printf("Failed to create chat backend process, %s", err)
 				os.Exit(1)
 			}
+
 		}
 	}
 
 	// Signal handling
 	signalChannel := make(chan os.Signal, 1)
-	signal.Notify(signalChannel, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGUSR1, os.Interrupt, os.Kill)
+	signal.Notify(signalChannel, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGUSR1, syscall.SIGUSR2, os.Interrupt, os.Kill)
 	go func() {
 		for {
 			currentSignal := <-signalChannel
 			switch currentSignal {
-			// Go to the supervisor to fetch new message
 			case syscall.SIGUSR1:
+				// Go to the supervisor to fetch new message
 				if StartChatBackend && !StartWebServer {
 					// TODO: do the stuff
 				}
@@ -215,16 +222,45 @@ ___________                      _______  .__  __               .__
 				if !StartChatBackend && !StartWebServer {
 					fmt.Print("\n")
 					log.Println("Gracefully terminating...")
-					_ = ChatBackendProcess.Signal(syscall.SIGINT)
+					_ = ChatBackendProcess.Signal(syscall.SIGUSR2)
 					_ = SocketListener.Close()
 					_ = syscall.Unlink(config.SocketPath)
 				} else if StartChatBackend {
+					if currentSignal != syscall.SIGUSR2 && currentSignal != os.Interrupt {
+						// Only write the packet if SIGUSR2 was not sent or the program was not interrupted
+						multiplexer.WritePacket(
+							multiplexer.IPCConnection,
+							multiplexer.IPCPacket{
+								IssuerIdentifier:   "ChatBackendInitializer",
+								ReceiverIdentifier: "Supervisor",
+								MessageIdentifier:  "KillSignal",
+								Body:               []string{currentSignal.String()},
+							})
+					}
+					for _, session := range multiplexer.DiscordSessions {
+						_ = session.Close()
+					}
 					_ = Session.Close()
+					_ = multiplexer.IPCConnection.Close()
 				}
 				multiplexer.ExitCode <- 0
 				return
 			}
 		}
 	}()
-	os.Exit(<-multiplexer.ExitCode)
+
+	// Send packet and exit if there's something on that channel
+	exitCode := <-multiplexer.ExitCode
+	if StartChatBackend && !StartWebServer && exitCode != 0 {
+		multiplexer.WritePacket(
+			multiplexer.IPCConnection,
+			multiplexer.IPCPacket{
+				IssuerIdentifier:   "ChatBackendInitializer",
+				ReceiverIdentifier: "Supervisor",
+				MessageIdentifier:  "AbnormalExit",
+				Body:               []string{strconv.Itoa(exitCode)},
+			})
+		_ = multiplexer.IPCConnection.Close()
+	}
+	os.Exit(exitCode)
 }

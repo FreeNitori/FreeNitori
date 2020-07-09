@@ -10,11 +10,14 @@ import (
 	"strings"
 )
 
+var Router = New()
+
 // Context information passed to the handlers
 type Context struct {
 	Message           *discordgo.Message
 	Session           *discordgo.Session
 	Guild             *discordgo.Guild
+	Author            *discordgo.User
 	Fields            []string
 	Content           string
 	IsPrivate         bool
@@ -192,6 +195,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		Content: strings.TrimSpace(create.Content),
 		Message: create.Message,
 		Session: session,
+		Author:  create.Author,
 		Guild:   guild,
 	}
 
@@ -238,6 +242,26 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	if !context.IsTargeted {
 		return
 	}
+
+	// Tell the supervisor to log the processed message
+	var hostName string
+	if context.IsPrivate {
+		hostName = "Private Messages"
+	} else {
+		hostName = "\"" + context.Guild.Name + "\""
+	}
+	WritePacket(IPCConnection,
+		IPCPacket{
+			IssuerIdentifier:   "ChatBackend",
+			ReceiverIdentifier: "Supervisor",
+			MessageIdentifier:  "RouteLog",
+			Body: []string{
+				context.Author.Username + "#" + context.Author.Discriminator,
+				hostName,
+				context.Message.Content,
+				strconv.Itoa(session.ShardID),
+			},
+		})
 
 	// Figure out the route of the message
 	route, fields := mux.MatchRoute(context.Content)

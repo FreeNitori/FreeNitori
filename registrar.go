@@ -1,20 +1,21 @@
 package main
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 )
 
-var Router = multiplexer.New()
-
 func init() {
 
-	// Registers the router's handler to handle all incoming messages.
-	Session.AddHandler(Router.OnMessageCreate)
+	// Add the multiplexer handler to the raw session if sharding is disabled
+	if !config.Shard {
+		Session.AddHandler(multiplexer.Router.OnMessageCreate)
+	}
 
-	// Register all route handlers
+	// Add the routes
 	for _, handlerMeta := range handlers.AllHandlers {
-		Router.Route(
+		multiplexer.Router.Route(
 			handlerMeta.Pattern,
 			handlerMeta.AliasPatterns,
 			handlerMeta.Description,

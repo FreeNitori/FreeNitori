@@ -14,9 +14,7 @@ func (handlers *Handlers) About(context *multiplexer.Context) {
 	embed.AddField("Homepage", config.BaseURL, true)
 	embed.AddField("Processed Messages", strconv.Itoa(config.GetTotalMessages()), true)
 	embed.AddField("License", "GNU General Public License v3.0", false)
-	embed.AddField("System Administrator", "Not Implemented", true)
-	embed.AddField("Operator", "Not Implemented", true)
-	embed.SetImage(context.Session.State.User.AvatarURL("256"))
+	embed.SetThumbnail(context.Session.State.User.AvatarURL("256"))
 	embed.SetFooter("A Discord utility by RandomChars", "https://static.randomchars.net/img/RandomChars.png")
 	context.SendEmbed(embed,
 		"producing system info Embed")

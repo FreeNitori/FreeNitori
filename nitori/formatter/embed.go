@@ -69,16 +69,16 @@ func (embed *Embed) SetFooter(args ...string) *Embed {
 		proxyIconURL string
 	)
 
-	switch {
-	case len(args) > 2:
+	switch argsLength := len(args); {
+	case argsLength > 2:
 		proxyIconURL = args[2]
 		fallthrough
-	case len(args) > 1:
+	case argsLength > 1:
 		iconURL = args[1]
 		fallthrough
-	case len(args) > 0:
+	case argsLength > 0:
 		text = args[0]
-	case len(args) == 0:
+	case argsLength == 0:
 		return embed
 	}
 
@@ -102,14 +102,14 @@ func (embed *Embed) SetImage(args ...string) *Embed {
 		proxyURL string
 	)
 
-	switch {
-	case len(args) > 1:
+	switch argsLength := len(args); {
+	case argsLength > 1:
 		proxyURL = args[1]
 		fallthrough
-	case len(args) > 0:
+	case argsLength > 0:
 		URL = args[0]
 		fallthrough
-	case len(args) == 0:
+	case argsLength == 0:
 		return embed
 	}
 
@@ -128,14 +128,14 @@ func (embed *Embed) SetThumbnail(args ...string) *Embed {
 		proxyURL string
 	)
 
-	switch {
-	case len(args) > 1:
+	switch argsLength := len(args); {
+	case argsLength > 1:
 		proxyURL = args[1]
 		fallthrough
-	case len(args) > 0:
+	case argsLength > 0:
 		URL = args[0]
 		fallthrough
-	case len(args) == 0:
+	case argsLength == 0:
 		return embed
 	}
 
@@ -156,17 +156,17 @@ func (embed *Embed) SetAuthor(args ...string) *Embed {
 		proxyURL string
 	)
 
-	switch {
-	case len(args) > 3:
+	switch argsLength := len(args); {
+	case argsLength > 3:
 		proxyURL = args[3]
 		fallthrough
-	case len(args) > 2:
+	case argsLength > 2:
 		URL = args[2]
 		fallthrough
-	case len(args) > 1:
+	case argsLength > 1:
 		iconURL = args[1]
 		fallthrough
-	case len(args) == 0:
+	case argsLength == 0:
 		return embed
 
 	}

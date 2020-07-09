@@ -21,7 +21,7 @@ func (handlers *Handlers) Manuals(context *multiplexer.Context) {
 
 			// The block of text with all categories
 			var catText string
-			for _, category := range multiplexer.Categories {
+			for _, category := range Categories {
 
 				// Only display categories with description set
 				if category.Description == "" {
@@ -42,7 +42,7 @@ func (handlers *Handlers) Manuals(context *multiplexer.Context) {
 
 			// Figure out if the category exist, and fallthrough if it doesn't
 			var desiredCat *multiplexer.CommandCategory
-			for _, cat := range multiplexer.Categories {
+			for _, cat := range Categories {
 				if strings.EqualFold(cat.Title, context.Fields[1]) {
 					desiredCat = cat
 					break
