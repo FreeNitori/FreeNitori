@@ -66,6 +66,14 @@ func main() {
 					multiplexer.RawSession.Token = configToken
 				} else {
 					log.Println("Please specify an authorization token.")
+					multiplexer.WritePacket(
+						multiplexer.IPCConnection,
+						multiplexer.IPCPacket{
+							IssuerIdentifier:   "ChatBackendInitializer",
+							ReceiverIdentifier: "Supervisor",
+							MessageIdentifier:  "AbnormalExit",
+							Body:               []string{strconv.Itoa(1)},
+						})
 					os.Exit(1)
 				}
 			} else {
