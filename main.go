@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"github.com/bwmarrin/discordgo"
 	"io"
 	"log"
 	"net"
@@ -18,12 +17,11 @@ import (
 
 const Version = "v0.0.1-rewrite"
 
-var Session, _ = discordgo.New()
 var StartChatBackend bool
 var StartWebServer bool
 
 func init() {
-	flag.StringVar(&Session.Token, "a", "", "Discord Authorization Token")
+	flag.StringVar(&multiplexer.RawSession.Token, "a", "", "Discord Authorization Token")
 	flag.BoolVar(&StartChatBackend, "c", false, "Start the chat backend directly")
 	flag.BoolVar(&StartWebServer, "w", false, "Start the web server directly")
 }
@@ -32,13 +30,6 @@ func main() {
 	// Some regular initialization
 	var err error
 	var SocketListener net.Listener
-	// var WebServerProcess os.Process
-	var ChatBackendProcess *os.Process
-	ExecPath, err := os.Executable()
-	if err != nil {
-		log.Printf("Failed to get FreeNitori's executable path, %s", err)
-		os.Exit(1)
-	}
 	flag.Parse()
 	switch {
 	case StartChatBackend && StartWebServer:
@@ -66,13 +57,13 @@ func main() {
 			}
 
 			// Authenticate and make session
-			if Session.Token == "" {
+			if multiplexer.RawSession.Token == "" {
 				configToken := config.Config.Section("System").Key("Token").String()
 				if configToken != "" && configToken != "INSERT_TOKEN_HERE" {
 					if config.Debug {
 						log.Println("Loaded token from configuration file.")
 					}
-					Session.Token = configToken
+					multiplexer.RawSession.Token = configToken
 				} else {
 					log.Println("Please specify an authorization token.")
 					os.Exit(1)
@@ -83,15 +74,17 @@ func main() {
 				}
 			}
 
-			Session.UserAgent = "DiscordBot (FreeNitori " + Version + ")"
-			Session.Token = "Bot " + Session.Token
-			err = Session.Open()
+			multiplexer.RawSession.UserAgent = "DiscordBot (FreeNitori " + Version + ")"
+			multiplexer.RawSession.Token = "Bot " + multiplexer.RawSession.Token
+			err = multiplexer.RawSession.Open()
 			if err != nil {
 				log.Printf("An error occurred while connecting to Discord, %s \n", err)
 				os.Exit(1)
 			}
+			_, _ = multiplexer.RawSession.UserUpdateStatus("dnd")
+			_ = multiplexer.RawSession.UpdateStatus(0, config.Presence)
 			if config.Shard {
-				multiplexer.MakeSessions(Session)
+				multiplexer.MakeSessions()
 			}
 
 			// Tell the supervisor we are ready to go
@@ -100,8 +93,8 @@ func main() {
 				ReceiverIdentifier: "Supervisor",
 				MessageIdentifier:  "ChatBackendInitializationFinish",
 				Body: []string{
-					Session.State.User.Username + "#" + Session.State.User.Discriminator,
-					Session.State.User.ID,
+					multiplexer.RawSession.State.User.Username + "#" + multiplexer.RawSession.State.User.Discriminator,
+					multiplexer.RawSession.State.User.ID,
 					config.Prefix},
 			})
 		}
@@ -160,7 +153,7 @@ ___________                      _______  .__  __               .__
 						return
 					}
 					go func(connection net.Conn) {
-						defer connection.Close()
+						// defer connection.Close()
 						jsonEncoder := json.NewEncoder(connection)
 						jsonDecoder := json.NewDecoder(connection)
 						for {
@@ -183,20 +176,9 @@ ___________                      _______  .__  __               .__
 				}
 			}()
 
-			// Create processes
-			processAttributes := os.ProcAttr{
-				Dir: ".",
-				Env: os.Environ(),
-				Files: []*os.File{
-					os.Stdin,
-					os.Stdout,
-					os.Stderr,
-				},
-			}
-
 			// Create the chat backend process
-			ChatBackendProcess, err =
-				os.StartProcess(ExecPath, []string{ExecPath, "-c", "-a", Session.Token}, &processAttributes)
+			multiplexer.ChatBackendProcess, err =
+				os.StartProcess(multiplexer.ExecPath, []string{multiplexer.ExecPath, "-c", "-a", multiplexer.RawSession.Token}, &multiplexer.ProcessAttributes)
 			if err != nil {
 				log.Printf("Failed to create chat backend process, %s", err)
 				os.Exit(1)
@@ -222,7 +204,7 @@ ___________                      _______  .__  __               .__
 				if !StartChatBackend && !StartWebServer {
 					fmt.Print("\n")
 					log.Println("Gracefully terminating...")
-					_ = ChatBackendProcess.Signal(syscall.SIGUSR2)
+					_ = multiplexer.ChatBackendProcess.Signal(syscall.SIGUSR2)
 					_ = SocketListener.Close()
 					_ = syscall.Unlink(config.SocketPath)
 				} else if StartChatBackend {
@@ -240,8 +222,7 @@ ___________                      _______  .__  __               .__
 					for _, session := range multiplexer.DiscordSessions {
 						_ = session.Close()
 					}
-					_ = Session.Close()
-					_ = multiplexer.IPCConnection.Close()
+					_ = multiplexer.RawSession.Close()
 				}
 				multiplexer.ExitCode <- 0
 				return
@@ -260,7 +241,6 @@ ___________                      _______  .__  __               .__
 				MessageIdentifier:  "AbnormalExit",
 				Body:               []string{strconv.Itoa(exitCode)},
 			})
-		_ = multiplexer.IPCConnection.Close()
 	}
 	os.Exit(exitCode)
 }

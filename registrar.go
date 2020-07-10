@@ -10,7 +10,7 @@ func init() {
 
 	// Add the multiplexer handler to the raw session if sharding is disabled
 	if !config.Shard {
-		Session.AddHandler(multiplexer.Router.OnMessageCreate)
+		multiplexer.RawSession.AddHandler(multiplexer.Router.OnMessageCreate)
 	}
 
 	// Add the routes

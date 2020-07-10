@@ -14,14 +14,35 @@ import (
 var ExitCode = make(chan int)
 var Initialized bool
 var IPCConnection net.Conn
-var RawSession *discordgo.Session
+var RawSession, _ = discordgo.New()
 var DiscordSessions []*discordgo.Session
+var ExecPath string
+var err error
+var WebServerProcess os.Process
+var ChatBackendProcess *os.Process
+var ProcessAttributes = os.ProcAttr{
+	Dir: ".",
+	Env: os.Environ(),
+	Files: []*os.File{
+		os.Stdin,
+		os.Stdout,
+		os.Stderr,
+	},
+}
 
 type IPCPacket struct {
 	IssuerIdentifier   string   `json:"issuer_identifier"`
 	ReceiverIdentifier string   `json:"receiver_identifier"`
 	MessageIdentifier  string   `json:"message_identifier"`
 	Body               []string `json:"body"`
+}
+
+func init() {
+	ExecPath, err = os.Executable()
+	if err != nil {
+		log.Printf("Failed to get FreeNitori's executable path, %s", err)
+		os.Exit(1)
+	}
 }
 
 func WritePacket(connection net.Conn, outgoingPacket IPCPacket) (incomingPacket IPCPacket) {
@@ -91,6 +112,24 @@ func (incomingPacket IPCPacket) SupervisorPacketHandler() (outgoingPacket IPCPac
 				} else {
 					log.Printf("%s@%s > %s", incomingPacket.Body[0], incomingPacket.Body[1], incomingPacket.Body[2])
 				}
+			case "Reboot":
+				// Recreate the chat backend process
+				go func() {
+					_, _ = ChatBackendProcess.Wait()
+					ChatBackendProcess, err =
+						os.StartProcess(ExecPath, []string{ExecPath, "-c", "-a", RawSession.Token}, &ProcessAttributes)
+					if err != nil {
+						log.Printf("Failed to recreate chat backend process, %s", err)
+						ExitCode <- 0
+					} else {
+						log.Println("Chat backend has been restarted.")
+					}
+				}()
+			case "FullShutdown":
+				// Kill the web server and go down
+				// TODO: kill web server
+				log.Println("Graceful shutdown initiated by chat backend.")
+				ExitCode <- 0
 			default:
 				return IPCPacket{
 					IssuerIdentifier:   "Supervisor",
@@ -124,9 +163,8 @@ func (incomingPacket IPCPacket) SupervisorPacketHandler() (outgoingPacket IPCPac
 	}
 }
 
-func MakeSessions(rawSession *discordgo.Session) {
+func MakeSessions() {
 	var err error
-	RawSession = rawSession
 
 	// Will do something about this later
 	if config.ShardCount < 1 {

@@ -33,8 +33,14 @@ var AllHandlers = []HandlerMetadata{
 		"Show some information about the kappa.",
 		SystemCategory,
 		Handler.About},
+	{"reboot",
+		[]string{"restart", "halt", "shutdown"},
+		"Reboot the chat backend.",
+		SystemCategory,
+		Handler.Reboot},
 }
 
 // Static messages
 var InvalidArgument = "Invalid argument."
+var AdminOnly = "This command is only available to system administrators!"
 var KappaColor = 0x3492c4

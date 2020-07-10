@@ -19,3 +19,38 @@ func (handlers *Handlers) About(context *multiplexer.Context) {
 	context.SendEmbed(embed,
 		"producing system info Embed")
 }
+
+func (handlers *Handlers) Reboot(context *multiplexer.Context) {
+	if context.Author.ID != config.Administrator {
+		context.SendMessage(AdminOnly, "generating permission denied message")
+		return
+	}
+	switch context.Fields[0] {
+	case "reboot", "restart":
+		context.SendMessage("Rebooting chat backend.", "generating chat backend reboot message")
+		multiplexer.WritePacket(
+			multiplexer.IPCConnection,
+			multiplexer.IPCPacket{
+				IssuerIdentifier:   "ChatBackend",
+				ReceiverIdentifier: "Supervisor",
+				MessageIdentifier:  "Reboot",
+				Body:               []string{"User requested."},
+			})
+		multiplexer.ExitCode <- 0
+		return
+	case "halt", "shutdown":
+		context.SendMessage("Performing complete shutdown.", "generating system shutdown message")
+		if context.Fields[0] == "shutdown" {
+			multiplexer.WritePacket(
+				multiplexer.IPCConnection,
+				multiplexer.IPCPacket{
+					IssuerIdentifier:   "ChatBackend",
+					ReceiverIdentifier: "Supervisor",
+					MessageIdentifier:  "FullShutdown",
+					Body:               []string{"User requested."},
+				})
+			multiplexer.ExitCode <- 0
+			return
+		}
+	}
+}
