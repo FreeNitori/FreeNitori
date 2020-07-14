@@ -79,7 +79,6 @@ func (embed *Embed) SetFooter(args ...string) *Embed {
 	case argsLength > 0:
 		text = args[0]
 	case argsLength == 0:
-		return embed
 	}
 
 	if len(text) > EmbedLimitFooter {
@@ -110,7 +109,6 @@ func (embed *Embed) SetImage(args ...string) *Embed {
 		URL = args[0]
 		fallthrough
 	case argsLength == 0:
-		return embed
 	}
 
 	embed.Image = &discordgo.MessageEmbedImage{
@@ -136,14 +134,12 @@ func (embed *Embed) SetThumbnail(args ...string) *Embed {
 		URL = args[0]
 		fallthrough
 	case argsLength == 0:
-		return embed
 	}
 
 	embed.Thumbnail = &discordgo.MessageEmbedThumbnail{
 		URL:      URL,
 		ProxyURL: proxyURL,
 	}
-
 	return embed
 }
 
@@ -167,8 +163,6 @@ func (embed *Embed) SetAuthor(args ...string) *Embed {
 		iconURL = args[1]
 		fallthrough
 	case argsLength == 0:
-		return embed
-
 	}
 
 	embed.Author = &discordgo.MessageEmbedAuthor{
