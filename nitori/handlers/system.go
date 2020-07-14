@@ -28,27 +28,13 @@ func (handlers *Handlers) Reboot(context *multiplexer.Context) {
 	switch context.Fields[0] {
 	case "reboot", "restart":
 		context.SendMessage("Rebooting chat backend.", "generating chat backend reboot message")
-		multiplexer.WritePacket(
-			multiplexer.IPCConnection,
-			multiplexer.IPCPacket{
-				IssuerIdentifier:   "ChatBackend",
-				ReceiverIdentifier: "Supervisor",
-				MessageIdentifier:  "Reboot",
-				Body:               []string{"User requested."},
-			})
+		_ = multiplexer.IPCConnection.Call("IPC.Restart", []string{"ChatBackend"}, nil)
 		multiplexer.ExitCode <- 0
 		return
 	case "halt", "shutdown":
 		context.SendMessage("Performing complete shutdown.", "generating system shutdown message")
 		if context.Fields[0] == "shutdown" {
-			multiplexer.WritePacket(
-				multiplexer.IPCConnection,
-				multiplexer.IPCPacket{
-					IssuerIdentifier:   "ChatBackend",
-					ReceiverIdentifier: "Supervisor",
-					MessageIdentifier:  "FullShutdown",
-					Body:               []string{"User requested."},
-				})
+			_ = multiplexer.IPCConnection.Call("IPC.Shutdown", []string{"ChatBackend"}, nil)
 			multiplexer.ExitCode <- 0
 			return
 		}

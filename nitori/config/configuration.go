@@ -21,6 +21,8 @@ var Presence = Config.Section("System").Key("Presence").String()
 var Administrator = Config.Section("System").Key("Administrator").String()
 var Operator = Config.Section("System").Key("Operator").String()
 var BaseURL = Config.Section("WebServer").Key("BaseURL").String()
+var Host = Config.Section("WebServer").Key("Host").String()
+var Port = Config.Section("WebServer").Key("Port").String()
 var Debug = getDebug()
 var Redis = getDatabaseClient()
 var RedisContext = context.Background()
@@ -32,7 +34,7 @@ func getConfig() (Config *ini.File) {
 		Config, err = ini.Load("nitori.conf")
 		if err != nil {
 			log.Printf("Error loading configuration file, %s", err)
-			defaultConfigFile, err := Asset("assets/nitori.conf")
+			defaultConfigFile, err := Asset("nitori.conf")
 			if err != nil {
 				log.Printf("Failed to extract the default configuration file, %s", err)
 				os.Exit(1)

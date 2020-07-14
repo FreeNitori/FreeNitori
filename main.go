@@ -1,14 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"io"
-	"log"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/web"
 	"net"
+	"net/http"
+	"net/rpc"
 	"os"
 	"os/signal"
 	"strconv"
@@ -29,7 +29,9 @@ func init() {
 func main() {
 	// Some regular initialization
 	var err error
+	var readyChannel = make(chan bool, 1)
 	var SocketListener net.Listener
+	var IPCFunctions = new(multiplexer.IPC)
 	flag.Parse()
 	switch {
 	case StartChatBackend && StartWebServer:
@@ -43,16 +45,16 @@ func main() {
 		{
 
 			// Dial the supervisor socket
-			multiplexer.IPCConnection, err = net.Dial("unix", config.SocketPath)
+			multiplexer.IPCConnection, err = rpc.DialHTTP("unix", config.SocketPath)
 			if err != nil {
-				log.Printf("Failed to connect to the supervisor process, %s", err)
+				multiplexer.Logger.Error(fmt.Sprintf("Failed to connect to the supervisor process, %s", err))
 				os.Exit(1)
 			}
 
 			// Check the database
 			_, err = config.Redis.Ping(config.RedisContext).Result()
 			if err != nil {
-				log.Printf("Unable to establish connection with database, %s", err)
+				multiplexer.Logger.Error(fmt.Sprintf("Failed to connect to the database, %s", err))
 				os.Exit(1)
 			}
 
@@ -61,32 +63,32 @@ func main() {
 				configToken := config.Config.Section("System").Key("Token").String()
 				if configToken != "" && configToken != "INSERT_TOKEN_HERE" {
 					if config.Debug {
-						log.Println("Loaded token from configuration file.")
+						multiplexer.Logger.Debug("Loaded token from configuration file.")
 					}
 					multiplexer.RawSession.Token = configToken
 				} else {
-					log.Println("Please specify an authorization token.")
-					multiplexer.WritePacket(
-						multiplexer.IPCConnection,
-						multiplexer.IPCPacket{
-							IssuerIdentifier:   "ChatBackendInitializer",
-							ReceiverIdentifier: "Supervisor",
-							MessageIdentifier:  "AbnormalExit",
-							Body:               []string{strconv.Itoa(1)},
-						})
+					multiplexer.Logger.Error("Please specify an authorization token.")
+					_ = multiplexer.IPCConnection.Call("IPC.Error", []string{"ChatBackend"}, nil)
 					os.Exit(1)
 				}
 			} else {
 				if config.Debug {
-					log.Println("Loaded token from command parameter.")
+					multiplexer.Logger.Error("Loaded token from command parameter.")
 				}
 			}
 
 			multiplexer.RawSession.UserAgent = "DiscordBot (FreeNitori " + Version + ")"
 			multiplexer.RawSession.Token = "Bot " + multiplexer.RawSession.Token
+			multiplexer.RawSession.ShouldReconnectOnError = true
 			err = multiplexer.RawSession.Open()
 			if err != nil {
-				log.Printf("An error occurred while connecting to Discord, %s \n", err)
+				multiplexer.Logger.Error(fmt.Sprintf("An error occurred while connecting to Discord, %s", err))
+				os.Exit(1)
+			}
+			multiplexer.Initialized = true
+			multiplexer.Application, err = multiplexer.RawSession.Application("@me")
+			if err != nil {
+				multiplexer.Logger.Error(fmt.Sprintf("An error occurred while fetching application info, %s", err))
 				os.Exit(1)
 			}
 			_, _ = multiplexer.RawSession.UserUpdateStatus("dnd")
@@ -95,26 +97,48 @@ func main() {
 				multiplexer.MakeSessions()
 			}
 
-			// Tell the supervisor we are ready to go
-			_ = multiplexer.WritePacket(multiplexer.IPCConnection, multiplexer.IPCPacket{
-				IssuerIdentifier:   "ChatBackendInitializer",
-				ReceiverIdentifier: "Supervisor",
-				MessageIdentifier:  "ChatBackendInitializationFinish",
-				Body: []string{
-					multiplexer.RawSession.State.User.Username + "#" + multiplexer.RawSession.State.User.Discriminator,
+			// Log into the logger that the ChatBackend is ready to go
+			_ = multiplexer.IPCConnection.Call("IPC.Log", []string{
+				"INFO",
+				fmt.Sprintf("User: %s | ID: %s | Default Prefix: %s",
+					multiplexer.RawSession.State.User.Username+"#"+multiplexer.RawSession.State.User.Discriminator,
 					multiplexer.RawSession.State.User.ID,
-					config.Prefix},
-			})
+					config.Prefix),
+			}, nil)
+			_ = multiplexer.IPCConnection.Call("IPC.Log", []string{
+				"INFO",
+				"FreeNitori is now ready. Press Control-C to terminate.",
+			}, nil)
+			_ = multiplexer.IPCConnection.Call("IPC.SignalWebServer", []string{}, nil)
 		}
 	case StartWebServer:
 		{
+
+			// Dial the supervisor socket
+			multiplexer.IPCConnection, err = rpc.DialHTTP("unix", config.SocketPath)
+			if err != nil {
+				multiplexer.Logger.Error(fmt.Sprintf("Failed to connect to the supervisor process, %s", err))
+				os.Exit(1)
+			}
+
 			// Check the database
 			_, err = config.Redis.Ping(config.RedisContext).Result()
 			if err != nil {
-				log.Printf("Unable to establish connection with database, %s", err)
+				multiplexer.Logger.Error(fmt.Sprintf("Unable to establish connection with database, %s", err))
 				os.Exit(1)
 			}
-			os.Exit(0)
+
+			// Initialize and start the server
+			web.Initialize()
+			go func() {
+				<-readyChannel
+				err = web.Engine.Run(fmt.Sprintf("%s:%s", config.Host, config.Port))
+				if err != nil {
+					multiplexer.Logger.Error(fmt.Sprintf("Failed to start web server, %s", err))
+					_ = multiplexer.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
+					os.Exit(1)
+				}
+			}()
 		}
 	case !StartWebServer && !StartChatBackend:
 		{
@@ -137,58 +161,38 @@ ___________                      _______  .__  __               .__
 				if err != nil {
 					err = syscall.Unlink(config.SocketPath)
 					if err != nil {
-						log.Printf("Unable to remove hanging socket, %s", err)
+						multiplexer.Logger.Error(fmt.Sprintf("Unable to remove hanging socket, %s", err))
 						os.Exit(1)
 					}
 				} else {
-					log.Println("Another instance of FreeNitori is already running.")
+					multiplexer.Logger.Error("Another instance of FreeNitori is already running.")
 					os.Exit(1)
 				}
 			}
 
 			// Initialize the socket
+			_ = rpc.Register(IPCFunctions)
+			rpc.HandleHTTP()
 			SocketListener, err = net.Listen("unix", config.SocketPath)
 			if err != nil {
-				log.Printf("Failed to listen on the socket, %s", err)
+				multiplexer.Logger.Error(fmt.Sprintf("Failed to listen on the socket, %s", err))
 				os.Exit(1)
 			}
-
-			// Function that monitors the socket and responds
-			go func() {
-				for {
-					descriptor, err := SocketListener.Accept()
-					if err != nil {
-						return
-					}
-					go func(connection net.Conn) {
-						// defer connection.Close()
-						jsonEncoder := json.NewEncoder(connection)
-						jsonDecoder := json.NewDecoder(connection)
-						for {
-							var packet multiplexer.IPCPacket
-							err := jsonDecoder.Decode(&packet)
-							if err != nil {
-								if err == io.EOF {
-									break
-								}
-								log.Printf("Failed to decode packet, %s", err)
-								continue
-							}
-							err = jsonEncoder.Encode(packet.SupervisorPacketHandler())
-							if err != nil {
-								log.Printf("Failed to encode packet, %s", err)
-								continue
-							}
-						}
-					}(descriptor)
-				}
-			}()
+			go http.Serve(SocketListener, nil)
 
 			// Create the chat backend process
 			multiplexer.ChatBackendProcess, err =
 				os.StartProcess(multiplexer.ExecPath, []string{multiplexer.ExecPath, "-c", "-a", multiplexer.RawSession.Token}, &multiplexer.ProcessAttributes)
 			if err != nil {
-				log.Printf("Failed to create chat backend process, %s", err)
+				multiplexer.Logger.Error(fmt.Sprintf("Failed to create chat backend process, %s", err))
+				os.Exit(1)
+			}
+
+			// Create web server process
+			multiplexer.WebServerProcess, err =
+				os.StartProcess(multiplexer.ExecPath, []string{multiplexer.ExecPath, "-w"}, &multiplexer.ProcessAttributes)
+			if err != nil {
+				multiplexer.Logger.Error(fmt.Sprintf("Failed to create web server process, %s", err))
 				os.Exit(1)
 			}
 
@@ -203,34 +207,51 @@ ___________                      _______  .__  __               .__
 			currentSignal := <-signalChannel
 			switch currentSignal {
 			case syscall.SIGUSR1:
-				// Go to the supervisor to fetch new message
+				// Go to the supervisor to fetch further instructions
 				if StartChatBackend && !StartWebServer {
-					// TODO: do the stuff
+					var instruction string
+					var response string
+					_ = multiplexer.IPCConnection.Call("IPC.ChatBackendIPCResponder", []string{"furtherInstruction"}, &instruction)
+					switch instruction {
+					case "totalGuilds":
+						response = strconv.Itoa(len(multiplexer.RawSession.State.Guilds))
+					case "inviteURL":
+						response = fmt.Sprintf("https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847",
+							multiplexer.Application.ID)
+					}
+					_ = multiplexer.IPCConnection.Call("IPC.ChatBackendIPCResponder", []string{"response", response}, nil)
+				} else if StartWebServer && !StartChatBackend {
+					if !multiplexer.Initialized {
+						readyChannel <- true
+						multiplexer.Initialized = true
+					}
 				}
+			case syscall.SIGUSR2:
+				multiplexer.ExitCode <- 0
+				return
 			default:
 				// Cleanup stuffs
 				if !StartChatBackend && !StartWebServer {
 					fmt.Print("\n")
-					log.Println("Gracefully terminating...")
+					multiplexer.Logger.Info("Gracefully terminating...")
 					_ = multiplexer.ChatBackendProcess.Signal(syscall.SIGUSR2)
+					_ = multiplexer.WebServerProcess.Signal(syscall.SIGUSR2)
 					_ = SocketListener.Close()
 					_ = syscall.Unlink(config.SocketPath)
 				} else if StartChatBackend {
-					if currentSignal != syscall.SIGUSR2 && currentSignal != os.Interrupt {
-						// Only write the packet if SIGUSR2 was not sent or the program was not interrupted
-						multiplexer.WritePacket(
-							multiplexer.IPCConnection,
-							multiplexer.IPCPacket{
-								IssuerIdentifier:   "ChatBackendInitializer",
-								ReceiverIdentifier: "Supervisor",
-								MessageIdentifier:  "KillSignal",
-								Body:               []string{currentSignal.String()},
-							})
+					if currentSignal != os.Interrupt {
+						// Only tell the supervisor if SIGUSR2 was not sent or the program was not interrupted
+						_ = multiplexer.IPCConnection.Call("IPC.Restart", []string{"ChatBackend"}, nil)
 					}
 					for _, session := range multiplexer.DiscordSessions {
 						_ = session.Close()
 					}
 					_ = multiplexer.RawSession.Close()
+				} else if StartWebServer {
+					if currentSignal != os.Interrupt {
+						// Only write the packet if SIGUSR2 was not sent or the program was not interrupted
+						_ = multiplexer.IPCConnection.Call("IPC.Restart", []string{"WebServer"}, nil)
+					}
 				}
 				multiplexer.ExitCode <- 0
 				return
@@ -238,17 +259,12 @@ ___________                      _______  .__  __               .__
 		}
 	}()
 
-	// Send packet and exit if there's something on that channel
+	// Tell the Supervisor and exit if there's something on that channel
 	exitCode := <-multiplexer.ExitCode
 	if StartChatBackend && !StartWebServer && exitCode != 0 {
-		multiplexer.WritePacket(
-			multiplexer.IPCConnection,
-			multiplexer.IPCPacket{
-				IssuerIdentifier:   "ChatBackendInitializer",
-				ReceiverIdentifier: "Supervisor",
-				MessageIdentifier:  "AbnormalExit",
-				Body:               []string{strconv.Itoa(exitCode)},
-			})
+		_ = multiplexer.IPCConnection.Call("IPC.Error", []string{"ChatBackend"}, nil)
+	} else if StartWebServer && !StartChatBackend && exitCode != 0 {
+		_ = multiplexer.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
 	}
 	os.Exit(exitCode)
 }

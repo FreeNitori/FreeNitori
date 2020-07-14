@@ -4,5 +4,6 @@
 *.out
 /.idea/
 /nitori/config/assets.go
+/nitori/web/static.go
 /FreeNitori
 /nitori.conf

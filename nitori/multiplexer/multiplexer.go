@@ -231,7 +231,6 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 
 	// Figure out if a proper command is issued to the Kappa
 	if !context.IsTargeted && len(guildPrefix) > 0 {
-		// TODO: Database integration
 		if strings.HasPrefix(context.Content, guildPrefix) {
 			context.IsTargeted, context.HasPrefix = true, true
 			context.Content = strings.TrimPrefix(context.Content, guildPrefix)
@@ -243,25 +242,21 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		return
 	}
 
-	// Tell the supervisor to log the processed message
+	// Log the processed message
 	var hostName string
 	if context.IsPrivate {
 		hostName = "Private Messages"
 	} else {
 		hostName = "\"" + context.Guild.Name + "\""
 	}
-	WritePacket(IPCConnection,
-		IPCPacket{
-			IssuerIdentifier:   "ChatBackend",
-			ReceiverIdentifier: "Supervisor",
-			MessageIdentifier:  "RouteLog",
-			Body: []string{
-				context.Author.Username + "#" + context.Author.Discriminator,
-				hostName,
-				context.Message.Content,
-				strconv.Itoa(session.ShardID),
-			},
-		})
+	_ = IPCConnection.Call("IPC.Log", []string{
+		"INFO",
+		fmt.Sprintf("(Shard %s) \"%s\"@%s > %s",
+			strconv.Itoa(session.ShardID),
+			context.Author.Username+"#"+context.Author.Discriminator,
+			hostName,
+			context.Message.Content),
+	}, nil)
 
 	// Figure out the route of the message
 	route, fields := mux.MatchRoute(context.Content)

@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+    <title>FreeNitori</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <link rel="icon" type="image/png" href="/static/icon.png">
+    <meta property="og:title" content="FreeNitori"/>
+    <meta property="og:description" content="Open source, general purpose Discord utility."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="/"/>
+    <meta property="og:image" content="/favicon.png"/>
+    <meta property="og:site_name" content="FreeNitori"/>
+    <meta itemprop="name" content="FreeNitori">
+    <meta itemprop="description" content="Open source, general purpose Discord utility.">
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:image" content="/favicon.png"/>
+    <meta name="twitter:title" content="FreeNitori"/>
+    <meta name="twitter:description" content="Open source, general purpose Discord utility."/>
+    <link href="https://modesta.alexflipnote.dev/css/modesta.css" type="text/css" rel="stylesheet">
+</head>
+<body class="github-font-standard">
+<div class="fullscreen">
+    <div class="background" style="background-image: url('static/background.png');"></div>
+    <div class="center-object">
+        <div class="container">
+            <section class="me">
+                <div class="avatar-container scroll-in from-top">
+                    <img alt="Nitori" draggable="false" src="/static/icon.png" class="image-title">
+                </div>
+                <div class="scroll-in from-front">
+                    <h1 class="title monospace">NitoriBot</h1>
+                </div>
+            </section>
+            <div class="buttons scroll-in from-bottom">
+                <!--suppress HtmlUnknownTarget -->
+                <a class="btn hover-scale-inset aqua-blue" href="#" onclick="redirectInvite()">Invite</a>
+                <!--suppress HtmlUnknownTarget -->
+                <a class="btn hover-scale-inset orange" href="/login">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="markdown-container" id="information">
+    <h1 class="center-text">Statistics</h1>
+    <div class="flex-grid">
+        <div class="col-xs">
+            <div class="box-container dark">
+                <h1>Messages Handled</h1>
+                <p id="messageTotal"></p>
+            </div>
+        </div>
+        <div class="col-xs">
+            <div class="box-container dark">
+                <h1>Guilds Deployed</h1>
+                <p id="guildsDeployed"></p>
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="center box-container primary no-border-radius">
+    <p class="no-margin">
+        Developed and maintained by <a href="https://random.chars.jp/" target="_blank">RandomChars</a>.
+    </p>
+</footer>
+<script src="https://modesta.alexflipnote.dev/js/modesta.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    let request = new XMLHttpRequest();
+    request.open("GET", "/api/stats", false);
+    request.send();
+    let stats = JSON.parse(request.responseText)
+    document.getElementById("messageTotal").textContent = stats["total_messages"]
+    document.getElementById("guildsDeployed").textContent = stats["guilds_deployed"]
+
+    function redirectInvite() {
+        let request = new XMLHttpRequest();
+        request.open("GET", "/api/invite", false);
+        request.send();
+        let response = JSON.parse(request.responseText)
+        window.open(response["invite_url"])
+    }
+</script>
+</body>
+</html>
