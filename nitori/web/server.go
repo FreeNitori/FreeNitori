@@ -48,7 +48,7 @@ func Initialize() {
 
 	// Register page routes
 	Engine.GET("/", func(context *gin.Context) {
-		context.HTML(http.StatusOK, "web/templates/index.html", gin.H{})
+		context.HTML(http.StatusOK, "web/templates/index.html", nil)
 	})
 
 	// Register JSON API routes

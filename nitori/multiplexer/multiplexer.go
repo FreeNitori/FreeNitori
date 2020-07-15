@@ -28,17 +28,14 @@ type Context struct {
 }
 
 // Wrapper around some stuff
-func (context *Context) GenerateGuildPrefix() (guildID int, guildPrefix string) {
-	var gID int
-	var gPrefix string
-	if !context.IsPrivate {
-		gID, _ = strconv.Atoi(context.Guild.ID)
-		gPrefix = config.GetPrefix(guildID)
-	} else {
-		gID = 0
-		gPrefix = config.Prefix
+func (context *Context) GenerateGuildPrefix() string {
+	switch context.IsPrivate {
+	case true:
+		return config.Prefix
+	case false:
+		return config.GetPrefix(context.Guild.ID)
 	}
-	return gID, gPrefix
+	return ""
 }
 
 // Function signature for functions that handle commands
@@ -207,7 +204,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	}
 
 	// Get guild-specific prefix
-	_, guildPrefix := context.GenerateGuildPrefix()
+	guildPrefix := context.GenerateGuildPrefix()
 
 	// Figure out if the Kappa got pinged
 	if !context.IsTargeted {

@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/rpc"
 	"os"
-	"sync"
 	"syscall"
+	"time"
 )
 
 var Logger = logging.MustGetLogger("FreeNitori")
@@ -26,6 +26,7 @@ var WebServerProcess *os.Process
 var ChatBackendProcess *os.Process
 var RequestDataChannel = make(chan string, 1)
 var RequestInstructionChannel = make(chan string, 1)
+var OngoingCommunication bool
 var ProcessAttributes = os.ProcAttr{
 	Dir: ".",
 	Env: os.Environ(),
@@ -36,9 +37,7 @@ var ProcessAttributes = os.ProcAttr{
 	},
 }
 
-type IPC struct {
-	locker sync.RWMutex
-}
+type IPC bool
 
 func init() {
 	ExecPath, err = os.Executable()
@@ -128,6 +127,10 @@ func (*IPC) Restart(args []string, reply *int) error {
 }
 
 func (ipc *IPC) RequestData(args []string, reply *string) error {
+	for OngoingCommunication {
+		time.Sleep(time.Millisecond)
+	}
+	OngoingCommunication = true
 	switch args[0] {
 	case "ChatBackend":
 		_ = ChatBackendProcess.Signal(syscall.SIGUSR1)
@@ -136,5 +139,6 @@ func (ipc *IPC) RequestData(args []string, reply *string) error {
 		}()
 		*reply = <-RequestDataChannel
 	}
+	OngoingCommunication = false
 	return nil
 }

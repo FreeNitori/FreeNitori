@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func (handlers *Handlers) About(context *multiplexer.Context) {
+func (*Handlers) About(context *multiplexer.Context) {
 	embed := formatter.NewEmbed(context.Session.State.User.Username,
 		"Open source, general purpose Discord utility.")
 	embed.Color = KappaColor

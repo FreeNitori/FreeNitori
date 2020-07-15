@@ -26,10 +26,11 @@ var Port = Config.Section("WebServer").Key("Port").String()
 var Debug = getDebug()
 var Redis = getDatabaseClient()
 var RedisContext = context.Background()
+var err error
 
 // Fetch configuration file object and generate one if needed
 func getConfig() (Config *ini.File) {
-	Config, err := ini.Load("/etc/nitori.conf")
+	Config, err = ini.Load("/etc/nitori.conf")
 	if err != nil {
 		Config, err = ini.Load("nitori.conf")
 		if err != nil {
@@ -61,7 +62,6 @@ func getConfig() (Config *ini.File) {
 
 // Obtain a redis client using details stored in the configuration
 func getDatabaseClient() (client *redis.Client) {
-	var err error
 	db, err := strconv.Atoi(Config.Section("Redis").Key("Database").String())
 	if err != nil {
 		log.Printf("Failed to read redis database configuration, %s", err)
@@ -96,7 +96,6 @@ func getDebug() (debug bool) {
 
 // Get amount of messages totally processed
 func GetTotalMessages() (amount int) {
-	var err error
 	messageAmount, err := Redis.HGet(RedisContext, "nitori", "total_messages").Result()
 	if err != nil {
 		if err == redis.Nil {
@@ -122,14 +121,13 @@ func AddTotalMessages() (err error) {
 }
 
 // Get prefix for a guild and return the default if there is none
-func GetPrefix(gid int) (prefix string) {
-	var err error
-	prefixValue, err := Redis.HGet(RedisContext, "settings."+strconv.Itoa(gid), "prefix").Result()
+func GetPrefix(gid string) (prefix string) {
+	prefixValue, err := Redis.HGet(RedisContext, "settings."+gid, "prefix").Result()
 	if err != nil {
 		if err == redis.Nil {
 			return Prefix
 		}
-		log.Printf("Failed to obtain prefix in guild %s, %s", strconv.Itoa(gid), err)
+		log.Printf("Failed to obtain prefix in guild %s, %s", gid, err)
 		return Prefix
 	}
 	if prefixValue == "" {
@@ -137,13 +135,19 @@ func GetPrefix(gid int) (prefix string) {
 	}
 	prefixDecoded, err := base64.StdEncoding.DecodeString(prefixValue)
 	if err != nil {
-		log.Printf("Malformed prefix in guild %s, %s", strconv.Itoa(gid), err)
+		log.Printf("Malformed prefix in guild %s, %s", gid, err)
 		return Prefix
 	}
 	return string(prefixDecoded)
 }
 
 // Set the prefix of a guild
-func SetPrefix(gid int, prefix string) (err error) {
-	return Redis.HSet(RedisContext, "settings."+strconv.Itoa(gid), "prefix", prefix).Err()
+func SetPrefix(gid string, prefix string) (err error) {
+	prefixEncoded := base64.StdEncoding.EncodeToString([]byte(prefix))
+	return Redis.HSet(RedisContext, "settings."+gid, "prefix", prefixEncoded).Err()
+}
+
+// Reset the prefix of a guild
+func ResetPrefix(gid string) (err error) {
+	return Redis.HDel(RedisContext, "settings."+gid, "prefix").Err()
 }

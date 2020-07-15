@@ -38,6 +38,11 @@ var AllHandlers = []HandlerMetadata{
 		"Reboot the chat backend.",
 		SystemCategory,
 		Handler.Reboot},
+	{"configure",
+		[]string{"config", "conf", "settings"},
+		"Configure per-guild overrides..",
+		SystemCategory,
+		Handler.Configure},
 }
 
 // Static messages

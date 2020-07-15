@@ -8,7 +8,7 @@ import (
 )
 
 func (handlers *Handlers) Manuals(context *multiplexer.Context) {
-	_, guildPrefix := context.GenerateGuildPrefix()
+	guildPrefix := context.GenerateGuildPrefix()
 
 	switch {
 	case len(context.Fields) == 1:
