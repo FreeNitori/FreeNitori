@@ -3,10 +3,12 @@ package config
 import (
 	"context"
 	"encoding/base64"
+	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
 	"gopkg.in/ini.v1"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"strconv"
 )
@@ -26,13 +28,12 @@ var Port = Config.Section("WebServer").Key("Port").String()
 var Debug = getDebug()
 var Redis = getDatabaseClient()
 var RedisContext = context.Background()
-var err error
 
 // Fetch configuration file object and generate one if needed
-func getConfig() (Config *ini.File) {
-	Config, err = ini.Load("/etc/nitori.conf")
+func getConfig() *ini.File {
+	config, err := ini.Load("/etc/nitori.conf")
 	if err != nil {
-		Config, err = ini.Load("nitori.conf")
+		config, err = ini.Load("nitori.conf")
 		if err != nil {
 			log.Printf("Error loading configuration file, %s", err)
 			defaultConfigFile, err := Asset("nitori.conf")
@@ -49,35 +50,34 @@ func getConfig() (Config *ini.File) {
 				"please edit it before restarting FreeNitori.")
 			os.Exit(1)
 		}
-		if Config.Section("System").Key("ExecutionMode").String() == "debug" {
+		if config.Section("System").Key("ExecutionMode").String() == "debug" {
 			log.Println("Loaded configuration file from current directory.")
 		}
 	} else {
-		if Config.Section("System").Key("ExecutionMode").String() == "debug" {
+		if config.Section("System").Key("ExecutionMode").String() == "debug" {
 			log.Println("Loaded system-wide configuration from /etc/nitori.conf.")
 		}
 	}
-	return Config
+	return config
 }
 
 // Obtain a redis client using details stored in the configuration
-func getDatabaseClient() (client *redis.Client) {
+func getDatabaseClient() *redis.Client {
 	db, err := strconv.Atoi(Config.Section("Redis").Key("Database").String())
 	if err != nil {
 		log.Printf("Failed to read redis database configuration, %s", err)
 		os.Exit(1)
 	}
-	redisClient := redis.NewClient(&redis.Options{
+	return redis.NewClient(&redis.Options{
 		Addr: Config.Section("Redis").Key("Host").String() +
 			":" + Config.Section("Redis").Key("Port").String(),
 		Password: Config.Section("Redis").Key("Password").String(),
 		DB:       db,
 	})
-	return redisClient
 }
 
 // Figure out if the execution mode happens to be debug
-func getDebug() (debug bool) {
+func getDebug() bool {
 	executionMode := Config.Section("System").Key("ExecutionMode").String()
 	var debugMode bool
 	switch {
@@ -95,7 +95,7 @@ func getDebug() (debug bool) {
 }
 
 // Get amount of messages totally processed
-func GetTotalMessages() (amount int) {
+func GetTotalMessages() int {
 	messageAmount, err := Redis.HGet(RedisContext, "nitori", "total_messages").Result()
 	if err != nil {
 		if err == redis.Nil {
@@ -116,12 +116,12 @@ func GetTotalMessages() (amount int) {
 }
 
 // Add one message to the counter
-func AddTotalMessages() (err error) {
+func AddTotalMessages() error {
 	return Redis.HSet(RedisContext, "nitori", "total_messages", strconv.Itoa(GetTotalMessages()+1)).Err()
 }
 
 // Get prefix for a guild and return the default if there is none
-func GetPrefix(gid string) (prefix string) {
+func GetPrefix(gid string) string {
 	prefixValue, err := Redis.HGet(RedisContext, "settings."+gid, "prefix").Result()
 	if err != nil {
 		if err == redis.Nil {
@@ -142,12 +142,68 @@ func GetPrefix(gid string) (prefix string) {
 }
 
 // Set the prefix of a guild
-func SetPrefix(gid string, prefix string) (err error) {
+func SetPrefix(gid string, prefix string) error {
 	prefixEncoded := base64.StdEncoding.EncodeToString([]byte(prefix))
 	return Redis.HSet(RedisContext, "settings."+gid, "prefix", prefixEncoded).Err()
 }
 
 // Reset the prefix of a guild
-func ResetPrefix(gid string) (err error) {
+func ResetPrefix(gid string) error {
 	return Redis.HDel(RedisContext, "settings."+gid, "prefix").Err()
+}
+
+// Figure out if experience system is enabled
+func ExpEnabled(gid string) (enabled bool, err error) {
+	result, err := Redis.HGet(RedisContext, "settings."+gid, "exp_enable").Result()
+	if err != nil {
+		if err == redis.Nil {
+			return false, nil
+		}
+		return false, err
+	}
+	if result == "" {
+		return false, nil
+	}
+	enabled, err = strconv.ParseBool(result)
+	return
+}
+
+// Toggle the experience system enabler
+func ExpToggle(gid string) (pre bool, err error) {
+	pre, err = ExpEnabled(gid)
+	switch pre {
+	case true:
+		err = Redis.HSet(RedisContext, "settings."+gid, "exp_enable", "false").Err()
+	case false:
+		err = Redis.HSet(RedisContext, "settings."+gid, "exp_enable", "true").Err()
+	}
+	return
+}
+
+// Obtain experience amount of a guild member
+func GetMemberExp(member *discordgo.Member) (int, error) {
+	result, err := Redis.HGet(RedisContext, "exp."+member.GuildID, member.User.ID).Result()
+	if err != nil {
+		if err == redis.Nil {
+			return 0.0, nil
+		}
+		return 0.0, err
+	}
+	if result == "" {
+		return 0.0, nil
+	}
+	return strconv.Atoi(result)
+}
+
+// Set a member's experience amount
+func SetMemberExp(member *discordgo.Member, exp int) error {
+	return Redis.HSet(RedisContext, "exp."+member.GuildID, member.User.ID, strconv.Itoa(exp)).Err()
+}
+
+// Chat experience calculation stuffs
+func LevelToExp(level int) int {
+	return int(1000.0 * (math.Pow(float64(level), 1.25)))
+}
+func ExpToLevel(exp int) int {
+	return int(math.Pow(float64(exp)/1000, 1.0/1.25))
 }

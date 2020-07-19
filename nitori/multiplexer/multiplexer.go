@@ -18,6 +18,7 @@ type Context struct {
 	Session           *discordgo.Session
 	Guild             *discordgo.Guild
 	Author            *discordgo.User
+	Member            *discordgo.Member
 	Fields            []string
 	Content           string
 	IsPrivate         bool
@@ -140,8 +141,8 @@ func (mux *Multiplexer) MatchRoute(message string) (*Route, []string) {
 func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *discordgo.MessageCreate) {
 	var err error
 
-	// Ignore self messages
-	if create.Author.ID == session.State.User.ID {
+	// Ignore self and bot messages
+	if create.Author.ID == session.State.User.ID || create.Author.Bot {
 		return
 	}
 
@@ -193,6 +194,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		Message: create.Message,
 		Session: session,
 		Author:  create.Author,
+		Member:  create.Member,
 		Guild:   guild,
 	}
 
@@ -233,6 +235,9 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 			context.Content = strings.TrimPrefix(context.Content, guildPrefix)
 		}
 	}
+
+	// Start a goroutine that deals with chat experience
+	go ProcessMessageExperience(context)
 
 	// Get out of the code if no one targeted the Kappa
 	if !context.IsTargeted {

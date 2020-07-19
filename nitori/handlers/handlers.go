@@ -17,6 +17,8 @@ var SystemCategory = multiplexer.NewCategory("System",
 	"System-related utilities.")
 var ManualsCategory = multiplexer.NewCategory("Manuals",
 	"The operation manual pager utility.")
+var ExperienceCategory = multiplexer.NewCategory("Experience",
+	"Chat experience and ranking system.")
 
 var Categories = []*multiplexer.CommandCategory{SystemCategory, ManualsCategory}
 
@@ -43,9 +45,17 @@ var AllHandlers = []HandlerMetadata{
 		"Configure per-guild overrides..",
 		SystemCategory,
 		Handler.Configure},
+	{"level",
+		[]string{"rank", "exp"},
+		"Query your current experience level.",
+		ExperienceCategory,
+		Handler.Level},
 }
 
 // Static messages
 var InvalidArgument = "Invalid argument."
+var ErrorOccurred = "An error occurred while handling your request, please try again later!"
+var GuildOnly = "This command can only be issued from a guild."
+var FeatureDisabled = "This feature is currently disabled."
 var AdminOnly = "This command is only available to system administrators!"
 var KappaColor = 0x3492c4
