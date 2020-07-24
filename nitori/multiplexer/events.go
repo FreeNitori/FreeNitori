@@ -24,19 +24,19 @@ func ProcessMessageExperience(context *Context) {
 		return
 	}
 
-	previousExp, err := config.GetMemberExp(context.Member)
+	previousExp, err := config.GetMemberExp(context.Author, context.Guild)
 	if err != nil {
 		Logger.Error(fmt.Sprintf("Database error on user experience advancing, %s", err))
 		return
 	}
 	advancedExp := previousExp + rand.Intn(10) + 5
-	err = config.SetMemberExp(context.Member, advancedExp)
+	err = config.SetMemberExp(context.Author, context.Guild, advancedExp)
 	if err != nil {
 		Logger.Error(fmt.Sprintf("Database error on user experience advancing, %s", err))
 		return
 	}
 	advancedLevel := config.ExpToLevel(advancedExp)
 	if advancedLevel > config.ExpToLevel(previousExp) {
-		context.SendMessage(fmt.Sprintf("Level up message, %s", strconv.Itoa(advancedLevel)), fmt.Sprintf("generating level up message for %s", context.Guild.ID))
+		context.SendMessage(fmt.Sprintf("Level up message, %s", strconv.Itoa(advancedLevel)))
 	}
 }

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
@@ -10,11 +11,15 @@ import (
 var err error
 
 func (*Handlers) Configure(context *multiplexer.Context) {
+	if context.IsPrivate {
+		context.SendMessage(GuildOnly)
+		return
+	}
 	if len(context.Fields) == 1 {
 		embed := formatter.NewEmbed("Configurator", "Configure per-guild overrides.")
 		embed.Color = KappaColor
 		embed.AddField("prefix", "Configure command prefix.", false)
-		context.SendEmbed(embed, "sending configurator help")
+		context.SendEmbed(embed)
 		return
 	}
 	switch context.Fields[1] {
@@ -31,19 +36,32 @@ func (*Handlers) Configure(context *multiplexer.Context) {
 			// Actually set the prefix
 			err = config.SetPrefix(context.Guild.ID, newPrefix)
 			if err != nil {
-				context.SendMessage("Failed to set custom prefix, please try again later.", "generating database error message")
+				context.SendMessage("Failed to set custom prefix, please try again later.")
 				return
 			}
-			context.SendMessage("Successfully updated prefix.", "generating prefix update success message")
+			context.SendMessage("Successfully updated prefix.")
 		case 2:
 			err = config.ResetPrefix(context.Guild.ID)
 			if err != nil {
-				context.SendMessage("Failed to reset prefix, please try again later.", "generating database error message")
+				context.SendMessage("Failed to reset prefix, please try again later.")
 				return
 			}
-			context.SendMessage("Successfully reset prefix.", "generating prefix reset success message")
+			context.SendMessage("Successfully reset prefix.")
 		default:
-			context.SendMessage("Invalid syntax, please check your parameters and try again.", "generating invalid syntax message")
+			context.SendMessage("Invalid syntax, please check your parameters and try again.")
+		}
+	case "experience":
+		pre, err := config.ExpToggle(context.Guild.ID)
+		if err != nil {
+			multiplexer.Logger.Warning(fmt.Sprintf("Failed to toggle experience enabler, %s", err))
+			context.SendMessage(ErrorOccurred)
+			return
+		}
+		switch pre {
+		case false:
+			context.SendMessage("Chat experience system has been enabled.")
+		case true:
+			context.SendMessage("Chat experience system has been disabled.")
 		}
 	}
 }

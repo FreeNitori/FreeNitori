@@ -181,23 +181,23 @@ func ExpToggle(gid string) (pre bool, err error) {
 }
 
 // Obtain experience amount of a guild member
-func GetMemberExp(member *discordgo.Member) (int, error) {
-	result, err := Redis.HGet(RedisContext, "exp."+member.GuildID, member.User.ID).Result()
+func GetMemberExp(user *discordgo.User, guild *discordgo.Guild) (int, error) {
+	result, err := Redis.HGet(RedisContext, "exp."+guild.ID, user.ID).Result()
 	if err != nil {
 		if err == redis.Nil {
-			return 0.0, nil
+			return 0, nil
 		}
-		return 0.0, err
+		return 0, err
 	}
 	if result == "" {
-		return 0.0, nil
+		return 0, nil
 	}
 	return strconv.Atoi(result)
 }
 
 // Set a member's experience amount
-func SetMemberExp(member *discordgo.Member, exp int) error {
-	return Redis.HSet(RedisContext, "exp."+member.GuildID, member.User.ID, strconv.Itoa(exp)).Err()
+func SetMemberExp(user *discordgo.User, guild *discordgo.Guild, exp int) error {
+	return Redis.HSet(RedisContext, "exp."+guild.ID, user.ID, strconv.Itoa(exp)).Err()
 }
 
 // Chat experience calculation stuffs

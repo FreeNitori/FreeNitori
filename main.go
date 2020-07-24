@@ -11,7 +11,6 @@ import (
 	"net/rpc"
 	"os"
 	"os/signal"
-	"strconv"
 	"syscall"
 )
 
@@ -209,17 +208,7 @@ ___________                      _______  .__  __               .__
 			case syscall.SIGUSR1:
 				// Go to the supervisor to fetch further instructions
 				if StartChatBackend && !StartWebServer {
-					var instruction string
-					var response string
-					_ = multiplexer.IPCConnection.Call("IPC.ChatBackendIPCResponder", []string{"furtherInstruction"}, &instruction)
-					switch instruction {
-					case "totalGuilds":
-						response = strconv.Itoa(len(multiplexer.RawSession.State.Guilds))
-					case "inviteURL":
-						response = fmt.Sprintf("https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847",
-							multiplexer.Application.ID)
-					}
-					_ = multiplexer.IPCConnection.Call("IPC.ChatBackendIPCResponder", []string{"response", response}, nil)
+					multiplexer.ChatBackendIPCReceiver()
 				} else if StartWebServer && !StartChatBackend {
 					if !multiplexer.Initialized {
 						readyChannel <- true

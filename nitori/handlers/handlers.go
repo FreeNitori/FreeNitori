@@ -54,7 +54,7 @@ var AllHandlers = []HandlerMetadata{
 
 // Static messages
 var InvalidArgument = "Invalid argument."
-var ErrorOccurred = "An error occurred while handling your request, please try again later!"
+var ErrorOccurred = "Something went wrong and I am very confused! Please try again!"
 var GuildOnly = "This command can only be issued from a guild."
 var FeatureDisabled = "This feature is currently disabled."
 var AdminOnly = "This command is only available to system administrators!"

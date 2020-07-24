@@ -34,7 +34,7 @@ func (handlers *Handlers) Manuals(context *multiplexer.Context) {
 
 			// Add list of categories to the Embed
 			embed.AddField("Categories", catText, false)
-			_ = context.SendEmbed(embed, "producing list of operation manuals")
+			_ = context.SendEmbed(embed)
 		}
 
 	case len(context.Fields) == 2:
@@ -51,8 +51,7 @@ func (handlers *Handlers) Manuals(context *multiplexer.Context) {
 
 			// Break out of the case if no category was matched
 			if desiredCat == nil {
-				context.SendMessage(InvalidArgument,
-					"producing invalid argument notice for manuals viewer")
+				context.SendMessage(InvalidArgument)
 				break
 			}
 
@@ -71,7 +70,7 @@ func (handlers *Handlers) Manuals(context *multiplexer.Context) {
 				// Just add the stuff as an entry, it will do on this level
 				embed.AddField(route.Pattern, route.Description, false)
 			}
-			context.SendEmbed(embed, fmt.Sprintf("producing manual page of category %s", desiredCat.Title))
+			context.SendEmbed(embed)
 
 		}
 
@@ -79,8 +78,7 @@ func (handlers *Handlers) Manuals(context *multiplexer.Context) {
 		{
 
 			// Some catch-all case I guess, though there will be a command-specific thing later maybe
-			context.SendMessage(InvalidArgument,
-				"producing invalid argument notice for manuals viewer")
+			context.SendMessage(InvalidArgument)
 		}
 	}
 }

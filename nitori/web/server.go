@@ -50,6 +50,22 @@ func Initialize() {
 	Engine.GET("/", func(context *gin.Context) {
 		context.HTML(http.StatusOK, "web/templates/index.html", nil)
 	})
+	Engine.GET("/guild/:gid/leaderboard", func(context *gin.Context) {
+		guildInfo := fetchGuild(context.Param("gid"))
+		if guildInfo == nil {
+			context.HTML(http.StatusBadRequest, "web/templates/error.html", gin.H{
+				"Title":    "No such file or directory",
+				"Subtitle": "This guild doesn't seem to exist.",
+				"Message":  "Maybe you got the wrong URL?",
+			})
+			return
+		}
+		context.HTML(http.StatusOK, "web/templates/error.html", gin.H{
+			"Title":    guildInfo.Name,
+			"Subtitle": guildInfo.ID,
+			"Message":  guildInfo.IconURL,
+		})
+	})
 
 	// Register JSON API routes
 	Engine.GET("/api", func(context *gin.Context) {
@@ -58,12 +74,12 @@ func Initialize() {
 	Engine.GET("/api/stats", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
 			"total_messages":  config.GetTotalMessages(),
-			"guilds_deployed": askForData("totalGuilds"),
+			"guilds_deployed": fetchData("totalGuilds"),
 		})
 	})
 	Engine.GET("/api/invite", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
-			"invite_url": askForData("inviteURL"),
+			"invite_url": fetchData("inviteURL"),
 		})
 	})
 }

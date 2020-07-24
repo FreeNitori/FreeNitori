@@ -18,7 +18,7 @@ type Context struct {
 	Session           *discordgo.Session
 	Guild             *discordgo.Guild
 	Author            *discordgo.User
-	Member            *discordgo.Member
+	Create            *discordgo.MessageCreate
 	Fields            []string
 	Content           string
 	IsPrivate         bool
@@ -194,7 +194,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		Message: create.Message,
 		Session: session,
 		Author:  create.Author,
-		Member:  create.Member,
+		Create:  create,
 		Guild:   guild,
 	}
 
@@ -236,11 +236,10 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		}
 	}
 
-	// Start a goroutine that deals with chat experience
-	go ProcessMessageExperience(context)
-
 	// Get out of the code if no one targeted the Kappa
 	if !context.IsTargeted {
+		// Start a goroutine that deals with chat experience and return
+		go ProcessMessageExperience(context)
 		return
 	}
 

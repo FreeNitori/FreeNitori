@@ -1,6 +1,8 @@
 package multiplexer
 
 import (
+	"encoding/json"
+	"errors"
 	"github.com/bwmarrin/discordgo"
 	"github.com/op/go-logging"
 	"log"
@@ -10,6 +12,7 @@ import (
 	"time"
 )
 
+var err error
 var Logger = logging.MustGetLogger("FreeNitori")
 var format = logging.MustStringFormatter(
 	logging.ColorSeq(logging.ColorGreen) + "[%{time:15:04:05.000}] %{color:reset}%{color:bold}%{level:.4s} %{color:reset}%{message}",
@@ -21,7 +24,6 @@ var IPCConnection *rpc.Client
 var RawSession, _ = discordgo.New()
 var DiscordSessions []*discordgo.Session
 var ExecPath string
-var err error
 var WebServerProcess *os.Process
 var ChatBackendProcess *os.Process
 var RequestDataChannel = make(chan string, 1)
@@ -38,6 +40,20 @@ var ProcessAttributes = os.ProcAttr{
 }
 
 type IPC bool
+
+type GuildInfo struct {
+	Name    string
+	ID      string
+	IconURL string
+	Members []*UserInfo
+}
+
+type UserInfo struct {
+	Name          string
+	ID            string
+	AvatarURL     string
+	Discriminator string
+}
 
 func init() {
 	ExecPath, err = os.Executable()
@@ -131,6 +147,9 @@ func (ipc *IPC) RequestData(args []string, reply *string) error {
 		time.Sleep(time.Millisecond)
 	}
 	OngoingCommunication = true
+	defer func() {
+		OngoingCommunication = false
+	}()
 	switch args[0] {
 	case "ChatBackend":
 		_ = ChatBackendProcess.Signal(syscall.SIGUSR1)
@@ -139,6 +158,28 @@ func (ipc *IPC) RequestData(args []string, reply *string) error {
 		}()
 		*reply = <-RequestDataChannel
 	}
-	OngoingCommunication = false
 	return nil
+}
+
+func (ipc *IPC) RequestGuild(args []string, reply *GuildInfo) error {
+	for OngoingCommunication {
+		time.Sleep(time.Millisecond)
+	}
+	OngoingCommunication = true
+	defer func() {
+		OngoingCommunication = false
+	}()
+	if len(args) == 0 {
+		return errors.New("no argument was specified")
+	}
+	_ = ChatBackendProcess.Signal(syscall.SIGUSR1)
+	go func() {
+		RequestInstructionChannel <- "GuildInfo" + args[0]
+	}()
+	replyMarshalled := <-RequestDataChannel
+	if replyMarshalled == "" {
+		return errors.New("no guild object was returned")
+	}
+	err = json.Unmarshal([]byte(replyMarshalled), &reply)
+	return err
 }
