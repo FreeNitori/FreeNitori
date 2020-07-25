@@ -36,13 +36,14 @@ func MakeSessions() {
 
 	// Make the sessions
 	for i := 0; i < config.ShardCount; i++ {
-		time.Sleep(2)
+		time.Sleep(time.Millisecond * 100)
 		session, _ := discordgo.New()
 		session.ShardCount = config.ShardCount
 		session.ShardID = i
 		session.Token = RawSession.Token
 		session.UserAgent = RawSession.UserAgent
 		session.ShouldReconnectOnError = RawSession.ShouldReconnectOnError
+		session.Identify.Intents = RawSession.Identify.Intents
 		err = session.Open()
 		if err != nil {
 			log.Printf("Failed to open session %s, %s", strconv.Itoa(i), err)
@@ -71,6 +72,8 @@ func ChatBackendIPCReceiver() {
 	switch instruction {
 	case "totalGuilds":
 		response = strconv.Itoa(len(RawSession.State.Guilds))
+	case "version":
+		response = config.Version
 	case "inviteURL":
 		response = fmt.Sprintf("https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847",
 			Application.ID)
@@ -80,8 +83,14 @@ func ChatBackendIPCReceiver() {
 		gid := instruction[9:]
 		guildSession, err := FetchGuildSession(gid)
 		if err == nil {
-			guild, err := guildSession.Guild(gid)
-			if err == nil {
+			var guild *discordgo.Guild
+			for _, guildIter := range guildSession.State.Guilds {
+				if guildIter.ID == gid {
+					guild = guildIter
+					break
+				}
+			}
+			if guild != nil {
 				for _, member := range guild.Members {
 					userInfo := UserInfo{
 						Name:          member.User.Username,

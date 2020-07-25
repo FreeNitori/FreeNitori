@@ -60,10 +60,26 @@ func Initialize() {
 			})
 			return
 		}
-		context.HTML(http.StatusOK, "web/templates/error.html", gin.H{
-			"Title":    guildInfo.Name,
-			"Subtitle": guildInfo.ID,
-			"Message":  guildInfo.IconURL,
+		expEnabled, err := config.ExpEnabled(guildInfo.ID)
+		if err != nil {
+			context.HTML(http.StatusInternalServerError, "web/templates/error.html", gin.H{
+				"Title":    "Internal Server Error",
+				"Subtitle": "Failed to fetch experience system enablement status.",
+				"Message":  "Nitori taking a nap?",
+			})
+			return
+		}
+		if !expEnabled {
+			context.HTML(http.StatusServiceUnavailable, "web/templates/error.html", gin.H{
+				"Title":    "Service Unavailable",
+				"Subtitle": "This feature is disabled in your guild.",
+				"Message":  "Moderators don't like Nitori?",
+			})
+			return
+		}
+		context.HTML(http.StatusOK, "web/templates/leaderboard.html", gin.H{
+			"GuildName": guildInfo.Name,
+			"GuildIcon": guildInfo.IconURL,
 		})
 	})
 
@@ -75,11 +91,39 @@ func Initialize() {
 		context.JSON(http.StatusOK, gin.H{
 			"total_messages":  config.GetTotalMessages(),
 			"guilds_deployed": fetchData("totalGuilds"),
+			"nitori_version":  fetchData("version"),
 		})
 	})
 	Engine.GET("/api/invite", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
 			"invite_url": fetchData("inviteURL"),
 		})
+	})
+	Engine.GET("/api/guild/:gid", func(context *gin.Context) {
+		guildInfo := fetchGuild(context.Param("gid"))
+		if guildInfo == nil {
+			context.JSON(http.StatusNotFound, gin.H{})
+			return
+		}
+		context.JSON(http.StatusOK, guildInfo)
+	})
+	Engine.GET("/api/guild/:gid/:key", func(context *gin.Context) {
+		guildInfo := fetchGuild(context.Param("gid"))
+		if guildInfo == nil {
+			context.JSON(http.StatusNotFound, gin.H{})
+			return
+		}
+		switch context.Param("key") {
+		case "id":
+			context.JSON(http.StatusOK, guildInfo.ID)
+		case "name":
+			context.JSON(http.StatusOK, guildInfo.Name)
+		case "icon_url":
+			context.JSON(http.StatusOK, guildInfo.IconURL)
+		case "members":
+			context.JSON(http.StatusOK, guildInfo.Members)
+		default:
+			context.JSON(http.StatusNotFound, gin.H{})
+		}
 	})
 }

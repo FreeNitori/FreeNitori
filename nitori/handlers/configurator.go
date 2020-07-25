@@ -19,6 +19,7 @@ func (*Handlers) Configure(context *multiplexer.Context) {
 		embed := formatter.NewEmbed("Configurator", "Configure per-guild overrides.")
 		embed.Color = KappaColor
 		embed.AddField("prefix", "Configure command prefix.", false)
+		embed.AddField("experience", "Toggle experience system enablement.", false)
 		context.SendEmbed(embed)
 		return
 	}

@@ -6,6 +6,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/web"
+	"github.com/bwmarrin/discordgo"
 	"net"
 	"net/http"
 	"net/rpc"
@@ -13,8 +14,6 @@ import (
 	"os/signal"
 	"syscall"
 )
-
-const Version = "v0.0.1-rewrite"
 
 var StartChatBackend bool
 var StartWebServer bool
@@ -76,13 +75,18 @@ func main() {
 				}
 			}
 
-			multiplexer.RawSession.UserAgent = "DiscordBot (FreeNitori " + Version + ")"
+			multiplexer.RawSession.UserAgent = "DiscordBot (FreeNitori " + config.Version + ")"
 			multiplexer.RawSession.Token = "Bot " + multiplexer.RawSession.Token
 			multiplexer.RawSession.ShouldReconnectOnError = true
+			multiplexer.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAll)
 			err = multiplexer.RawSession.Open()
 			if err != nil {
-				multiplexer.Logger.Error(fmt.Sprintf("An error occurred while connecting to Discord, %s", err))
-				os.Exit(1)
+				multiplexer.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAllWithoutPrivileged)
+				err = multiplexer.RawSession.Open()
+				if err != nil {
+					multiplexer.Logger.Error(fmt.Sprintf("An error occurred while connecting to Discord, %s", err))
+					os.Exit(1)
+				}
 			}
 			multiplexer.Initialized = true
 			multiplexer.Application, err = multiplexer.RawSession.Application("@me")
@@ -151,7 +155,7 @@ ___________                      _______  .__  __               .__
  |     \   |  | \/\  ___/\  ___//    |    \  ||  | (  <_> )  | \/  |
  \___  /   |__|    \___  >\___  >____|__  /__||__|  \____/|__|  |__|
      \/                \/     \/        \/    %-16s
-`+"\n", Version)
+`+"\n", config.Version)
 
 			// Check for an existing instance
 			if _, err := os.Stat(config.SocketPath); os.IsNotExist(err) {
