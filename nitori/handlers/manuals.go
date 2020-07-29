@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"strings"
 )
 
-func (handlers *Handlers) Manuals(context *multiplexer.Context) {
+func (handlers *CommandHandlers) Manuals(context *multiplexer.Context) {
 	guildPrefix := context.GenerateGuildPrefix()
 
 	switch {
@@ -51,14 +52,14 @@ func (handlers *Handlers) Manuals(context *multiplexer.Context) {
 
 			// Break out of the case if no category was matched
 			if desiredCat == nil {
-				context.SendMessage(InvalidArgument)
+				context.SendMessage(state.InvalidArgument)
 				break
 			}
 
 			// Generate list of all commands in one specific category
 			embed := formatter.NewEmbed(desiredCat.Title,
 				desiredCat.Description)
-			embed.Color = KappaColor
+			embed.Color = state.KappaColor
 
 			for _, route := range desiredCat.Routes {
 
@@ -78,7 +79,7 @@ func (handlers *Handlers) Manuals(context *multiplexer.Context) {
 		{
 
 			// Some catch-all case I guess, though there will be a command-specific thing later maybe
-			context.SendMessage(InvalidArgument)
+			context.SendMessage(state.InvalidArgument)
 		}
 	}
 }

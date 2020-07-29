@@ -3,6 +3,7 @@ package multiplexer
 import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -14,9 +15,9 @@ func (context *Context) SendMessage(message string) *discordgo.Message {
 		if err == discordgo.ErrUnauthorized {
 			return nil
 		}
-		Logger.Error(fmt.Sprintf("Error while sending message to guild %s, %s", context.Message.GuildID, err))
+		state.Logger.Error(fmt.Sprintf("Error while sending message to guild %s, %s", context.Message.GuildID, err))
 		_, _ = context.Session.ChannelMessageSend(context.Message.ChannelID,
-			"Something went wrong and I am very confused! Please try again!")
+			state.ErrorOccurred)
 		return nil
 	}
 	return resultMessage
@@ -30,9 +31,9 @@ func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
 		if err == discordgo.ErrUnauthorized {
 			return nil
 		}
-		Logger.Error(fmt.Sprintf("Error while sending embed to guild %s, %s", context.Message.GuildID, err))
+		state.Logger.Error(fmt.Sprintf("Error while sending embed to guild %s, %s", context.Message.GuildID, err))
 		_, _ = context.Session.ChannelMessageSend(context.Message.ChannelID,
-			"Something went wrong and I am very confused! Please try again!")
+			state.ErrorOccurred)
 		return nil
 	}
 	return resultMessage

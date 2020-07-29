@@ -3,7 +3,7 @@ package handlers
 import "git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 
 // Some structures to save some registering work
-type Handlers struct{}
+type CommandHandlers struct{}
 type HandlerMetadata struct {
 	Pattern       string
 	AliasPatterns []string
@@ -23,39 +23,31 @@ var ExperienceCategory = multiplexer.NewCategory("Experience",
 var Categories = []*multiplexer.CommandCategory{SystemCategory, ManualsCategory}
 
 // Define all the handlers here
-var Handler Handlers
+var CommandHandler CommandHandlers
 var AllHandlers = []HandlerMetadata{
 	{"man",
 		[]string{"help", "?"},
 		"An interface to the on-line reference manuals.",
 		ManualsCategory,
-		Handler.Manuals},
+		CommandHandler.Manuals},
 	{"about",
 		[]string{"info", "kappa", "information"},
 		"Show some information about the kappa.",
 		SystemCategory,
-		Handler.About},
+		CommandHandler.About},
 	{"reboot",
 		[]string{"restart", "halt", "shutdown"},
 		"Reboot the chat backend.",
 		SystemCategory,
-		Handler.Reboot},
+		CommandHandler.Reboot},
 	{"configure",
 		[]string{"config", "conf", "settings"},
 		"Configure per-guild overrides..",
 		SystemCategory,
-		Handler.Configure},
+		CommandHandler.Configure},
 	{"level",
 		[]string{"rank", "exp"},
 		"Query your current experience level.",
 		ExperienceCategory,
-		Handler.Level},
+		CommandHandler.Level},
 }
-
-// Static messages
-var InvalidArgument = "Invalid argument."
-var ErrorOccurred = "Something went wrong and I am very confused! Please try again!"
-var GuildOnly = "This command can only be issued from a guild."
-var FeatureDisabled = "This feature is currently disabled."
-var AdminOnly = "This command is only available to system administrators!"
-var KappaColor = 0x3492c4

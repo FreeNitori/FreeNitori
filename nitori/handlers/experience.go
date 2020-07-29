@@ -5,21 +5,61 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"math/rand"
 	"strconv"
 )
 
-func (*Handlers) Level(context *multiplexer.Context) {
+func init() {
+	multiplexer.NotTargeted = append(multiplexer.NotTargeted, AdvanceExperience)
+}
+
+func AdvanceExperience(context *multiplexer.Context) {
+	var err error
+
+	// Not do anything if private or bot
 	if context.IsPrivate {
-		context.SendMessage(GuildOnly)
+		return
 	}
+
+	// Also don't do anything if experience system is disabled
 	expEnabled, err := config.ExpEnabled(context.Guild.ID)
 	if err != nil {
-		multiplexer.Logger.Warning(fmt.Sprintf("Failed to obtain experience enabler information, %s", err))
-		context.SendMessage(ErrorOccurred)
 		return
 	}
 	if !expEnabled {
-		context.SendMessage(FeatureDisabled)
+		return
+	}
+
+	previousExp, err := config.GetMemberExp(context.Author, context.Guild)
+	if err != nil {
+		state.Logger.Error(fmt.Sprintf("Database error on user experience advancing, %s", err))
+		return
+	}
+	advancedExp := previousExp + rand.Intn(10) + 5
+	err = config.SetMemberExp(context.Author, context.Guild, advancedExp)
+	if err != nil {
+		state.Logger.Error(fmt.Sprintf("Database error on user experience advancing, %s", err))
+		return
+	}
+	advancedLevel := config.ExpToLevel(advancedExp)
+	if advancedLevel > config.ExpToLevel(previousExp) {
+		context.SendMessage(fmt.Sprintf("Level up message, %s", strconv.Itoa(advancedLevel)))
+	}
+}
+
+func (*CommandHandlers) Level(context *multiplexer.Context) {
+	if context.IsPrivate {
+		context.SendMessage(state.GuildOnly)
+	}
+	expEnabled, err := config.ExpEnabled(context.Guild.ID)
+	if err != nil {
+		state.Logger.Warning(fmt.Sprintf("Failed to obtain experience enabler information, %s", err))
+		context.SendMessage(state.ErrorOccurred)
+		return
+	}
+	if !expEnabled {
+		context.SendMessage(state.FeatureDisabled)
 		return
 	}
 	embed := formatter.NewEmbed("Experience Level", context.Author.Username+"#"+context.Author.Discriminator)
@@ -33,8 +73,8 @@ func (*Handlers) Level(context *multiplexer.Context) {
 	}
 	expValue, err := config.GetMemberExp(context.Author, context.Guild)
 	if err != nil {
-		multiplexer.Logger.Warning(fmt.Sprintf("Failed to obtain experience information, %s", err))
-		context.SendMessage(ErrorOccurred)
+		state.Logger.Warning(fmt.Sprintf("Failed to obtain experience information, %s", err))
+		context.SendMessage(state.ErrorOccurred)
 		return
 	}
 	levelValue := config.ExpToLevel(expValue)

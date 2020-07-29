@@ -21,7 +21,38 @@
     <link href="https://modesta.alexflipnote.dev/css/modesta.css" type="text/css" rel="stylesheet">
 </head>
 <body class="github-font-standard">
-
+<div class="fullscreen">
+    <div class="background" style="background-image: url('/static/background.png');"></div>
+    <div class="center-object">
+        <div class="container">
+            <section class="me unset">
+                <div class="avatar-container">
+                    <img alt="{{ .GuildName }}" draggable="false" src="{{ .GuildIcon }}" class="image-title">
+                </div>
+                <div class="unset">
+                    <h1 class="title monospace">{{ .GuildName }}</h1>
+                    <p class="undertitle monospace">Leaderboard</p>
+                </div>
+            </section>
+            <section class="markdown-container" id="leaderboard">
+                <div class="flex-grid">
+                    <div class="col-xs-8">
+                        <div class="box-container turquoise-flat">
+                            <h1 class="center-text">Messages Handled</h1>
+                            <p id="messageTotal" class="center-text"></p>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="paper aqua-blue-paper">
+                            <h2 class="center-text">Ranked Roles</h2>
+                            <p id="messageTotal" class="center-text"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
 <footer class="center box-container primary no-border-radius">
     <p class="no-margin">
         Developed and maintained by <a href="https://random.chars.jp/" target="_blank">RandomChars</a>.

@@ -1,8 +1,10 @@
 package web
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/communication"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"github.com/bwmarrin/discordgo"
 	"github.com/gin-gonic/gin"
 	"html/template"
 	"log"
@@ -28,7 +30,7 @@ func Initialize() {
 			templates, err = templates.New(path).Parse(string(templateBin))
 			if err != nil {
 				log.Printf("Failed to parse template, %s", err)
-				_ = multiplexer.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
+				_ = state.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
 				os.Exit(1)
 			}
 		}
@@ -122,6 +124,26 @@ func Initialize() {
 			context.JSON(http.StatusOK, guildInfo.IconURL)
 		case "members":
 			context.JSON(http.StatusOK, guildInfo.Members)
+		case "leaderboard":
+			expEnabled, err := config.ExpEnabled(guildInfo.ID)
+			if err != nil {
+				context.JSON(http.StatusInternalServerError, gin.H{})
+				return
+			}
+			if !expEnabled {
+				context.JSON(http.StatusServiceUnavailable, gin.H{})
+				return
+			}
+			var leaderboard []map[*communication.UserInfo]interface{}
+			for _, userInfo := range guildInfo.Members {
+				userObj := discordgo.User{ID: userInfo.ID}
+				guildObj := discordgo.Guild{ID: guildInfo.ID}
+				expData, err := config.GetMemberExp(&userObj, &guildObj)
+				if err != nil {
+				}
+				leaderboard = append(leaderboard, map[*communication.UserInfo]interface{}{userInfo: expData})
+			}
+			context.JSON(http.StatusOK, gin.H{"leaderboard": leaderboard})
 		default:
 			context.JSON(http.StatusNotFound, gin.H{})
 		}

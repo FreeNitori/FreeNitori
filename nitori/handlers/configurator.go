@@ -5,19 +5,20 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"unicode"
 )
 
 var err error
 
-func (*Handlers) Configure(context *multiplexer.Context) {
+func (*CommandHandlers) Configure(context *multiplexer.Context) {
 	if context.IsPrivate {
-		context.SendMessage(GuildOnly)
+		context.SendMessage(state.GuildOnly)
 		return
 	}
 	if len(context.Fields) == 1 {
 		embed := formatter.NewEmbed("Configurator", "Configure per-guild overrides.")
-		embed.Color = KappaColor
+		embed.Color = state.KappaColor
 		embed.AddField("prefix", "Configure command prefix.", false)
 		embed.AddField("experience", "Toggle experience system enablement.", false)
 		context.SendEmbed(embed)
@@ -54,8 +55,8 @@ func (*Handlers) Configure(context *multiplexer.Context) {
 	case "experience":
 		pre, err := config.ExpToggle(context.Guild.ID)
 		if err != nil {
-			multiplexer.Logger.Warning(fmt.Sprintf("Failed to toggle experience enabler, %s", err))
-			context.SendMessage(ErrorOccurred)
+			state.Logger.Warning(fmt.Sprintf("Failed to toggle experience enabler, %s", err))
+			context.SendMessage(state.ErrorOccurred)
 			return
 		}
 		switch pre {

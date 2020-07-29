@@ -13,9 +13,6 @@ import (
 	"strconv"
 )
 
-// Version information
-const Version = "v0.0.1-rewrite"
-
 // Exported variables for usage in other classes
 var Config = getConfig()
 var SocketPath = Config.Section("System").Key("Socket").String()

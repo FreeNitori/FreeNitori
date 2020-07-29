@@ -3,6 +3,7 @@ package multiplexer
 import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"log"
 	"regexp"
@@ -11,6 +12,7 @@ import (
 )
 
 var Router = New()
+var NotTargeted []interface{}
 
 // Context information passed to the handlers
 type Context struct {
@@ -57,6 +59,10 @@ type CommandCategory struct {
 	Routes      []*Route
 	Title       string
 	Description string
+}
+
+func init() {
+	state.EventHandlers = append(state.EventHandlers, Router.OnMessageCreate)
 }
 
 // Returns a new command category
@@ -238,8 +244,14 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 
 	// Get out of the code if no one targeted the Kappa
 	if !context.IsTargeted {
-		// Start a goroutine that deals with chat experience and return
-		go ProcessMessageExperience(context)
+		// Run all the not targeted hooks and leave
+		go func() {
+			for _, hook := range NotTargeted {
+				if function, success := hook.(func(context *Context)); success {
+					function(context)
+				}
+			}
+		}()
 		return
 	}
 
@@ -250,7 +262,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	} else {
 		hostName = "\"" + context.Guild.Name + "\""
 	}
-	_ = IPCConnection.Call("IPC.Log", []string{
+	_ = state.IPCConnection.Call("IPC.Log", []string{
 		"INFO",
 		fmt.Sprintf("(Shard %s) \"%s\"@%s > %s",
 			strconv.Itoa(session.ShardID),

@@ -4,13 +4,16 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 )
 
 func init() {
 
 	// Add the multiplexer handler to the raw session if sharding is disabled
 	if !config.Shard {
-		multiplexer.RawSession.AddHandler(multiplexer.Router.OnMessageCreate)
+		for _, handler := range state.EventHandlers {
+			state.RawSession.AddHandler(handler)
+		}
 	}
 
 	// Add the routes

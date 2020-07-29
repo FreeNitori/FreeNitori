@@ -1,16 +1,19 @@
 package web
 
-import "git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+import (
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/communication"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+)
 
 func fetchData(request string) string {
 	var response string
-	_ = multiplexer.IPCConnection.Call("IPC.RequestData", []string{"ChatBackend", request}, &response)
+	_ = state.IPCConnection.Call("IPC.RequestData", []string{"ChatBackend", request}, &response)
 	return response
 }
 
-func fetchGuild(gid string) *multiplexer.GuildInfo {
-	var response *multiplexer.GuildInfo
-	err = multiplexer.IPCConnection.Call("IPC.RequestGuild", []string{gid}, &response)
+func fetchGuild(gid string) *communication.GuildInfo {
+	var response *communication.GuildInfo
+	err = state.IPCConnection.Call("IPC.RequestGuild", []string{gid}, &response)
 	if err != nil {
 		return nil
 	}
