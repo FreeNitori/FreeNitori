@@ -16,6 +16,12 @@ import (
 var err error
 var Engine *gin.Engine
 
+type leaderboardEntry struct {
+	User       *communication.UserInfo
+	Experience int
+	Level      int
+}
+
 func Initialize() {
 
 	// Initialize the engine
@@ -134,16 +140,24 @@ func Initialize() {
 				context.JSON(http.StatusServiceUnavailable, gin.H{})
 				return
 			}
-			var leaderboard []map[*communication.UserInfo]interface{}
+			var leaderboard []*leaderboardEntry
 			for _, userInfo := range guildInfo.Members {
 				userObj := discordgo.User{ID: userInfo.ID}
 				guildObj := discordgo.Guild{ID: guildInfo.ID}
 				expData, err := config.GetMemberExp(&userObj, &guildObj)
 				if err != nil {
+					context.JSON(http.StatusInternalServerError, gin.H{})
+					return
 				}
-				leaderboard = append(leaderboard, map[*communication.UserInfo]interface{}{userInfo: expData})
+				levelData := config.ExpToLevel(expData)
+				entry := leaderboardEntry{
+					User:       userInfo,
+					Experience: expData,
+					Level:      levelData,
+				}
+				leaderboard = append(leaderboard, &entry)
 			}
-			context.JSON(http.StatusOK, gin.H{"leaderboard": leaderboard})
+			context.JSON(http.StatusOK, leaderboard)
 		default:
 			context.JSON(http.StatusNotFound, gin.H{})
 		}

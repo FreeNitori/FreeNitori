@@ -1,5 +1,5 @@
 all: build
-test: build-test run
+test: build-test run-test
 
 .PHONY: deps
 deps:
@@ -10,15 +10,15 @@ assets:
 	$$GOPATH/bin/go-bindata -o nitori/config/assets.go -pkg config -prefix assets/ ./assets/* ./assets/web/templates/*
 	$$GOPATH/bin/go-bindata -fs -o nitori/web/static.go -pkg web -prefix assets/web/static/ ./assets/web/static/...
 
-.PHONY: run
-run:
-	./FreeNitori
+.PHONY: run-test
+run-test:
+	./FreeNitoriTest
 
 .PHONY: build
 build: deps assets
-	go build -ldflags="-s -w"
+	go build -tags=jsoniter -ldflags="-s -w"
 	upx --brute FreeNitori
 
 .PHONY: build-test
 build-test: assets
-	go build
+	go build -tags=jsoniter -o FreeNitoriTest
