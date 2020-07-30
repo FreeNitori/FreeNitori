@@ -25,6 +25,7 @@ type UserInfo struct {
 	ID            string
 	AvatarURL     string
 	Discriminator string
+	Bot           bool
 }
 
 func (*IPC) Log(args []string, reply *int) error {

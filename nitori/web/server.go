@@ -142,6 +142,9 @@ func Initialize() {
 			}
 			var leaderboard []*leaderboardEntry
 			for _, userInfo := range guildInfo.Members {
+				if userInfo.Bot {
+					continue
+				}
 				userObj := discordgo.User{ID: userInfo.ID}
 				guildObj := discordgo.Guild{ID: guildInfo.ID}
 				expData, err := config.GetMemberExp(&userObj, &guildObj)

@@ -43,6 +43,7 @@ func ChatBackendIPCReceiver() {
 						ID:            member.User.ID,
 						AvatarURL:     member.User.AvatarURL("128"),
 						Discriminator: member.User.Discriminator,
+						Bot:           member.User.Bot,
 					}
 					members = append(members, &userInfo)
 				}

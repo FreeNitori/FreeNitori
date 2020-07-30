@@ -94,6 +94,40 @@ func getDebug() bool {
 	return debugMode
 }
 
+// Get a guild-specific message string
+func GetMessage(gid string, key string) (string, error) {
+	messageEncoded, err := Redis.HGet(RedisContext, "settings."+gid, "message."+key).Result()
+	if err != nil {
+		if err == redis.Nil {
+			return "", nil
+		}
+		log.Printf("Failed to obtain message in guild %s, %s", gid, err)
+		return "", err
+	}
+	if messageEncoded == "" {
+		return "", nil
+	}
+	message, err := base64.StdEncoding.DecodeString(messageEncoded)
+	if err != nil {
+		log.Printf("Malformed message in guild %s, %s", gid, err)
+		return "", err
+	}
+	return string(message), nil
+}
+
+// Set a guild-specific message string
+func SetMessage(gid string, key string, message string) (bool, error) {
+	if len(message) > 2048 {
+		return false, nil
+	}
+	messageEncoded := base64.StdEncoding.EncodeToString([]byte(message))
+	err := Redis.HSet(RedisContext, "settings."+gid, "message."+key, messageEncoded).Err()
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
 // Get amount of messages totally processed
 func GetTotalMessages() int {
 	messageAmount, err := Redis.HGet(RedisContext, "nitori", "total_messages").Result()
