@@ -1,0 +1,93 @@
+.header-navbar {
+    position: relative;
+}
+
+.header-navbar .mdl-layout__header-row {
+    padding: 0;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.leaderboard-list {
+    width: auto;
+}
+
+.mdl-layout__title {
+    font-size: 14px;
+    text-align: center;
+    font-weight: 300;
+}
+
+.is-compact .mdl-layout__title span {
+    display: none;
+}
+
+.logo-row {
+    min-height: 200px;
+}
+
+.is-compact .logo-row {
+    min-height: auto;
+}
+
+.is-compact .guild-icon {
+    height: 50px;
+    width: 50px;
+    margin-top: 7px;
+}
+
+.navigation-row {
+    background-color: rgba(0, 0, 0, 0.08);
+    text-transform: uppercase;
+    height: 45px;
+}
+
+.navigation-row .mdl-navigation {
+    text-align: center;
+    max-width: 900px;
+    width: 100%;
+}
+
+.navigation-row .mdl-navigation__link {
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    line-height: 42px;
+}
+
+.header-navbar .mdl-layout__drawer-button {
+    background-color: rgba(197, 197, 197, 0.44);
+}
+
+.navigation-row .is-active {
+    position: relative;
+    font-weight: bold;
+}
+
+.navigation-row .is-active:after {
+    content: "";
+    width: 70%;
+    height: 2px;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    background-color: rgb(255, 64, 129);
+    left: 15%;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.no-left-padding {
+    padding-left: 0;
+}
+
+.no-bottom-padding {
+    padding-bottom: 0;
+}
+
+.padding-top {
+    padding: 10px 0 0;
+}

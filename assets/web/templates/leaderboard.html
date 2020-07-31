@@ -18,31 +18,59 @@
     <meta name="twitter:image" content="{{ .GuildIcon }}"/>
     <meta name="twitter:title" content="{{ .GuildName }} Leaderboard"/>
     <meta name="twitter:description" content="Experience leaderboard of {{ .GuildName }}"/>
-    <link href="https://modesta.alexflipnote.dev/css/modesta.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-light_blue.min.css"/>
+    <link rel="stylesheet" href="/static/css/leaderboard.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        .guild-icon {
+            background: url({{ .GuildIcon }}?size=512) 50% no-repeat;
+            background-size: cover;
+            height: 150px;
+            width: 150px;
+            margin: auto auto 10px;
+            border-radius: 50%;
+        }
+    </style>
 </head>
-<body class="github-font-standard">
+<body>
 <div class="fullscreen">
-    <div class="background" style="background-image: url('/static/background.png');"></div>
-    <div class="center-object">
-        <div class="container">
-            <section class="me unset">
-                <div class="avatar-container">
-                    <img alt="{{ .GuildName }}" draggable="false" src="{{ .GuildIcon }}" class="image-title">
-                </div>
-                <div class="unset">
-                    <h1 class="title monospace">{{ .GuildName }}</h1>
-                    <p class="undertitle monospace">Leaderboard</p>
-                </div>
-            </section>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header mdl-layout__header--waterfall header-navbar mdl-color--primary">
+            <div class="mdl-layout__header-row logo-row">
+                  <span class="mdl-layout__title">
+                     <div class="guild-icon"></div>
+                     <span class="mdl-layout__title">Leaderboard of {{ .GuildName }}.</span>
+                  </span>
+            </div>
+            <div class="mdl-layout__header-row navigation-row mdl-layout--large-screen-only">
+                <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
+                    <a class="mdl-navigation__link is-active" href=".">Leaderboard</a>
+                    <a class="mdl-navigation__link" href="ranks">Ranks</a>
+                </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer mdl-layout--small-screen-only">
+            <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
+                <a class="mdl-navigation__link is-active" href=".">Leaderboard</a>
+                <a class="mdl-navigation__link" href="ranks">Ranks</a>
+            </nav>
         </div>
+        <main class="mdl-layout__content">
+            <div class="mdl-grid">
+                <div class="mdl-layout-spacer"></div>
+                <div class="mdl-cell mdl-cell--4-col">
+                    <ul class="leaderboard-list mdl-list" id="leaderboard-body"></ul>
+                </div>
+                <div class="mdl-layout-spacer"></div>
+            </div>
+        </main>
     </div>
 </div>
-<footer class="center box-container primary no-border-radius">
-    <p class="no-margin">
-        Developed and maintained by <a href="https://random.chars.jp/" target="_blank">RandomChars</a>.
-    </p>
-</footer>
-<script src="https://modesta.alexflipnote.dev/js/modesta.js" type="text/javascript" charset="utf-8"></script>
-<script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://fredwu.github.io/jquery-endless-scroll/js/jquery.endless-scroll.js"></script>
+<script src="/static/js/leaderboard.js"></script>
 </body>
 </html>

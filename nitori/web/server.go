@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -160,6 +161,9 @@ func Initialize() {
 				}
 				leaderboard = append(leaderboard, &entry)
 			}
+			sort.Slice(leaderboard, func(i, j int) bool {
+				return leaderboard[i].Experience > leaderboard[j].Experience
+			})
 			context.JSON(http.StatusOK, leaderboard)
 		default:
 			context.JSON(http.StatusNotFound, gin.H{})
