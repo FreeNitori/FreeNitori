@@ -1,10 +1,22 @@
-let request = new XMLHttpRequest();
-request.open("GET", "/api" + window.location.pathname, false);
-request.send();
-let response = JSON.parse(request.responseText)
+let leaderboard;
+
+if (self.fetch) {
+    const request = async () => {
+        const response = await fetch("/api" + window.location.pathname, {method: 'GET'});
+        leaderboard = await response.json();
+        renderLeaderboard();
+    }
+    request().then();
+} else {
+    let request = new XMLHttpRequest();
+    request.open("GET", "/api" + window.location.pathname, false);
+    request.send();
+    leaderboard = JSON.parse(request.responseText);
+    renderLeaderboard();
+}
 
 function makeEntry(key) {
-    let entry = response[key]
+    let entry = leaderboard[key];
     return `
                         <li class="mdl-list__item mdl-list__item--three-line">
                           <span class="mdl-list__item-primary-content">
@@ -21,15 +33,29 @@ function makeEntry(key) {
                              <a class="mdl-list__item-secondary-action">#` + (key + 1) + `</a>
                           </span>
                         </li>
-        `
+        `;
 }
 
-for (let i = 0; i < response.length; i++) {
-    document.getElementById("leaderboard-body").innerHTML += makeEntry(i)
+function makePage(index) {
+    let page = "";
+    let finalKey = 9;
+    if (leaderboard.length > index * 10) {
+        if (leaderboard.length > (index + 1) * 10) {
+            finalKey = (index + 1) * 10;
+        } else {
+            finalKey = leaderboard.length;
+        }
+        for (let i = index * 10; i < finalKey; i++) {
+            page += makeEntry(i);
+        }
+        return page;
+    } else {
+        return null;
+    }
 }
-// $(document).ready(function () {
-//     $('#leaderboard-body').endlessScroll({
-//         fireOnce: false,
-//         callback: function () {}
-//     })
-// })
+
+function renderLeaderboard() {
+    for (let i = 0; i < leaderboard.length; i++) {
+        document.getElementById("leaderboard-list").innerHTML += makeEntry(i);
+    }
+}
