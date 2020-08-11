@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"math/rand"
 	"strconv"
+	"strings"
 )
 
 func init() {
@@ -32,19 +32,25 @@ func AdvanceExperience(context *multiplexer.Context) {
 	}
 
 	previousExp, err := config.GetMemberExp(context.Author, context.Guild)
-	if err != nil {
-		state.Logger.Error(fmt.Sprintf("Database error on user experience advancing, %s", err))
+	if !context.HandleError(err, config.Debug) {
 		return
 	}
 	advancedExp := previousExp + rand.Intn(10) + 5
 	err = config.SetMemberExp(context.Author, context.Guild, advancedExp)
-	if err != nil {
-		state.Logger.Error(fmt.Sprintf("Database error on user experience advancing, %s", err))
+	if !context.HandleError(err, config.Debug) {
 		return
 	}
 	advancedLevel := config.ExpToLevel(advancedExp)
 	if advancedLevel > config.ExpToLevel(previousExp) {
-		context.SendMessage(fmt.Sprintf("Level up message, %s", strconv.Itoa(advancedLevel)))
+		levelupMessage, err := config.GetMessage(context.Guild.ID, "levelup")
+		if !context.HandleError(err, config.Debug) {
+			return
+		}
+		if levelupMessage == "" {
+			levelupMessage = config.LevelUpDefault
+		}
+		replacer := strings.NewReplacer("$USER", context.Author.Mention(), "$LEVEL", strconv.Itoa(advancedLevel))
+		context.SendMessage(replacer.Replace(levelupMessage))
 	}
 }
 
@@ -53,9 +59,7 @@ func (*CommandHandlers) Level(context *multiplexer.Context) {
 		context.SendMessage(state.GuildOnly)
 	}
 	expEnabled, err := config.ExpEnabled(context.Guild.ID)
-	if err != nil {
-		state.Logger.Warning(fmt.Sprintf("Failed to obtain experience enabler information, %s", err))
-		context.SendMessage(state.ErrorOccurred)
+	if !context.HandleError(err, config.Debug) {
 		return
 	}
 	if !expEnabled {
@@ -72,9 +76,7 @@ func (*CommandHandlers) Level(context *multiplexer.Context) {
 		}
 	}
 	expValue, err := config.GetMemberExp(context.Author, context.Guild)
-	if err != nil {
-		state.Logger.Warning(fmt.Sprintf("Failed to obtain experience information, %s", err))
-		context.SendMessage(state.ErrorOccurred)
+	if !context.HandleError(err, config.Debug) {
 		return
 	}
 	levelValue := config.ExpToLevel(expValue)

@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"github.com/bwmarrin/discordgo"
 	"unicode"
 )
 
@@ -14,6 +14,10 @@ var err error
 func (*CommandHandlers) Configure(context *multiplexer.Context) {
 	if context.IsPrivate {
 		context.SendMessage(state.GuildOnly)
+		return
+	}
+	if !context.HasPermission(discordgo.PermissionAdministrator) {
+		context.SendMessage(state.PermissionDenied)
 		return
 	}
 	if len(context.Fields) == 1 {
@@ -37,15 +41,13 @@ func (*CommandHandlers) Configure(context *multiplexer.Context) {
 
 			// Actually set the prefix
 			err = config.SetPrefix(context.Guild.ID, newPrefix)
-			if err != nil {
-				context.SendMessage("Failed to set custom prefix, please try again later.")
+			if !context.HandleError(err, config.Debug) {
 				return
 			}
 			context.SendMessage("Successfully updated prefix.")
 		case 2:
 			err = config.ResetPrefix(context.Guild.ID)
-			if err != nil {
-				context.SendMessage("Failed to reset prefix, please try again later.")
+			if !context.HandleError(err, config.Debug) {
 				return
 			}
 			context.SendMessage("Successfully reset prefix.")
@@ -54,9 +56,7 @@ func (*CommandHandlers) Configure(context *multiplexer.Context) {
 		}
 	case "experience":
 		pre, err := config.ExpToggle(context.Guild.ID)
-		if err != nil {
-			state.Logger.Warning(fmt.Sprintf("Failed to toggle experience enabler, %s", err))
-			context.SendMessage(state.ErrorOccurred)
+		if !context.HandleError(err, config.Debug) {
 			return
 		}
 		switch pre {
