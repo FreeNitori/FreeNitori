@@ -25,10 +25,18 @@ var Operator = Config.Section("System").Key("Operator").String()
 var BaseURL = Config.Section("WebServer").Key("BaseURL").String()
 var Host = Config.Section("WebServer").Key("Host").String()
 var Port = Config.Section("WebServer").Key("Port").String()
-var LevelUpDefault = Config.Section("Defaults").Key("LevelUp").String()
 var Debug = getDebug()
 var Redis = getDatabaseClient()
 var RedisContext = context.Background()
+var CustomizableMessages = map[string]string{
+	"levelup": "Congratulations $USER on reaching level $LEVEL.",
+}
+
+type MessageOutOfBounds struct{}
+
+func (err MessageOutOfBounds) Error() string {
+	return "message out of bounds"
+}
 
 // Fetch configuration file object and generate one if needed
 func getConfig() *ini.File {
@@ -95,8 +103,34 @@ func getDebug() bool {
 	return debugMode
 }
 
+// Get a guild-specific message string within predefined messages
+func GetCustomizableMessage(gid string, key string) (string, error) {
+	defaultMessage, ok := CustomizableMessages[key]
+	if !ok {
+		return "", &MessageOutOfBounds{}
+	}
+	message, err := getMessage(gid, key)
+	if err != nil {
+		return "", err
+	}
+	if message == "" {
+		return defaultMessage, nil
+	}
+	return message, nil
+}
+
+// Set a guild-specific message string within predefined messages
+func SetCustomizableMessage(gid string, key string, message string) error {
+	_, ok := CustomizableMessages[key]
+	if !ok {
+		return &MessageOutOfBounds{}
+	}
+	err := setMessage(gid, key, message)
+	return err
+}
+
 // Get a guild-specific message string
-func GetMessage(gid string, key string) (string, error) {
+func getMessage(gid string, key string) (string, error) {
 	messageEncoded, err := Redis.HGet(RedisContext, "settings."+gid, "message."+key).Result()
 	if err != nil {
 		if err == redis.Nil {
@@ -117,16 +151,17 @@ func GetMessage(gid string, key string) (string, error) {
 }
 
 // Set a guild-specific message string
-func SetMessage(gid string, key string, message string) (bool, error) {
+func setMessage(gid string, key string, message string) error {
 	if len(message) > 2048 {
-		return false, nil
+		return &MessageOutOfBounds{}
+	}
+	if message == "" {
+		err := Redis.HDel(RedisContext, "settings."+gid, "message."+key).Err()
+		return err
 	}
 	messageEncoded := base64.StdEncoding.EncodeToString([]byte(message))
 	err := Redis.HSet(RedisContext, "settings."+gid, "message."+key, messageEncoded).Err()
-	if err != nil {
-		return false, err
-	}
-	return true, nil
+	return err
 }
 
 // Get amount of messages totally processed

@@ -23,8 +23,9 @@ func (*CommandHandlers) Configure(context *multiplexer.Context) {
 	if len(context.Fields) == 1 {
 		embed := formatter.NewEmbed("Configurator", "Configure per-guild overrides.")
 		embed.Color = state.KappaColor
-		embed.AddField("prefix", "Configure command prefix.", false)
 		embed.AddField("experience", "Toggle experience system enablement.", false)
+		embed.AddField("message", "Configure customizable messages.", false)
+		embed.AddField("prefix", "Configure command prefix.", false)
 		context.SendEmbed(embed)
 		return
 	}
@@ -64,6 +65,45 @@ func (*CommandHandlers) Configure(context *multiplexer.Context) {
 			context.SendMessage("Chat experience system has been enabled.")
 		case true:
 			context.SendMessage("Chat experience system has been disabled.")
+		}
+	case "message":
+		switch len(context.Fields) {
+		default:
+
+		case 4:
+			err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], context.Fields[3])
+			switch err.(type) {
+			default:
+				if !context.HandleError(err, config.Debug) {
+					return
+				}
+			case *config.MessageOutOfBounds:
+				context.SendMessage(state.InvalidArgument)
+				return
+			}
+			context.SendMessage("Message `" + context.Fields[2] + "` has been set.")
+		case 3:
+			err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], "")
+			switch err.(type) {
+			default:
+				if !context.HandleError(err, config.Debug) {
+					return
+				}
+			case *config.MessageOutOfBounds:
+				context.SendMessage(state.InvalidArgument)
+				return
+			}
+			context.SendMessage("Message `" + context.Fields[2] + "` has been reset.")
+		case 2:
+			embed := formatter.NewEmbed("Messages", "Configurable messages.")
+			for identifier := range config.CustomizableMessages {
+				message, err := config.GetCustomizableMessage(context.Guild.ID, identifier)
+				if !context.HandleError(err, config.Debug) {
+					return
+				}
+				embed.AddField(identifier, message, false)
+			}
+			context.SendEmbed(embed)
 		}
 	}
 }

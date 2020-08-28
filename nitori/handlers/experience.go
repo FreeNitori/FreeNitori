@@ -42,12 +42,9 @@ func AdvanceExperience(context *multiplexer.Context) {
 	}
 	advancedLevel := config.ExpToLevel(advancedExp)
 	if advancedLevel > config.ExpToLevel(previousExp) {
-		levelupMessage, err := config.GetMessage(context.Guild.ID, "levelup")
+		levelupMessage, err := config.GetCustomizableMessage(context.Guild.ID, "levelup")
 		if !context.HandleError(err, config.Debug) {
 			return
-		}
-		if levelupMessage == "" {
-			levelupMessage = config.LevelUpDefault
 		}
 		replacer := strings.NewReplacer("$USER", context.Author.Mention(), "$LEVEL", strconv.Itoa(advancedLevel))
 		context.SendMessage(replacer.Replace(levelupMessage))

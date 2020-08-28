@@ -116,7 +116,7 @@ func main() {
 			}, nil)
 			_ = state.IPCConnection.Call("IPC.Log", []string{
 				"INFO",
-				"FreeNitori is now ready. Press Control-C to terminate.",
+				"FreeNitori is ready. Press Control-C to terminate.",
 			}, nil)
 			_ = state.IPCConnection.Call("IPC.SignalWebServer", []string{}, nil)
 		}

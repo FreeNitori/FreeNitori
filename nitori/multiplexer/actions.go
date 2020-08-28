@@ -2,6 +2,7 @@ package multiplexer
 
 import (
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
@@ -51,6 +52,9 @@ func (context *Context) HandleError(err error, debug bool) bool {
 }
 
 func (context *Context) HasPermission(permission int) bool {
+	if context.Author.ID == config.Operator || context.Author.ID == config.Administrator {
+		return true
+	}
 	permissions, err := context.Session.State.UserChannelPermissions(context.Author.ID, context.Message.ChannelID)
 	return err == nil && (permissions&permission == permission)
 }

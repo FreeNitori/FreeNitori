@@ -31,15 +31,16 @@ var RawSession, _ = discordgo.New()
 var ShardSessions []*discordgo.Session
 var Application *discordgo.Application
 var Logger = logging.MustGetLogger("FreeNitori")
-var format = logging.MustStringFormatter(
-	logging.ColorSeq(logging.ColorGreen) + "[%{time:15:04:05.000}] %{color:reset}%{color:bold}%{level:.4s} %{color:reset}%{message}",
-)
 var logInfo = logging.AddModuleLevel(logging.NewBackendFormatter(logging.NewLogBackend(os.Stdout, "", 0), format))
 var logError = logging.AddModuleLevel(logging.NewBackendFormatter(logging.NewLogBackend(os.Stderr, "", 0), format))
 var ExitCode = make(chan int)
 var ExecPath string
 var WebServerProcess *os.Process
 var ChatBackendProcess *os.Process
+var EventHandlers []interface{}
+var format = logging.MustStringFormatter(
+	logging.ColorSeq(logging.ColorGreen) + "[%{time:15:04:05.000}] %{color:reset}%{color:bold}%{level:.4s} %{color:reset}%{message}",
+)
 var ProcessAttributes = os.ProcAttr{
 	Dir: ".",
 	Env: os.Environ(),
@@ -49,8 +50,6 @@ var ProcessAttributes = os.ProcAttr{
 		os.Stderr,
 	},
 }
-
-var EventHandlers []interface{}
 
 func init() {
 	ExecPath, err = os.Executable()
