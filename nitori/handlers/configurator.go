@@ -69,9 +69,11 @@ func (*CommandHandlers) Configure(context *multiplexer.Context) {
 	case "message":
 		switch len(context.Fields) {
 		default:
-
-		case 4:
-			err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], context.Fields[3])
+			message := context.Fields[3]
+			for i := 4; i < len(context.Fields); i++ {
+				message += " " + context.Fields[i]
+			}
+			err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], message)
 			switch err.(type) {
 			default:
 				if !context.HandleError(err, config.Debug) {
