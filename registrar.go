@@ -2,7 +2,6 @@ package main
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 )
@@ -17,7 +16,7 @@ func init() {
 	}
 
 	// Add the routes
-	for _, handlerMeta := range handlers.AllHandlers {
+	for _, handlerMeta := range multiplexer.Commands {
 		multiplexer.Router.Route(
 			handlerMeta.Pattern,
 			handlerMeta.AliasPatterns,

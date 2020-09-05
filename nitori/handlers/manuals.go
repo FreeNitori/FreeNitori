@@ -8,7 +8,11 @@ import (
 	"strings"
 )
 
-func (handlers *CommandHandlers) Manuals(context *multiplexer.Context) {
+func init() {
+	ManualsCategory.Register(manuals, "man", []string{"manuals", "help"}, "An interface to the system reference manuals.")
+}
+
+func manuals(context *multiplexer.Context) {
 	guildPrefix := context.GenerateGuildPrefix()
 
 	switch {

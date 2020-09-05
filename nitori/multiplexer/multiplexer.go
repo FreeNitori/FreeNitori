@@ -12,6 +12,7 @@ import (
 )
 
 var Router = New()
+var Commands []*HandlerMetadata
 var NotTargeted []interface{}
 
 // Context information passed to the handlers
@@ -61,8 +62,30 @@ type CommandCategory struct {
 	Description string
 }
 
+// Some structures to save some registering work
+type CommandHandlers struct{}
+type HandlerMetadata struct {
+	Pattern       string
+	AliasPatterns []string
+	Description   string
+	Category      *CommandCategory
+	Handler       CommandHandler
+}
+
 func init() {
 	state.EventHandlers = append(state.EventHandlers, Router.OnMessageCreate)
+	state.EventHandlers = append(state.EventHandlers, Router.OnGuildMemberRemove)
+}
+
+// Register new command handler to a category
+func (cat *CommandCategory) Register(handler CommandHandler, pattern string, alias []string, description string) {
+	Commands = append(Commands, &HandlerMetadata{
+		Pattern:       pattern,
+		AliasPatterns: alias,
+		Description:   description,
+		Category:      cat,
+		Handler:       handler,
+	})
 }
 
 // Returns a new command category
@@ -286,5 +309,12 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		_, _ = session.ChannelMessageSend(channel.ID,
 			fmt.Sprintf("This command does not exist! Issue `%sman` for a list of command manuals.",
 				guildPrefix))
+	}
+}
+
+// Event handler that fires when a guild member is removed
+func (mux *Multiplexer) OnGuildMemberRemove(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
+	if remove.User.ID == session.State.User.ID {
+		config.ResetGuild(remove.GuildID)
 	}
 }

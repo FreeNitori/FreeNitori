@@ -12,6 +12,7 @@ import (
 
 func init() {
 	multiplexer.NotTargeted = append(multiplexer.NotTargeted, AdvanceExperience)
+	ExperienceCategory.Register(level, "level", []string{"rank", "experience", "exp"}, "Query experience level.")
 }
 
 func AdvanceExperience(context *multiplexer.Context) {
@@ -51,7 +52,7 @@ func AdvanceExperience(context *multiplexer.Context) {
 	}
 }
 
-func (*CommandHandlers) Level(context *multiplexer.Context) {
+func level(context *multiplexer.Context) {
 	if context.IsPrivate {
 		context.SendMessage(state.GuildOnly)
 	}

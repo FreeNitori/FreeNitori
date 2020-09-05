@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/communication"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	_ "git.randomchars.net/RandomChars/FreeNitori/nitori/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/session"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/web"
@@ -92,6 +93,7 @@ func main() {
 			}
 			state.Initialized = true
 			state.Application, err = state.RawSession.Application("@me")
+			state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", state.Application.ID)
 			if err != nil {
 				state.Logger.Error(fmt.Sprintf("An error occurred while fetching application info, %s", err))
 				os.Exit(1)

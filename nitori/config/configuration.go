@@ -38,6 +38,22 @@ func (err MessageOutOfBounds) Error() string {
 	return "message out of bounds"
 }
 
+func ResetGuild(gid string) {
+	Redis.Del(RedisContext, "settings."+gid)
+	Redis.Del(RedisContext, "exp."+gid)
+	Redis.Del(RedisContext, "rank."+gid)
+	Redis.Del(RedisContext, "exp_bl."+gid)
+	Redis.Del(RedisContext, "ra_metadata."+gid)
+	Redis.Del(RedisContext, "ra_table_0."+gid)
+	Redis.Del(RedisContext, "ra_table_1."+gid)
+	Redis.Del(RedisContext, "ra_table_2."+gid)
+	Redis.Del(RedisContext, "ra_table_3."+gid)
+	Redis.Del(RedisContext, "ra_table_4."+gid)
+	Redis.Del(RedisContext, "ra_table_5."+gid)
+	Redis.Del(RedisContext, "ra_table_6."+gid)
+	Redis.Del(RedisContext, "ra_table_7."+gid)
+}
+
 // Fetch configuration file object and generate one if needed
 func getConfig() *ini.File {
 	config, err := ini.Load("/etc/nitori.conf")

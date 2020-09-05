@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
@@ -8,7 +9,13 @@ import (
 	"strconv"
 )
 
-func (*CommandHandlers) About(context *multiplexer.Context) {
+func init() {
+	SystemCategory.Register(about, "about", []string{"info", "kappa", "information"}, "Display system information.")
+	SystemCategory.Register(reboot, "reboot", []string{"shutdown", "halt", "restart"}, "")
+	SystemCategory.Register(invite, "invite", []string{"authorize", "oauth"}, "Display authorization URL.")
+}
+
+func about(context *multiplexer.Context) {
 	embed := formatter.NewEmbed(context.Session.State.User.Username,
 		"Open source, general purpose Discord utility.")
 	embed.Color = state.KappaColor
@@ -20,7 +27,7 @@ func (*CommandHandlers) About(context *multiplexer.Context) {
 	context.SendEmbed(embed)
 }
 
-func (handlers *CommandHandlers) Reboot(context *multiplexer.Context) {
+func reboot(context *multiplexer.Context) {
 	if context.Author.ID != config.Administrator {
 		context.SendMessage(state.AdminOnly)
 		return
@@ -39,4 +46,9 @@ func (handlers *CommandHandlers) Reboot(context *multiplexer.Context) {
 			return
 		}
 	}
+}
+
+func invite(context *multiplexer.Context) {
+	embed := formatter.NewEmbed("Invite", fmt.Sprintf("Click [this](%s) to invite Nitori.", state.InviteURL))
+	context.SendEmbed(embed)
 }

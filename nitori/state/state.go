@@ -30,6 +30,7 @@ var Initialized = false
 var RawSession, _ = discordgo.New()
 var ShardSessions []*discordgo.Session
 var Application *discordgo.Application
+var InviteURL string
 var Logger = logging.MustGetLogger("FreeNitori")
 var logInfo = logging.AddModuleLevel(logging.NewBackendFormatter(logging.NewLogBackend(os.Stdout, "", 0), format))
 var logError = logging.AddModuleLevel(logging.NewBackendFormatter(logging.NewLogBackend(os.Stderr, "", 0), format))

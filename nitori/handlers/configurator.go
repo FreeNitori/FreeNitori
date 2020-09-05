@@ -11,7 +11,11 @@ import (
 
 var err error
 
-func (*CommandHandlers) Configure(context *multiplexer.Context) {
+func init() {
+	SystemCategory.Register(configure, "configure", []string{"conf", "settings", "set"}, "Configure per-guild overrides.")
+}
+
+func configure(context *multiplexer.Context) {
 	if context.IsPrivate {
 		context.SendMessage(state.GuildOnly)
 		return
