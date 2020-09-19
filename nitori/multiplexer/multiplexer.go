@@ -74,6 +74,7 @@ type HandlerMetadata struct {
 
 func init() {
 	state.EventHandlers = append(state.EventHandlers, Router.OnMessageCreate)
+	state.EventHandlers = append(state.EventHandlers, Router.OnGuildMemberAdd)
 	state.EventHandlers = append(state.EventHandlers, Router.OnGuildMemberRemove)
 }
 
@@ -310,6 +311,11 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 			fmt.Sprintf("This command does not exist! Issue `%sman` for a list of command manuals.",
 				guildPrefix))
 	}
+}
+
+// Event handler that fires when a guild member is added
+func (mux *Multiplexer) OnGuildMemberAdd(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
+	// thing
 }
 
 // Event handler that fires when a guild member is removed

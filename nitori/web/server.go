@@ -28,6 +28,7 @@ func Initialize() {
 	// Initialize the engine
 	gin.SetMode(gin.ReleaseMode)
 	Engine = gin.New()
+	Engine.Use(RateLimiting(1000, 20))
 
 	// Register templates
 	templates := template.New("web/templates")

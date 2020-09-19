@@ -6,7 +6,15 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
+	"regexp"
+	"strings"
 )
+
+var numericalRegex *regexp.Regexp
+
+func init() {
+	numericalRegex, _ = regexp.Compile("[^0-9]+")
+}
 
 func (context *Context) SendMessage(message string) *discordgo.Message {
 	var err error
@@ -57,4 +65,24 @@ func (context *Context) HasPermission(permission int) bool {
 	}
 	permissions, err := context.Session.State.UserChannelPermissions(context.Author.ID, context.Message.ChannelID)
 	return err == nil && (permissions&permission == permission)
+}
+
+func (context *Context) GetMember(user string) *discordgo.Member {
+	if strings.HasPrefix(user, "<@") && strings.HasSuffix(user, ">") {
+		userID := numericalRegex.ReplaceAllString(user, "")
+		if len(userID) == 18 {
+			for _, member := range context.Guild.Members {
+				if member.User.ID == userID {
+					return member
+				}
+			}
+		}
+	} else {
+		for _, member := range context.Guild.Members {
+			if member.User.Username == user || member.Nick == user {
+				return member
+			}
+		}
+	}
+	return nil
 }
