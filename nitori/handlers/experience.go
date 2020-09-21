@@ -78,11 +78,7 @@ func level(context *multiplexer.Context) {
 	// Get the member
 	var member *discordgo.Member
 	if len(context.Fields) > 1 {
-		message := context.Fields[1]
-		for i := 2; i < len(context.Fields); i++ {
-			message += " " + context.Fields[i]
-		}
-		member = context.GetMember(message)
+		member = context.GetMember(context.StitchFields(1))
 	} else {
 		member = context.Create.Member
 		member.User = context.Author
@@ -96,14 +92,7 @@ func level(context *multiplexer.Context) {
 
 	// Make the message
 	embed := formatter.NewEmbed("Experience Level", member.User.Username+"#"+member.User.Discriminator)
-	if len(member.Roles) > 0 {
-		for _, role := range context.Guild.Roles {
-			if role.ID == member.Roles[0] {
-				embed.Color = role.Color
-				break
-			}
-		}
-	}
+	embed.Color = context.Session.State.UserColor(context.Author.ID, context.Create.ChannelID)
 	expValue, err := config.GetMemberExp(member.User, context.Guild)
 	if !context.HandleError(err, config.Debug) {
 		return

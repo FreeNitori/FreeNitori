@@ -73,11 +73,7 @@ func configure(context *multiplexer.Context) {
 	case "message":
 		switch len(context.Fields) {
 		default:
-			message := context.Fields[3]
-			for i := 4; i < len(context.Fields); i++ {
-				message += " " + context.Fields[i]
-			}
-			err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], message)
+			err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], context.StitchFields(3))
 			switch err.(type) {
 			default:
 				if !context.HandleError(err, config.Debug) {

@@ -73,6 +73,11 @@ func (context *Context) HasPermission(permission int) bool {
 
 // Get a guild member from a string
 func (context *Context) GetMember(user string) *discordgo.Member {
+	// Guild only function
+	if context.IsPrivate {
+		return nil
+	}
+
 	// Check if it's a mention or the string is numerical
 	_, err := strconv.Atoi(user)
 	if strings.HasPrefix(user, "<@") && strings.HasSuffix(user, ">") || err == nil {
@@ -95,4 +100,13 @@ func (context *Context) GetMember(user string) *discordgo.Member {
 		}
 	}
 	return nil
+}
+
+// Stitch together fields of a context
+func (context *Context) StitchFields(start int) string {
+	message := context.Fields[1]
+	for i := start + 1; i < len(context.Fields); i++ {
+		message += " " + context.Fields[i]
+	}
+	return message
 }

@@ -184,18 +184,20 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 
 	// Figure out the message guild
 	var guild *discordgo.Guild
-	guild, err = session.State.Guild(create.GuildID)
-	if err != nil {
-		// Attempt direct API fetching
-		guild, err = session.Guild(create.GuildID)
+	if create.GuildID != "" {
+		guild, err = session.State.Guild(create.GuildID)
 		if err != nil {
-			log.Printf("Failed to fetch guild from API or cache, %s", err)
-			return
-		} else {
-			// Attempt caching the channel
-			err = session.State.GuildAdd(guild)
+			// Attempt direct API fetching
+			guild, err = session.Guild(create.GuildID)
 			if err != nil {
-				log.Printf("Failed to cache channel fetched from API, %s", err)
+				log.Printf("Failed to fetch guild from API or cache, %s", err)
+				return
+			} else {
+				// Attempt caching the channel
+				err = session.State.GuildAdd(guild)
+				if err != nil {
+					log.Printf("Failed to cache channel fetched from API, %s", err)
+				}
 			}
 		}
 	}
