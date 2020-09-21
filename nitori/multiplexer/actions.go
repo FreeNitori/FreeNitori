@@ -17,9 +17,8 @@ func init() {
 	numericalRegex, _ = regexp.Compile("[^0-9]+")
 }
 
+// Send a text message and return it
 func (context *Context) SendMessage(message string) *discordgo.Message {
-	var err error
-
 	resultMessage, err := context.Session.ChannelMessageSend(context.Message.ChannelID, message)
 	if err != nil {
 		if err == discordgo.ErrUnauthorized {
@@ -33,9 +32,8 @@ func (context *Context) SendMessage(message string) *discordgo.Message {
 	return resultMessage
 }
 
+// Send an embed message and return it
 func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
-	var err error
-
 	resultMessage, err := context.Session.ChannelMessageSendEmbed(context.Message.ChannelID, embed.MessageEmbed)
 	if err != nil {
 		if err == discordgo.ErrUnauthorized {
@@ -49,6 +47,7 @@ func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
 	return resultMessage
 }
 
+// Handle error and send the stuff if in debug mode
 func (context *Context) HandleError(err error, debug bool) bool {
 	if err != nil {
 		context.SendMessage(state.ErrorOccurred)
@@ -60,10 +59,14 @@ func (context *Context) HandleError(err error, debug bool) bool {
 	return true
 }
 
+// Check if user has specific permission
 func (context *Context) HasPermission(permission int) bool {
+	// Override check for operators and system administrators
 	if context.Author.ID == config.Operator || context.Author.ID == config.Administrator {
 		return true
 	}
+
+	// Check against the user
 	permissions, err := context.Session.State.UserChannelPermissions(context.Author.ID, context.Message.ChannelID)
 	return err == nil && (permissions&permission == permission)
 }
