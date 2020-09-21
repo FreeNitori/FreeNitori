@@ -305,7 +305,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 
 	// If no command was matched, resort to either being annoyed by the ping or a command not found message
 	if context.HasMention {
-		_, _ = session.ChannelMessageSend(channel.ID, "<a:KyoukoAngryPing:710413221927976980>")
+		_, _ = session.ChannelMessageSend(channel.ID, "<a:KyokoAngryPing:757399059114885180>")
 	} else {
 		_, _ = session.ChannelMessageSend(channel.ID,
 			fmt.Sprintf("This command does not exist! Issue `%sman` for a list of command manuals.",

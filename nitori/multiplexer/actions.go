@@ -7,6 +7,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -67,9 +68,14 @@ func (context *Context) HasPermission(permission int) bool {
 	return err == nil && (permissions&permission == permission)
 }
 
+// Get a guild member from a string
 func (context *Context) GetMember(user string) *discordgo.Member {
-	if strings.HasPrefix(user, "<@") && strings.HasSuffix(user, ">") {
+	// Check if it's a mention or the string is numerical
+	_, err := strconv.Atoi(user)
+	if strings.HasPrefix(user, "<@") && strings.HasSuffix(user, ">") || err == nil {
+		// Strip off the mention thingy
 		userID := numericalRegex.ReplaceAllString(user, "")
+		// Length of a real user ID after stripping off stuff
 		if len(userID) == 18 {
 			for _, member := range context.Guild.Members {
 				if member.User.ID == userID {
@@ -78,6 +84,7 @@ func (context *Context) GetMember(user string) *discordgo.Member {
 			}
 		}
 	} else {
+		// Find as username or nickname
 		for _, member := range context.Guild.Members {
 			if member.User.Username == user || member.Nick == user {
 				return member
