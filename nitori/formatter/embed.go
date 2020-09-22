@@ -162,6 +162,9 @@ func (embed *Embed) SetAuthor(args ...string) *Embed {
 	case argsLength > 1:
 		iconURL = args[1]
 		fallthrough
+	case argsLength > 0:
+		name = args[0]
+		fallthrough
 	case argsLength == 0:
 	}
 

@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	ModerationCategory.Register(whois, "whois", []string{"lookup"},
+	ModerationCategory.Register(whois, "whois", []string{"lookup", "pfp"},
 		"Lookup a user's detailed information by username, nickname or ID")
 }
 
@@ -41,11 +41,24 @@ func whois(context *multiplexer.Context) {
 		return
 	}
 
+	// Only generate the pfp stuff if that's what's required
+	if context.Fields[0] == "pfp" {
+		embed := formatter.NewEmbed("", "")
+		embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
+		embed.SetAuthor(user.Username, user.AvatarURL("128"))
+		embed.SetImage(user.AvatarURL("4096"))
+		context.SendEmbed(embed)
+		return
+	}
+
 	// Make the message
-	userID, _ := strconv.Atoi(user.ID)
+	userID, err := strconv.Atoi(user.ID)
+	if !context.HandleError(err, config.Debug) {
+		return
+	}
 	creationTime := time.Unix(int64(((userID>>22)+1420070400000)/1000), 0)
 	embed := formatter.NewEmbed("User Information", "")
-	embed.Color = context.Session.State.UserColor(context.Author.ID, context.Create.ChannelID)
+	embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
 	embed.SetThumbnail(user.AvatarURL("1024"))
 	embed.AddField("Username", user.Username+"#"+user.Discriminator, member != nil)
 	if member != nil {
