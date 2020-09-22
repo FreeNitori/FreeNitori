@@ -3,11 +3,11 @@ package config
 import (
 	"context"
 	"encoding/base64"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
 	"gopkg.in/ini.v1"
 	"io/ioutil"
-	"log"
 	"math"
 	"os"
 	"strconv"
@@ -60,27 +60,27 @@ func getConfig() *ini.File {
 	if err != nil {
 		config, err = ini.Load("nitori.conf")
 		if err != nil {
-			log.Printf("Error loading configuration file, %s", err)
+			log.Logger.Fatalf("Error loading configuration file, %s", err)
 			defaultConfigFile, err := Asset("nitori.conf")
 			if err != nil {
-				log.Printf("Failed to extract the default configuration file, %s", err)
+				log.Logger.Fatalf("Failed to extract the default configuration file, %s", err)
 				os.Exit(1)
 			}
 			err = ioutil.WriteFile("nitori.conf", defaultConfigFile, 0644)
 			if err != nil {
-				log.Printf("Failed to write the default configuration file, %s", err)
+				log.Logger.Fatalf("Failed to write the default configuration file, %s", err)
 				os.Exit(1)
 			}
-			log.Println("Generated default configuration file at ./nitori.conf, " +
+			log.Logger.Fatalf("Generated default configuration file at ./nitori.conf, " +
 				"please edit it before restarting FreeNitori.")
 			os.Exit(1)
 		}
 		if config.Section("System").Key("ExecutionMode").String() == "debug" {
-			log.Println("Loaded configuration file from current directory.")
+			log.Logger.Info("Loaded configuration file from current directory.")
 		}
 	} else {
 		if config.Section("System").Key("ExecutionMode").String() == "debug" {
-			log.Println("Loaded system-wide configuration from /etc/nitori.conf.")
+			log.Logger.Info("Loaded system-wide configuration from /etc/nitori.conf.")
 		}
 	}
 	return config
@@ -90,7 +90,7 @@ func getConfig() *ini.File {
 func getDatabaseClient() *redis.Client {
 	db, err := strconv.Atoi(Config.Section("Redis").Key("Database").String())
 	if err != nil {
-		log.Printf("Failed to read redis database configuration, %s", err)
+		log.Logger.Fatalf("Failed to read redis database configuration, %s", err)
 		os.Exit(1)
 	}
 	return redis.NewClient(&redis.Options{
@@ -113,7 +113,7 @@ func getDebug() bool {
 		debugMode = false
 		break
 	case true:
-		log.Printf("Unknown execution mode: %s", executionMode)
+		log.Logger.Fatalf("Unknown execution mode: %s", executionMode)
 		os.Exit(1)
 	}
 	return debugMode
@@ -152,7 +152,7 @@ func getMessage(gid string, key string) (string, error) {
 		if err == redis.Nil {
 			return "", nil
 		}
-		log.Printf("Failed to obtain message in guild %s, %s", gid, err)
+		log.Logger.Warnf("Failed to obtain message in guild %s, %s", gid, err)
 		return "", err
 	}
 	if messageEncoded == "" {
@@ -160,7 +160,7 @@ func getMessage(gid string, key string) (string, error) {
 	}
 	message, err := base64.StdEncoding.DecodeString(messageEncoded)
 	if err != nil {
-		log.Printf("Malformed message in guild %s, %s", gid, err)
+		log.Logger.Warnf("Malformed message in guild %s, %s", gid, err)
 		return "", err
 	}
 	return string(message), nil
@@ -187,7 +187,7 @@ func GetTotalMessages() int {
 		if err == redis.Nil {
 			return 0
 		}
-		log.Printf("Failed to obtain total amount of messages processed, %s", err)
+		log.Logger.Warnf("Failed to obtain total amount of messages processed, %s", err)
 		return 0
 	}
 	if messageAmount == "" {
@@ -195,7 +195,7 @@ func GetTotalMessages() int {
 	}
 	amountInteger, err := strconv.Atoi(messageAmount)
 	if err != nil {
-		log.Printf("Malformed amount of messages processed, %s", err)
+		log.Logger.Warnf("Malformed amount of messages processed, %s", err)
 		return 0
 	}
 	return amountInteger
@@ -213,7 +213,7 @@ func GetPrefix(gid string) string {
 		if err == redis.Nil {
 			return Prefix
 		}
-		log.Printf("Failed to obtain prefix in guild %s, %s", gid, err)
+		log.Logger.Warnf("Failed to obtain prefix in guild %s, %s", gid, err)
 		return Prefix
 	}
 	if prefixValue == "" {
@@ -221,7 +221,7 @@ func GetPrefix(gid string) string {
 	}
 	prefixDecoded, err := base64.StdEncoding.DecodeString(prefixValue)
 	if err != nil {
-		log.Printf("Malformed prefix in guild %s, %s", gid, err)
+		log.Logger.Warnf("Malformed prefix in guild %s, %s", gid, err)
 		return Prefix
 	}
 	return string(prefixDecoded)

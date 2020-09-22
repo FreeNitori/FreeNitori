@@ -1,8 +1,8 @@
 package formatter
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"github.com/bwmarrin/discordgo"
-	"log"
 )
 
 type Embed struct {
@@ -40,7 +40,7 @@ func NewEmbed(title string, description string) *Embed {
 func (embed *Embed) AddField(name, value string, inline bool) *Embed {
 
 	if len(embed.Fields) == EmbedLimitField {
-		log.Printf("Embed with name \"%s\" exceeded limit!", name)
+		log.Logger.Warnf("Embed with name \"%s\" exceeded limit!", name)
 		return embed
 	}
 

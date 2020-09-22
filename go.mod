@@ -5,7 +5,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
 	github.com/go-redis/redis/v8 v8.0.0-beta.5
-	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
+	github.com/sirupsen/logrus v1.6.0
 	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e
 	gopkg.in/ini.v1 v1.57.0
 )

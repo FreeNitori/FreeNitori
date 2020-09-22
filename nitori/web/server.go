@@ -3,11 +3,11 @@ package web
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/communication"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"github.com/gin-gonic/gin"
 	"html/template"
-	"log"
 	"net/http"
 	"os"
 	"sort"
@@ -37,7 +37,7 @@ func Initialize() {
 			templateBin, _ := config.Asset(path)
 			templates, err = templates.New(path).Parse(string(templateBin))
 			if err != nil {
-				log.Printf("Failed to parse template, %s", err)
+				log.Logger.Fatalf("Failed to parse template, %s", err)
 				_ = state.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
 				os.Exit(1)
 			}
