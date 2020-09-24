@@ -17,7 +17,7 @@ run-test:
 .PHONY: build
 build: deps assets
 	go build -tags=jsoniter -ldflags="-s -w"
-	upx --best --color --brute FreeNitori
+	upx --best --brute FreeNitori
 
 .PHONY: build-test
 build-test: assets
