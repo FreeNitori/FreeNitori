@@ -14,6 +14,9 @@ import (
 var Router = New()
 var Commands []*HandlerMetadata
 var NotTargeted []interface{}
+var GuildMemberAdd []interface{}
+var GuildMemberRemove []interface{}
+var GuildDelete []interface{}
 
 // Context information passed to the handlers
 type Context struct {
@@ -76,6 +79,7 @@ func init() {
 	state.EventHandlers = append(state.EventHandlers, Router.OnMessageCreate)
 	state.EventHandlers = append(state.EventHandlers, Router.OnGuildMemberAdd)
 	state.EventHandlers = append(state.EventHandlers, Router.OnGuildMemberRemove)
+	state.EventHandlers = append(state.EventHandlers, Router.OnGuildDelete)
 }
 
 // Register new command handler to a category
@@ -314,12 +318,36 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 
 // Event handler that fires when a guild member is added
 func (mux *Multiplexer) OnGuildMemberAdd(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
-	// thing
+	go func() {
+		for _, hook := range GuildMemberAdd {
+			if function, success := hook.(func(session *discordgo.Session, add *discordgo.GuildMemberAdd)); success {
+				function(session, add)
+			}
+		}
+	}()
+	return
 }
 
 // Event handler that fires when a guild member is removed
 func (mux *Multiplexer) OnGuildMemberRemove(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
-	if remove.User.ID == session.State.User.ID {
-		config.ResetGuild(remove.GuildID)
-	}
+	go func() {
+		for _, hook := range GuildMemberRemove {
+			if function, success := hook.(func(session *discordgo.Session, remove *discordgo.GuildMemberRemove)); success {
+				function(session, remove)
+			}
+		}
+	}()
+	return
+}
+
+// Event handler that fires when a guild is deleted
+func (mux *Multiplexer) OnGuildDelete(session *discordgo.Session, delete *discordgo.GuildDelete) {
+	go func() {
+		for _, hook := range GuildDelete {
+			if function, success := hook.(func(session *discordgo.Session, delete *discordgo.GuildDelete)); success {
+				function(session, delete)
+			}
+		}
+	}()
+	return
 }

@@ -13,6 +13,14 @@ var err error
 
 func init() {
 	SystemCategory.Register(configure, "configure", []string{"conf", "settings", "set"}, "Configure per-guild overrides.")
+	multiplexer.GuildMemberRemove = append(multiplexer.GuildMemberRemove, func(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
+		if remove.User.ID == session.State.User.ID {
+			config.ResetGuild(remove.GuildID)
+		}
+	})
+	multiplexer.GuildDelete = append(multiplexer.GuildDelete, func(session *discordgo.Session, delete *discordgo.GuildDelete) {
+		config.ResetGuild(delete.ID)
+	})
 }
 
 func configure(context *multiplexer.Context) {
