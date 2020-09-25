@@ -129,4 +129,9 @@ func setrank(context *multiplexer.Context) {
 		return
 	}
 
+	switch len(context.Fields) {
+	case 0:
+		embed := formatter.NewEmbed("Ranked Roles", "Configure ranked roles.")
+		context.SendEmbed(embed)
+	}
 }

@@ -58,7 +58,7 @@ func main() {
 
 			// Authenticate and make session
 			if state.RawSession.Token == "" {
-				configToken := config.Config.Section("System").Key("Token").String()
+				configToken := config.Config.System.Token
 				if configToken != "" && configToken != "INSERT_TOKEN_HERE" {
 					log.Debug("Loaded token from configuration file.")
 					state.RawSession.Token = configToken
@@ -86,8 +86,8 @@ func main() {
 					os.Exit(1)
 				}
 			}
-			config.Administrator, _ = state.RawSession.User(config.AdministratorID)
-			config.Operator, _ = state.RawSession.User(config.OperatorID)
+			config.Administrator, _ = state.RawSession.User(config.Config.System.Administrator)
+			config.Operator, _ = state.RawSession.User(config.Config.System.Operator)
 			state.Initialized = true
 			state.Application, err = state.RawSession.Application("@me")
 			state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", state.Application.ID)
@@ -96,8 +96,8 @@ func main() {
 				os.Exit(1)
 			}
 			_, _ = state.RawSession.UserUpdateStatus("dnd")
-			_ = state.RawSession.UpdateStatus(0, config.Presence)
-			if config.Shard {
+			_ = state.RawSession.UpdateStatus(0, config.Config.System.Presence)
+			if config.Config.System.Shard {
 				err = session.MakeSessions()
 				if err != nil {
 					_ = state.IPCConnection.Call("IPC.Error", []string{"ChatBackend"}, nil)
@@ -109,7 +109,7 @@ func main() {
 			log.Infof("User: %s | ID: %s | Default Prefix: %s",
 				state.RawSession.State.User.Username+"#"+state.RawSession.State.User.Discriminator,
 				state.RawSession.State.User.ID,
-				config.Prefix)
+				config.Config.System.Prefix)
 			log.Infof("FreeNitori is ready. Press Control-C to terminate.")
 			_ = state.IPCConnection.Call("IPC.SignalWebServer", []string{}, nil)
 		}
@@ -134,7 +134,7 @@ func main() {
 			web.Initialize()
 			go func() {
 				<-readyChannel
-				err = web.Engine.Run(fmt.Sprintf("%s:%s", config.Host, config.Port))
+				err = web.Engine.Run(fmt.Sprintf("%s:%s", config.Config.WebServer.Host, config.Config.WebServer.Port))
 				if err != nil {
 					log.Error(fmt.Sprintf("Failed to start web server, %s", err))
 					_ = state.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
@@ -157,11 +157,11 @@ ___________                      _______  .__  __               .__
 `+"\n", state.Version)
 
 			// Check for an existing instance
-			if _, err := os.Stat(config.SocketPath); os.IsNotExist(err) {
+			if _, err := os.Stat(config.Config.System.Socket); os.IsNotExist(err) {
 			} else {
-				_, err := net.Dial("unix", config.SocketPath)
+				_, err := net.Dial("unix", config.Config.System.Socket)
 				if err != nil {
-					err = syscall.Unlink(config.SocketPath)
+					err = syscall.Unlink(config.Config.System.Socket)
 					if err != nil {
 						log.Error(fmt.Sprintf("Unable to remove hanging socket, %s", err))
 						os.Exit(1)
@@ -175,7 +175,7 @@ ___________                      _______  .__  __               .__
 			// Initialize the socket
 			_ = rpc.Register(IPCFunctions)
 			rpc.HandleHTTP()
-			SocketListener, err = net.Listen("unix", config.SocketPath)
+			SocketListener, err = net.Listen("unix", config.Config.System.Socket)
 			if err != nil {
 				log.Error(fmt.Sprintf("Failed to listen on the socket, %s", err))
 				os.Exit(1)
@@ -229,7 +229,7 @@ ___________                      _______  .__  __               .__
 					_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
 					_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
 					_ = SocketListener.Close()
-					_ = syscall.Unlink(config.SocketPath)
+					_ = syscall.Unlink(config.Config.System.Socket)
 				} else if state.StartChatBackend {
 					if currentSignal != os.Interrupt {
 						// Only tell the supervisor if SIGUSR2 was not sent or the program was not interrupted

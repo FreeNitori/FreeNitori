@@ -19,7 +19,7 @@ func about(context *multiplexer.Context) {
 	embed := formatter.NewEmbed(context.Session.State.User.Username,
 		"Open source, general purpose Discord utility.")
 	embed.Color = state.KappaColor
-	embed.AddField("Homepage", config.BaseURL, true)
+	embed.AddField("Homepage", config.Config.WebServer.BaseURL, true)
 	embed.AddField("Processed Messages", strconv.Itoa(config.GetTotalMessages()), true)
 	embed.AddField("License", "GNU General Public License v3.0", false)
 	if config.Administrator != nil {
@@ -32,7 +32,7 @@ func about(context *multiplexer.Context) {
 }
 
 func reboot(context *multiplexer.Context) {
-	if context.Author.ID != config.AdministratorID {
+	if context.Author.ID != config.Config.System.Administrator {
 		context.SendMessage(state.AdminOnly)
 		return
 	}

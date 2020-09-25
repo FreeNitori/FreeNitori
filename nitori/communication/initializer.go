@@ -16,7 +16,7 @@ func InitializeIPC(StartChatBackend bool, StartWebServer bool) error {
 }
 
 func ipcDialClient() error {
-	state.IPCConnection, err = rpc.DialHTTP("unix", config.SocketPath)
+	state.IPCConnection, err = rpc.DialHTTP("unix", config.Config.System.Socket)
 	if err != nil {
 		return err
 	} else {

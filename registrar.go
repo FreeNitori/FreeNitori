@@ -9,7 +9,7 @@ import (
 func init() {
 
 	// Add the multiplexer handler to the raw session if sharding is disabled
-	if !config.Shard {
+	if !config.Config.System.Shard {
 		for _, handler := range state.EventHandlers {
 			state.RawSession.AddHandler(handler)
 		}

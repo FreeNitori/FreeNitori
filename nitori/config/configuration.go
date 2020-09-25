@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/base64"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"github.com/BurntSushi/toml"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
 	"github.com/sirupsen/logrus"
-	"gopkg.in/ini.v1"
 	"io/ioutil"
 	"math"
 	"os"
@@ -15,27 +15,50 @@ import (
 )
 
 // Exported variables for usage in other classes
-var Config = getConfig()
-var SocketPath = Config.Section("System").Key("Socket").String()
-var Prefix = Config.Section("System").Key("Prefix").String()
-var Shard, _ = Config.Section("System").Key("Shard").Bool()
-var ShardCount, _ = Config.Section("System").Key("ShardCount").Int()
-var Presence = Config.Section("System").Key("Presence").String()
-var AdministratorID = Config.Section("System").Key("Administrator").String()
-var OperatorID = Config.Section("System").Key("Operator").String()
+var Config = parseConfig()
 var Administrator *discordgo.User
 var Operator *discordgo.User
-var BaseURL = Config.Section("WebServer").Key("BaseURL").String()
-var Host = Config.Section("WebServer").Key("Host").String()
-var Port = Config.Section("WebServer").Key("Port").String()
 var Debug = getDebug()
-var Redis = getDatabaseClient()
+var Redis = redis.NewClient(&redis.Options{
+	Addr:     Config.Redis.Host + ":" + Config.Redis.Port,
+	Password: Config.Redis.Password,
+	DB:       Config.Redis.Database,
+})
 var RedisContext = context.Background()
 var CustomizableMessages = map[string]string{
 	"levelup": "Congratulations $USER on reaching level $LEVEL.",
 }
 
+// Configuration related types
 type MessageOutOfBounds struct{}
+type Conf struct {
+	System    SystemSection
+	Redis     RedisSection
+	WebServer WebServerSection
+}
+type SystemSection struct {
+	ExecutionMode string
+	Socket        string
+	Token         string
+	Prefix        string
+	Presence      string
+	Shard         bool
+	ShardCount    int
+	Administrator string
+	Operator      string
+}
+type RedisSection struct {
+	Host     string
+	Port     string
+	Password string
+	Database int
+}
+type WebServerSection struct {
+	SecretKey string
+	Host      string
+	Port      string
+	BaseURL   string
+}
 
 func init() {
 	switch Debug {
@@ -48,6 +71,36 @@ func init() {
 
 func (err MessageOutOfBounds) Error() string {
 	return "message out of bounds"
+}
+
+// Parse or generate configuration file
+func parseConfig() *Conf {
+	var nitoriConf Conf
+	config, err := ioutil.ReadFile("/etc/nitori.conf")
+	if err != nil {
+		config, err = ioutil.ReadFile("nitori.conf")
+		if err != nil {
+			log.Fatalf("Error loading configuration file, %s", err)
+			defaultConfigFile, err := Asset("nitori.conf")
+			if err != nil {
+				log.Fatalf("Failed to extract the default configuration file, %s", err)
+				os.Exit(1)
+			}
+			err = ioutil.WriteFile("nitori.conf", defaultConfigFile, 0644)
+			if err != nil {
+				log.Fatalf("Failed to write the default configuration file, %s", err)
+				os.Exit(1)
+			}
+			log.Fatalf("Generated default configuration file at ./nitori.conf, " +
+				"please edit it before restarting FreeNitori.")
+			os.Exit(1)
+		}
+	}
+	if _, err := toml.Decode(string(config), &nitoriConf); err != nil {
+		log.Fatalf("Configuration file syntax error: %s", err)
+		os.Exit(1)
+	}
+	return &nitoriConf
 }
 
 func ResetGuild(gid string) {
@@ -66,69 +119,18 @@ func ResetGuild(gid string) {
 	Redis.Del(RedisContext, "ra_table_7."+gid)
 }
 
-// Fetch configuration file object and generate one if needed
-func getConfig() *ini.File {
-	config, err := ini.Load("/etc/nitori.conf")
-	if err != nil {
-		config, err = ini.Load("nitori.conf")
-		if err != nil {
-			log.Fatalf("Error loading configuration file, %s", err)
-			defaultConfigFile, err := Asset("nitori.conf")
-			if err != nil {
-				log.Fatalf("Failed to extract the default configuration file, %s", err)
-				os.Exit(1)
-			}
-			err = ioutil.WriteFile("nitori.conf", defaultConfigFile, 0644)
-			if err != nil {
-				log.Fatalf("Failed to write the default configuration file, %s", err)
-				os.Exit(1)
-			}
-			log.Fatalf("Generated default configuration file at ./nitori.conf, " +
-				"please edit it before restarting FreeNitori.")
-			os.Exit(1)
-		}
-		if config.Section("System").Key("ExecutionMode").String() == "debug" {
-			log.Info("Loaded configuration file from current directory.")
-		}
-	} else {
-		if config.Section("System").Key("ExecutionMode").String() == "debug" {
-			log.Info("Loaded system-wide configuration from /etc/nitori.conf.")
-		}
-	}
-	return config
-}
-
-// Obtain a redis client using details stored in the configuration
-func getDatabaseClient() *redis.Client {
-	db, err := strconv.Atoi(Config.Section("Redis").Key("Database").String())
-	if err != nil {
-		log.Fatalf("Failed to read redis database configuration, %s", err)
-		os.Exit(1)
-	}
-	return redis.NewClient(&redis.Options{
-		Addr: Config.Section("Redis").Key("Host").String() +
-			":" + Config.Section("Redis").Key("Port").String(),
-		Password: Config.Section("Redis").Key("Password").String(),
-		DB:       db,
-	})
-}
-
 // Figure out if the execution mode happens to be debug
 func getDebug() bool {
-	executionMode := Config.Section("System").Key("ExecutionMode").String()
-	var debugMode bool
-	switch {
-	case executionMode == "debug":
-		debugMode = true
-		break
-	case executionMode == "production":
-		debugMode = false
-		break
-	case true:
-		log.Fatalf("Unknown execution mode: %s", executionMode)
+	switch Config.System.ExecutionMode {
+	case "debug":
+		return true
+	case "production":
+		return false
+	default:
+		log.Fatalf("Unknown execution mode: %s", Config.System.ExecutionMode)
 		os.Exit(1)
 	}
-	return debugMode
+	return false
 }
 
 // Get a guild-specific message string within predefined messages
@@ -223,18 +225,18 @@ func GetPrefix(gid string) string {
 	prefixValue, err := Redis.HGet(RedisContext, "settings."+gid, "prefix").Result()
 	if err != nil {
 		if err == redis.Nil {
-			return Prefix
+			return Config.System.Prefix
 		}
 		log.Warnf("Failed to obtain prefix in guild %s, %s", gid, err)
-		return Prefix
+		return Config.System.Prefix
 	}
 	if prefixValue == "" {
-		return Prefix
+		return Config.System.Prefix
 	}
 	prefixDecoded, err := base64.StdEncoding.DecodeString(prefixValue)
 	if err != nil {
 		log.Warnf("Malformed prefix in guild %s, %s", gid, err)
-		return Prefix
+		return Config.System.Prefix
 	}
 	return string(prefixDecoded)
 }

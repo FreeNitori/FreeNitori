@@ -38,7 +38,7 @@ type Context struct {
 func (context *Context) GenerateGuildPrefix() string {
 	switch context.IsPrivate {
 	case true:
-		return config.Prefix
+		return config.Config.System.Prefix
 	case false:
 		return config.GetPrefix(context.Guild.ID)
 	}
@@ -111,7 +111,7 @@ type Multiplexer struct {
 // Returns a new message route multiplexer
 func New() *Multiplexer {
 	mux := &Multiplexer{
-		Prefix: config.Prefix,
+		Prefix: config.Config.System.Prefix,
 	}
 	return mux
 }
