@@ -3,43 +3,43 @@ package log
 import "github.com/sirupsen/logrus"
 
 func Info(args ...interface{}) {
-	logger.Info(args)
+	logger.Info(args...)
 }
 
 func Infof(format string, args ...interface{}) {
-	logger.Infof(format, args)
+	logger.Infof(format, args...)
 }
 
 func Debug(args ...interface{}) {
-	logger.Debug(args)
+	logger.Debug(args...)
 }
 
 func Debugf(format string, args ...interface{}) {
-	logger.Debugf(format, args)
+	logger.Debugf(format, args...)
 }
 
 func Warn(args ...interface{}) {
-	logger.Warn(args)
+	logger.Warn(args...)
 }
 
 func Warnf(format string, args ...interface{}) {
-	logger.Warnf(format, args)
+	logger.Warnf(format, args...)
 }
 
 func Error(args ...interface{}) {
-	logger.Error(args)
+	logger.Error(args...)
 }
 
 func Errorf(format string, args ...interface{}) {
-	logger.Errorf(format, args)
+	logger.Errorf(format, args...)
 }
 
 func Fatal(args ...interface{}) {
-	logger.Fatal(args)
+	logger.Fatal(args...)
 }
 
 func Fatalf(format string, args ...interface{}) {
-	logger.Fatalf(format, args)
+	logger.Fatalf(format, args...)
 }
 
 func SetLevel(level logrus.Level) {

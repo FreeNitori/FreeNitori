@@ -62,7 +62,7 @@ func (context *Context) HandleError(err error, debug bool) bool {
 // Check if user has specific permission
 func (context *Context) HasPermission(permission int) bool {
 	// Override check for operators and system administrators
-	if context.Author.ID == config.Operator || context.Author.ID == config.Administrator {
+	if context.Author.ID == config.OperatorID || context.Author.ID == config.AdministratorID {
 		return true
 	}
 

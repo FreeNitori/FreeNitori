@@ -14,6 +14,7 @@ import (
 func init() {
 	multiplexer.NotTargeted = append(multiplexer.NotTargeted, AdvanceExperience)
 	ExperienceCategory.Register(level, "level", []string{"rank", "experience", "exp"}, "Query experience level.")
+	ExperienceCategory.Register(setrank, "setrank", []string{"rankset"}, "Configure ranked roles.")
 }
 
 func AdvanceExperience(context *multiplexer.Context) {
@@ -103,4 +104,29 @@ func level(context *multiplexer.Context) {
 	embed.AddField("Experience", strconv.Itoa(expValue-baseExpValue)+"/"+strconv.Itoa(config.LevelToExp(levelValue+1)-baseExpValue), true)
 	embed.SetThumbnail(member.User.AvatarURL("128"))
 	context.SendEmbed(embed)
+}
+
+func setrank(context *multiplexer.Context) {
+
+	// Doesn't work in private messages
+	if context.IsPrivate {
+		context.SendMessage(state.GuildOnly)
+	}
+
+	// Checks if feature is enabled
+	expEnabled, err := config.ExpEnabled(context.Guild.ID)
+	if !context.HandleError(err, config.Debug) {
+		return
+	}
+	if !expEnabled {
+		context.SendMessage(state.FeatureDisabled)
+		return
+	}
+
+	// Deny access to anyone that does not have permission Administrator
+	if !context.HasPermission(discordgo.PermissionAdministrator) {
+		context.SendMessage(state.PermissionDenied)
+		return
+	}
+
 }

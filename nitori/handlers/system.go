@@ -22,13 +22,17 @@ func about(context *multiplexer.Context) {
 	embed.AddField("Homepage", config.BaseURL, true)
 	embed.AddField("Processed Messages", strconv.Itoa(config.GetTotalMessages()), true)
 	embed.AddField("License", "GNU General Public License v3.0", false)
+	if config.Administrator != nil {
+		embed.AddField("Administrator", config.Administrator.Username+"#"+config.Administrator.Discriminator, true)
+		embed.AddField("Operator", config.Operator.Username+"#"+config.Operator.Discriminator, true)
+	}
 	embed.SetThumbnail(context.Session.State.User.AvatarURL("256"))
 	embed.SetFooter("A Discord utility by RandomChars", "https://static.randomchars.net/img/RandomChars.png")
 	context.SendEmbed(embed)
 }
 
 func reboot(context *multiplexer.Context) {
-	if context.Author.ID != config.Administrator {
+	if context.Author.ID != config.AdministratorID {
 		context.SendMessage(state.AdminOnly)
 		return
 	}

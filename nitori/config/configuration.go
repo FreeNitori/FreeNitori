@@ -21,8 +21,10 @@ var Prefix = Config.Section("System").Key("Prefix").String()
 var Shard, _ = Config.Section("System").Key("Shard").Bool()
 var ShardCount, _ = Config.Section("System").Key("ShardCount").Int()
 var Presence = Config.Section("System").Key("Presence").String()
-var Administrator = Config.Section("System").Key("Administrator").String()
-var Operator = Config.Section("System").Key("Operator").String()
+var AdministratorID = Config.Section("System").Key("Administrator").String()
+var OperatorID = Config.Section("System").Key("Operator").String()
+var Administrator *discordgo.User
+var Operator *discordgo.User
 var BaseURL = Config.Section("WebServer").Key("BaseURL").String()
 var Host = Config.Section("WebServer").Key("Host").String()
 var Port = Config.Section("WebServer").Key("Port").String()

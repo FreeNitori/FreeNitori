@@ -86,6 +86,8 @@ func main() {
 					os.Exit(1)
 				}
 			}
+			config.Administrator, _ = state.RawSession.User(config.AdministratorID)
+			config.Operator, _ = state.RawSession.User(config.OperatorID)
 			state.Initialized = true
 			state.Application, err = state.RawSession.Application("@me")
 			state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", state.Application.ID)
