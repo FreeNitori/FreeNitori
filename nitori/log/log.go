@@ -1,7 +1,6 @@
 package log
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/sirupsen/logrus"
 )
@@ -31,12 +30,6 @@ type formatter struct {
 
 func init() {
 	logger.SetFormatter(&Formatter)
-	switch config.Debug {
-	case true:
-		logger.SetLevel(logrus.DebugLevel)
-	case false:
-		logger.SetLevel(logrus.InfoLevel)
-	}
 }
 
 func (formatter *formatter) Format(entry *logrus.Entry) ([]byte, error) {

@@ -6,6 +6,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/ini.v1"
 	"io/ioutil"
 	"math"
@@ -33,6 +34,15 @@ var CustomizableMessages = map[string]string{
 }
 
 type MessageOutOfBounds struct{}
+
+func init() {
+	switch Debug {
+	case true:
+		log.SetLevel(logrus.DebugLevel)
+	case false:
+		log.SetLevel(logrus.InfoLevel)
+	}
+}
 
 func (err MessageOutOfBounds) Error() string {
 	return "message out of bounds"
