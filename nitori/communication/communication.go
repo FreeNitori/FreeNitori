@@ -34,11 +34,11 @@ func (*IPC) Error(args []string, reply *int) error {
 	switch args[0] {
 	case "ChatBackend":
 		_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
-		log.Logger.Error("ChatBackend has encountered an error.")
+		log.Error("ChatBackend has encountered an error.")
 		state.ExitCode <- 1
 	case "WebServer":
 		_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
-		log.Logger.Error("WebServer has encountered an error.")
+		log.Error("WebServer has encountered an error.")
 		state.ExitCode <- 1
 	}
 	return nil
@@ -49,11 +49,11 @@ func (*IPC) Shutdown(args []string, reply *int) error {
 	switch args[0] {
 	case "ChatBackend":
 		_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
-		log.Logger.Info("Graceful shutdown initiated by ChatBackend.")
+		log.Info("Graceful shutdown initiated by ChatBackend.")
 		state.ExitCode <- 0
 	case "WebServer":
 		_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
-		log.Logger.Info("Graceful shutdown initiated by WebServer.")
+		log.Info("Graceful shutdown initiated by WebServer.")
 		state.ExitCode <- 0
 	}
 	return nil
@@ -68,10 +68,10 @@ func (*IPC) Restart(args []string, reply *int) error {
 			state.ChatBackendProcess, err =
 				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-c", "-a", state.RawSession.Token}, &state.ProcessAttributes)
 			if err != nil {
-				log.Logger.Errorf("Failed to recreate chat backend process, %s", err)
+				log.Errorf("Failed to recreate chat backend process, %s", err)
 				state.ExitCode <- 1
 			} else {
-				log.Logger.Info("Chat backend has been restarted.")
+				log.Info("Chat backend has been restarted.")
 			}
 		}()
 	case "WebServer":
@@ -80,10 +80,10 @@ func (*IPC) Restart(args []string, reply *int) error {
 			state.WebServerProcess, err =
 				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-w"}, &state.ProcessAttributes)
 			if err != nil {
-				log.Logger.Errorf("Failed to recreate web server process, %s", err)
+				log.Errorf("Failed to recreate web server process, %s", err)
 				state.ExitCode <- 1
 			} else {
-				log.Logger.Info("Web server has been restarted.")
+				log.Info("Web server has been restarted.")
 			}
 		}()
 	}

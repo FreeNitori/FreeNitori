@@ -37,7 +37,7 @@ func Initialize() {
 			templateBin, _ := config.Asset(path)
 			templates, err = templates.New(path).Parse(string(templateBin))
 			if err != nil {
-				log.Logger.Fatalf("Failed to parse template, %s", err)
+				log.Fatalf("Failed to parse template, %s", err)
 				_ = state.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
 				os.Exit(1)
 			}

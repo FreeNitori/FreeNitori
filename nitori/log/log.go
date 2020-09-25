@@ -1,11 +1,12 @@
 package log
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/sirupsen/logrus"
 )
 
-var Logger = logrus.New()
+var logger = logrus.New()
 var Formatter = formatter{logrus.TextFormatter{
 	ForceColors:               false,
 	DisableColors:             false,
@@ -29,7 +30,13 @@ type formatter struct {
 }
 
 func init() {
-	Logger.SetFormatter(&Formatter)
+	logger.SetFormatter(&Formatter)
+	switch config.Debug {
+	case true:
+		logger.SetLevel(logrus.DebugLevel)
+	case false:
+		logger.SetLevel(logrus.InfoLevel)
+	}
 }
 
 func (formatter *formatter) Format(entry *logrus.Entry) ([]byte, error) {

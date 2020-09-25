@@ -183,7 +183,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	// Add to the counter if the message is valid
 	err = config.AddTotalMessages()
 	if err != nil {
-		log.Logger.Warnf("Failed to increase the message counter, %s", err)
+		log.Warnf("Failed to increase the message counter, %s", err)
 	}
 
 	// Figure out the message guild
@@ -194,13 +194,13 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 			// Attempt direct API fetching
 			guild, err = session.Guild(create.GuildID)
 			if err != nil {
-				log.Logger.Errorf("Failed to fetch guild from API or cache, %s", err)
+				log.Errorf("Failed to fetch guild from API or cache, %s", err)
 				return
 			} else {
 				// Attempt caching the channel
 				err = session.State.GuildAdd(guild)
 				if err != nil {
-					log.Logger.Warnf("Failed to cache channel fetched from API, %s", err)
+					log.Warnf("Failed to cache channel fetched from API, %s", err)
 				}
 			}
 		}
@@ -213,13 +213,13 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		// Attempt direct API fetching
 		channel, err = session.Channel(create.ChannelID)
 		if err != nil {
-			log.Logger.Errorf("Failed to fetch channel from API or cache, %s", err)
+			log.Errorf("Failed to fetch channel from API or cache, %s", err)
 			return
 		} else {
 			// Attempt caching the channel
 			err = session.State.ChannelAdd(channel)
 			if err != nil {
-				log.Logger.Warnf("Failed to cache channel fetched from API, %s", err)
+				log.Warnf("Failed to cache channel fetched from API, %s", err)
 			}
 		}
 	}
@@ -292,7 +292,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	} else {
 		hostName = "\"" + context.Guild.Name + "\""
 	}
-	log.Logger.Infof("(Shard %s) \"%s\"@%s > %s",
+	log.Infof("(Shard %s) \"%s\"@%s > %s",
 		strconv.Itoa(session.ShardID),
 		context.Author.Username+"#"+context.Author.Discriminator,
 		hostName,

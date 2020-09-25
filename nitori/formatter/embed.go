@@ -40,7 +40,7 @@ func NewEmbed(title string, description string) *Embed {
 func (embed *Embed) AddField(name, value string, inline bool) *Embed {
 
 	if len(embed.Fields) == EmbedLimitField {
-		log.Logger.Warnf("Embed with name \"%s\" exceeded limit!", name)
+		log.Warnf("Embed with name \"%s\" exceeded limit!", name)
 		return embed
 	}
 

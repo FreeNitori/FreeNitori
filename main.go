@@ -45,14 +45,14 @@ func main() {
 			// Dial the supervisor socket
 			err = communication.InitializeIPC(state.StartChatBackend, state.StartWebServer)
 			if err != nil {
-				log.Logger.Error(fmt.Sprintf("Failed to connect to the supervisor process, %s", err))
+				log.Error(fmt.Sprintf("Failed to connect to the supervisor process, %s", err))
 				os.Exit(1)
 			}
 
 			// Check the database
 			_, err = config.Redis.Ping(config.RedisContext).Result()
 			if err != nil {
-				log.Logger.Error(fmt.Sprintf("Failed to connect to the database, %s", err))
+				log.Error(fmt.Sprintf("Failed to connect to the database, %s", err))
 				os.Exit(1)
 			}
 
@@ -60,18 +60,16 @@ func main() {
 			if state.RawSession.Token == "" {
 				configToken := config.Config.Section("System").Key("Token").String()
 				if configToken != "" && configToken != "INSERT_TOKEN_HERE" {
-					if config.Debug {
-						log.Logger.Debug("Loaded token from configuration file.")
-					}
+					log.Debug("Loaded token from configuration file.")
 					state.RawSession.Token = configToken
 				} else {
-					log.Logger.Error("Please specify an authorization token.")
+					log.Error("Please specify an authorization token.")
 					_ = state.IPCConnection.Call("IPC.Error", []string{"ChatBackend"}, nil)
 					os.Exit(1)
 				}
 			} else {
 				if config.Debug {
-					log.Logger.Error("Loaded token from command parameter.")
+					log.Error("Loaded token from command parameter.")
 				}
 			}
 
@@ -84,7 +82,7 @@ func main() {
 				state.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAllWithoutPrivileged)
 				err = state.RawSession.Open()
 				if err != nil {
-					log.Logger.Error(fmt.Sprintf("An error occurred while connecting to Discord, %s", err))
+					log.Error(fmt.Sprintf("An error occurred while connecting to Discord, %s", err))
 					os.Exit(1)
 				}
 			}
@@ -92,7 +90,7 @@ func main() {
 			state.Application, err = state.RawSession.Application("@me")
 			state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", state.Application.ID)
 			if err != nil {
-				log.Logger.Error(fmt.Sprintf("An error occurred while fetching application info, %s", err))
+				log.Error(fmt.Sprintf("An error occurred while fetching application info, %s", err))
 				os.Exit(1)
 			}
 			_, _ = state.RawSession.UserUpdateStatus("dnd")
@@ -106,11 +104,11 @@ func main() {
 			}
 
 			// Print out logs ChatBackend is ready to go
-			log.Logger.Infof("User: %s | ID: %s | Default Prefix: %s",
+			log.Infof("User: %s | ID: %s | Default Prefix: %s",
 				state.RawSession.State.User.Username+"#"+state.RawSession.State.User.Discriminator,
 				state.RawSession.State.User.ID,
 				config.Prefix)
-			log.Logger.Infof("FreeNitori is ready. Press Control-C to terminate.")
+			log.Infof("FreeNitori is ready. Press Control-C to terminate.")
 			_ = state.IPCConnection.Call("IPC.SignalWebServer", []string{}, nil)
 		}
 	case state.StartWebServer:
@@ -119,14 +117,14 @@ func main() {
 			// Dial the supervisor socket
 			err = communication.InitializeIPC(state.StartChatBackend, state.StartWebServer)
 			if err != nil {
-				log.Logger.Error(fmt.Sprintf("Failed to connect to the supervisor process, %s", err))
+				log.Error(fmt.Sprintf("Failed to connect to the supervisor process, %s", err))
 				os.Exit(1)
 			}
 
 			// Check the database
 			_, err = config.Redis.Ping(config.RedisContext).Result()
 			if err != nil {
-				log.Logger.Error(fmt.Sprintf("Unable to establish state with database, %s", err))
+				log.Error(fmt.Sprintf("Unable to establish state with database, %s", err))
 				os.Exit(1)
 			}
 
@@ -136,7 +134,7 @@ func main() {
 				<-readyChannel
 				err = web.Engine.Run(fmt.Sprintf("%s:%s", config.Host, config.Port))
 				if err != nil {
-					log.Logger.Error(fmt.Sprintf("Failed to start web server, %s", err))
+					log.Error(fmt.Sprintf("Failed to start web server, %s", err))
 					_ = state.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
 					os.Exit(1)
 				}
@@ -163,11 +161,11 @@ ___________                      _______  .__  __               .__
 				if err != nil {
 					err = syscall.Unlink(config.SocketPath)
 					if err != nil {
-						log.Logger.Error(fmt.Sprintf("Unable to remove hanging socket, %s", err))
+						log.Error(fmt.Sprintf("Unable to remove hanging socket, %s", err))
 						os.Exit(1)
 					}
 				} else {
-					log.Logger.Error("Another instance of FreeNitori is already running.")
+					log.Error("Another instance of FreeNitori is already running.")
 					os.Exit(1)
 				}
 			}
@@ -177,7 +175,7 @@ ___________                      _______  .__  __               .__
 			rpc.HandleHTTP()
 			SocketListener, err = net.Listen("unix", config.SocketPath)
 			if err != nil {
-				log.Logger.Error(fmt.Sprintf("Failed to listen on the socket, %s", err))
+				log.Error(fmt.Sprintf("Failed to listen on the socket, %s", err))
 				os.Exit(1)
 			}
 			go http.Serve(SocketListener, nil)
@@ -186,7 +184,7 @@ ___________                      _______  .__  __               .__
 			state.ChatBackendProcess, err =
 				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-c", "-a", state.RawSession.Token}, &state.ProcessAttributes)
 			if err != nil {
-				log.Logger.Error(fmt.Sprintf("Failed to create chat backend process, %s", err))
+				log.Error(fmt.Sprintf("Failed to create chat backend process, %s", err))
 				os.Exit(1)
 			}
 
@@ -194,7 +192,7 @@ ___________                      _______  .__  __               .__
 			state.WebServerProcess, err =
 				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-w"}, &state.ProcessAttributes)
 			if err != nil {
-				log.Logger.Error(fmt.Sprintf("Failed to create web server process, %s", err))
+				log.Error(fmt.Sprintf("Failed to create web server process, %s", err))
 				os.Exit(1)
 			}
 
@@ -225,7 +223,7 @@ ___________                      _______  .__  __               .__
 				// Cleanup stuffs
 				if !state.StartChatBackend && !state.StartWebServer {
 					fmt.Print("\n")
-					log.Logger.Info("Gracefully terminating...")
+					log.Info("Gracefully terminating...")
 					_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
 					_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
 					_ = SocketListener.Close()
