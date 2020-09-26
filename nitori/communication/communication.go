@@ -1,6 +1,7 @@
 package communication
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"os"
@@ -66,7 +67,7 @@ func (*IPC) Restart(args []string, reply *int) error {
 		go func() {
 			_, _ = state.ChatBackendProcess.Wait()
 			state.ChatBackendProcess, err =
-				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-c", "-a", state.RawSession.Token}, &state.ProcessAttributes)
+				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-cb", "-a", state.RawSession.Token, "-c", config.NitoriConfPath}, &state.ProcessAttributes)
 			if err != nil {
 				log.Errorf("Failed to recreate chat backend process, %s", err)
 				state.ExitCode <- 1
@@ -78,7 +79,7 @@ func (*IPC) Restart(args []string, reply *int) error {
 		go func() {
 			_, _ = state.WebServerProcess.Wait()
 			state.WebServerProcess, err =
-				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-w"}, &state.ProcessAttributes)
+				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-ws", "-c", config.NitoriConfPath}, &state.ProcessAttributes)
 			if err != nil {
 				log.Errorf("Failed to recreate web server process, %s", err)
 				state.ExitCode <- 1

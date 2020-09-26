@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/communication"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
@@ -16,14 +15,9 @@ import (
 	"net/rpc"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 )
-
-func init() {
-	flag.StringVar(&state.RawSession.Token, "a", "", "Discord Authorization Token")
-	flag.BoolVar(&state.StartChatBackend, "c", false, "Start the chat backend directly")
-	flag.BoolVar(&state.StartWebServer, "w", false, "Start the web server directly")
-}
 
 func main() {
 	// Some regular initialization
@@ -31,13 +25,12 @@ func main() {
 	var readyChannel = make(chan bool, 1)
 	var SocketListener net.Listener
 	var IPCFunctions = new(communication.IPC)
-	flag.Parse()
 	switch {
 	case state.StartChatBackend && state.StartWebServer:
 		{
 
 			// This doesn't work, so exit
-			println("Parameter \"-c\" cannot be used with \"-w\".")
+			println("Parameter \"-cb\" cannot be used with \"-ws\".")
 			os.Exit(1)
 		}
 	case state.StartChatBackend:
@@ -84,8 +77,8 @@ func main() {
 					os.Exit(1)
 				}
 			}
-			config.Administrator, _ = state.RawSession.User(config.Config.System.Administrator)
-			config.Operator, _ = state.RawSession.User(config.Config.System.Operator)
+			state.Administrator, _ = state.RawSession.User(strconv.Itoa(config.Config.System.Administrator))
+			state.Operator, _ = state.RawSession.User(strconv.Itoa(config.Config.System.Operator))
 			state.Initialized = true
 			state.Application, err = state.RawSession.Application("@me")
 			state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", state.Application.ID)
@@ -132,7 +125,7 @@ func main() {
 			web.Initialize()
 			go func() {
 				<-readyChannel
-				err = web.Engine.Run(fmt.Sprintf("%s:%s", config.Config.WebServer.Host, config.Config.WebServer.Port))
+				err = web.Engine.Run(fmt.Sprintf("%s:%s", config.Config.WebServer.Host, strconv.Itoa(config.Config.WebServer.Port)))
 				if err != nil {
 					log.Error(fmt.Sprintf("Failed to start web server, %s", err))
 					_ = state.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
@@ -182,7 +175,7 @@ ___________                      _______  .__  __               .__
 
 			// Create the chat backend process
 			state.ChatBackendProcess, err =
-				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-c", "-a", state.RawSession.Token}, &state.ProcessAttributes)
+				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-cb", "-a", state.RawSession.Token, "-c", config.NitoriConfPath}, &state.ProcessAttributes)
 			if err != nil {
 				log.Error(fmt.Sprintf("Failed to create chat backend process, %s", err))
 				os.Exit(1)
@@ -190,7 +183,7 @@ ___________                      _______  .__  __               .__
 
 			// Create web server process
 			state.WebServerProcess, err =
-				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-w"}, &state.ProcessAttributes)
+				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-ws", "-c", config.NitoriConfPath}, &state.ProcessAttributes)
 			if err != nil {
 				log.Error(fmt.Sprintf("Failed to create web server process, %s", err))
 				os.Exit(1)

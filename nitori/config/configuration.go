@@ -2,23 +2,36 @@ package config
 
 import (
 	"context"
+	"flag"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/BurntSushi/toml"
-	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
 	"github.com/sirupsen/logrus"
+	"go/types"
 	"io/ioutil"
 	"math"
 	"os"
+	"strconv"
 )
+
+var _ = flags()
+
+func flags() *types.Nil {
+	flag.StringVar(&state.RawSession.Token, "a", "", "Discord Authorization Token")
+	flag.StringVar(&NitoriConfPath, "c", "", "Specify configuration file path.")
+	flag.BoolVar(&state.StartChatBackend, "cb", false, "Start the chat backend directly")
+	flag.BoolVar(&state.StartWebServer, "ws", false, "Start the web server directly")
+	flag.Parse()
+	return nil
+}
 
 // Exported variables for usage in other classes
 var Config = parseConfig()
-var Administrator *discordgo.User
-var Operator *discordgo.User
+var NitoriConfPath string
 var LogLevel = getLogLevel()
 var Redis = redis.NewClient(&redis.Options{
-	Addr:     Config.Redis.Host + ":" + Config.Redis.Port,
+	Addr:     Config.Redis.Host + ":" + strconv.Itoa(Config.Redis.Port),
 	Password: Config.Redis.Password,
 	DB:       Config.Redis.Database,
 })
@@ -42,19 +55,19 @@ type SystemSection struct {
 	Presence      string
 	Shard         bool
 	ShardCount    int
-	Administrator string
-	Operator      string
+	Administrator int
+	Operator      int
 }
 type RedisSection struct {
 	Host     string
-	Port     string
+	Port     int
 	Password string
 	Database int
 }
 type WebServerSection struct {
 	SecretKey string
 	Host      string
-	Port      string
+	Port      int
 	BaseURL   string
 }
 
@@ -69,28 +82,42 @@ func (err MessageOutOfBounds) Error() string {
 // Parse or generate configuration file
 func parseConfig() *Conf {
 	var nitoriConf Conf
-	config, err := ioutil.ReadFile("/etc/nitori.conf")
-	if err != nil {
-		config, err = ioutil.ReadFile("nitori.conf")
+	var config []byte
+	var err error
+	if NitoriConfPath == "" {
+		config, err = ioutil.ReadFile("/etc/nitori.conf")
 		if err != nil {
-			log.Fatalf("Error loading configuration file, %s", err)
-			defaultConfigFile, err := Asset("nitori.conf")
+			config, err = ioutil.ReadFile("nitori.conf")
 			if err != nil {
-				log.Fatalf("Failed to extract the default configuration file, %s", err)
+				log.Debugf("Configuration file inaccessible, %s", err)
+				defaultConfigFile, err := Asset("nitori.conf")
+				if err != nil {
+					log.Fatalf("Failed to extract the default configuration file, %s", err)
+					os.Exit(1)
+				}
+				err = ioutil.WriteFile("nitori.conf", defaultConfigFile, 0644)
+				if err != nil {
+					log.Fatalf("Failed to write the default configuration file, %s", err)
+					os.Exit(1)
+				}
+				log.Fatalf("Generated default configuration file at ./nitori.conf, " +
+					"please edit it before starting FreeNitori.")
 				os.Exit(1)
+			} else {
+				NitoriConfPath = "nitori.conf"
 			}
-			err = ioutil.WriteFile("nitori.conf", defaultConfigFile, 0644)
-			if err != nil {
-				log.Fatalf("Failed to write the default configuration file, %s", err)
-				os.Exit(1)
-			}
-			log.Fatalf("Generated default configuration file at ./nitori.conf, " +
-				"please edit it before restarting FreeNitori.")
+		} else {
+			NitoriConfPath = "/etc/nitori.conf"
+		}
+	} else {
+		config, err = ioutil.ReadFile(NitoriConfPath)
+		if err != nil {
+			log.Fatalf("Unable to access configuration file, %s", err)
 			os.Exit(1)
 		}
 	}
 	if _, err := toml.Decode(string(config), &nitoriConf); err != nil {
-		log.Fatalf("Configuration file syntax error: %s", err)
+		log.Fatalf("Configuration file syntax error, %s", err)
 		os.Exit(1)
 	}
 	return &nitoriConf
