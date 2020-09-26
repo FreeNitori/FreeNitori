@@ -6,6 +6,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
+	"github.com/sirupsen/logrus"
 	"regexp"
 	"strconv"
 	"strings"
@@ -48,10 +49,10 @@ func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
 }
 
 // Handle error and send the stuff if in debug mode
-func (context *Context) HandleError(err error, debug bool) bool {
+func (context *Context) HandleError(err error) bool {
 	if err != nil {
 		context.SendMessage(state.ErrorOccurred)
-		if debug {
+		if config.LogLevel == logrus.DebugLevel {
 			context.SendMessage(err.Error())
 		}
 		return false

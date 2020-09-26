@@ -181,7 +181,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	}
 
 	// Add to the counter if the message is valid
-	err = config.AddTotalMessages()
+	err = config.AdvanceTotalMessages()
 	if err != nil {
 		log.Warnf("Failed to increase the message counter, %s", err)
 	}

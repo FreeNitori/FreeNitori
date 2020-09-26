@@ -68,9 +68,7 @@ func main() {
 					os.Exit(1)
 				}
 			} else {
-				if config.Debug {
-					log.Error("Loaded token from command parameter.")
-				}
+				log.Debug("Loaded token from command parameter.")
 			}
 
 			state.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version + ")"

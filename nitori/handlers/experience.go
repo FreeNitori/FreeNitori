@@ -36,14 +36,14 @@ func AdvanceExperience(context *multiplexer.Context) {
 
 	// Obtain experience value of user
 	previousExp, err := config.GetMemberExp(context.Author, context.Guild)
-	if !context.HandleError(err, config.Debug) {
+	if !context.HandleError(err) {
 		return
 	}
 
 	// Calculate and set new experience value
 	advancedExp := previousExp + rand.Intn(10) + 5
 	err = config.SetMemberExp(context.Author, context.Guild, advancedExp)
-	if !context.HandleError(err, config.Debug) {
+	if !context.HandleError(err) {
 		return
 	}
 
@@ -51,7 +51,7 @@ func AdvanceExperience(context *multiplexer.Context) {
 	advancedLevel := config.ExpToLevel(advancedExp)
 	if advancedLevel > config.ExpToLevel(previousExp) {
 		levelupMessage, err := config.GetCustomizableMessage(context.Guild.ID, "levelup")
-		if !context.HandleError(err, config.Debug) {
+		if !context.HandleError(err) {
 			return
 		}
 		replacer := strings.NewReplacer("$USER", context.Author.Mention(), "$LEVEL", strconv.Itoa(advancedLevel))
@@ -68,7 +68,7 @@ func level(context *multiplexer.Context) {
 
 	// Checks if feature is enabled
 	expEnabled, err := config.ExpEnabled(context.Guild.ID)
-	if !context.HandleError(err, config.Debug) {
+	if !context.HandleError(err) {
 		return
 	}
 	if !expEnabled {
@@ -95,7 +95,7 @@ func level(context *multiplexer.Context) {
 	embed := formatter.NewEmbed("Experience Level", member.User.Username+"#"+member.User.Discriminator)
 	embed.Color = context.Session.State.UserColor(context.Author.ID, context.Create.ChannelID)
 	expValue, err := config.GetMemberExp(member.User, context.Guild)
-	if !context.HandleError(err, config.Debug) {
+	if !context.HandleError(err) {
 		return
 	}
 	levelValue := config.ExpToLevel(expValue)
@@ -115,7 +115,7 @@ func setrank(context *multiplexer.Context) {
 
 	// Checks if feature is enabled
 	expEnabled, err := config.ExpEnabled(context.Guild.ID)
-	if !context.HandleError(err, config.Debug) {
+	if !context.HandleError(err) {
 		return
 	}
 	if !expEnabled {

@@ -54,13 +54,13 @@ func configure(context *multiplexer.Context) {
 
 			// Actually set the prefix
 			err = config.SetPrefix(context.Guild.ID, newPrefix)
-			if !context.HandleError(err, config.Debug) {
+			if !context.HandleError(err) {
 				return
 			}
 			context.SendMessage("Successfully updated prefix.")
 		case 2:
 			err = config.ResetPrefix(context.Guild.ID)
-			if !context.HandleError(err, config.Debug) {
+			if !context.HandleError(err) {
 				return
 			}
 			context.SendMessage("Successfully reset prefix.")
@@ -69,7 +69,7 @@ func configure(context *multiplexer.Context) {
 		}
 	case "experience":
 		pre, err := config.ExpToggle(context.Guild.ID)
-		if !context.HandleError(err, config.Debug) {
+		if !context.HandleError(err) {
 			return
 		}
 		switch pre {
@@ -84,7 +84,7 @@ func configure(context *multiplexer.Context) {
 			err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], context.StitchFields(3))
 			switch err.(type) {
 			default:
-				if !context.HandleError(err, config.Debug) {
+				if !context.HandleError(err) {
 					return
 				}
 			case *config.MessageOutOfBounds:
@@ -96,7 +96,7 @@ func configure(context *multiplexer.Context) {
 			err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], "")
 			switch err.(type) {
 			default:
-				if !context.HandleError(err, config.Debug) {
+				if !context.HandleError(err) {
 					return
 				}
 			case *config.MessageOutOfBounds:
@@ -108,7 +108,7 @@ func configure(context *multiplexer.Context) {
 			embed := formatter.NewEmbed("Messages", "Configurable messages.")
 			for identifier := range config.CustomizableMessages {
 				message, err := config.GetCustomizableMessage(context.Guild.ID, identifier)
-				if !context.HandleError(err, config.Debug) {
+				if !context.HandleError(err) {
 					return
 				}
 				embed.AddField(identifier, message, false)

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
@@ -53,7 +52,7 @@ func whois(context *multiplexer.Context) {
 
 	// Make the message
 	userID, err := strconv.Atoi(user.ID)
-	if !context.HandleError(err, config.Debug) {
+	if !context.HandleError(err) {
 		return
 	}
 	creationTime := time.Unix(int64(((userID>>22)+1420070400000)/1000), 0)
@@ -82,7 +81,7 @@ func whois(context *multiplexer.Context) {
 	embed.AddField("Registration Date", creationTime.String(), true)
 	if member != nil {
 		joinTime, err := member.JoinedAt.Parse()
-		if !context.HandleError(err, config.Debug) {
+		if !context.HandleError(err) {
 			return
 		}
 		embed.AddField("Join Date", joinTime.String(), true)
