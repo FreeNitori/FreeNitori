@@ -77,8 +77,17 @@ func main() {
 					os.Exit(1)
 				}
 			}
-			state.Administrator, _ = state.RawSession.User(strconv.Itoa(config.Config.System.Administrator))
-			state.Operator, _ = state.RawSession.User(strconv.Itoa(config.Config.System.Operator))
+			state.Administrator, err = state.RawSession.User(strconv.Itoa(config.Config.System.Administrator))
+			if err != nil {
+				log.Fatalf("Failed to get system administrator, %s", err)
+				os.Exit(1)
+			}
+			for _, id := range config.Config.System.Operator {
+				user, err := state.RawSession.User(strconv.Itoa(id))
+				if err == nil {
+					state.Operator = append(state.Operator, user)
+				}
+			}
 			state.Initialized = true
 			state.Application, err = state.RawSession.Application("@me")
 			state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", state.Application.ID)

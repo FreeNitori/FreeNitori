@@ -46,6 +46,7 @@ type Conf struct {
 	System    SystemSection
 	Redis     RedisSection
 	WebServer WebServerSection
+	LastFM    LastFMSection
 }
 type SystemSection struct {
 	LogLevel      string
@@ -56,7 +57,7 @@ type SystemSection struct {
 	Shard         bool
 	ShardCount    int
 	Administrator int
-	Operator      int
+	Operator      []int
 }
 type RedisSection struct {
 	Host     string
@@ -69,6 +70,10 @@ type WebServerSection struct {
 	Host      string
 	Port      int
 	BaseURL   string
+}
+type LastFMSection struct {
+	ApiKey    string
+	ApiSecret string
 }
 
 func init() {

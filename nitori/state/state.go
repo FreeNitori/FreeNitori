@@ -25,7 +25,7 @@ const KappaColor = 0x3492c4
 
 // State variables
 var Administrator *discordgo.User
-var Operator *discordgo.User
+var Operator []*discordgo.User
 var StartChatBackend bool
 var StartWebServer bool
 var IPCConnection *rpc.Client
