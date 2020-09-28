@@ -9,7 +9,9 @@ var ManualsCategory = multiplexer.NewCategory("Manuals",
 	"The operation manual pager utility.")
 var ModerationCategory = multiplexer.NewCategory("Moderation",
 	"Chat moderation utilities.")
+var MusicCategory = multiplexer.NewCategory("Music",
+	"Music related utilities.")
 var SystemCategory = multiplexer.NewCategory("System",
 	"System-related utilities.")
 
-var Categories = []*multiplexer.CommandCategory{ExperienceCategory, ManualsCategory, ModerationCategory, SystemCategory}
+var Categories = []*multiplexer.CommandCategory{ExperienceCategory, ManualsCategory, ModerationCategory, MusicCategory, SystemCategory}

@@ -14,6 +14,7 @@ func ResetGuild(gid string) {
 	Redis.Del(RedisContext, "exp."+gid)
 	Redis.Del(RedisContext, "rank."+gid)
 	Redis.Del(RedisContext, "exp_bl."+gid)
+	Redis.Del(RedisContext, "lastfm."+gid)
 	Redis.Del(RedisContext, "ra_metadata."+gid)
 	Redis.Del(RedisContext, "ra_table_0."+gid)
 	Redis.Del(RedisContext, "ra_table_1."+gid)
@@ -164,4 +165,26 @@ func GetMemberExp(user *discordgo.User, guild *discordgo.Guild) (int, error) {
 // Set a member's experience amount
 func SetMemberExp(user *discordgo.User, guild *discordgo.Guild, exp int) error {
 	return Redis.HSet(RedisContext, "exp."+guild.ID, user.ID, strconv.Itoa(exp)).Err()
+}
+
+// Get a user's lastfm username
+func GetLastfm(user *discordgo.User, guild *discordgo.Guild) (string, error) {
+	result, err := Redis.HGet(RedisContext, "lastfm."+guild.ID, user.ID).Result()
+	if err != nil {
+		if err == redis.Nil {
+			return "", nil
+		}
+		return "", err
+	}
+	return result, err
+}
+
+// Set a user's lastfm username
+func SetLastfm(user *discordgo.User, guild *discordgo.Guild, username string) error {
+	return Redis.HSet(RedisContext, "lastfm."+guild.ID, user.ID, username).Err()
+}
+
+// Reset a user's lastfm username
+func ResetLastfm(user *discordgo.User, guild *discordgo.Guild) error {
+	return Redis.HDel(RedisContext, "lastfm."+guild.ID, user.ID).Err()
 }

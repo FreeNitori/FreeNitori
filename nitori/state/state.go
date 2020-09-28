@@ -2,6 +2,7 @@ package state
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"github.com/shkh/lastfm-go/lastfm"
 	"net/rpc"
 	"os"
 )
@@ -32,6 +33,7 @@ var IPCConnection *rpc.Client
 var Initialized = false
 var RawSession, _ = discordgo.New()
 var ShardSessions []*discordgo.Session
+var LastFM *lastfm.Api
 var Application *discordgo.Application
 var InviteURL string
 var ExitCode = make(chan int)

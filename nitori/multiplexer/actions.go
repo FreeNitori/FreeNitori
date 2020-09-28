@@ -1,7 +1,6 @@
 package multiplexer
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
@@ -52,7 +51,7 @@ func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
 func (context *Context) HandleError(err error) bool {
 	if err != nil {
 		context.SendMessage(state.ErrorOccurred)
-		if config.LogLevel == logrus.DebugLevel {
+		if log.GetLevel() == logrus.DebugLevel {
 			context.SendMessage(err.Error())
 		}
 		return false
