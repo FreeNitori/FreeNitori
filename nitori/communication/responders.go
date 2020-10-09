@@ -3,7 +3,7 @@ package communication
 import (
 	"encoding/json"
 	"errors"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	SuperVisor "git.randomchars.net/RandomChars/FreeNitori/nitori/state/supervisor"
 	"syscall"
 	"time"
 )
@@ -18,7 +18,7 @@ func (ipc *IPC) RequestData(args []string, reply *string) error {
 	}()
 	switch args[0] {
 	case "ChatBackend":
-		_ = state.ChatBackendProcess.Signal(syscall.SIGUSR1)
+		_ = SuperVisor.ChatBackendProcess.Signal(syscall.SIGUSR1)
 		go func() {
 			RequestInstructionChannel <- args[1]
 		}()
@@ -38,7 +38,7 @@ func (ipc *IPC) RequestGuild(args []string, reply *GuildInfo) error {
 	if len(args) == 0 {
 		return errors.New("no argument was specified")
 	}
-	_ = state.ChatBackendProcess.Signal(syscall.SIGUSR1)
+	_ = SuperVisor.ChatBackendProcess.Signal(syscall.SIGUSR1)
 	go func() {
 		RequestInstructionChannel <- "GuildInfo" + args[0]
 	}()

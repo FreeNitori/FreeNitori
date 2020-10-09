@@ -5,7 +5,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/shkh/lastfm-go/lastfm"
 	"regexp"
 	"strconv"
@@ -13,7 +13,7 @@ import (
 
 func init() {
 	MusicCategory.Register(fm, "fm", []string{"lastfm"}, "Query last song scrobbled to lastfm.")
-	state.LastFM = lastfm.New(config.Config.LastFM.ApiKey, config.Config.LastFM.ApiSecret)
+	ChatBackend.LastFM = lastfm.New(config.Config.LastFM.ApiKey, config.Config.LastFM.ApiSecret)
 }
 
 func fm(context *multiplexer.Context) {
@@ -34,7 +34,7 @@ func fm(context *multiplexer.Context) {
 		switch context.Fields[1] {
 		case "set":
 			if b, _ := regexp.MatchString(`^[a-zA-Z0-9_]+$`, context.Fields[2]); !b || len(context.Fields[2]) < 2 || len(context.Fields[2]) > 15 {
-				context.SendMessage(state.InvalidArgument)
+				context.SendMessage(ChatBackend.InvalidArgument)
 				return
 			}
 			err = config.SetLastfm(context.Author, context.Guild, context.Fields[2])
@@ -51,7 +51,7 @@ func fm(context *multiplexer.Context) {
 			context.SendMessage("Successfully reset lastfm username.")
 			return
 		default:
-			context.SendMessage(state.InvalidArgument)
+			context.SendMessage(ChatBackend.InvalidArgument)
 			return
 		}
 	}
@@ -62,7 +62,7 @@ func fm(context *multiplexer.Context) {
 		return
 	}
 	p := lastfm.P{"user": username, "limit": 1, "extended": 0}
-	result, err := state.LastFM.User.GetRecentTracks(p)
+	result, err := ChatBackend.LastFM.User.GetRecentTracks(p)
 	if err != nil {
 		context.SendMessage("Please set your lastfm username `" + context.GenerateGuildPrefix() + "fm set <username>`.")
 		return

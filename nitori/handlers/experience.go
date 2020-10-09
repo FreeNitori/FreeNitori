@@ -4,7 +4,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/bwmarrin/discordgo"
 	"math/rand"
 	"strconv"
@@ -63,7 +63,7 @@ func level(context *multiplexer.Context) {
 
 	// Doesn't work in private messages
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(ChatBackend.GuildOnly)
 	}
 
 	// Checks if feature is enabled
@@ -72,7 +72,7 @@ func level(context *multiplexer.Context) {
 		return
 	}
 	if !expEnabled {
-		context.SendMessage(state.FeatureDisabled)
+		context.SendMessage(ChatBackend.FeatureDisabled)
 		return
 	}
 
@@ -87,7 +87,7 @@ func level(context *multiplexer.Context) {
 
 	// Bail out if nothing is get
 	if member == nil {
-		context.SendMessage(state.MissingUser)
+		context.SendMessage(ChatBackend.MissingUser)
 		return
 	}
 
@@ -110,7 +110,7 @@ func setrank(context *multiplexer.Context) {
 
 	// Doesn't work in private messages
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(ChatBackend.GuildOnly)
 	}
 
 	// Checks if feature is enabled
@@ -119,13 +119,13 @@ func setrank(context *multiplexer.Context) {
 		return
 	}
 	if !expEnabled {
-		context.SendMessage(state.FeatureDisabled)
+		context.SendMessage(ChatBackend.FeatureDisabled)
 		return
 	}
 
 	// Deny access to anyone that does not have permission Administrator
 	if !context.HasPermission(discordgo.PermissionAdministrator) {
-		context.SendMessage(state.PermissionDenied)
+		context.SendMessage(ChatBackend.PermissionDenied)
 		return
 	}
 

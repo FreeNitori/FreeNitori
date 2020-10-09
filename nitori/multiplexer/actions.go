@@ -3,7 +3,7 @@ package multiplexer
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/bwmarrin/discordgo"
 	"github.com/sirupsen/logrus"
 	"regexp"
@@ -26,7 +26,7 @@ func (context *Context) SendMessage(message string) *discordgo.Message {
 		}
 		log.Errorf("Error while sending message to guild %s, %s", context.Message.GuildID, err)
 		_, _ = context.Session.ChannelMessageSend(context.Message.ChannelID,
-			state.ErrorOccurred)
+			ChatBackend.ErrorOccurred)
 		return nil
 	}
 	return resultMessage
@@ -41,7 +41,7 @@ func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
 		}
 		log.Errorf("Error while sending embed to guild %s, %s", context.Message.GuildID, err)
 		_, _ = context.Session.ChannelMessageSend(context.Message.ChannelID,
-			state.ErrorOccurred)
+			ChatBackend.ErrorOccurred)
 		return nil
 	}
 	return resultMessage
@@ -50,7 +50,7 @@ func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
 // Handle error and send the stuff if in debug mode
 func (context *Context) HandleError(err error) bool {
 	if err != nil {
-		context.SendMessage(state.ErrorOccurred)
+		context.SendMessage(ChatBackend.ErrorOccurred)
 		if log.GetLevel() == logrus.DebugLevel {
 			context.SendMessage(err.Error())
 		}
@@ -62,10 +62,10 @@ func (context *Context) HandleError(err error) bool {
 // Check if user has specific permission
 func (context *Context) HasPermission(permission int) bool {
 	// Override check for operators and system administrators
-	if context.Author.ID == state.Administrator.ID {
+	if context.Author.ID == ChatBackend.Administrator.ID {
 		return true
 	} else {
-		for _, user := range state.Operator {
+		for _, user := range ChatBackend.Operator {
 			if context.Author.ID == user.ID {
 				return true
 			}

@@ -8,6 +8,8 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/session"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state/supervisor"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/web"
 	"github.com/bwmarrin/discordgo"
 	"net"
@@ -23,7 +25,6 @@ func main() {
 	// Some regular initialization
 	var err error
 	var readyChannel = make(chan bool, 1)
-	var SocketListener net.Listener
 	var IPCFunctions = new(communication.IPC)
 	switch {
 	case state.StartChatBackend && state.StartWebServer:
@@ -50,11 +51,11 @@ func main() {
 			}
 
 			// Authenticate and make session
-			if state.RawSession.Token == "" {
+			if ChatBackend.RawSession.Token == "" {
 				configToken := config.Config.System.Token
 				if configToken != "" && configToken != "INSERT_TOKEN_HERE" {
 					log.Debug("Loaded token from configuration file.")
-					state.RawSession.Token = configToken
+					ChatBackend.RawSession.Token = configToken
 				} else {
 					log.Error("Please specify an authorization token.")
 					_ = state.IPCConnection.Call("IPC.Error", []string{"ChatBackend"}, nil)
@@ -64,39 +65,39 @@ func main() {
 				log.Debug("Loaded token from command parameter.")
 			}
 
-			state.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version + ")"
-			state.RawSession.Token = "Bot " + state.RawSession.Token
-			state.RawSession.ShouldReconnectOnError = true
-			state.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAll)
-			err = state.RawSession.Open()
+			ChatBackend.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version + ")"
+			ChatBackend.RawSession.Token = "Bot " + ChatBackend.RawSession.Token
+			ChatBackend.RawSession.ShouldReconnectOnError = true
+			ChatBackend.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAll)
+			err = ChatBackend.RawSession.Open()
 			if err != nil {
-				state.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAllWithoutPrivileged)
-				err = state.RawSession.Open()
+				ChatBackend.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAllWithoutPrivileged)
+				err = ChatBackend.RawSession.Open()
 				if err != nil {
 					log.Error(fmt.Sprintf("An error occurred while connecting to Discord, %s", err))
 					os.Exit(1)
 				}
 			}
-			state.Administrator, err = state.RawSession.User(strconv.Itoa(config.Config.System.Administrator))
+			ChatBackend.Administrator, err = ChatBackend.RawSession.User(strconv.Itoa(config.Config.System.Administrator))
 			if err != nil {
 				log.Fatalf("Failed to get system administrator, %s", err)
 				os.Exit(1)
 			}
 			for _, id := range config.Config.System.Operator {
-				user, err := state.RawSession.User(strconv.Itoa(id))
+				user, err := ChatBackend.RawSession.User(strconv.Itoa(id))
 				if err == nil {
-					state.Operator = append(state.Operator, user)
+					ChatBackend.Operator = append(ChatBackend.Operator, user)
 				}
 			}
 			state.Initialized = true
-			state.Application, err = state.RawSession.Application("@me")
-			state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", state.Application.ID)
+			ChatBackend.Application, err = ChatBackend.RawSession.Application("@me")
+			state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", ChatBackend.Application.ID)
 			if err != nil {
 				log.Error(fmt.Sprintf("An error occurred while fetching application info, %s", err))
 				os.Exit(1)
 			}
-			_, _ = state.RawSession.UserUpdateStatus("dnd")
-			_ = state.RawSession.UpdateStatus(0, config.Config.System.Presence)
+			_, _ = ChatBackend.RawSession.UserUpdateStatus("dnd")
+			_ = ChatBackend.RawSession.UpdateStatus(0, config.Config.System.Presence)
 			if config.Config.System.Shard {
 				err = session.MakeSessions()
 				if err != nil {
@@ -107,8 +108,8 @@ func main() {
 
 			// Print out logs ChatBackend is ready to go
 			_ = state.IPCConnection.Call("IPC.FireReadyMessage", []string{
-				state.RawSession.State.User.Username + "#" + state.RawSession.State.User.Discriminator,
-				state.RawSession.State.User.ID}, nil)
+				ChatBackend.RawSession.State.User.Username + "#" + ChatBackend.RawSession.State.User.Discriminator,
+				ChatBackend.RawSession.State.User.ID}, nil)
 			_ = state.IPCConnection.Call("IPC.SignalWebServer", []string{}, nil)
 		}
 	case state.StartWebServer:
@@ -142,17 +143,8 @@ func main() {
 		}
 	case !state.StartWebServer && !state.StartChatBackend:
 		{
-
-			// Print some fancy ASCII art
-			fmt.Printf(
-				`
-___________                      _______  .__  __               .__ 
-\_   _____/______   ____   ____  \      \ |__|/  |_  ___________|__|
- |    __) \_  __ \_/ __ \_/ __ \ /   |   \|  \   __\/  _ \_  __ \  |
- |     \   |  | \/\  ___/\  ___//    |    \  ||  | (  <_> )  | \/  |
- \___  /   |__|    \___  >\___  >____|__  /__||__|  \____/|__|  |__|
-     \/                \/     \/        \/    %-16s
-`+"\n", state.Version)
+			// Print version information and stuff
+			log.Infof("Starting FreeNitori %s", state.Version)
 
 			// Check for an existing instance
 			if _, err := os.Stat(config.Config.System.Socket); os.IsNotExist(err) {
@@ -173,24 +165,24 @@ ___________                      _______  .__  __               .__
 			// Initialize the socket
 			_ = rpc.Register(IPCFunctions)
 			rpc.HandleHTTP()
-			SocketListener, err = net.Listen("unix", config.Config.System.Socket)
+			SuperVisor.SocketListener, err = net.Listen("unix", config.Config.System.Socket)
 			if err != nil {
 				log.Error(fmt.Sprintf("Failed to listen on the socket, %s", err))
 				os.Exit(1)
 			}
-			go http.Serve(SocketListener, nil)
+			go http.Serve(SuperVisor.SocketListener, nil)
 
 			// Create the chat backend process
-			state.ChatBackendProcess, err =
-				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-cb", "-a", state.RawSession.Token, "-c", config.NitoriConfPath}, &state.ProcessAttributes)
+			SuperVisor.ChatBackendProcess, err =
+				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-cb", "-a", ChatBackend.RawSession.Token, "-c", config.NitoriConfPath}, &SuperVisor.ProcessAttributes)
 			if err != nil {
 				log.Error(fmt.Sprintf("Failed to create chat backend process, %s", err))
 				os.Exit(1)
 			}
 
 			// Create web server process
-			state.WebServerProcess, err =
-				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-ws", "-c", config.NitoriConfPath}, &state.ProcessAttributes)
+			SuperVisor.WebServerProcess, err =
+				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-ws", "-c", config.NitoriConfPath}, &SuperVisor.ProcessAttributes)
 			if err != nil {
 				log.Error(fmt.Sprintf("Failed to create web server process, %s", err))
 				os.Exit(1)
@@ -224,19 +216,19 @@ ___________                      _______  .__  __               .__
 				if !state.StartChatBackend && !state.StartWebServer {
 					fmt.Print("\n")
 					log.Info("Gracefully terminating...")
-					_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
-					_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
-					_ = SocketListener.Close()
+					_ = SuperVisor.ChatBackendProcess.Signal(syscall.SIGUSR2)
+					_ = SuperVisor.WebServerProcess.Signal(syscall.SIGUSR2)
+					_ = SuperVisor.SocketListener.Close()
 					_ = syscall.Unlink(config.Config.System.Socket)
 				} else if state.StartChatBackend {
 					if currentSignal != os.Interrupt {
 						// Only tell the supervisor if SIGUSR2 was not sent or the program was not interrupted
 						_ = state.IPCConnection.Call("IPC.Restart", []string{"ChatBackend"}, nil)
 					}
-					for _, shardSession := range state.ShardSessions {
+					for _, shardSession := range ChatBackend.ShardSessions {
 						_ = shardSession.Close()
 					}
-					_ = state.RawSession.Close()
+					_ = ChatBackend.RawSession.Close()
 				} else if state.StartWebServer {
 					if currentSignal != os.Interrupt {
 						// Only write the packet if SIGUSR2 was not sent or the program was not interrupted

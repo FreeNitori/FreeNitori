@@ -5,6 +5,7 @@ import (
 	"flag"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/BurntSushi/toml"
 	"github.com/go-redis/redis/v8"
 	"github.com/sirupsen/logrus"
@@ -18,7 +19,7 @@ import (
 var _ = flags()
 
 func flags() *types.Nil {
-	flag.StringVar(&state.RawSession.Token, "a", "", "Discord Authorization Token")
+	flag.StringVar(&ChatBackend.RawSession.Token, "a", "", "Discord Authorization Token")
 	flag.StringVar(&NitoriConfPath, "c", "", "Specify configuration file path.")
 	flag.BoolVar(&state.StartChatBackend, "cb", false, "Start the chat backend directly")
 	flag.BoolVar(&state.StartWebServer, "ws", false, "Start the web server directly")

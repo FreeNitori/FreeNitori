@@ -3,7 +3,7 @@ package handlers
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"time"
@@ -36,7 +36,7 @@ func whois(context *multiplexer.Context) {
 
 	// Fail if unable to make sense of the arguments passed
 	if user == nil {
-		context.SendMessage(state.MissingUser)
+		context.SendMessage(ChatBackend.MissingUser)
 		return
 	}
 

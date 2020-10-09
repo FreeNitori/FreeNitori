@@ -6,6 +6,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"strconv"
 )
 
@@ -18,20 +19,20 @@ func init() {
 func about(context *multiplexer.Context) {
 	embed := formatter.NewEmbed(context.Session.State.User.Username,
 		"Open source, general purpose Discord utility.")
-	embed.Color = state.KappaColor
+	embed.Color = ChatBackend.KappaColor
 	embed.AddField("Homepage", config.Config.WebServer.BaseURL, true)
 	embed.AddField("Processed Messages", strconv.Itoa(config.GetTotalMessages()), true)
 	embed.AddField("License", "GNU General Public License v3.0", false)
-	if state.Administrator != nil {
-		embed.AddField("Administrator", state.Administrator.Username+"#"+state.Administrator.Discriminator, true)
+	if ChatBackend.Administrator != nil {
+		embed.AddField("Administrator", ChatBackend.Administrator.Username+"#"+ChatBackend.Administrator.Discriminator, true)
 	}
-	switch len(state.Operator) {
+	switch len(ChatBackend.Operator) {
 	case 0:
 	case 1:
-		embed.AddField("Operator", state.Operator[0].Username+"#"+state.Operator[0].Discriminator, true)
+		embed.AddField("Operator", ChatBackend.Operator[0].Username+"#"+ChatBackend.Operator[0].Discriminator, true)
 	default:
 		var usernames string
-		for i, user := range state.Operator {
+		for i, user := range ChatBackend.Operator {
 			switch i {
 			case 0:
 				usernames += user.Username + "#" + user.Discriminator
@@ -47,8 +48,8 @@ func about(context *multiplexer.Context) {
 }
 
 func reboot(context *multiplexer.Context) {
-	if context.Author.ID != state.Administrator.ID {
-		context.SendMessage(state.AdminOnly)
+	if context.Author.ID != ChatBackend.Administrator.ID {
+		context.SendMessage(ChatBackend.AdminOnly)
 		return
 	}
 	switch context.Fields[0] {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/bwmarrin/discordgo"
 	"regexp"
 	"strconv"
@@ -76,10 +76,10 @@ type HandlerMetadata struct {
 }
 
 func init() {
-	state.EventHandlers = append(state.EventHandlers, Router.OnMessageCreate)
-	state.EventHandlers = append(state.EventHandlers, Router.OnGuildMemberAdd)
-	state.EventHandlers = append(state.EventHandlers, Router.OnGuildMemberRemove)
-	state.EventHandlers = append(state.EventHandlers, Router.OnGuildDelete)
+	ChatBackend.EventHandlers = append(ChatBackend.EventHandlers, Router.OnMessageCreate)
+	ChatBackend.EventHandlers = append(ChatBackend.EventHandlers, Router.OnGuildMemberAdd)
+	ChatBackend.EventHandlers = append(ChatBackend.EventHandlers, Router.OnGuildMemberRemove)
+	ChatBackend.EventHandlers = append(ChatBackend.EventHandlers, Router.OnGuildDelete)
 }
 
 // Register new command handler to a category

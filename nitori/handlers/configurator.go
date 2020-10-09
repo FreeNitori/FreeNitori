@@ -4,7 +4,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/bwmarrin/discordgo"
 	"unicode"
 )
@@ -25,16 +25,16 @@ func init() {
 
 func configure(context *multiplexer.Context) {
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(ChatBackend.GuildOnly)
 		return
 	}
 	if !context.HasPermission(discordgo.PermissionAdministrator) {
-		context.SendMessage(state.PermissionDenied)
+		context.SendMessage(ChatBackend.PermissionDenied)
 		return
 	}
 	if len(context.Fields) == 1 {
 		embed := formatter.NewEmbed("Configurator", "Configure per-guild overrides.")
-		embed.Color = state.KappaColor
+		embed.Color = ChatBackend.KappaColor
 		embed.AddField("experience", "Toggle experience system enablement.", false)
 		embed.AddField("message", "Configure customizable messages.", false)
 		embed.AddField("prefix", "Configure command prefix.", false)
@@ -88,7 +88,7 @@ func configure(context *multiplexer.Context) {
 					return
 				}
 			case *config.MessageOutOfBounds:
-				context.SendMessage(state.InvalidArgument)
+				context.SendMessage(ChatBackend.InvalidArgument)
 				return
 			}
 			context.SendMessage("Message `" + context.Fields[2] + "` has been set.")
@@ -100,7 +100,7 @@ func configure(context *multiplexer.Context) {
 					return
 				}
 			case *config.MessageOutOfBounds:
-				context.SendMessage(state.InvalidArgument)
+				context.SendMessage(ChatBackend.InvalidArgument)
 				return
 			}
 			context.SendMessage("Message `" + context.Fields[2] + "` has been reset.")

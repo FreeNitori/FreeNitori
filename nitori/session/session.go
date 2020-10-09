@@ -2,7 +2,7 @@ package session
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"time"
@@ -13,7 +13,7 @@ func MakeSessions() error {
 
 	// Get recommended shard count from Discord
 	if config.Config.System.ShardCount < 1 {
-		gatewayBot, err := state.RawSession.GatewayBot()
+		gatewayBot, err := ChatBackend.RawSession.GatewayBot()
 		if err != nil {
 			return err
 		}
@@ -31,29 +31,29 @@ func MakeSessions() error {
 		session, _ := discordgo.New()
 		session.ShardCount = config.Config.System.ShardCount
 		session.ShardID = i
-		session.Token = state.RawSession.Token
-		session.UserAgent = state.RawSession.UserAgent
-		session.ShouldReconnectOnError = state.RawSession.ShouldReconnectOnError
-		session.Identify.Intents = state.RawSession.Identify.Intents
+		session.Token = ChatBackend.RawSession.Token
+		session.UserAgent = ChatBackend.RawSession.UserAgent
+		session.ShouldReconnectOnError = ChatBackend.RawSession.ShouldReconnectOnError
+		session.Identify.Intents = ChatBackend.RawSession.Identify.Intents
 		err = session.Open()
 		if err != nil {
 			return err
 		}
-		for _, handler := range state.EventHandlers {
+		for _, handler := range ChatBackend.EventHandlers {
 			session.AddHandler(handler)
 		}
-		state.ShardSessions = append(state.ShardSessions, session)
+		ChatBackend.ShardSessions = append(ChatBackend.ShardSessions, session)
 	}
 	return nil
 }
 
 func FetchGuildSession(gid string) (*discordgo.Session, error) {
 	if !config.Config.System.Shard {
-		return state.RawSession, nil
+		return ChatBackend.RawSession, nil
 	}
 	ID, err := strconv.ParseInt(gid, 10, 64)
 	if err != nil {
 		return nil, err
 	}
-	return state.ShardSessions[(ID>>22)%int64(config.Config.System.ShardCount)], nil
+	return ChatBackend.ShardSessions[(ID>>22)%int64(config.Config.System.ShardCount)], nil
 }

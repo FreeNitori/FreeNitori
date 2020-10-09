@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/session"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
+	SuperVisor "git.randomchars.net/RandomChars/FreeNitori/nitori/state/supervisor"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"strings"
@@ -17,12 +19,12 @@ func ChatBackendIPCReceiver() {
 	_ = state.IPCConnection.Call("IPC.ChatBackendIPCResponder", []string{"furtherInstruction"}, &instruction)
 	switch instruction {
 	case "totalGuilds":
-		response = strconv.Itoa(len(state.RawSession.State.Guilds))
+		response = strconv.Itoa(len(ChatBackend.RawSession.State.Guilds))
 	case "version":
 		response = state.Version
 	case "inviteURL":
 		response = fmt.Sprintf("https://discordapp.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847",
-			state.Application.ID)
+			ChatBackend.Application.ID)
 	}
 	if strings.HasPrefix(instruction, "GuildInfo") {
 		var members []*UserInfo
@@ -65,7 +67,7 @@ func ChatBackendIPCReceiver() {
 func (ipc *IPC) SignalWebServer(args []string, reply *int) error {
 	args = nil
 	reply = nil
-	return state.WebServerProcess.Signal(syscall.SIGUSR1)
+	return SuperVisor.WebServerProcess.Signal(syscall.SIGUSR1)
 }
 
 func (ipc *IPC) ChatBackendIPCResponder(args []string, reply *string) error {

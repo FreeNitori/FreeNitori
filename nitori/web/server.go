@@ -67,7 +67,7 @@ func Initialize() {
 	Engine.GET("/guild/:gid/leaderboard", func(context *gin.Context) {
 		guildInfo := fetchGuild(context.Param("gid"))
 		if guildInfo == nil {
-			context.HTML(http.StatusBadRequest, "web/templates/error.html", gin.H{
+			context.HTML(http.StatusNotFound, "web/templates/error.html", gin.H{
 				"Title":    noSuchFileOrDirectory,
 				"Subtitle": "This guild doesn't seem to exist.",
 				"Message":  "Maybe you got the wrong URL?",

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"strings"
 )
 
@@ -18,7 +18,6 @@ func manuals(context *multiplexer.Context) {
 	switch {
 	case len(context.Fields) == 1:
 		{
-
 			// Generate a list of all categories
 			embed := formatter.NewEmbed("Manuals",
 				fmt.Sprintf("Issue `%sman <category>` for category-specific manuals.", guildPrefix))
@@ -56,14 +55,14 @@ func manuals(context *multiplexer.Context) {
 
 			// Break out of the case if no category was matched
 			if desiredCat == nil {
-				context.SendMessage(state.InvalidArgument)
+				context.SendMessage(ChatBackend.InvalidArgument)
 				break
 			}
 
 			// Generate list of all commands in one specific category
 			embed := formatter.NewEmbed(desiredCat.Title,
 				desiredCat.Description)
-			embed.Color = state.KappaColor
+			embed.Color = ChatBackend.KappaColor
 
 			for _, route := range desiredCat.Routes {
 
@@ -81,9 +80,8 @@ func manuals(context *multiplexer.Context) {
 
 	case len(context.Fields) > 2:
 		{
-
 			// Some catch-all case I guess, though there will be a command-specific thing later maybe
-			context.SendMessage(state.InvalidArgument)
+			context.SendMessage(ChatBackend.InvalidArgument)
 		}
 	}
 }
