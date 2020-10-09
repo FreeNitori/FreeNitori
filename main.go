@@ -12,6 +12,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state/supervisor"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/web"
 	"github.com/bwmarrin/discordgo"
+	"github.com/dgraph-io/badger/v2"
 	"net"
 	"net/http"
 	"net/rpc"
@@ -65,6 +66,7 @@ func main() {
 				log.Debug("Loaded token from command parameter.")
 			}
 
+			discordgo.Logger = log.DiscordGoLogger
 			ChatBackend.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version + ")"
 			ChatBackend.RawSession.Token = "Bot " + ChatBackend.RawSession.Token
 			ChatBackend.RawSession.ShouldReconnectOnError = true
@@ -171,6 +173,16 @@ func main() {
 				os.Exit(1)
 			}
 			go http.Serve(SuperVisor.SocketListener, nil)
+
+			// Open the database
+			dbOptions := badger.DefaultOptions(config.Config.System.Database)
+			dbOptions.Logger = log.Logger
+			SuperVisor.Database, err = badger.Open(dbOptions)
+			if err != nil {
+				log.Fatalf("Failed to open database, %s", err)
+				os.Exit(1)
+			}
+			defer func() { _ = SuperVisor.Database.Close() }()
 
 			// Create the chat backend process
 			SuperVisor.ChatBackendProcess, err =

@@ -1,6 +1,7 @@
 package SuperVisor
 
 import (
+	"github.com/dgraph-io/badger/v2"
 	"net"
 	"os"
 )
@@ -22,3 +23,6 @@ var ProcessAttributes = os.ProcAttr{
 		os.Stderr,
 	},
 }
+
+// Database
+var Database *badger.DB

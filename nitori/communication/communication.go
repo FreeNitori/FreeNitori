@@ -8,6 +8,7 @@ import (
 	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	SuperVisor "git.randomchars.net/RandomChars/FreeNitori/nitori/state/supervisor"
 	"os"
+	"strconv"
 	"syscall"
 )
 
@@ -33,8 +34,7 @@ type UserInfo struct {
 	Bot           bool
 }
 
-func (*IPC) Error(args []string, reply *int) error {
-	reply = new(int)
+func (*IPC) Error(args []string, _ *int) error {
 	if len(args) != 1 {
 		return errors.New("invalid action")
 	}
@@ -51,8 +51,7 @@ func (*IPC) Error(args []string, reply *int) error {
 	return nil
 }
 
-func (*IPC) Shutdown(args []string, reply *int) error {
-	reply = new(int)
+func (*IPC) Shutdown(args []string, _ *int) error {
 	if len(args) != 1 {
 		return errors.New("invalid action")
 	}
@@ -69,8 +68,7 @@ func (*IPC) Shutdown(args []string, reply *int) error {
 	return nil
 }
 
-func (*IPC) Restart(args []string, reply *int) error {
-	reply = new(int)
+func (*IPC) Restart(args []string, _ *int) error {
 	if len(args) != 1 {
 		return errors.New("invalid action")
 	}
@@ -103,8 +101,7 @@ func (*IPC) Restart(args []string, reply *int) error {
 	return nil
 }
 
-func (*IPC) FireReadyMessage(args []string, reply *int) error {
-	reply = new(int)
+func (*IPC) FireReadyMessage(args []string, _ *int) error {
 	if len(args) != 2 {
 		return errors.New("invalid action")
 	}
@@ -115,4 +112,27 @@ func (*IPC) FireReadyMessage(args []string, reply *int) error {
 		config.Config.System.Prefix)
 	log.Infof("FreeNitori is ready. Press Control-C to terminate.")
 	return nil
+}
+
+func (*IPC) DatabaseAction(args []string, reply *[]string) error {
+	if len(args) < 2 {
+		return errors.New("invalid action")
+	}
+	var response = []string{""}
+	switch args[0] {
+	case "size":
+		response[0] = strconv.Itoa(int(size()))
+	case "gc":
+		err = gc()
+	case "set":
+		err = set(args[1], args[2])
+	case "get":
+		response[0], err = get(args[1])
+	case "del":
+		err = del(args[1:])
+	default:
+		return errors.New("invalid operation")
+	}
+	*reply = response
+	return err
 }

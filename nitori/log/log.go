@@ -5,7 +5,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var logger = logrus.New()
+var Logger = logrus.New()
 var Formatter = formatter{logrus.TextFormatter{
 	ForceColors:               false,
 	DisableColors:             false,
@@ -29,7 +29,7 @@ type formatter struct {
 }
 
 func init() {
-	logger.SetFormatter(&Formatter)
+	Logger.SetFormatter(&Formatter)
 }
 
 func (formatter *formatter) Format(entry *logrus.Entry) ([]byte, error) {

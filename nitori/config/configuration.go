@@ -52,6 +52,7 @@ type Conf struct {
 type SystemSection struct {
 	LogLevel      string
 	Socket        string
+	Database      string
 	Token         string
 	ClientID      int
 	ClientSecret  string
