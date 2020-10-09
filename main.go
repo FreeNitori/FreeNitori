@@ -106,11 +106,9 @@ func main() {
 			}
 
 			// Print out logs ChatBackend is ready to go
-			log.Infof("User: %s | ID: %s | Default Prefix: %s",
-				state.RawSession.State.User.Username+"#"+state.RawSession.State.User.Discriminator,
-				state.RawSession.State.User.ID,
-				config.Config.System.Prefix)
-			log.Infof("FreeNitori is ready. Press Control-C to terminate.")
+			_ = state.IPCConnection.Call("IPC.FireReadyMessage", []string{
+				state.RawSession.State.User.Username + "#" + state.RawSession.State.User.Discriminator,
+				state.RawSession.State.User.ID}, nil)
 			_ = state.IPCConnection.Call("IPC.SignalWebServer", []string{}, nil)
 		}
 	case state.StartWebServer:

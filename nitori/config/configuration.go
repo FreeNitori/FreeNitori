@@ -52,6 +52,8 @@ type SystemSection struct {
 	LogLevel      string
 	Socket        string
 	Token         string
+	ClientID      int
+	ClientSecret  string
 	Prefix        string
 	Presence      string
 	Shard         bool

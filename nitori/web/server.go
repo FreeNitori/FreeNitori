@@ -17,6 +17,11 @@ import (
 var err error
 var Engine *gin.Engine
 
+const internalServerError = "Internal Server Error"
+const noSuchFileOrDirectory = "No such file or directory"
+const badRequest = "Bad Request"
+const serviceUnavailable = "Service Unavailable"
+
 type leaderboardEntry struct {
 	User       *communication.UserInfo
 	Experience int
@@ -46,11 +51,10 @@ func Initialize() {
 	Engine.SetHTMLTemplate(templates)
 
 	// Register static files
-	//noinspection GoUnresolvedReference
 	Engine.StaticFS("/static", AssetFile())
 	Engine.NoRoute(func(context *gin.Context) {
 		context.HTML(http.StatusNotFound, "web/templates/error.html", gin.H{
-			"Title":    "No such file or directory",
+			"Title":    noSuchFileOrDirectory,
 			"Subtitle": "This route doesn't seem to exist.",
 			"Message":  "I wonder how you got here...",
 		})
@@ -64,7 +68,7 @@ func Initialize() {
 		guildInfo := fetchGuild(context.Param("gid"))
 		if guildInfo == nil {
 			context.HTML(http.StatusBadRequest, "web/templates/error.html", gin.H{
-				"Title":    "No such file or directory",
+				"Title":    noSuchFileOrDirectory,
 				"Subtitle": "This guild doesn't seem to exist.",
 				"Message":  "Maybe you got the wrong URL?",
 			})
@@ -73,7 +77,7 @@ func Initialize() {
 		expEnabled, err := config.ExpEnabled(guildInfo.ID)
 		if err != nil {
 			context.HTML(http.StatusInternalServerError, "web/templates/error.html", gin.H{
-				"Title":    "Internal Server Error",
+				"Title":    internalServerError,
 				"Subtitle": "Failed to fetch experience system enablement status.",
 				"Message":  "Nitori taking a nap?",
 			})
@@ -81,7 +85,7 @@ func Initialize() {
 		}
 		if !expEnabled {
 			context.HTML(http.StatusServiceUnavailable, "web/templates/error.html", gin.H{
-				"Title":    "Service Unavailable",
+				"Title":    serviceUnavailable,
 				"Subtitle": "This feature is disabled in your guild.",
 				"Message":  "Moderators don't like Nitori?",
 			})

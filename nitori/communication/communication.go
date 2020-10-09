@@ -1,6 +1,7 @@
 package communication
 
 import (
+	"errors"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
@@ -32,14 +33,17 @@ type UserInfo struct {
 
 func (*IPC) Error(args []string, reply *int) error {
 	reply = new(int)
+	if len(args) != 1 {
+		return errors.New("invalid action")
+	}
 	switch args[0] {
 	case "ChatBackend":
 		_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
-		log.Error("ChatBackend has encountered an error.")
+		log.Error("ChatBackend has encountered a fatal error.")
 		state.ExitCode <- 1
 	case "WebServer":
 		_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
-		log.Error("WebServer has encountered an error.")
+		log.Error("WebServer has encountered a fatal error.")
 		state.ExitCode <- 1
 	}
 	return nil
@@ -47,6 +51,9 @@ func (*IPC) Error(args []string, reply *int) error {
 
 func (*IPC) Shutdown(args []string, reply *int) error {
 	reply = new(int)
+	if len(args) != 1 {
+		return errors.New("invalid action")
+	}
 	switch args[0] {
 	case "ChatBackend":
 		_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
@@ -62,6 +69,9 @@ func (*IPC) Shutdown(args []string, reply *int) error {
 
 func (*IPC) Restart(args []string, reply *int) error {
 	reply = new(int)
+	if len(args) != 1 {
+		return errors.New("invalid action")
+	}
 	switch args[0] {
 	case "ChatBackend":
 		go func() {
@@ -88,5 +98,18 @@ func (*IPC) Restart(args []string, reply *int) error {
 			}
 		}()
 	}
+	return nil
+}
+
+func (*IPC) FireReadyMessage(args []string, reply *int) error {
+	reply = new(int)
+	if len(args) != 2 {
+		return errors.New("invalid action")
+	}
+	log.Infof("User: %s | ID: %s | Default Prefix: %s",
+		args[0],
+		args[1],
+		config.Config.System.Prefix)
+	log.Infof("FreeNitori is ready. Press Control-C to terminate.")
 	return nil
 }

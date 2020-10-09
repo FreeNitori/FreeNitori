@@ -76,5 +76,8 @@ func fm(context *multiplexer.Context) {
 	embed.SetFooter(fmt.Sprintf("%s has %s scrobbles in total.", result.User, strconv.Itoa(result.Total)))
 	embed.Color = context.Session.State.UserColor(context.Author.ID, context.Create.ChannelID)
 	embed.URL = result.Tracks[0].Url
+	if len(result.Tracks[0].Images) == 4 {
+		embed.SetThumbnail(result.Tracks[0].Images[3].Url)
+	}
 	context.SendEmbed(embed)
 }
