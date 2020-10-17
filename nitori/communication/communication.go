@@ -130,6 +130,18 @@ func (*IPC) DatabaseAction(args []string, reply *[]string) error {
 		response[0], err = get(args[1])
 	case "del":
 		err = del(args[1:])
+	case "hset":
+		err = hset(args[1], args[2], args[3])
+	case "hget":
+		response[0], err = hget(args[1], args[2])
+	case "hdel":
+		err = hdel(args[1], args[2:])
+	case "hkeys":
+		response, err = hkeys(args[1])
+	case "hlen":
+		var result int
+		result, err = hlen(args[1])
+		response[0] = strconv.Itoa(result)
 	default:
 		return errors.New("invalid operation")
 	}

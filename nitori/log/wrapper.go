@@ -2,6 +2,7 @@ package log
 
 import (
 	"fmt"
+	"github.com/bwmarrin/discordgo"
 	"github.com/sirupsen/logrus"
 )
 
@@ -58,5 +59,16 @@ func IsLevelEnabled(level logrus.Level) bool {
 }
 
 func DiscordGoLogger(msgL, _ int, format string, a ...interface{}) {
-	Logger.Log(logrus.Level(msgL), fmt.Sprintf(format, a...))
+	var level logrus.Level
+	switch msgL {
+	case discordgo.LogDebug:
+		level = logrus.DebugLevel
+	case discordgo.LogInformational:
+		level = logrus.InfoLevel
+	case discordgo.LogWarning:
+		level = logrus.WarnLevel
+	case discordgo.LogError:
+		level = logrus.ErrorLevel
+	}
+	Logger.Log(level, fmt.Sprintf(format, a...))
 }
