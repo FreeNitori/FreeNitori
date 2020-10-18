@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/base64"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
@@ -28,7 +29,7 @@ func ResetGuild(gid string) {
 
 // Get a guild-specific message string
 func getMessage(gid string, key string) (string, error) {
-	messageEncoded, err := Redis.HGet(RedisContext, "settings."+gid, "message."+key).Result()
+	messageEncoded, err := database.HGet("settings."+gid, "message."+key)
 	if err != nil {
 		if err == redis.Nil {
 			return "", nil

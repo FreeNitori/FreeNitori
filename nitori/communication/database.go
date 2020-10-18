@@ -84,8 +84,18 @@ func hget(hashmap, key string) (string, error) {
 }
 
 func hdel(hashmap string, keys []string) error {
-	for i := range keys {
-		keys[i] = hashmap + "/{HASH}/" + keys[i]
+	if len(keys) > 0 {
+		for i, key := range keys {
+			keys[i] = hashmap + "/{HASH}/" + key
+		}
+	} else {
+		err := iter(false, true, hashmap+"/{HASH}/", hashmap+"/{HASH}/", func(key, _ string) bool {
+			keys = append(keys, key)
+			return true
+		})
+		if err != nil {
+			return err
+		}
 	}
 	return del(keys)
 }
