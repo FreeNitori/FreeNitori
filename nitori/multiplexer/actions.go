@@ -1,6 +1,7 @@
 package multiplexer
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/formatter"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
@@ -76,6 +77,24 @@ func (context *Context) HasPermission(permission int) bool {
 	// Check against the user
 	permissions, err := context.Session.State.UserChannelPermissions(context.Author.ID, context.Message.ChannelID)
 	return err == nil && (permissions&permission == permission)
+}
+
+// Check if the author is or above operator
+func (context *Context) IsOperator() bool {
+	if context.Author.ID == strconv.Itoa(config.Config.System.Administrator) {
+		return true
+	}
+	for _, id := range config.Config.System.Operator {
+		if context.Author.ID == strconv.Itoa(id) {
+			return true
+		}
+	}
+	return false
+}
+
+// Checks of the author is a system administrator
+func (context *Context) IsAdministrator() bool {
+	return context.Author.ID == strconv.Itoa(config.Config.System.Administrator)
 }
 
 // Get a guild member from a string

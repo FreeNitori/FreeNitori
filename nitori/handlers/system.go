@@ -47,8 +47,15 @@ func about(context *multiplexer.Context) {
 	context.SendEmbed(embed)
 }
 
+func resetGuild(context *multiplexer.Context) {
+	if !context.IsOperator() {
+		context.SendMessage(ChatBackend.OperatorOnly)
+		return
+	}
+}
+
 func reboot(context *multiplexer.Context) {
-	if context.Author.ID != ChatBackend.Administrator.ID {
+	if !context.IsAdministrator() {
 		context.SendMessage(ChatBackend.AdminOnly)
 		return
 	}
