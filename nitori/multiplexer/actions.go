@@ -50,6 +50,7 @@ func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
 // Handle error and send the stuff if in debug mode
 func (context *Context) HandleError(err error) bool {
 	if err != nil {
+		log.Errorf("Error occurred while executing command, %s", err)
 		context.SendMessage(ChatBackend.ErrorOccurred)
 		if log.GetLevel() == logrus.DebugLevel {
 			context.SendMessage(err.Error())

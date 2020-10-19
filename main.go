@@ -44,13 +44,6 @@ func main() {
 				os.Exit(1)
 			}
 
-			// Check the database
-			_, err = config.Redis.Ping(config.RedisContext).Result()
-			if err != nil {
-				log.Error(fmt.Sprintf("Failed to connect to the database, %s", err))
-				os.Exit(1)
-			}
-
 			// Authenticate and make session
 			if ChatBackend.RawSession.Token == "" {
 				configToken := config.Config.System.Token
@@ -121,13 +114,6 @@ func main() {
 			err = communication.InitializeIPC(state.StartChatBackend, state.StartWebServer)
 			if err != nil {
 				log.Error(fmt.Sprintf("Failed to connect to the supervisor process, %s", err))
-				os.Exit(1)
-			}
-
-			// Check the database
-			_, err = config.Redis.Ping(config.RedisContext).Result()
-			if err != nil {
-				log.Error(fmt.Sprintf("Unable to establish state with database, %s", err))
 				os.Exit(1)
 			}
 

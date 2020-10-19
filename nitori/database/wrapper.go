@@ -29,6 +29,9 @@ func Set(key, value string) error {
 
 func Get(key string) (string, error) {
 	reply, err := callDatabase("get", []string{key})
+	if len(reply) == 0 {
+		return "", nil
+	}
 	return reply[0], err
 }
 
@@ -44,10 +47,13 @@ func HSet(hashmap, key, value string) error {
 
 func HGet(hashmap, key string) (string, error) {
 	reply, err := callDatabase("hget", []string{hashmap, key})
+	if len(reply) == 0 {
+		return "", nil
+	}
 	return reply[0], err
 }
 
-func HDel(hashmap string, keys []string) error {
+func HDel(hashmap string, keys ...string) error {
 	_, err := callDatabase("hdel", append([]string{hashmap}, keys...))
 	return err
 }

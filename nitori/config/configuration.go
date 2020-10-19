@@ -1,19 +1,16 @@
 package config
 
 import (
-	"context"
 	"flag"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/BurntSushi/toml"
-	"github.com/go-redis/redis/v8"
 	"github.com/sirupsen/logrus"
 	"go/types"
 	"io/ioutil"
 	"math"
 	"os"
-	"strconv"
 )
 
 var _ = flags()
@@ -31,12 +28,6 @@ func flags() *types.Nil {
 var Config = parseConfig()
 var NitoriConfPath string
 var LogLevel = getLogLevel()
-var Redis = redis.NewClient(&redis.Options{
-	Addr:     Config.Redis.Host + ":" + strconv.Itoa(Config.Redis.Port),
-	Password: Config.Redis.Password,
-	DB:       Config.Redis.Database,
-})
-var RedisContext = context.Background()
 var CustomizableMessages = map[string]string{
 	"levelup": "Congratulations $USER on reaching level $LEVEL.",
 }
@@ -45,7 +36,6 @@ var CustomizableMessages = map[string]string{
 type MessageOutOfBounds struct{}
 type Conf struct {
 	System    SystemSection
-	Redis     RedisSection
 	WebServer WebServerSection
 	LastFM    LastFMSection
 }
@@ -62,12 +52,6 @@ type SystemSection struct {
 	ShardCount    int
 	Administrator int
 	Operator      []int
-}
-type RedisSection struct {
-	Host     string
-	Port     int
-	Password string
-	Database int
 }
 type WebServerSection struct {
 	SecretKey string
