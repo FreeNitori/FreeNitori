@@ -17,9 +17,5 @@ func InitializeIPC() error {
 
 func ipcDialClient() error {
 	state.IPCConnection, err = rpc.DialHTTP("unix", config.Config.System.Socket)
-	if err != nil {
-		return err
-	} else {
-		return nil
-	}
+	return err
 }

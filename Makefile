@@ -16,16 +16,16 @@ run-test:
 
 .PHONY: build
 build: deps assets
-	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-supervisor proc/supervisor/main.go
-	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-chatbackend proc/chatbackend/main.go
-	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-webserver proc/webserver/main.go
-	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-console proc/console/main.go
-	cp build/freenitori-supervisor build/freenitori
+	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-supervisor $$PWD/proc/supervisor
+	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-chatbackend $$PWD/proc/chatbackend
+	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-webserver $$PWD/proc/webserver
+	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-console $$PWD/proc/console
+	cp -f build/freenitori-supervisor build/freenitori
 
 .PHONY: build-test
 build-test: assets
-	go build -tags=jsoniter -o build/freenitori-supervisor proc/supervisor/main.go
-	go build -tags=jsoniter -o build/freenitori-chatbackend proc/chatbackend/main.go
-	go build -tags=jsoniter -o build/freenitori-webserver proc/webserver/main.go
-	go build -tags=jsoniter -o build/freenitori-console proc/console/main.go
-	cp build/freenitori-supervisor build/freenitori
+	go build -tags=jsoniter -o build/freenitori-supervisor $$PWD/proc/supervisor
+	go build -tags=jsoniter -o build/freenitori-chatbackend $$PWD/proc/chatbackend
+	go build -tags=jsoniter -o build/freenitori-webserver $$PWD/proc/webserver
+	go build -tags=jsoniter -o build/freenitori-console $$PWD/proc/console
+	cp -f build/freenitori-supervisor build/freenitori

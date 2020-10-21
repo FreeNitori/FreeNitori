@@ -6,7 +6,6 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	_ "git.randomchars.net/RandomChars/FreeNitori/nitori/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/session"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
@@ -19,25 +18,6 @@ import (
 
 var err error
 
-func init() {
-	// Add the multiplexer handler to the raw session if sharding is disabled
-	if !config.Config.Discord.Shard {
-		for _, handler := range ChatBackend.EventHandlers {
-			ChatBackend.RawSession.AddHandler(handler)
-		}
-	}
-
-	// Add the event handlers
-	for _, handlerInfo := range multiplexer.Commands {
-		multiplexer.Router.Route(
-			handlerInfo.Pattern,
-			handlerInfo.AliasPatterns,
-			handlerInfo.Description,
-			handlerInfo.Handler,
-			handlerInfo.Category)
-	}
-}
-
 func main() {
 	state.ProcessType = state.ChatBackend
 
@@ -47,6 +27,7 @@ func main() {
 		log.Fatalf("Failed to connect to the supervisor process, %s", err)
 		os.Exit(1)
 	}
+	defer func() { _ = state.IPCConnection.Close() }()
 
 	// Authenticate and make session
 	if ChatBackend.RawSession.Token == "" {

@@ -3,6 +3,7 @@ module git.randomchars.net/RandomChars/FreeNitori
 require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/bwmarrin/discordgo v0.21.1
+	github.com/c-bata/go-prompt v0.2.5
 	github.com/dgraph-io/badger/v2 v2.2007.2
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect

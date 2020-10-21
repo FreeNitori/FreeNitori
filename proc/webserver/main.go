@@ -22,9 +22,10 @@ func main() {
 	// Dial the supervisor socket
 	err = communication.InitializeIPC()
 	if err != nil {
-		log.Error(fmt.Sprintf("Failed to connect to the supervisor process, %s", err))
+		log.Errorf("Failed to connect to the supervisor process, %s", err)
 		os.Exit(1)
 	}
+	defer func() { _ = state.IPCConnection.Close() }()
 
 	// Initialize and start the server
 	web.Initialize()

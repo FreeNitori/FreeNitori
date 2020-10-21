@@ -110,7 +110,7 @@ func (*IPC) FireReadyMessage(args []string, _ *int) error {
 		args[0],
 		args[1],
 		config.Config.System.Prefix)
-	log.Infof("FreeNitori is ready. Press Control-C to terminate.")
+	log.Infof("FreeNitori is ready.")
 	return nil
 }
 
