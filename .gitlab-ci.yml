@@ -12,7 +12,7 @@ build:
   stage: build
   script:
     - make
-    - tar zcf /tmp/freenitori.tar.gz build/freenitori*
+    - cd build; tar zcf /tmp/freenitori.tar.gz freenitori*; cd ../
     - cp /tmp/freenitori.tar.gz build/
   artifacts:
     paths:
