@@ -12,7 +12,8 @@ build:
   stage: build
   script:
     - make
+    - tar zcf /tmp/freenitori.tar.gz build/freenitori*
   artifacts:
     paths:
-      - build/
+      - /tmp/freenitori.tar.gz
     expire_in: 1 week
