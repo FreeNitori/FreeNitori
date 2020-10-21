@@ -16,7 +16,7 @@ func ResetGuild(gid string) {
 	for _, prefix := range prefixes {
 		err := database.HDel(fmt.Sprintf("%s.%s", prefix, gid))
 		if err != nil {
-			log.Errorf("Error while resetting guild %s, %s", gid, err)
+			log.Errorf("Error while resetting guild %s key %s, %s", gid, fmt.Sprintf("%s.%s", prefix, gid), err)
 		}
 	}
 }

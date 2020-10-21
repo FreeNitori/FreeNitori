@@ -11,6 +11,12 @@ func callDatabase(action string, data []string) (reply []string, err error) {
 	return
 }
 
+func callDatabaseHashmap(action string, data []string) (reply []map[string]string, err error) {
+	body := append([]string{action}, data...)
+	err = state.IPCConnection.Call("IPC.DatabaseAction", body, &reply)
+	return
+}
+
 func Size() int {
 	reply, _ := callDatabase("size", []string{""})
 	result, _ := strconv.Atoi(reply[0])
@@ -49,6 +55,14 @@ func HGet(hashmap, key string) (string, error) {
 	reply, err := callDatabase("hget", []string{hashmap, key})
 	if len(reply) == 0 {
 		return "", nil
+	}
+	return reply[0], err
+}
+
+func HGetAll(hashmap string) (map[string]string, error) {
+	reply, err := callDatabaseHashmap("hgetall", []string{hashmap})
+	if len(reply) == 0 {
+		return nil, nil
 	}
 	return reply[0], err
 }

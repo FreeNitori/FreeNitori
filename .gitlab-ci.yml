@@ -8,15 +8,11 @@ cache:
 stages:
   - build
 
-before_script:
-  - apt-get update
-  - apt-get install -y upx
-
 build:
   stage: build
   script:
     - make
   artifacts:
     paths:
-      - FreeNitori
+      - build/
     expire_in: 1 week

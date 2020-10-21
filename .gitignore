@@ -5,7 +5,6 @@
 /.idea/
 /nitori/config/assets.go
 /nitori/web/static.go
-/FreeNitori
-/FreeNitoriTest
+/build
 /nitori.conf
 /db

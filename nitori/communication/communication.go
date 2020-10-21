@@ -77,7 +77,7 @@ func (*IPC) Restart(args []string, _ *int) error {
 		go func() {
 			_, _ = SuperVisor.ChatBackendProcess.Wait()
 			SuperVisor.ChatBackendProcess, err =
-				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-cb", "-a", ChatBackend.RawSession.Token, "-c", config.NitoriConfPath}, &SuperVisor.ProcessAttributes)
+				os.StartProcess(config.Config.System.ChatBackend, []string{config.Config.System.ChatBackend, "-a", ChatBackend.RawSession.Token, "-c", config.NitoriConfPath}, &SuperVisor.ProcessAttributes)
 			if err != nil {
 				log.Errorf("Failed to recreate chat backend process, %s", err)
 				state.ExitCode <- 1
@@ -89,7 +89,7 @@ func (*IPC) Restart(args []string, _ *int) error {
 		go func() {
 			_, _ = SuperVisor.WebServerProcess.Wait()
 			SuperVisor.WebServerProcess, err =
-				os.StartProcess(state.ExecPath, []string{state.ExecPath, "-ws", "-c", config.NitoriConfPath}, &SuperVisor.ProcessAttributes)
+				os.StartProcess(config.Config.System.WebServer, []string{config.Config.System.WebServer, "-c", config.NitoriConfPath}, &SuperVisor.ProcessAttributes)
 			if err != nil {
 				log.Errorf("Failed to recreate web server process, %s", err)
 				state.ExitCode <- 1
@@ -142,6 +142,21 @@ func (*IPC) DatabaseAction(args []string, reply *[]string) error {
 		var result int
 		result, err = hlen(args[1])
 		response[0] = strconv.Itoa(result)
+	default:
+		return errors.New("invalid operation")
+	}
+	*reply = response
+	return err
+}
+
+func (*IPC) DatabaseActionHashmap(args []string, reply *[]map[string]string) error {
+	if len(args) < 2 {
+		return errors.New("invalid action")
+	}
+	var response = []map[string]string{make(map[string]string)}
+	switch args[0] {
+	case "hgetall":
+		response[0], err = hgetall(args[1])
 	default:
 		return errors.New("invalid operation")
 	}

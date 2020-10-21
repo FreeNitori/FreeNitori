@@ -12,8 +12,9 @@ import (
 
 func init() {
 	SystemCategory.Register(about, "about", []string{"info", "kappa", "information"}, "Display system information.")
-	SystemCategory.Register(reboot, "reboot", []string{"shutdown", "halt", "restart"}, "")
 	SystemCategory.Register(invite, "invite", []string{"authorize", "oauth"}, "Display authorization URL.")
+	SystemCategory.Register(reboot, "reboot", []string{"shutdown", "halt", "restart"}, "")
+	SystemCategory.Register(resetGuild, "reset-guild", []string{}, "Reset current guild configuration.")
 }
 
 func about(context *multiplexer.Context) {
@@ -52,6 +53,8 @@ func resetGuild(context *multiplexer.Context) {
 		context.SendMessage(ChatBackend.OperatorOnly)
 		return
 	}
+	config.ResetGuild(context.Guild.ID)
+	context.SendMessage("Guild configuration has been reset.")
 }
 
 func reboot(context *multiplexer.Context) {

@@ -2,24 +2,20 @@ package state
 
 import (
 	"net/rpc"
-	"os"
 )
 
 // Version information
 const Version = "v0.0.1-rewrite"
 
+// Process types
+const Supervisor = 0
+const ChatBackend = 1
+const WebServer = 2
+const InteractiveConsole = 3
+
 // State variables
-var StartChatBackend bool
-var StartWebServer bool
+var ProcessType int
 var IPCConnection *rpc.Client
 var Initialized = false
 var InviteURL string
 var ExitCode = make(chan int)
-var ExecPath string
-
-func init() {
-	var err error
-	if ExecPath, err = os.Executable(); err != nil {
-		panic(err)
-	}
-}

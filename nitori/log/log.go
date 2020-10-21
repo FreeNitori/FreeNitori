@@ -34,14 +34,16 @@ func init() {
 
 func (formatter *formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	format, err := formatter.TextFormatter.Format(entry)
-	switch {
-	case state.StartChatBackend:
-		return append([]byte("[CB]"), format...), err
-	case state.StartWebServer:
-		return append([]byte("[WS]"), format...), err
-	case !state.StartWebServer && !state.StartChatBackend:
+	switch state.ProcessType {
+	case state.Supervisor:
 		return append([]byte("[SV]"), format...), err
+	case state.ChatBackend:
+		return append([]byte("[CB]"), format...), err
+	case state.WebServer:
+		return append([]byte("[WS]"), format...), err
+	case state.InteractiveConsole:
+		return append([]byte("[VT]"), format...), err
 	default:
-		panic("invalid start parameters")
+		panic("invalid process type")
 	}
 }

@@ -12,12 +12,20 @@ assets:
 
 .PHONY: run-test
 run-test:
-	./FreeNitoriTest
+	./build/freenitori
 
 .PHONY: build
 build: deps assets
-	go build -tags=jsoniter -ldflags="-s -w"
+	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-supervisor proc/supervisor/main.go
+	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-chatbackend proc/chatbackend/main.go
+	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-webserver proc/webserver/main.go
+	go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-console proc/console/main.go
+	cp build/freenitori-supervisor build/freenitori
 
 .PHONY: build-test
 build-test: assets
-	go build -tags=jsoniter -o FreeNitoriTest
+	go build -tags=jsoniter -o build/freenitori-supervisor proc/supervisor/main.go
+	go build -tags=jsoniter -o build/freenitori-chatbackend proc/chatbackend/main.go
+	go build -tags=jsoniter -o build/freenitori-webserver proc/webserver/main.go
+	go build -tags=jsoniter -o build/freenitori-console proc/console/main.go
+	cp build/freenitori-supervisor build/freenitori

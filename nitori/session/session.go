@@ -2,6 +2,7 @@ package session
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
@@ -12,24 +13,24 @@ func MakeSessions() error {
 	var err error
 
 	// Get recommended shard count from Discord
-	if config.Config.System.ShardCount < 1 {
+	if config.Config.Discord.ShardCount < 1 {
 		gatewayBot, err := ChatBackend.RawSession.GatewayBot()
 		if err != nil {
 			return err
 		}
-		config.Config.System.ShardCount = gatewayBot.Shards
+		config.Config.Discord.ShardCount = gatewayBot.Shards
 	}
 
 	// Make sure it doesn't end up being 0 shards
-	if config.Config.System.ShardCount == 0 {
-		config.Config.System.ShardCount = 1
+	if config.Config.Discord.ShardCount == 0 {
+		config.Config.Discord.ShardCount = 1
 	}
 
 	// Make the sessions
-	for i := 0; i < config.Config.System.ShardCount; i++ {
+	for i := 0; i < config.Config.Discord.ShardCount; i++ {
 		time.Sleep(time.Millisecond * 100)
 		session, _ := discordgo.New()
-		session.ShardCount = config.Config.System.ShardCount
+		session.ShardCount = config.Config.Discord.ShardCount
 		session.ShardID = i
 		session.Token = ChatBackend.RawSession.Token
 		session.UserAgent = ChatBackend.RawSession.UserAgent
@@ -42,18 +43,19 @@ func MakeSessions() error {
 		for _, handler := range ChatBackend.EventHandlers {
 			session.AddHandler(handler)
 		}
+		log.Infof("Shard %s ready.", strconv.Itoa(i))
 		ChatBackend.ShardSessions = append(ChatBackend.ShardSessions, session)
 	}
 	return nil
 }
 
 func FetchGuildSession(gid string) (*discordgo.Session, error) {
-	if !config.Config.System.Shard {
+	if !config.Config.Discord.Shard {
 		return ChatBackend.RawSession, nil
 	}
 	ID, err := strconv.ParseInt(gid, 10, 64)
 	if err != nil {
 		return nil, err
 	}
-	return ChatBackend.ShardSessions[(ID>>22)%int64(config.Config.System.ShardCount)], nil
+	return ChatBackend.ShardSessions[(ID>>22)%int64(config.Config.Discord.ShardCount)], nil
 }

@@ -7,11 +7,11 @@ import (
 	"net/rpc"
 )
 
-func InitializeIPC(StartChatBackend bool, StartWebServer bool) error {
-	if StartChatBackend || StartWebServer {
-		return ipcDialClient()
-	} else {
+func InitializeIPC() error {
+	if state.ProcessType == 0 {
 		return errors.New("initializing IPC client from supervisor")
+	} else {
+		return ipcDialClient()
 	}
 }
 
