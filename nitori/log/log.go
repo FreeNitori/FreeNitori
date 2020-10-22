@@ -1,7 +1,7 @@
 package log
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
 	"github.com/sirupsen/logrus"
 )
 
@@ -34,15 +34,15 @@ func init() {
 
 func (formatter *formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	format, err := formatter.TextFormatter.Format(entry)
-	switch state.ProcessType {
-	case state.Supervisor:
+	switch vars.ProcessType {
+	case vars.Supervisor:
 		return append([]byte("[SV]"), format...), err
-	case state.ChatBackend:
+	case vars.ChatBackend:
 		return append([]byte("[CB]"), format...), err
-	case state.WebServer:
+	case vars.WebServer:
 		return append([]byte("[WS]"), format...), err
-	case state.InteractiveConsole:
-		return append([]byte("[VT]"), format...), err
+	case vars.Other:
+		return format, err
 	default:
 		panic("invalid process type")
 	}

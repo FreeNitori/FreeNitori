@@ -2,16 +2,14 @@ package main
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/communication"
+	_ "git.randomchars.net/RandomChars/FreeNitori/nitori/args"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
-	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
-	SuperVisor "git.randomchars.net/RandomChars/FreeNitori/nitori/state/supervisor"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/supervisor/communication"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/supervisor/state"
 	"github.com/dgraph-io/badger/v2"
 	"net"
-	"net/http"
-	"net/rpc"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,13 +18,10 @@ import (
 var err error
 
 func main() {
-	state.ProcessType = state.Supervisor
-
-	// IPC functions
-	var IPCFunctions = new(communication.IPC)
+	vars.ProcessType = vars.Supervisor
 
 	// Print version information and stuff
-	log.Infof("Starting FreeNitori %s", state.Version)
+	log.Infof("Starting FreeNitori %s", vars.Version)
 
 	// Check for an existing instance
 	if _, err := os.Stat(config.Config.System.Socket); os.IsNotExist(err) {
@@ -44,37 +39,35 @@ func main() {
 		}
 	}
 
-	// Initialize the socket
-	_ = rpc.Register(IPCFunctions)
-	rpc.HandleHTTP()
-	SuperVisor.SocketListener, err = net.Listen("unix", config.Config.System.Socket)
-	if err != nil {
-		log.Error(fmt.Sprintf("Failed to listen on the socket, %s", err))
-		os.Exit(1)
-	}
-	go func() { _ = http.Serve(SuperVisor.SocketListener, nil) }()
+	// Start RPC server
+	go func() {
+		err = communication.Server()
+		if err != nil {
+			log.Fatalf("Failed to start RPC server, %s", err)
+		}
+	}()
 
 	// Open the database
 	dbOptions := badger.DefaultOptions(config.Config.System.Database)
 	dbOptions.Logger = log.Logger
-	SuperVisor.Database, err = badger.Open(dbOptions)
+	state.Database, err = badger.Open(dbOptions)
 	if err != nil {
 		log.Fatalf("Failed to open database, %s", err)
 		os.Exit(1)
 	}
-	defer func() { _ = SuperVisor.Database.Close() }()
+	defer func() { _ = state.Database.Close() }()
 
 	// Create the chat backend process
-	SuperVisor.ChatBackendProcess, err =
-		os.StartProcess(config.Config.System.ChatBackend, []string{config.Config.System.ChatBackend, "-a", ChatBackend.RawSession.Token, "-c", config.NitoriConfPath}, &SuperVisor.ProcessAttributes)
+	state.ChatBackendProcess, err =
+		os.StartProcess(config.Config.System.ChatBackend, []string{config.Config.System.ChatBackend, "-a", config.TokenOverride, "-c", config.NitoriConfPath}, &state.ProcessAttributes)
 	if err != nil {
 		log.Errorf("Failed to create chat backend process, %s", err)
 		os.Exit(1)
 	}
 
 	// Create web server process
-	SuperVisor.WebServerProcess, err =
-		os.StartProcess(config.Config.System.WebServer, []string{config.Config.System.WebServer, "-c", config.NitoriConfPath}, &SuperVisor.ProcessAttributes)
+	state.WebServerProcess, err =
+		os.StartProcess(config.Config.System.WebServer, []string{config.Config.System.WebServer, "-a", config.TokenOverride, "-c", config.NitoriConfPath}, &state.ProcessAttributes)
 	if err != nil {
 		log.Errorf("Failed to create web server process, %s", err)
 		os.Exit(1)
@@ -87,23 +80,23 @@ func main() {
 			currentSignal := <-signalChannel
 			switch currentSignal {
 			case syscall.SIGUSR2:
-				state.ExitCode <- 0
+				vars.ExitCode <- 0
 				return
 			default:
 				// Cleanup stuffs
 				fmt.Print("\n")
 				log.Info("Gracefully terminating...")
-				_ = SuperVisor.ChatBackendProcess.Signal(syscall.SIGUSR2)
-				_ = SuperVisor.WebServerProcess.Signal(syscall.SIGUSR2)
-				_ = SuperVisor.SocketListener.Close()
+				_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
+				_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
+				_ = state.SocketListener.Close()
 				_ = syscall.Unlink(config.Config.System.Socket)
-				state.ExitCode <- 0
+				vars.ExitCode <- 0
 				return
 			}
 		}
 	}()
 
 	// Exit if there's something on that channel
-	exitCode := <-state.ExitCode
+	exitCode := <-vars.ExitCode
 	os.Exit(exitCode)
 }

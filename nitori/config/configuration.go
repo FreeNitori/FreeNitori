@@ -1,29 +1,18 @@
 package config
 
 import (
-	"flag"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	ChatBackend "git.randomchars.net/RandomChars/FreeNitori/nitori/state/chatbackend"
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
-	"go/types"
 	"io/ioutil"
 	"math"
 	"os"
 )
 
-var _ = flags()
-
-func flags() *types.Nil {
-	flag.StringVar(&ChatBackend.RawSession.Token, "a", "", "Discord Authorization Token")
-	flag.StringVar(&NitoriConfPath, "c", "", "Specify configuration file path.")
-	flag.Parse()
-	return nil
-}
-
 // Exported variables for usage in other classes
 var Config = parseConfig()
 var NitoriConfPath string
+var TokenOverride string
 var LogLevel = getLogLevel()
 var CustomizableMessages = map[string]string{
 	"levelup": "Congratulations $USER on reaching level $LEVEL.",

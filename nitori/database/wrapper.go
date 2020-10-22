@@ -1,19 +1,19 @@
 package database
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
 	"strconv"
 )
 
 func callDatabase(action string, data []string) (reply []string, err error) {
 	body := append([]string{action}, data...)
-	err = state.IPCConnection.Call("IPC.DatabaseAction", body, &reply)
+	err = vars.RPCConnection.Call("R.DatabaseAction", body, &reply)
 	return
 }
 
 func callDatabaseHashmap(action string, data []string) (reply []map[string]string, err error) {
 	body := append([]string{action}, data...)
-	err = state.IPCConnection.Call("IPC.DatabaseAction", body, &reply)
+	err = vars.RPCConnection.Call("R.DatabaseAction", body, &reply)
 	return
 }
 

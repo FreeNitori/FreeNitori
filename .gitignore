@@ -4,7 +4,7 @@
 *.out
 /.idea/
 /nitori/config/assets.go
-/nitori/web/static.go
+/proc/webserver/static/static.go
 /build
 /nitori.conf
 /db

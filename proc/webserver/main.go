@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/communication"
+	_ "git.randomchars.net/RandomChars/FreeNitori/nitori/args"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/ipc"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/web"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
 	"os"
 	"os/signal"
 	"strconv"
@@ -17,24 +17,24 @@ var err error
 var readyChannel = make(chan bool, 1)
 
 func main() {
-	state.ProcessType = state.WebServer
+	vars.ProcessType = vars.WebServer
 
 	// Dial the supervisor socket
-	err = communication.InitializeIPC()
+	err = ipc.InitializeIPC()
 	if err != nil {
 		log.Errorf("Failed to connect to the supervisor process, %s", err)
 		os.Exit(1)
 	}
-	defer func() { _ = state.IPCConnection.Close() }()
+	defer func() { _ = vars.RPCConnection.Close() }()
 
 	// Initialize and start the server
-	web.Initialize()
+	Initialize()
 	go func() {
 		<-readyChannel
-		err = web.Engine.Run(fmt.Sprintf("%s:%s", config.Config.WebServer.Host, strconv.Itoa(config.Config.WebServer.Port)))
+		err = Engine.Run(fmt.Sprintf("%s:%s", config.Config.WebServer.Host, strconv.Itoa(config.Config.WebServer.Port)))
 		if err != nil {
 			log.Error(fmt.Sprintf("Failed to start web server, %s", err))
-			_ = state.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
+			_ = vars.RPCConnection.Call("R.Error", []string{"WebServer"}, nil)
 			os.Exit(1)
 		}
 	}()
@@ -48,29 +48,29 @@ func main() {
 			switch currentSignal {
 			case syscall.SIGUSR1:
 				// Go to the supervisor to fetch further instructions or set ready status
-				if !state.Initialized {
+				if !vars.Initialized {
 					readyChannel <- true
-					state.Initialized = true
+					vars.Initialized = true
 				}
 			case syscall.SIGUSR2:
-				state.ExitCode <- 0
+				vars.ExitCode <- 0
 				return
 			default:
 				// Cleanup stuffs
 				if currentSignal != os.Interrupt {
 					// Only write the packet if SIGUSR2 was not sent or the program was not interrupted
-					_ = state.IPCConnection.Call("IPC.Restart", []string{"WebServer"}, nil)
+					_ = vars.RPCConnection.Call("R.Restart", []string{"WebServer"}, nil)
 				}
-				state.ExitCode <- 0
+				vars.ExitCode <- 0
 				return
 			}
 		}
 	}()
 
 	// Tell the Supervisor and exit if there's something on that channel
-	exitCode := <-state.ExitCode
+	exitCode := <-vars.ExitCode
 	if exitCode != 0 {
-		_ = state.IPCConnection.Call("IPC.Error", []string{"WebServer"}, nil)
+		_ = vars.RPCConnection.Call("R.Error", []string{"WebServer"}, nil)
 	}
 	os.Exit(exitCode)
 }
