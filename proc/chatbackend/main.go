@@ -97,7 +97,7 @@ func main() {
 				ChatBackendIPCReceiver()
 			case syscall.SIGUSR2:
 				vars.ExitCode <- 0
-				return
+				break
 			default:
 				// Cleanup stuffs
 				if currentSignal != os.Interrupt {
@@ -109,7 +109,7 @@ func main() {
 				}
 				_ = state.RawSession.Close()
 				vars.ExitCode <- 0
-				return
+				break
 			}
 		}
 	}()

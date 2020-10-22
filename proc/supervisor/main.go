@@ -81,7 +81,7 @@ func main() {
 			switch currentSignal {
 			case syscall.SIGUSR2:
 				vars.ExitCode <- 0
-				return
+				break
 			default:
 				// Cleanup stuffs
 				fmt.Print("\n")
@@ -91,7 +91,7 @@ func main() {
 				_ = state.SocketListener.Close()
 				_ = syscall.Unlink(config.Config.System.Socket)
 				vars.ExitCode <- 0
-				return
+				break
 			}
 		}
 	}()

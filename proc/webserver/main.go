@@ -54,7 +54,7 @@ func main() {
 				}
 			case syscall.SIGUSR2:
 				vars.ExitCode <- 0
-				return
+				break
 			default:
 				// Cleanup stuffs
 				if currentSignal != os.Interrupt {
@@ -62,7 +62,7 @@ func main() {
 					_ = vars.RPCConnection.Call("R.Restart", []string{"WebServer"}, nil)
 				}
 				vars.ExitCode <- 0
-				return
+				break
 			}
 		}
 	}()
