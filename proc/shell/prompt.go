@@ -107,6 +107,16 @@ func shell() {
 					continue
 				}
 				println(result)
+			case "hgetall":
+				if len(fields) != 3 {
+					fmt.Println("hget requires exactly 1 argument")
+					continue
+				}
+				result, err := database.HGetAll(fields[2])
+				if err != nil {
+					fmt.Printf("An error occurred while executing this command, %s", err)
+				}
+				println(result)
 			case "hdel":
 				if len(fields) < 4 {
 					fmt.Println("hdel requires at least 2 arguments")

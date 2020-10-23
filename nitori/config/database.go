@@ -1,7 +1,6 @@
 package config
 
 import (
-	"encoding/base64"
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
@@ -23,18 +22,7 @@ func ResetGuild(gid string) {
 
 // Get a guild-specific message string
 func getMessage(gid string, key string) (string, error) {
-	messageEncoded, err := database.HGet("settings."+gid, "message."+key)
-	if err != nil {
-		return "", err
-	}
-	if messageEncoded == "" {
-		return "", nil
-	}
-	message, err := base64.StdEncoding.DecodeString(messageEncoded)
-	if err != nil {
-		return "", err
-	}
-	return string(message), nil
+	return database.HGet("settings."+gid, "message."+key)
 }
 
 // Set a guild-specific message string
@@ -43,12 +31,9 @@ func setMessage(gid string, key string, message string) error {
 		return &MessageOutOfBounds{}
 	}
 	if message == "" {
-		err := database.HDel("settings."+gid, "message."+key)
-		return err
+		return database.HDel("settings."+gid, "message."+key)
 	}
-	messageEncoded := base64.StdEncoding.EncodeToString([]byte(message))
-	err := database.HSet("settings."+gid, "message."+key, messageEncoded)
-	return err
+	return database.HSet("settings."+gid, "message."+key, message)
 }
 
 // Get amount of messages totally processed
@@ -76,26 +61,20 @@ func AdvanceTotalMessages() error {
 
 // Get prefix for a guild and return the default if there is none
 func GetPrefix(gid string) string {
-	prefixValue, err := database.HGet("settings."+gid, "prefix")
+	prefix, err := database.HGet("settings."+gid, "prefix")
 	if err != nil {
 		log.Warnf("Failed to obtain prefix in guild %s, %s", gid, err)
 		return Config.System.Prefix
 	}
-	if prefixValue == "" {
+	if prefix == "" {
 		return Config.System.Prefix
 	}
-	prefixDecoded, err := base64.StdEncoding.DecodeString(prefixValue)
-	if err != nil {
-		log.Warnf("Malformed prefix in guild %s, %s", gid, err)
-		return Config.System.Prefix
-	}
-	return string(prefixDecoded)
+	return prefix
 }
 
 // Set the prefix of a guild
 func SetPrefix(gid string, prefix string) error {
-	prefixEncoded := base64.StdEncoding.EncodeToString([]byte(prefix))
-	return database.HSet("settings."+gid, "prefix", prefixEncoded)
+	return database.HSet("settings."+gid, "prefix", prefix)
 }
 
 // Reset the prefix of a guild
