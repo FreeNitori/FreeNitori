@@ -8,6 +8,6 @@ FreeNitori is a general purpose Discord bot written in Golang.
 
 Download that archive from the URL above, extract it somewhere, run `freenitori-supervisor` or `freenitori` (they are both the supervisor program) once, and edit the configuration file, fill in the credentials and replace the default binary paths to the locations you placed FreeNitori binaries, then run the supervisor program again.
 
-When using the Makefile, remember to run `make` at least once then use `make test` in development (which retains the extra debug information, remove an extra downloading stage and automatically starts the program).
+When using the Makefile, remember to run `make` at least once then use `make run` in development (which remove an extra downloading stage and automatically starts the program).
 
 ---
