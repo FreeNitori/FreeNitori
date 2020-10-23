@@ -6,6 +6,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/webserver/static"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/webserver/tmpl"
 	"github.com/bwmarrin/discordgo"
 	"github.com/gin-gonic/gin"
 	"html/template"
@@ -36,10 +37,10 @@ func Initialize() {
 	Engine.Use(RateLimiting(1000, 20))
 
 	// Register templates
-	templates := template.New("web/templates")
-	for _, path := range config.AssetNames() {
+	templates := template.New("/")
+	for _, path := range tmpl.AssetNames() {
 		if strings.HasPrefix(path, "") {
-			templateBin, _ := config.Asset(path)
+			templateBin, _ := tmpl.Asset(path)
 			templates, err = templates.New(path).Parse(string(templateBin))
 			if err != nil {
 				log.Fatalf("Failed to parse template, %s", err)
@@ -53,7 +54,7 @@ func Initialize() {
 	// Register static files
 	Engine.StaticFS("/static", static.AssetFile())
 	Engine.NoRoute(func(context *gin.Context) {
-		context.HTML(http.StatusNotFound, "web/templates/error.html", gin.H{
+		context.HTML(http.StatusNotFound, "error.html", gin.H{
 			"Title":    noSuchFileOrDirectory,
 			"Subtitle": "This route doesn't seem to exist.",
 			"Message":  "I wonder how you got here...",
@@ -62,12 +63,12 @@ func Initialize() {
 
 	// Register page routes
 	Engine.GET("/", func(context *gin.Context) {
-		context.HTML(http.StatusOK, "web/templates/index.html", nil)
+		context.HTML(http.StatusOK, "index.html", nil)
 	})
 	Engine.GET("/guild/:gid/leaderboard", func(context *gin.Context) {
 		guildInfo := fetchGuild(context.Param("gid"))
 		if guildInfo == nil {
-			context.HTML(http.StatusNotFound, "web/templates/error.html", gin.H{
+			context.HTML(http.StatusNotFound, "error.html", gin.H{
 				"Title":    noSuchFileOrDirectory,
 				"Subtitle": "This guild doesn't seem to exist.",
 				"Message":  "Maybe you got the wrong URL?",
@@ -76,7 +77,7 @@ func Initialize() {
 		}
 		expEnabled, err := config.ExpEnabled(guildInfo.ID)
 		if err != nil {
-			context.HTML(http.StatusInternalServerError, "web/templates/error.html", gin.H{
+			context.HTML(http.StatusInternalServerError, "error.html", gin.H{
 				"Title":    internalServerError,
 				"Subtitle": "Failed to fetch experience system enablement status.",
 				"Message":  "Nitori taking a nap?",
@@ -84,14 +85,14 @@ func Initialize() {
 			return
 		}
 		if !expEnabled {
-			context.HTML(http.StatusServiceUnavailable, "web/templates/error.html", gin.H{
+			context.HTML(http.StatusServiceUnavailable, "error.html", gin.H{
 				"Title":    serviceUnavailable,
 				"Subtitle": "This feature is disabled in your guild.",
 				"Message":  "Moderators don't like Nitori?",
 			})
 			return
 		}
-		context.HTML(http.StatusOK, "web/templates/leaderboard.html", gin.H{
+		context.HTML(http.StatusOK, "leaderboard.html", gin.H{
 			"GuildName": guildInfo.Name,
 			"GuildIcon": guildInfo.IconURL,
 		})

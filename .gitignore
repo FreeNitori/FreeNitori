@@ -5,6 +5,7 @@
 /.idea/
 /nitori/config/assets.go
 /proc/webserver/static/static.go
+/proc/webserver/tmpl/tmpl.go
 /build
 /nitori.conf
 /db
