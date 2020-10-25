@@ -16,7 +16,7 @@ assets:
 .PHONY: plugins
 plugins:
 	@echo "Building plugins..."
-	@for pl in $(shell sh -c "ls plugins/*.go"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$pl; echo "Built $${pl}."; done;
+	@for pl in $(shell sh -c "ls plugins/*/main.go"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
 
 .PHONY: build
 build: assets
