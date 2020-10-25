@@ -15,12 +15,7 @@ func init() {
 	}
 
 	// Add the event handlers
-	for _, handlerInfo := range multiplexer.Commands {
-		multiplexer.Router.Route(
-			handlerInfo.Pattern,
-			handlerInfo.AliasPatterns,
-			handlerInfo.Description,
-			handlerInfo.Handler,
-			handlerInfo.Category)
+	for _, route := range multiplexer.Commands {
+		multiplexer.Router.Route(route)
 	}
 }

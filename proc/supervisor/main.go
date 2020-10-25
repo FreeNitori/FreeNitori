@@ -17,9 +17,11 @@ import (
 
 var err error
 
-func main() {
+func init() {
 	vars.ProcessType = vars.Supervisor
+}
 
+func main() {
 	// Print version information and stuff
 	log.Infof("Starting FreeNitori %s", vars.Version)
 

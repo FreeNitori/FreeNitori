@@ -12,7 +12,7 @@ import (
 )
 
 var Router = New()
-var Commands []*HandlerMetadata
+var Commands []*Route
 var NotTargeted []interface{}
 var GuildMemberAdd []interface{}
 var GuildMemberRemove []interface{}
@@ -34,15 +34,10 @@ type Context struct {
 	HasLeadingMention bool
 }
 
-// Wrapper around some stuff
-func (context *Context) GenerateGuildPrefix() string {
-	switch context.IsPrivate {
-	case true:
-		return config.Config.System.Prefix
-	case false:
-		return config.GetPrefix(context.Guild.ID)
-	}
-	return ""
+// Structure the multiplexer
+type Multiplexer struct {
+	Routes []*Route
+	Prefix string
 }
 
 // Function signature for functions that handle commands
@@ -53,7 +48,6 @@ type Route struct {
 	Pattern       string
 	AliasPatterns []string
 	Description   string
-	Manuals       string
 	Category      CommandCategory
 	Handler       CommandHandler
 }
@@ -67,13 +61,6 @@ type CommandCategory struct {
 
 // Some structures to save some registering work
 type CommandHandlers struct{}
-type HandlerMetadata struct {
-	Pattern       string
-	AliasPatterns []string
-	Description   string
-	Category      *CommandCategory
-	Handler       CommandHandler
-}
 
 func init() {
 	state.EventHandlers = append(state.EventHandlers, Router.OnMessageCreate)
@@ -83,8 +70,8 @@ func init() {
 }
 
 // Register new command handler to a category
-func (cat *CommandCategory) Register(handler CommandHandler, pattern string, alias []string, description string) {
-	Commands = append(Commands, &HandlerMetadata{
+func (cat CommandCategory) Register(handler CommandHandler, pattern string, alias []string, description string) {
+	Commands = append(Commands, &Route{
 		Pattern:       pattern,
 		AliasPatterns: alias,
 		Description:   description,
@@ -102,12 +89,6 @@ func NewCategory(name string, description string) *CommandCategory {
 	return cat
 }
 
-// Structure for all multiplexer things
-type Multiplexer struct {
-	Routes []*Route
-	Prefix string
-}
-
 // Returns a new message route multiplexer
 func New() *Multiplexer {
 	mux := &Multiplexer{
@@ -117,17 +98,10 @@ func New() *Multiplexer {
 }
 
 // Register a route
-func (mux *Multiplexer) Route(pattern string, aliasPattern []string, description string, handler CommandHandler, category *CommandCategory) *Route {
-	route := Route{
-		Pattern:       pattern,
-		AliasPatterns: aliasPattern,
-		Description:   description,
-		Handler:       handler,
-		Category:      *category,
-	}
-	category.Routes = append(category.Routes, &route)
-	mux.Routes = append(mux.Routes, &route)
-	return &route
+func (mux *Multiplexer) Route(route *Route) *Route {
+	route.Category.Routes = append(route.Category.Routes, route)
+	mux.Routes = append(mux.Routes, route)
+	return route
 }
 
 // This matches routes for the message

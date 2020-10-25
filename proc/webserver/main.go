@@ -16,9 +16,11 @@ import (
 var err error
 var readyChannel = make(chan bool, 1)
 
-func main() {
+func init() {
 	vars.ProcessType = vars.WebServer
+}
 
+func main() {
 	// Dial the supervisor socket
 	err = ipc.InitializeIPC()
 	if err != nil {

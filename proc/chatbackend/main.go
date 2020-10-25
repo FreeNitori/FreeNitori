@@ -8,19 +8,70 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
 	_ "git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/handlers"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/state"
 	"github.com/bwmarrin/discordgo"
+	"io/ioutil"
 	"os"
 	"os/signal"
+	"plugin"
 	"strconv"
+	"strings"
 	"syscall"
 )
 
 var err error
 
-func main() {
+func init() {
 	vars.ProcessType = vars.ChatBackend
+	func() {
+		stat, err := os.Stat("plugins")
+		if os.IsNotExist(err) {
+			err = os.Mkdir("plugins", 0755)
+			if err != nil {
+				log.Fatalf("Failed to create plugin directory, %s", err)
+				_ = vars.RPCConnection.Call("R.Error", []string{"ChatBackend"}, nil)
+				os.Exit(1)
+			}
+			return
+		}
+		if !stat.IsDir() {
+			log.Fatal("Plugin path is not a directory.")
+			_ = vars.RPCConnection.Call("R.Error", []string{"ChatBackend"}, nil)
+			os.Exit(1)
+		}
+		pluginPaths, err := ioutil.ReadDir("plugins/")
+		if err != nil {
+			log.Fatalf("Unable to read plugin directory, %s", err)
+			_ = vars.RPCConnection.Call("R.Error", []string{"ChatBackend"}, nil)
+			os.Exit(1)
+		}
+		for _, path := range pluginPaths {
+			if !strings.HasSuffix(path.Name(), ".so") {
+				continue
+			}
+			pl, err := plugin.Open("plugins/" + path.Name())
+			if err != nil {
+				log.Warnf("Error while loading plugin %s, %s", path.Name(), err)
+				continue
+			}
+			symbol, err := pl.Lookup("CommandRoute")
+			if err != nil {
+				log.Warnf("Error while looking up CommandRoute symbol in plugin %s, %s", path.Name(), err)
+				continue
+			}
+			route, ok := symbol.(*multiplexer.Route)
+			if !ok {
+				log.Warnf("No Route found in %s.", path.Name())
+				continue
+			}
+			multiplexer.Router.Route(route)
+			log.Infof("Loaded plugin %s implementing command %s.", path.Name(), route.Pattern)
+		}
+	}()
+}
 
+func main() {
 	// Connect to the Supervisor
 	err = ipc.InitializeIPC()
 	if err != nil {

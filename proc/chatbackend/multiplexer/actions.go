@@ -136,3 +136,14 @@ func (context *Context) StitchFields(start int) string {
 	}
 	return message
 }
+
+// Wrapper around some stuff
+func (context *Context) GenerateGuildPrefix() string {
+	switch context.IsPrivate {
+	case true:
+		return config.Config.System.Prefix
+	case false:
+		return config.GetPrefix(context.Guild.ID)
+	}
+	return ""
+}

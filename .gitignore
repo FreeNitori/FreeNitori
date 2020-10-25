@@ -7,5 +7,6 @@
 /proc/webserver/static/static.go
 /proc/webserver/tmpl/tmpl.go
 /build
+/plugins
 /nitori.conf
 /db
