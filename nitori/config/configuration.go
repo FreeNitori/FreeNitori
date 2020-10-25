@@ -1,6 +1,7 @@
 package config
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/assets"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
@@ -74,7 +75,7 @@ func parseConfig() *Conf {
 			config, err = ioutil.ReadFile("nitori.conf")
 			if err != nil {
 				log.Debugf("Configuration file inaccessible, %s", err)
-				defaultConfigFile, err := Asset("nitori.conf")
+				defaultConfigFile, err := assets.Asset("nitori.conf")
 				if err != nil {
 					log.Fatalf("Failed to extract the default configuration file, %s", err)
 					os.Exit(1)

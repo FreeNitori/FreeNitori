@@ -4,6 +4,7 @@
 *.out
 /.idea/
 /nitori/config/assets.go
+/nitori/assets
 /proc/webserver/static/static.go
 /proc/webserver/tmpl/tmpl.go
 /build
