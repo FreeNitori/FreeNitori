@@ -55,23 +55,16 @@ func del(keys []string) error {
 		for _, key := range keys {
 			err := txn.Delete([]byte(key))
 			if err != nil {
-				break
+				if err != badger.ErrKeyNotFound {
+					break
+				} else {
+					err = nil
+				}
 			}
 		}
 
 		return err
 	})
-}
-
-func seek(offset string, includeOffset bool, iterator *badger.Iterator) {
-	if offset != "" {
-		iterator.Seek([]byte(offset))
-		if includeOffset && iterator.Valid() {
-			iterator.Next()
-		}
-	} else {
-		iterator.Rewind()
-	}
 }
 
 func hset(hashmap, key, value string) error {
@@ -102,7 +95,7 @@ func hdel(hashmap string, keys []string) error {
 
 func hgetall(hashmap string) (map[string]string, error) {
 	result := map[string]string{}
-	err := iter(true, true, hashmap, hashmap,
+	err := iter(true, true, hashmap+"/{HASH}/", hashmap+"/{HASH}/",
 		func(key, value string) bool {
 			fields := strings.SplitN(key, "/{HASH}/", 2)
 			if len(fields) < 2 {
@@ -138,23 +131,35 @@ func hlen(hashmap string) (int, error) {
 	return length, err
 }
 
-func validate(prefix string, iterator *badger.Iterator) bool {
-	if !iterator.Valid() {
-		return false
-	}
-	if prefix != "" && !iterator.ValidForPrefix([]byte(prefix)) {
-		return false
-	}
-	return true
-}
-
 func iter(prefetch, includeOffset bool, offset, prefix string, handler func(key, value string) bool) error {
 	return state.Database.View(func(txn *badger.Txn) error {
 		options := badger.DefaultIteratorOptions
 		options.PrefetchValues = prefetch
 		iterator := txn.NewIterator(options)
 		defer iterator.Close()
-		for seek(offset, includeOffset, iterator); validate(prefix, iterator); iterator.Next() {
+
+		seek := func(iterator *badger.Iterator) {
+			if offset == "" {
+				iterator.Rewind()
+			} else {
+				iterator.Seek([]byte(offset))
+				if !includeOffset && iterator.Valid() {
+					iterator.Next()
+				}
+			}
+		}
+
+		validate := func(iterator *badger.Iterator) bool {
+			if !iterator.Valid() {
+				return false
+			}
+			if prefix != "" && !iterator.ValidForPrefix([]byte(prefix)) {
+				return false
+			}
+			return true
+		}
+
+		for seek(iterator); validate(iterator); iterator.Next() {
 			var key, value []byte
 			item := iterator.Item()
 			key = item.KeyCopy(nil)
