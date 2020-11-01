@@ -10,6 +10,7 @@ import (
 
 var rootArgs = []prompt.Suggest{
 	{Text: "db", Description: "Issue database commands."},
+	{Text: "shutdown", Description: "Gracefully shutdown."},
 	{Text: "exit", Description: "Exit the shell."},
 }
 var dbArgs = []prompt.Suggest{
@@ -131,6 +132,10 @@ func shell() {
 				println("Invalid argument.")
 				continue
 			}
+		case "shutdown":
+			_ = vars.RPCConnection.Call("R.Shutdown", []int{vars.ProcessType}, nil)
+			vars.ExitCode <- 0
+			break
 		case "exit":
 			vars.ExitCode <- 0
 			break

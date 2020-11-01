@@ -6,6 +6,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/supervisor/state"
+	"go/types"
 	"os"
 	"strconv"
 	"syscall"
@@ -35,33 +36,38 @@ func (*R) Error(args []string, _ *int) error {
 	return nil
 }
 
-func (*R) Shutdown(args []string, _ *int) error {
+func (*R) Shutdown(args []int, _ *types.Nil) error {
 	if len(args) != 1 {
 		return errors.New("invalid action")
 	}
 	switch args[0] {
-	case "ChatBackend":
+	case vars.ChatBackend:
 		_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
 		log.Info("Graceful shutdown initiated by ChatBackend.")
 		vars.ExitCode <- 0
-	case "WebServer":
+	case vars.WebServer:
 		_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
 		log.Info("Graceful shutdown initiated by WebServer.")
+		vars.ExitCode <- 0
+	case vars.Other:
+		_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
+		_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
+		log.Info("Graceful shutdown initiated by external program.")
 		vars.ExitCode <- 0
 	}
 	return nil
 }
 
-func (*R) Restart(args []string, _ *int) error {
+func (*R) Restart(args []int, _ *int) error {
 	if len(args) != 1 {
 		return errors.New("invalid action")
 	}
 	switch args[0] {
-	case "ChatBackend":
+	case vars.ChatBackend:
 		go func() {
 			_, _ = state.ChatBackendProcess.Wait()
 			state.ChatBackendProcess, err =
-				os.StartProcess(config.Config.System.ChatBackend, []string{config.Config.System.ChatBackend, "-a", config.TokenOverride, "-c", config.NitoriConfPath}, &state.ProcessAttributes)
+				os.StartProcess(config.Config.System.ChatBackend, append([]string{config.Config.System.ChatBackend}, state.ServerArgs...), &state.ProcessAttributes)
 			if err != nil {
 				log.Errorf("Failed to recreate chat backend process, %s", err)
 				vars.ExitCode <- 1
@@ -69,11 +75,11 @@ func (*R) Restart(args []string, _ *int) error {
 				log.Info("Chat backend has been restarted.")
 			}
 		}()
-	case "WebServer":
+	case vars.WebServer:
 		go func() {
 			_, _ = state.WebServerProcess.Wait()
 			state.WebServerProcess, err =
-				os.StartProcess(config.Config.System.WebServer, []string{config.Config.System.WebServer, "-a", config.TokenOverride, "-c", config.NitoriConfPath}, &state.ProcessAttributes)
+				os.StartProcess(config.Config.System.WebServer, append([]string{config.Config.System.WebServer}, state.ServerArgs...), &state.ProcessAttributes)
 			if err != nil {
 				log.Errorf("Failed to recreate web server process, %s", err)
 				vars.ExitCode <- 1
@@ -104,10 +110,6 @@ func (*R) DatabaseAction(args []string, reply *[]string) error {
 	}
 	var response = []string{""}
 	switch args[0] {
-	case "size":
-		response[0] = strconv.Itoa(int(size()))
-	case "gc":
-		err = gc()
 	case "set":
 		err = set(args[1], args[2])
 	case "get":

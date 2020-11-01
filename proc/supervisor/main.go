@@ -59,9 +59,9 @@ func main() {
 	}
 	defer func() { _ = state.Database.Close() }()
 
-	// Create the chat backend process
+	// Create chat backend process
 	state.ChatBackendProcess, err =
-		os.StartProcess(config.Config.System.ChatBackend, []string{config.Config.System.ChatBackend, "-a", config.TokenOverride, "-c", config.NitoriConfPath}, &state.ProcessAttributes)
+		os.StartProcess(config.Config.System.ChatBackend, append([]string{config.Config.System.ChatBackend}, state.ServerArgs...), &state.ProcessAttributes)
 	if err != nil {
 		log.Errorf("Failed to create chat backend process, %s", err)
 		os.Exit(1)
@@ -69,7 +69,7 @@ func main() {
 
 	// Create web server process
 	state.WebServerProcess, err =
-		os.StartProcess(config.Config.System.WebServer, []string{config.Config.System.WebServer, "-a", config.TokenOverride, "-c", config.NitoriConfPath}, &state.ProcessAttributes)
+		os.StartProcess(config.Config.System.WebServer, append([]string{config.Config.System.WebServer}, state.ServerArgs...), &state.ProcessAttributes)
 	if err != nil {
 		log.Errorf("Failed to create web server process, %s", err)
 		os.Exit(1)

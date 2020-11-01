@@ -1,6 +1,7 @@
 package state
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"github.com/dgraph-io/badger/v2"
 	"net"
 	"os"
@@ -23,6 +24,9 @@ var ProcessAttributes = os.ProcAttr{
 		os.Stderr,
 	},
 }
+
+// Server arguments
+var ServerArgs = []string{"-a", config.TokenOverride, "-c", config.NitoriConfPath}
 
 // Database
 var Database *badger.DB
