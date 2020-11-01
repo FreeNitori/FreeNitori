@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-var prefixes = []string{"settings", "exp", "rank", "exp_bl", "lastfm", "ra_metadata"}
+var prefixes = []string{"conf", "exp", "rank", "exp_bl", "lastfm", "ra_metadata"}
 
 // Completely reset a specific guild's configuration
 func ResetGuild(gid string) {
@@ -22,7 +22,7 @@ func ResetGuild(gid string) {
 
 // Get a guild-specific message string
 func getMessage(gid string, key string) (string, error) {
-	return database.HGet("settings."+gid, "message."+key)
+	return database.HGet("conf."+gid, "message."+key)
 }
 
 // Set a guild-specific message string
@@ -31,9 +31,9 @@ func setMessage(gid string, key string, message string) error {
 		return &MessageOutOfBounds{}
 	}
 	if message == "" {
-		return database.HDel("settings."+gid, "message."+key)
+		return database.HDel("conf."+gid, "message."+key)
 	}
-	return database.HSet("settings."+gid, "message."+key, message)
+	return database.HSet("conf."+gid, "message."+key, message)
 }
 
 // Get amount of messages totally processed
@@ -61,7 +61,7 @@ func AdvanceTotalMessages() error {
 
 // Get prefix for a guild and return the default if there is none
 func GetPrefix(gid string) string {
-	prefix, err := database.HGet("settings."+gid, "prefix")
+	prefix, err := database.HGet("conf."+gid, "prefix")
 	if err != nil {
 		log.Warnf("Failed to obtain prefix in guild %s, %s", gid, err)
 		return Config.System.Prefix
@@ -74,17 +74,17 @@ func GetPrefix(gid string) string {
 
 // Set the prefix of a guild
 func SetPrefix(gid string, prefix string) error {
-	return database.HSet("settings."+gid, "prefix", prefix)
+	return database.HSet("conf."+gid, "prefix", prefix)
 }
 
 // Reset the prefix of a guild
 func ResetPrefix(gid string) error {
-	return database.HDel("settings."+gid, "prefix")
+	return database.HDel("conf."+gid, "prefix")
 }
 
 // Figure out if experience system is enabled
 func ExpEnabled(gid string) (enabled bool, err error) {
-	result, err := database.HGet("settings."+gid, "exp_enable")
+	result, err := database.HGet("conf."+gid, "exp_enable")
 	if err != nil {
 		return false, err
 	}
@@ -100,9 +100,9 @@ func ExpToggle(gid string) (pre bool, err error) {
 	pre, err = ExpEnabled(gid)
 	switch pre {
 	case true:
-		err = database.HSet("settings."+gid, "exp_enable", "false")
+		err = database.HSet("conf."+gid, "exp_enable", "false")
 	case false:
-		err = database.HSet("settings."+gid, "exp_enable", "true")
+		err = database.HSet("conf."+gid, "exp_enable", "true")
 	}
 	return
 }

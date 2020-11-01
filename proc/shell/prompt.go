@@ -19,6 +19,7 @@ var dbArgs = []prompt.Suggest{
 	{Text: "del", Description: "Issue database command `del`"},
 	{Text: "hset", Description: "Issue database command `hset`"},
 	{Text: "hget", Description: "Issue database command `hget`"},
+	{Text: "hgetall", Description: "Issue database command `hgetall`"},
 	{Text: "hdel", Description: "Issue database command `hdel`"},
 }
 
@@ -110,7 +111,7 @@ func shell() {
 				println(result)
 			case "hgetall":
 				if len(fields) != 3 {
-					fmt.Println("hget requires exactly 1 argument")
+					fmt.Println("hgetall requires exactly 1 argument")
 					continue
 				}
 				result, err := database.HGetAll(fields[2])
@@ -119,8 +120,8 @@ func shell() {
 				}
 				println(result)
 			case "hdel":
-				if len(fields) < 4 {
-					fmt.Println("hdel requires at least 2 arguments")
+				if len(fields) < 3 {
+					fmt.Println("hdel requires at least 1 argument")
 					continue
 				}
 				err = database.HDel(fields[2], fields[3:]...)
