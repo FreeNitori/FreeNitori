@@ -112,13 +112,13 @@ func hlen(hashmap string) (int, error) {
 }
 
 func seek(offset string, includeOffset bool, iterator *badger.Iterator) {
-	if offset != "" {
+	if offset == "" {
+		iterator.Rewind()
+	} else {
 		iterator.Seek([]byte(offset))
-		if includeOffset && iterator.Valid() {
+		if !includeOffset && iterator.Valid() {
 			iterator.Next()
 		}
-	} else {
-		iterator.Rewind()
 	}
 }
 

@@ -9,9 +9,9 @@ import (
 )
 
 var rootArgs = []prompt.Suggest{
-	{Text: "db", Description: "Issue database commands."},
-	{Text: "shutdown", Description: "Gracefully shutdown."},
-	{Text: "exit", Description: "Exit the shell."},
+	{Text: "db", Description: "Issue database commands"},
+	{Text: "shutdown", Description: "Gracefully shutdown"},
+	{Text: "exit", Description: "Exit the shell"},
 }
 var dbArgs = []prompt.Suggest{
 	{Text: "set", Description: "Issue database command `set`"},
@@ -19,6 +19,8 @@ var dbArgs = []prompt.Suggest{
 	{Text: "del", Description: "Issue database command `del`"},
 	{Text: "hset", Description: "Issue database command `hset`"},
 	{Text: "hget", Description: "Issue database command `hget`"},
+	{Text: "hkeys", Description: "Issue database command `hkeys`"},
+	{Text: "hlen", Description: "Issue database command `hlen`"},
 	{Text: "hgetall", Description: "Issue database command `hgetall`"},
 	{Text: "hdel", Description: "Issue database command `hdel`"},
 }
@@ -104,6 +106,28 @@ func shell() {
 					continue
 				}
 				result, err := database.HGet(fields[2], fields[3])
+				if err != nil {
+					fmt.Printf("An error occurred while executing this command, %s", err)
+					continue
+				}
+				println(result)
+			case "hkeys":
+				if len(fields) != 3 {
+					fmt.Println("hkeys requires exactly 1 argument")
+					continue
+				}
+				result, err := database.HKeys(fields[2])
+				if err != nil {
+					fmt.Printf("An error occurred while executing this command, %s", err)
+					continue
+				}
+				println(result)
+			case "hlen":
+				if len(fields) != 3 {
+					fmt.Println("hlen requires exactly 1 argument")
+					continue
+				}
+				result, err := database.HLen(fields[2])
 				if err != nil {
 					fmt.Printf("An error occurred while executing this command, %s", err)
 					continue

@@ -6,7 +6,6 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/supervisor/state"
-	"go/types"
 	"os"
 	"strconv"
 	"syscall"
@@ -36,7 +35,7 @@ func (*R) Error(args []string, _ *int) error {
 	return nil
 }
 
-func (*R) Shutdown(args []int, _ *types.Nil) error {
+func (*R) Shutdown(args []int, _ *int) error {
 	if len(args) != 1 {
 		return errors.New("invalid action")
 	}
