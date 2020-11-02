@@ -59,7 +59,7 @@ func init() {
 				continue
 			}
 			if state.Database != nil {
-				log.Warnf("Already loaded database backend %s, skipping plugin $s.", state.Database.DBType(), path.Name())
+				log.Warnf("Already loaded database backend %s, skipping plugin %s.", state.Database.DBType(), path.Name())
 				continue
 			}
 			state.Database = db
