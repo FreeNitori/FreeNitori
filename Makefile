@@ -16,12 +16,12 @@ assets:
 .PHONY: plugins
 plugins:
 	@echo "Building plugins..."
-	@for pl in $(shell bash -c "ls plugins/*/main.go"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
+	@for pl in $(shell sh -c "ls plugins/*/main.go"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
 
 .PHONY: internal
 internal:
 	@echo "Building internal plugins..."
-	@for pl in $(shell bash -c "ls internal/*/main.go"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
+	@for pl in $(shell ls "internal/"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/internal/$$pl; echo "Built $${pl}."; done;
 
 .PHONY: build
 build: assets internal
