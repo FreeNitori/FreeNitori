@@ -11,7 +11,8 @@ stages:
 build:
   stage: build
   script:
-    - make
+    - make;
+    - mkdir build/plugins/; cp plugins/*.so build/plugins
     - cd build; tar zcf /tmp/freenitori.tar.gz freenitori*; cd ../
     - cp /tmp/freenitori.tar.gz build/
   artifacts:
