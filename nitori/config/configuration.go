@@ -70,7 +70,7 @@ func parseConfig() *Conf {
 	var config []byte
 	var err error
 	if NitoriConfPath == "" {
-		config, err = ioutil.ReadFile("/etc/nitori.conf")
+		config, err = ioutil.ReadFile("/etc/freenitori/nitori.conf")
 		if err != nil {
 			config, err = ioutil.ReadFile("nitori.conf")
 			if err != nil {
