@@ -6,6 +6,22 @@ import (
 	"strings"
 )
 
+func size() int64 {
+	lsm, vlog := state.Database.Size()
+	return lsm + vlog
+}
+
+func gc() error {
+	var err error
+	for {
+		err = state.Database.RunValueLogGC(0.5)
+		if err != nil {
+			break
+		}
+	}
+	return err
+}
+
 func set(k, v string) error {
 	return state.Database.Update(func(txn *badger.Txn) (err error) {
 		return txn.Set([]byte(k), []byte(v))

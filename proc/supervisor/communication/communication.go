@@ -109,6 +109,10 @@ func (*R) DatabaseAction(args []string, reply *[]string) error {
 	}
 	var response = []string{""}
 	switch args[0] {
+	case "size":
+		response[0] = strconv.Itoa(int(size()))
+	case "gc":
+		err = gc()
 	case "set":
 		err = set(args[1], args[2])
 	case "get":

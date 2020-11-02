@@ -17,6 +17,17 @@ func callDatabaseHashmap(action string, data []string) (reply []map[string]strin
 	return
 }
 
+func Size() int {
+	reply, _ := callDatabase("size", []string{""})
+	result, _ := strconv.Atoi(reply[0])
+	return result
+}
+
+func GC() error {
+	_, err := callDatabase("gc", []string{""})
+	return err
+}
+
 func Set(key, value string) error {
 	_, err := callDatabase("set", []string{key, value})
 	return err
