@@ -57,7 +57,6 @@ func init() {
 			}
 			symbol, err := pl.Lookup("CommandRoute")
 			if err != nil {
-				log.Warnf("Error while looking up CommandRoute symbol in plugin %s, %s", path.Name(), err)
 				continue
 			}
 			route, ok := symbol.(*multiplexer.Route)

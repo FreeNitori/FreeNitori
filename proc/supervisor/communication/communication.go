@@ -110,26 +110,26 @@ func (*R) DatabaseAction(args []string, reply *[]string) error {
 	var response = []string{""}
 	switch args[0] {
 	case "size":
-		response[0] = strconv.Itoa(int(size()))
+		response[0] = strconv.Itoa(int(state.Database.Size()))
 	case "gc":
-		err = gc()
+		err = state.Database.GC()
 	case "set":
-		err = set(args[1], args[2])
+		err = state.Database.Set(args[1], args[2])
 	case "get":
-		response[0], err = get(args[1])
+		response[0], err = state.Database.Get(args[1])
 	case "del":
-		err = del(args[1:])
+		err = state.Database.Del(args[1:])
 	case "hset":
-		err = hset(args[1], args[2], args[3])
+		err = state.Database.HSet(args[1], args[2], args[3])
 	case "hget":
-		response[0], err = hget(args[1], args[2])
+		response[0], err = state.Database.HGet(args[1], args[2])
 	case "hdel":
-		err = hdel(args[1], args[2:])
+		err = state.Database.HDel(args[1], args[2:])
 	case "hkeys":
-		response, err = hkeys(args[1])
+		response, err = state.Database.HKeys(args[1])
 	case "hlen":
 		var result int
-		result, err = hlen(args[1])
+		result, err = state.Database.HLen(args[1])
 		response[0] = strconv.Itoa(result)
 	default:
 		return errors.New("invalid operation")
@@ -145,7 +145,7 @@ func (*R) DatabaseActionHashmap(args []string, reply *[]map[string]string) error
 	var response = []map[string]string{make(map[string]string)}
 	switch args[0] {
 	case "hgetall":
-		response[0], err = hgetall(args[1])
+		response[0], err = state.Database.HGetAll(args[1])
 	default:
 		return errors.New("invalid operation")
 	}

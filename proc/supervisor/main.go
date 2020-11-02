@@ -8,10 +8,12 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/supervisor/communication"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/supervisor/state"
-	"github.com/dgraph-io/badger/v2"
+	"io/ioutil"
 	"net"
 	"os"
 	"os/signal"
+	"plugin"
+	"strings"
 	"syscall"
 )
 
@@ -19,6 +21,55 @@ var err error
 
 func init() {
 	vars.ProcessType = vars.Supervisor
+	func() {
+		stat, err := os.Stat("plugins")
+		if os.IsNotExist(err) {
+			err = os.Mkdir("plugins", 0755)
+			if err != nil {
+				log.Fatalf("Failed to create plugin directory, %s", err)
+				os.Exit(1)
+			}
+			return
+		}
+		if !stat.IsDir() {
+			log.Fatal("Plugin path is not a directory.")
+			os.Exit(1)
+		}
+		pluginPaths, err := ioutil.ReadDir("plugins/")
+		if err != nil {
+			log.Fatalf("Unable to read plugin directory, %s", err)
+			os.Exit(1)
+		}
+		for _, path := range pluginPaths {
+			if !strings.HasSuffix(path.Name(), ".so") {
+				continue
+			}
+			pl, err := plugin.Open("plugins/" + path.Name())
+			if err != nil {
+				log.Warnf("Error while loading plugin %s, %s", path.Name(), err)
+				continue
+			}
+			symbol, err := pl.Lookup("Database")
+			if err != nil {
+				continue
+			}
+			db, ok := symbol.(state.DatabaseBackend)
+			if !ok {
+				log.Warnf("No DatabaseBackend found in %s.", path.Name())
+				continue
+			}
+			if state.Database != nil {
+				log.Warnf("Already loaded database backend %s, skipping plugin $s.", state.Database.DBType(), path.Name())
+				continue
+			}
+			state.Database = db
+			log.Infof("Loaded plugin %s implementing database backend %s.", path.Name(), db.DBType())
+		}
+	}()
+	if state.Database == nil {
+		log.Fatal("Please place a database driver in the plugins directory.")
+		os.Exit(1)
+	}
 }
 
 func main() {
@@ -50,9 +101,7 @@ func main() {
 	}()
 
 	// Open the database
-	dbOptions := badger.DefaultOptions(config.Config.System.Database)
-	dbOptions.Logger = log.Logger
-	state.Database, err = badger.Open(dbOptions)
+	err = state.Database.Open(config.Config.System.Database)
 	if err != nil {
 		log.Fatalf("Failed to open database, %s", err)
 		os.Exit(1)

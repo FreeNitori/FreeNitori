@@ -18,8 +18,13 @@ plugins:
 	@echo "Building plugins..."
 	@for pl in $(shell sh -c "ls plugins/*/main.go"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
 
+.PHONY: internal
+internal:
+	@echo "Building internal plugins..."
+	@for pl in $(shell sh -c "ls internal/*/main.go"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
+
 .PHONY: build
-build: assets
+build: assets internal
 	@echo "Building FreeNitori..."
 	@for proc in $(shell ls "proc/"); do go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-$$proc $$PWD/proc/$$proc; echo "Built $${proc}."; done;
 	@cp -f build/freenitori-supervisor build/freenitori
