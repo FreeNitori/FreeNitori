@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
@@ -142,7 +143,8 @@ func shell() {
 				if err != nil {
 					fmt.Printf("An error occurred while executing this command, %s", err)
 				}
-				println(result)
+				jsonResult, _ := json.Marshal(result)
+				println(jsonResult)
 			case "hdel":
 				if len(fields) < 3 {
 					fmt.Println("hdel requires at least 1 argument")

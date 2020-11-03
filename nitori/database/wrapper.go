@@ -13,7 +13,7 @@ func callDatabase(action string, data []string) (reply []string, err error) {
 
 func callDatabaseHashmap(action string, data []string) (reply []map[string]string, err error) {
 	body := append([]string{action}, data...)
-	err = vars.RPCConnection.Call("R.DatabaseAction", body, &reply)
+	err = vars.RPCConnection.Call("R.DatabaseActionHashmap", body, &reply)
 	return
 }
 
