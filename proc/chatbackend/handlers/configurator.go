@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/formatter"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/state"
 	"github.com/bwmarrin/discordgo"
@@ -33,7 +33,7 @@ func configure(context *multiplexer.Context) {
 		return
 	}
 	if len(context.Fields) == 1 {
-		embed := formatter.NewEmbed("Configurator", "Configure per-guild overrides.")
+		embed := embedutil.NewEmbed("Configurator", "Configure per-guild overrides.")
 		embed.Color = state.KappaColor
 		embed.AddField("experience", "Toggle experience system enablement.", false)
 		embed.AddField("message", "Configure customizable messages.", false)
@@ -105,7 +105,7 @@ func configure(context *multiplexer.Context) {
 			}
 			context.SendMessage("Message `" + context.Fields[2] + "` has been reset.")
 		case 2:
-			embed := formatter.NewEmbed("Messages", "Configurable messages.")
+			embed := embedutil.NewEmbed("Messages", "Configurable messages.")
 			for identifier := range config.CustomizableMessages {
 				message, err := config.GetCustomizableMessage(context.Guild.ID, identifier)
 				if !context.HandleError(err) {

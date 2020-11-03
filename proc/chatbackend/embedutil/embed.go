@@ -1,4 +1,5 @@
-package formatter
+// Embed formatting utility.
+package embedutil
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
@@ -10,24 +11,24 @@ type Embed struct {
 }
 
 const (
-	EmbedLimitTitle       = 256
-	EmbedLimitDescription = 2048
-	EmbedLimitFieldName   = 256
-	EmbedLimitFieldValue  = 1024
-	EmbedLimitField       = 25
-	EmbedLimitFooter      = 2048
+	LimitTitle       = 256
+	LimitDescription = 2048
+	LimitFieldName   = 256
+	LimitFieldValue  = 1024
+	LimitField       = 25
+	LimitFooter      = 2048
 )
 
 // NewEmbed makes a new Embed object.
 func NewEmbed(title string, description string) *Embed {
 	embed := Embed{&discordgo.MessageEmbed{}}
 
-	if len(title) > EmbedLimitTitle {
-		title = title[:EmbedLimitTitle]
+	if len(title) > LimitTitle {
+		title = title[:LimitTitle]
 	}
 
-	if len(description) > EmbedLimitDescription {
-		description = description[:EmbedLimitDescription]
+	if len(description) > LimitDescription {
+		description = description[:LimitDescription]
 	}
 
 	embed.Title = title
@@ -35,20 +36,20 @@ func NewEmbed(title string, description string) *Embed {
 	return &embed
 }
 
-// AddField adds a field to the embed.
+// AddField adds a field to the embedutil.
 func (embed *Embed) AddField(name, value string, inline bool) *Embed {
 
-	if len(embed.Fields) == EmbedLimitField {
+	if len(embed.Fields) == LimitField {
 		log.Warnf("Embed with name \"%s\" exceeded limit!", name)
 		return embed
 	}
 
-	if len(value) > EmbedLimitFieldValue {
-		value = value[:EmbedLimitFieldValue]
+	if len(value) > LimitFieldValue {
+		value = value[:LimitFieldValue]
 	}
 
-	if len(name) > EmbedLimitFieldName {
-		name = name[:EmbedLimitFieldName]
+	if len(name) > LimitFieldName {
+		name = name[:LimitFieldName]
 	}
 
 	embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
@@ -60,7 +61,7 @@ func (embed *Embed) AddField(name, value string, inline bool) *Embed {
 	return embed
 }
 
-// SetFooter sets the footer text and image of an embed.
+// SetFooter sets the footer text and image of an embedutil.
 func (embed *Embed) SetFooter(args ...string) *Embed {
 	var (
 		iconURL      string
@@ -80,8 +81,8 @@ func (embed *Embed) SetFooter(args ...string) *Embed {
 	case argsLength == 0:
 	}
 
-	if len(text) > EmbedLimitFooter {
-		text = text[:EmbedLimitFooter]
+	if len(text) > LimitFooter {
+		text = text[:LimitFooter]
 	}
 
 	embed.Footer = &discordgo.MessageEmbedFooter{
@@ -93,7 +94,7 @@ func (embed *Embed) SetFooter(args ...string) *Embed {
 	return embed
 }
 
-// SetImage sets the image URL of an embed.
+// SetImage sets the image URL of an embedutil.
 func (embed *Embed) SetImage(args ...string) *Embed {
 	var (
 		URL      string
@@ -118,7 +119,7 @@ func (embed *Embed) SetImage(args ...string) *Embed {
 	return embed
 }
 
-// SetThumbnail sets the thumbnail URL of an embed.
+// SetThumbnail sets the thumbnail URL of an embedutil.
 func (embed *Embed) SetThumbnail(args ...string) *Embed {
 	var (
 		URL      string
@@ -142,7 +143,7 @@ func (embed *Embed) SetThumbnail(args ...string) *Embed {
 	return embed
 }
 
-// SetAuthor sets author name, URL and icon URL of an embed.
+// SetAuthor sets author name, URL and icon URL of an embedutil.
 func (embed *Embed) SetAuthor(args ...string) *Embed {
 	var (
 		name     string

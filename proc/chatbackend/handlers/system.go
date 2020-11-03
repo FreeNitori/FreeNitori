@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
-	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/formatter"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/state"
 	"strconv"
@@ -18,7 +18,7 @@ func init() {
 }
 
 func about(context *multiplexer.Context) {
-	embed := formatter.NewEmbed(context.Session.State.User.Username,
+	embed := embedutil.NewEmbed(context.Session.State.User.Username,
 		"Open source, general purpose Discord utility.")
 	embed.Color = state.KappaColor
 	embed.AddField("Homepage", config.Config.WebServer.BaseURL, true)
@@ -79,6 +79,6 @@ func reboot(context *multiplexer.Context) {
 }
 
 func invite(context *multiplexer.Context) {
-	embed := formatter.NewEmbed("Invite", fmt.Sprintf("Click [this](%s) to invite Nitori.", vars.InviteURL))
+	embed := embedutil.NewEmbed("Invite", fmt.Sprintf("Click [this](%s) to invite Nitori.", vars.InviteURL))
 	context.SendEmbed(embed)
 }

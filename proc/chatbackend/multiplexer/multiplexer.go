@@ -1,3 +1,4 @@
+// Command multiplexer.
 package multiplexer
 
 import (

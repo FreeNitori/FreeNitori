@@ -1,3 +1,4 @@
+// Server program that logs in to Discord as a bot account.
 package main
 
 import (

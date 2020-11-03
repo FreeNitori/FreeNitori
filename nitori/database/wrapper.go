@@ -1,3 +1,4 @@
+// Wrappers around database RPC functions.
 package database
 
 import (

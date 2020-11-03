@@ -1,3 +1,4 @@
+// Program to interact with Nitori through a shell prompt.
 package main
 
 import (

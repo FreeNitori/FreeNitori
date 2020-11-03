@@ -1,3 +1,4 @@
+// Important chatbackend-specific variables.
 package state
 
 import (

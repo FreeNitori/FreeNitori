@@ -3,7 +3,7 @@ package multiplexer
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/formatter"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/state"
 	"github.com/bwmarrin/discordgo"
 	"github.com/sirupsen/logrus"
@@ -33,14 +33,14 @@ func (context *Context) SendMessage(message string) *discordgo.Message {
 	return resultMessage
 }
 
-// SendEmbed sends an embed message in the current channel and returns the message.
-func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
+// SendEmbed sends an embedutil message in the current channel and returns the message.
+func (context *Context) SendEmbed(embed *embedutil.Embed) *discordgo.Message {
 	resultMessage, err := context.Session.ChannelMessageSendEmbed(context.Message.ChannelID, embed.MessageEmbed)
 	if err != nil {
 		if err == discordgo.ErrUnauthorized {
 			return nil
 		}
-		log.Errorf("Error while sending embed to guild %s, %s", context.Message.GuildID, err)
+		log.Errorf("Error while sending embedutil to guild %s, %s", context.Message.GuildID, err)
 		_, _ = context.Session.ChannelMessageSend(context.Message.ChannelID,
 			state.ErrorOccurred)
 		return nil

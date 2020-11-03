@@ -1,3 +1,4 @@
+// Badger database backend.
 package main
 
 import (

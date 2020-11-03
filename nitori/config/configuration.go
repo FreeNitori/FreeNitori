@@ -1,3 +1,4 @@
+// Functions to interact with global and guild-specific configuration values.
 package config
 
 import (

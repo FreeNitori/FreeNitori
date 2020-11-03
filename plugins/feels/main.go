@@ -1,3 +1,4 @@
+// Plugin example.
 package main
 
 import (

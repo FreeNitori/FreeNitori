@@ -1,3 +1,4 @@
+// Things used for inter-process communication.
 package ipc
 
 import (

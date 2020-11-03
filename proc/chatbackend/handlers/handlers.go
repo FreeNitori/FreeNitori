@@ -1,3 +1,4 @@
+// Integrated command handlers.
 package handlers
 
 import "git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/multiplexer"

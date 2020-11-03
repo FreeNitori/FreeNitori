@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/formatter"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/state"
 	"strings"
@@ -19,7 +19,7 @@ func manuals(context *multiplexer.Context) {
 	case len(context.Fields) == 1:
 		{
 			// Generate a list of all categories
-			embed := formatter.NewEmbed("Manuals",
+			embed := embedutil.NewEmbed("Manuals",
 				fmt.Sprintf("Issue `%sman <category>` for category-specific manuals.", guildPrefix))
 			embed.Color = 0x3492c4
 
@@ -60,7 +60,7 @@ func manuals(context *multiplexer.Context) {
 			}
 
 			// Generate list of all commands in one specific category
-			embed := formatter.NewEmbed(desiredCat.Title,
+			embed := embedutil.NewEmbed(desiredCat.Title,
 				desiredCat.Description)
 			embed.Color = state.KappaColor
 

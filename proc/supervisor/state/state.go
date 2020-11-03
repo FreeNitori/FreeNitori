@@ -1,3 +1,4 @@
+// Important supervisor-specific variables.
 package state
 
 import (

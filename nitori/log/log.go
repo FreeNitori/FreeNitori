@@ -1,3 +1,4 @@
+// Logging functions and logger object.
 package log
 
 import (

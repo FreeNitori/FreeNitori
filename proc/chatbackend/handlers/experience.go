@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/formatter"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/state"
 	"github.com/bwmarrin/discordgo"
@@ -92,7 +92,7 @@ func level(context *multiplexer.Context) {
 	}
 
 	// Make the message
-	embed := formatter.NewEmbed("Experience Level", member.User.Username+"#"+member.User.Discriminator)
+	embed := embedutil.NewEmbed("Experience Level", member.User.Username+"#"+member.User.Discriminator)
 	embed.Color = context.Session.State.UserColor(context.Author.ID, context.Create.ChannelID)
 	expValue, err := config.GetMemberExp(member.User, context.Guild)
 	if !context.HandleError(err) {
@@ -131,7 +131,7 @@ func setrank(context *multiplexer.Context) {
 
 	switch len(context.Fields) {
 	case 0:
-		embed := formatter.NewEmbed("Ranked Roles", "Configure ranked roles.")
+		embed := embedutil.NewEmbed("Ranked Roles", "Configure ranked roles.")
 		context.SendEmbed(embed)
 	}
 }

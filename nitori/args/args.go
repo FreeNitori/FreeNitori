@@ -1,3 +1,4 @@
+// Package args provide the means to parse arguments early when imported.
 package args
 
 import (

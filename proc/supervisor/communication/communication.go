@@ -1,3 +1,4 @@
+// Inter-process communication related functions.
 package communication
 
 import (

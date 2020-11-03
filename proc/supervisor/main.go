@@ -1,3 +1,4 @@
+// Supervisor program that house the database and mediate communication between server programs.
 package main
 
 import (

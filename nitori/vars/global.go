@@ -1,3 +1,4 @@
+// Variables containing important information.
 package vars
 
 import (

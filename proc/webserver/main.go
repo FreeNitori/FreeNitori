@@ -1,3 +1,4 @@
+// Server program that serves things over HTTP.
 package main
 
 import (

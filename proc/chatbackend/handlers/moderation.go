@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/formatter"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/state"
 	"github.com/bwmarrin/discordgo"
@@ -42,7 +42,7 @@ func whois(context *multiplexer.Context) {
 
 	// Only generate the pfp stuff if that's what's required
 	if context.Fields[0] == "pfp" {
-		embed := formatter.NewEmbed("", "")
+		embed := embedutil.NewEmbed("", "")
 		embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
 		embed.SetAuthor(user.Username, user.AvatarURL("128"))
 		embed.SetImage(user.AvatarURL("4096"))
@@ -56,7 +56,7 @@ func whois(context *multiplexer.Context) {
 		return
 	}
 	creationTime := time.Unix(int64(((userID>>22)+1420070400000)/1000), 0)
-	embed := formatter.NewEmbed("User Information", "")
+	embed := embedutil.NewEmbed("User Information", "")
 	embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
 	embed.SetThumbnail(user.AvatarURL("1024"))
 	embed.AddField("Username", user.Username+"#"+user.Discriminator, member != nil)
