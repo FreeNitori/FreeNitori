@@ -15,9 +15,6 @@ var Config = parseConfig()
 var NitoriConfPath string
 var TokenOverride string
 var LogLevel = getLogLevel()
-var CustomizableMessages = map[string]string{
-	"levelup": "Congratulations $USER on reaching level $LEVEL.",
-}
 
 // Configuration related types
 type MessageOutOfBounds struct{}
@@ -64,7 +61,7 @@ func (err MessageOutOfBounds) Error() string {
 	return "message out of bounds"
 }
 
-// Parse or generate configuration file
+// parseConfig parses the configuration file, generating one if none is present.
 func parseConfig() *Conf {
 	var nitoriConf Conf
 	var config []byte
@@ -108,7 +105,7 @@ func parseConfig() *Conf {
 	return &nitoriConf
 }
 
-// Set the log level
+// getLogLevel refers the log level configuration string to a log level integer.
 func getLogLevel() logrus.Level {
 	switch Config.System.LogLevel {
 	case "panic":
@@ -130,36 +127,12 @@ func getLogLevel() logrus.Level {
 	return logrus.InfoLevel
 }
 
-// Get a guild-specific message string within predefined messages
-func GetCustomizableMessage(gid string, key string) (string, error) {
-	defaultMessage, ok := CustomizableMessages[key]
-	if !ok {
-		return "", &MessageOutOfBounds{}
-	}
-	message, err := getMessage(gid, key)
-	if err != nil {
-		return "", err
-	}
-	if message == "" {
-		return defaultMessage, nil
-	}
-	return message, nil
-}
-
-// Set a guild-specific message string within predefined messages
-func SetCustomizableMessage(gid string, key string, message string) error {
-	_, ok := CustomizableMessages[key]
-	if !ok {
-		return &MessageOutOfBounds{}
-	}
-	err := setMessage(gid, key, message)
-	return err
-}
-
-// Chat experience calculation stuffs
+// LevelToExp calculates amount of experience from a level integer.
 func LevelToExp(level int) int {
 	return int(1000.0 * (math.Pow(float64(level), 1.25)))
 }
+
+// ExpToLevel calculates amount of levels from an experience integer.
 func ExpToLevel(exp int) int {
 	return int(math.Pow(float64(exp)/1000, 1.0/1.25))
 }

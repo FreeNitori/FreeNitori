@@ -9,7 +9,6 @@ type Embed struct {
 	*discordgo.MessageEmbed
 }
 
-// Length limits for any embed
 const (
 	EmbedLimitTitle       = 256
 	EmbedLimitDescription = 2048
@@ -19,7 +18,7 @@ const (
 	EmbedLimitFooter      = 2048
 )
 
-// Make a new Embed object with specific things
+// NewEmbed makes a new Embed object.
 func NewEmbed(title string, description string) *Embed {
 	embed := Embed{&discordgo.MessageEmbed{}}
 
@@ -36,7 +35,7 @@ func NewEmbed(title string, description string) *Embed {
 	return &embed
 }
 
-// Append a field to the Embed
+// AddField adds a field to the embed.
 func (embed *Embed) AddField(name, value string, inline bool) *Embed {
 
 	if len(embed.Fields) == EmbedLimitField {
@@ -61,7 +60,7 @@ func (embed *Embed) AddField(name, value string, inline bool) *Embed {
 	return embed
 }
 
-// Set the Embed's footer string and image
+// SetFooter sets the footer text and image of an embed.
 func (embed *Embed) SetFooter(args ...string) *Embed {
 	var (
 		iconURL      string
@@ -94,7 +93,7 @@ func (embed *Embed) SetFooter(args ...string) *Embed {
 	return embed
 }
 
-// Set image URL of the Embed
+// SetImage sets the image URL of an embed.
 func (embed *Embed) SetImage(args ...string) *Embed {
 	var (
 		URL      string
@@ -119,7 +118,7 @@ func (embed *Embed) SetImage(args ...string) *Embed {
 	return embed
 }
 
-// Set thumbnail URL of the Embed
+// SetThumbnail sets the thumbnail URL of an embed.
 func (embed *Embed) SetThumbnail(args ...string) *Embed {
 	var (
 		URL      string
@@ -143,7 +142,7 @@ func (embed *Embed) SetThumbnail(args ...string) *Embed {
 	return embed
 }
 
-// Set author information of the Embed
+// SetAuthor sets author name, URL and icon URL of an embed.
 func (embed *Embed) SetAuthor(args ...string) *Embed {
 	var (
 		name     string

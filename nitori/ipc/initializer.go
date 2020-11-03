@@ -9,6 +9,7 @@ import (
 
 var err error
 
+// InitializeIPC dials the RPC server for any process other than the supervisor.
 func InitializeIPC() error {
 	if vars.ProcessType == 0 {
 		return errors.New("initializing RPC client from supervisor")
@@ -17,6 +18,7 @@ func InitializeIPC() error {
 	}
 }
 
+// ipcDialClient dials the RPC server.
 func ipcDialClient() error {
 	vars.RPCConnection, err = rpc.DialHTTP("unix", config.Config.System.Socket)
 	return err

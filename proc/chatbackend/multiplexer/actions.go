@@ -18,7 +18,7 @@ func init() {
 	numericalRegex, _ = regexp.Compile("[^0-9]+")
 }
 
-// Send a text message and return it
+// SendMessage sends a text message in the current channel and returns the message.
 func (context *Context) SendMessage(message string) *discordgo.Message {
 	resultMessage, err := context.Session.ChannelMessageSend(context.Message.ChannelID, message)
 	if err != nil {
@@ -33,7 +33,7 @@ func (context *Context) SendMessage(message string) *discordgo.Message {
 	return resultMessage
 }
 
-// Send an embed message and return it
+// SendEmbed sends an embed message in the current channel and returns the message.
 func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
 	resultMessage, err := context.Session.ChannelMessageSendEmbed(context.Message.ChannelID, embed.MessageEmbed)
 	if err != nil {
@@ -48,7 +48,7 @@ func (context *Context) SendEmbed(embed *formatter.Embed) *discordgo.Message {
 	return resultMessage
 }
 
-// Handle error and send the stuff if in debug mode
+// HandleError handles a returned error and send the information of it if in debug mode.
 func (context *Context) HandleError(err error) bool {
 	if err != nil {
 		log.Errorf("Error occurred while executing command, %s", err)
@@ -61,7 +61,7 @@ func (context *Context) HandleError(err error) bool {
 	return true
 }
 
-// Check if user has specific permission
+// HasPermission checks a user for a permission.
 func (context *Context) HasPermission(permission int) bool {
 	// Override check for operators and system administrators
 	if context.Author.ID == state.Administrator.ID {
@@ -79,7 +79,7 @@ func (context *Context) HasPermission(permission int) bool {
 	return err == nil && (permissions&permission == permission)
 }
 
-// Check if the author is or above operator
+// IsOperator checks of a user is an operator.
 func (context *Context) IsOperator() bool {
 	if context.Author.ID == strconv.Itoa(config.Config.System.Administrator) {
 		return true
@@ -92,12 +92,12 @@ func (context *Context) IsOperator() bool {
 	return false
 }
 
-// Checks of the author is a system administrator
+// IsAdministrator checks of a user is the system administrator.
 func (context *Context) IsAdministrator() bool {
 	return context.Author.ID == strconv.Itoa(config.Config.System.Administrator)
 }
 
-// Get a guild member from a string
+// GetMember gets a member from a string representing it.
 func (context *Context) GetMember(user string) *discordgo.Member {
 	// Guild only function
 	if context.IsPrivate {
@@ -128,7 +128,7 @@ func (context *Context) GetMember(user string) *discordgo.Member {
 	return nil
 }
 
-// Stitch together fields of a context
+// StitchFields stitches together fields of the message.
 func (context *Context) StitchFields(start int) string {
 	message := context.Fields[1]
 	for i := start + 1; i < len(context.Fields); i++ {
@@ -137,7 +137,7 @@ func (context *Context) StitchFields(start int) string {
 	return message
 }
 
-// Wrapper around some stuff
+// GenerateGuildPrefix returns the command prefix of a context.
 func (context *Context) GenerateGuildPrefix() string {
 	switch context.IsPrivate {
 	case true:

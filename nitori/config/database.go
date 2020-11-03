@@ -9,8 +9,11 @@ import (
 )
 
 var prefixes = []string{"conf", "exp", "rank", "exp_bl", "lastfm", "ra_metadata"}
+var CustomizableMessages = map[string]string{
+	"levelup": "Congratulations $USER on reaching level $LEVEL.",
+}
 
-// Completely reset a specific guild's configuration
+// ResetGuild deletes all database values that belongs to a specific guild.
 func ResetGuild(gid string) {
 	for _, prefix := range prefixes {
 		err := database.HDel(fmt.Sprintf("%s.%s", prefix, gid))
@@ -20,12 +23,12 @@ func ResetGuild(gid string) {
 	}
 }
 
-// Get a guild-specific message string
+// getMessage gets a guild-specific string.
 func getMessage(gid string, key string) (string, error) {
 	return database.HGet("conf."+gid, "message."+key)
 }
 
-// Set a guild-specific message string
+// setMessage sets a guild-specific string
 func setMessage(gid string, key string, message string) error {
 	if len(message) > 2048 {
 		return &MessageOutOfBounds{}
@@ -36,7 +39,33 @@ func setMessage(gid string, key string, message string) error {
 	return database.HSet("conf."+gid, "message."+key, message)
 }
 
-// Get amount of messages totally processed
+// GetCustomizableMessage gets a guild-specific message within predefined messages, returning default if not present.
+func GetCustomizableMessage(gid string, key string) (string, error) {
+	defaultMessage, ok := CustomizableMessages[key]
+	if !ok {
+		return "", &MessageOutOfBounds{}
+	}
+	message, err := getMessage(gid, key)
+	if err != nil {
+		return "", err
+	}
+	if message == "" {
+		return defaultMessage, nil
+	}
+	return message, nil
+}
+
+// SetCustomizableMessage sets a guild-specific message string within predefined messages.
+func SetCustomizableMessage(gid string, key string, message string) error {
+	_, ok := CustomizableMessages[key]
+	if !ok {
+		return &MessageOutOfBounds{}
+	}
+	err := setMessage(gid, key, message)
+	return err
+}
+
+// GetTotalMessages gets the total amount of messages processed.
 func GetTotalMessages() int {
 	messageAmount, err := database.HGet("nitori", "total_messages")
 	if err != nil {
@@ -54,12 +83,12 @@ func GetTotalMessages() int {
 	return amountInteger
 }
 
-// Advance the counter once
+// AdvanceTotalMessages advances the total messages processed counter.
 func AdvanceTotalMessages() error {
 	return database.HSet("nitori", "total_messages", strconv.Itoa(GetTotalMessages()+1))
 }
 
-// Get prefix for a guild and return the default if there is none
+// GetPrefix gets the command prefix of a guild and returns the default if none is set.
 func GetPrefix(gid string) string {
 	prefix, err := database.HGet("conf."+gid, "prefix")
 	if err != nil {
@@ -72,17 +101,17 @@ func GetPrefix(gid string) string {
 	return prefix
 }
 
-// Set the prefix of a guild
+// SetPrefix sets the command prefix of a guild.
 func SetPrefix(gid string, prefix string) error {
 	return database.HSet("conf."+gid, "prefix", prefix)
 }
 
-// Reset the prefix of a guild
+// ResetPrefix resets the command prefix of a guild.
 func ResetPrefix(gid string) error {
 	return database.HDel("conf."+gid, "prefix")
 }
 
-// Figure out if experience system is enabled
+// ExpEnabled queries whether the experience system is enabled for a guild.
 func ExpEnabled(gid string) (enabled bool, err error) {
 	result, err := database.HGet("conf."+gid, "exp_enable")
 	if err != nil {
@@ -95,7 +124,7 @@ func ExpEnabled(gid string) (enabled bool, err error) {
 	return
 }
 
-// Toggle the experience system enabler
+// ExpToggle toggles the experience system enabler.
 func ExpToggle(gid string) (pre bool, err error) {
 	pre, err = ExpEnabled(gid)
 	switch pre {
@@ -107,7 +136,7 @@ func ExpToggle(gid string) (pre bool, err error) {
 	return
 }
 
-// Obtain experience amount of a guild member
+// GetMemberExp obtains experience amount of a guild member.
 func GetMemberExp(user *discordgo.User, guild *discordgo.Guild) (int, error) {
 	result, err := database.HGet("exp."+guild.ID, user.ID)
 	if err != nil {
@@ -119,12 +148,12 @@ func GetMemberExp(user *discordgo.User, guild *discordgo.Guild) (int, error) {
 	return strconv.Atoi(result)
 }
 
-// Set a member's experience amount
+// SetMemberExp sets a member's experience amount.
 func SetMemberExp(user *discordgo.User, guild *discordgo.Guild, exp int) error {
 	return database.HSet("exp."+guild.ID, user.ID, strconv.Itoa(exp))
 }
 
-// Get a user's lastfm username
+// GetLastfm gets a user's lastfm username.
 func GetLastfm(user *discordgo.User, guild *discordgo.Guild) (string, error) {
 	result, err := database.HGet("lastfm."+guild.ID, user.ID)
 	if err != nil {
@@ -133,12 +162,12 @@ func GetLastfm(user *discordgo.User, guild *discordgo.Guild) (string, error) {
 	return result, err
 }
 
-// Set a user's lastfm username
+// SetLastfm sets a user's lastfm username.
 func SetLastfm(user *discordgo.User, guild *discordgo.Guild, username string) error {
 	return database.HSet("lastfm."+guild.ID, user.ID, username)
 }
 
-// Reset a user's lastfm username
+// ResetLastfm resets a user's lastfm username.
 func ResetLastfm(user *discordgo.User, guild *discordgo.Guild) error {
 	return database.HDel("lastfm."+guild.ID, user.ID)
 }
