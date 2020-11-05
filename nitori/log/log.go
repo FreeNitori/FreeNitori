@@ -37,11 +37,11 @@ func (formatter *formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	format, err := formatter.TextFormatter.Format(entry)
 	switch vars.ProcessType {
 	case vars.Supervisor:
-		return append([]byte("[SV]"), format...), err
+		return append([]byte("SV "), format...), err
 	case vars.ChatBackend:
-		return append([]byte("[CB]"), format...), err
+		return append([]byte("CB "), format...), err
 	case vars.WebServer:
-		return append([]byte("[WS]"), format...), err
+		return append([]byte("WS "), format...), err
 	case vars.Other:
 		return format, err
 	default:
