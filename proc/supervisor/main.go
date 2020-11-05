@@ -97,8 +97,9 @@ func main() {
 	go func() {
 		err = communication.Server()
 		if err != nil {
-			log.Fatalf("Failed to start RPC server, %s", err)
+			log.Fatalf("RPC server encountered an error, %s", err)
 		}
+		defer func() { _ = state.SocketListener.Close() }()
 	}()
 
 	// Open the database
@@ -140,7 +141,6 @@ func main() {
 				log.Info("Gracefully terminating...")
 				_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
 				_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
-				_ = state.SocketListener.Close()
 				_ = syscall.Unlink(config.Config.System.Socket)
 				vars.ExitCode <- 0
 				break
