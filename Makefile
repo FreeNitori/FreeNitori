@@ -1,5 +1,5 @@
-all: deps build
-run: build start
+all: deps assets build
+run: build assets start
 
 .PHONY: deps
 deps:
@@ -24,7 +24,7 @@ internal:
 	@for pl in $(shell ls "internal/"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/internal/$$pl; echo "Built $${pl}."; done;
 
 .PHONY: build
-build: assets internal
+build: internal
 	@echo "Building FreeNitori..."
 	@for proc in $(shell ls "proc/"); do go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-$$proc $$PWD/proc/$$proc; echo "Built $${proc}."; done;
 	@cp -f build/freenitori-supervisor build/freenitori
