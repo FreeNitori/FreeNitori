@@ -3,8 +3,8 @@
 *.test
 *.out
 /.idea/
-/nitori/config/assets.go
 /nitori/assets
+/proc/supervisor/confdefault
 /proc/webserver/static/static.go
 /proc/webserver/tmpl/tmpl.go
 /build

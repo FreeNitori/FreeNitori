@@ -8,6 +8,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/supervisor/communication"
+	"git.randomchars.net/RandomChars/FreeNitori/proc/supervisor/confdefault"
 	"git.randomchars.net/RandomChars/FreeNitori/proc/supervisor/state"
 	"io/ioutil"
 	"net"
@@ -22,6 +23,21 @@ var err error
 
 func init() {
 	vars.ProcessType = vars.Supervisor
+	if config.Config == nil {
+		defaultConfigFile, err := confdefault.Asset("nitori.conf")
+		if err != nil {
+			log.Fatalf("Failed to extract the default configuration file, %s", err)
+			os.Exit(1)
+		}
+		err = ioutil.WriteFile("nitori.conf", defaultConfigFile, 0644)
+		if err != nil {
+			log.Fatalf("Failed to write the default configuration file, %s", err)
+			os.Exit(1)
+		}
+		log.Fatalf("Generated default configuration file at ./nitori.conf, " +
+			"please edit it before starting FreeNitori.")
+		os.Exit(1)
+	}
 	func() {
 		stat, err := os.Stat("plugins")
 		if os.IsNotExist(err) {

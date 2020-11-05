@@ -2,7 +2,6 @@
 package config
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/assets"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
@@ -73,19 +72,7 @@ func parseConfig() *Conf {
 			config, err = ioutil.ReadFile("nitori.conf")
 			if err != nil {
 				log.Debugf("Configuration file inaccessible, %s", err)
-				defaultConfigFile, err := assets.Asset("nitori.conf")
-				if err != nil {
-					log.Fatalf("Failed to extract the default configuration file, %s", err)
-					os.Exit(1)
-				}
-				err = ioutil.WriteFile("nitori.conf", defaultConfigFile, 0644)
-				if err != nil {
-					log.Fatalf("Failed to write the default configuration file, %s", err)
-					os.Exit(1)
-				}
-				log.Fatalf("Generated default configuration file at ./nitori.conf, " +
-					"please edit it before starting FreeNitori.")
-				os.Exit(1)
+				return nil
 			} else {
 				NitoriConfPath = "nitori.conf"
 			}
