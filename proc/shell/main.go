@@ -31,11 +31,12 @@ func main() {
 		os.Exit(1)
 	}
 	defer func() { _ = vars.RPCConnection.Close() }()
-	if len(os.Args) == 2 {
-		if os.Args[1] == "shutdown" {
+	if action != "" {
+		switch action {
+		case "shutdown":
 			_ = vars.RPCConnection.Call("R.Shutdown", []int{vars.ProcessType}, nil)
-			os.Exit(0)
 		}
+		os.Exit(0)
 	}
 
 	// Initialize the shell prompt
