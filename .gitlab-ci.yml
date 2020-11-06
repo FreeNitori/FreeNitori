@@ -13,9 +13,12 @@ build:
   script:
     - make;
     - mkdir build/plugins/; cp plugins/*.so build/plugins
-    - cd build; tar zcf /tmp/freenitori.tar.gz freenitori* plugins/*.so; cd ../
-    - cp /tmp/freenitori.tar.gz build/
+    - cd build; tar zcf freenitori.tar.gz freenitori* plugins/*.so; cd ../
+    - GOOS=freebsd GOARCH=amd64 make build
+    - mkdir build/plugins/; cp plugins/*.so build/plugins
+    - cd build; tar zcf freenitori-freebsd.tar.gz freenitori* plugins/*.so; cd ../
   artifacts:
     paths:
       - build/freenitori.tar.gz
+      - build/freenitori-freebsd.tar.gz
     expire_in: 1 week
