@@ -12,9 +12,11 @@ import (
 )
 
 var socketPath string
+var action string
 var err error
 
 func init() {
+	flag.StringVar(&action, "c", "", "Execute command.")
 	flag.StringVar(&socketPath, "s", "/tmp/nitori", "Nitori socket path")
 	flag.Parse()
 }
@@ -37,7 +39,7 @@ func main() {
 	}
 
 	// Initialize the shell prompt
-	go shell()
+	go initShell()
 
 	// Signal handling
 	signalChannel := make(chan os.Signal, 1)

@@ -42,11 +42,13 @@ func (*R) Shutdown(args []int, _ *int) error {
 	}
 	switch args[0] {
 	case vars.ChatBackend:
+		_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
 		_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
 		log.Info("Graceful shutdown initiated by ChatBackend.")
 		vars.ExitCode <- 0
 	case vars.WebServer:
 		_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
+		_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
 		log.Info("Graceful shutdown initiated by WebServer.")
 		vars.ExitCode <- 0
 	case vars.Other:
@@ -65,6 +67,7 @@ func (*R) Restart(args []int, _ *int) error {
 	switch args[0] {
 	case vars.ChatBackend:
 		go func() {
+			_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
 			_, _ = state.ChatBackendProcess.Wait()
 			state.ChatBackendProcess, err =
 				os.StartProcess(config.Config.System.ChatBackend, append([]string{config.Config.System.ChatBackend}, state.ServerArgs...), &state.ProcessAttributes)
@@ -77,6 +80,7 @@ func (*R) Restart(args []int, _ *int) error {
 		}()
 	case vars.WebServer:
 		go func() {
+			_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
 			_, _ = state.WebServerProcess.Wait()
 			state.WebServerProcess, err =
 				os.StartProcess(config.Config.System.WebServer, append([]string{config.Config.System.WebServer}, state.ServerArgs...), &state.ProcessAttributes)
