@@ -64,8 +64,8 @@ func reboot(context *multiplexer.Context) {
 	}
 	switch context.Fields[0] {
 	case "reboot", "restart":
-		context.SendMessage("Rebooting chat backend.")
-		_ = vars.RPCConnection.Call("R.Restart", []int{vars.ProcessType}, nil)
+		context.SendMessage("Restarting.")
+		_ = vars.RPCConnection.Call("R.Restart", []int{vars.Supervisor}, nil)
 		return
 	case "halt", "shutdown":
 		context.SendMessage("Performing complete shutdown.")

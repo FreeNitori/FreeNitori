@@ -65,6 +65,26 @@ func (*R) Restart(args []int, _ *int) error {
 		return errors.New("invalid action")
 	}
 	switch args[0] {
+	case vars.Supervisor:
+		go func() {
+			execPath, err := os.Executable()
+			if err != nil {
+				log.Fatalf("Failed to get executable path, %s", err)
+				vars.ExitCode <- 1
+				return
+			}
+			_ = state.WebServerProcess.Signal(syscall.SIGUSR2)
+			_, _ = state.WebServerProcess.Wait()
+			_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
+			_, _ = state.ChatBackendProcess.Wait()
+			log.Info("Re-executing...")
+			err = syscall.Exec(execPath, os.Args, os.Environ())
+			if err != nil {
+				log.Fatalf("Failed to re-execute, %s", err)
+				vars.ExitCode <- 1
+				return
+			}
+		}()
 	case vars.ChatBackend:
 		go func() {
 			_ = state.ChatBackendProcess.Signal(syscall.SIGUSR2)
