@@ -15,7 +15,7 @@ build:
     - mkdir build/plugins/; cp plugins/*.so build/plugins
     - cd build; tar zcf freenitori.tar.gz freenitori* plugins/*.so; cd ../
     - GOOS=freebsd GOARCH=amd64 make build
-    - mkdir build/plugins/; cp plugins/*.so build/plugins
+    - cp plugins/*.so build/plugins
     - cd build; tar zcf freenitori-freebsd.tar.gz freenitori* plugins/*.so; cd ../
   artifacts:
     paths:
