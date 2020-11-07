@@ -69,9 +69,9 @@ func (*R) Restart(args []int, _ *int) error {
 		go func() {
 			execPath, err := os.Executable()
 			if err != nil {
-				if _, err := os.Stat("bin/freenitori"); err != nil {
+				if _, err := os.Stat("bin/freenitori"); err == nil {
 					execPath = "bin/freenitori"
-				} else if _, err := os.Stat("build/freenitori"); err != nil {
+				} else if _, err := os.Stat("build/freenitori"); err == nil {
 					execPath = "build/freenitori"
 				} else {
 					log.Fatalf("Failed to get executable path, %s", err)
