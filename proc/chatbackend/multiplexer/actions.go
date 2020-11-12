@@ -147,3 +147,28 @@ func (context *Context) GenerateGuildPrefix() string {
 	}
 	return ""
 }
+
+// GetVoiceState returns the voice state of a user if found.
+func (context *Context) GetVoiceState() (*discordgo.VoiceState, bool) {
+	if context.IsPrivate {
+		return nil, false
+	}
+	for _, voiceState := range context.Guild.VoiceStates {
+		if voiceState.UserID == context.Author.ID {
+			return voiceState, true
+		}
+	}
+	return nil, false
+}
+
+// MakeVoiceConnection returns the voice connection to a user's voice channel if join-able.
+func (context *Context) MakeVoiceConnection() (*discordgo.VoiceConnection, error) {
+	if context.IsPrivate {
+		return nil, nil
+	}
+	voiceState, ok := context.GetVoiceState()
+	if !ok {
+		return nil, nil
+	}
+	return context.Session.ChannelVoiceJoin(voiceState.GuildID, voiceState.ChannelID, false, true)
+}

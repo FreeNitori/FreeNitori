@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	MusicCategory.Register(fm, "fm", []string{"lastfm"}, "Query last song scrobbled to lastfm.")
+	AudioCategory.Register(fm, "fm", []string{"lastfm"}, "Query last song scrobbled to lastfm.")
 	state.LastFM = lastfm.New(config.Config.LastFM.ApiKey, config.Config.LastFM.ApiSecret)
 }
 

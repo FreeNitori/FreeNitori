@@ -14,7 +14,8 @@ const FeatureDisabled = "This feature is currently disabled."
 const AdminOnly = "This command is only available to system administrators!"
 const OperatorOnly = "This command is only available to operators!"
 const PermissionDenied = "You are not allowed to issue this command!"
-const MissingUser = "Specified user is not present."
+const MissingUser = "Specified user is nonexistent."
+const Inaccessible = "Channel inaccessible."
 const KappaColor = 0x3492c4
 
 // Important users
