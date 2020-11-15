@@ -9,9 +9,9 @@ deps:
 .PHONY: assets
 assets:
 	@echo "Packaging assets..."
-	@$$GOPATH/bin/go-bindata -o proc/supervisor/confdefault/confdefault.go -pkg confdefault -prefix assets/ ./assets/nitori.conf
-	@$$GOPATH/bin/go-bindata -o proc/webserver/tmpl/tmpl.go -pkg tmpl -prefix assets/web/templates/ ./assets/web/templates/*
-	@$$GOPATH/bin/go-bindata -fs -o proc/webserver/static/static.go -pkg static -prefix assets/web/static/ ./assets/web/static/...
+	@$$(go env GOPATH)/bin/go-bindata -o proc/supervisor/confdefault/confdefault.go -pkg confdefault -prefix assets/ ./assets/nitori.conf
+	@$$(go env GOPATH)/bin/go-bindata -o proc/webserver/tmpl/tmpl.go -pkg tmpl -prefix assets/web/templates/ ./assets/web/templates/*
+	@$$(go env GOPATH)/bin/go-bindata -fs -o proc/webserver/static/static.go -pkg static -prefix assets/web/static/ ./assets/web/static/...
 
 .PHONY: plugins
 plugins:
