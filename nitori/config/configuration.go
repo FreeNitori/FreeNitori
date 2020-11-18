@@ -35,12 +35,13 @@ type SystemSection struct {
 	Operator      []int
 }
 type WebServerSection struct {
-	SecretKey       string
-	Host            string
-	Port            int
-	BaseURL         string
-	RateLimit       int
-	RateLimitPeriod int
+	SecretKey           string
+	Host                string
+	Port                int
+	BaseURL             string
+	ForwardedByClientIP bool
+	RateLimit           int
+	RateLimitPeriod     int
 }
 type DiscordSection struct {
 	Token        string

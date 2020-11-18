@@ -35,6 +35,7 @@ func Initialize() {
 	gin.SetMode(gin.ReleaseMode)
 	Engine = gin.New()
 	Engine.Use(rateLimiter)
+	Engine.ForwardedByClientIP = config.Config.WebServer.ForwardedByClientIP
 
 	// Register templates
 	templates := template.New("/")
