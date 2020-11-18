@@ -35,10 +35,12 @@ type SystemSection struct {
 	Operator      []int
 }
 type WebServerSection struct {
-	SecretKey string
-	Host      string
-	Port      int
-	BaseURL   string
+	SecretKey       string
+	Host            string
+	Port            int
+	BaseURL         string
+	RateLimit       int
+	RateLimitPeriod int
 }
 type DiscordSection struct {
 	Token        string

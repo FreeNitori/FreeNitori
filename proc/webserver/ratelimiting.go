@@ -1,18 +1,19 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"golang.org/x/time/rate"
-	"net/http"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"github.com/ulule/limiter/v3"
+	"github.com/ulule/limiter/v3/drivers/middleware/gin"
+	"github.com/ulule/limiter/v3/drivers/store/memory"
+	"time"
 )
 
-func RateLimiting(eventsLimit int, burstLimit int) gin.HandlerFunc {
-	rateLimiter := rate.NewLimiter(rate.Limit(eventsLimit), burstLimit)
-	return func(context *gin.Context) {
-		if rateLimiter.Allow() {
-			context.Next()
-			return
-		}
-		context.AbortWithStatus(http.StatusTooManyRequests)
-	}
-}
+var (
+	store       = memory.NewStore()
+	rateLimiter = gin.NewMiddleware(instance)
+	instance    = limiter.New(store, limiter.Rate{
+		Formatted: "",
+		Period:    time.Duration(config.Config.WebServer.RateLimitPeriod) * time.Second,
+		Limit:     int64(config.Config.WebServer.RateLimit),
+	})
+)

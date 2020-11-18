@@ -12,7 +12,7 @@ require (
 	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
 	github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0
 	github.com/sirupsen/logrus v1.7.0
-	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e
+	github.com/ulule/limiter/v3 v3.7.1
 )
 
 go 1.14
