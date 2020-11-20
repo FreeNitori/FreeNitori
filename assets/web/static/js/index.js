@@ -1,40 +1,26 @@
-let stats;
+// I don't know JavaScript, so this is probably a very terrible script, if you are interested in contributing, hit me up on Discord or something :)
+let info = fetchJSON("/api/info")
+let stats = fetchJSON("/api/stats")
 
-if (self.fetch) {
-    const request = async () => {
-        const response = await fetch("/api/stats", {method: 'GET'});
-        stats = await response.json();
-        finalizePage();
-    }
-    request().then();
-} else {
-    let request = new XMLHttpRequest();
-    request.open("GET", "/api/stats", false);
-    request.send();
-    leaderboard = JSON.parse(request.responseText);
-    finalizePage();
-}
+info.then(function (data) {
+    document.getElementById("inviteURL").href = data["invite_url"];
+    document.getElementById("programVersion").textContent = data["nitori_version"];
+})
+stats.then(function (data) {
+    document.getElementById("messageTotal").textContent = data["total_messages"];
+    document.getElementById("guildsDeployed").textContent = data["guilds_deployed"];
+})
 
-function finalizePage() {
-    document.getElementById("messageTotal").textContent = stats["total_messages"];
-    document.getElementById("guildsDeployed").textContent = stats["guilds_deployed"];
-    document.getElementById("programVersion").textContent = stats["nitori_version"];
-}
-
-function redirectInvite() {
+function fetchJSON(endpoint) {
     if (self.fetch) {
-        fetch("/api/invite", {method: 'GET'}).then(
-            response => response.json()
-        ).then(
-            function (response) {
-                window.open(response["invite_url"]);
-            }
-        )
+        return fetch(endpoint, {method: 'GET'})
+            .then((resp) => resp.json());
     } else {
-        let request = new XMLHttpRequest();
-        request.open("GET", "/api/invite", false);
-        request.send();
-        let response = JSON.parse(request.responseText);
-        window.open(response["invite_url"]);
+        return new Promise(function () {
+            let request = new XMLHttpRequest();
+            request.open("GET", endpoint, false);
+            request.send();
+            return JSON.parse(request.responseText);
+        })
     }
 }

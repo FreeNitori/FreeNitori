@@ -34,6 +34,11 @@ func main() {
 	Initialize()
 	go func() {
 		<-readyChannel
+		// Get some constant data
+		vars.InviteURL = fetchData("inviteURL")
+
+		// Start the server
+		log.Infof("Web server listening on %s:%s", config.Config.WebServer.Host, strconv.Itoa(config.Config.WebServer.Port))
 		err = Engine.Run(fmt.Sprintf("%s:%s", config.Config.WebServer.Host, strconv.Itoa(config.Config.WebServer.Port)))
 		if err != nil {
 			log.Error(fmt.Sprintf("Failed to start web server, %s", err))

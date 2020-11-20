@@ -103,16 +103,16 @@ func Initialize() {
 	Engine.GET("/api", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{"status": "OK!"})
 	})
+	Engine.GET("/api/info", func(context *gin.Context) {
+		context.JSON(http.StatusOK, gin.H{
+			"nitori_version": vars.Version,
+			"invite_url":     vars.InviteURL,
+		})
+	})
 	Engine.GET("/api/stats", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
 			"total_messages":  config.GetTotalMessages(),
 			"guilds_deployed": fetchData("totalGuilds"),
-			"nitori_version":  fetchData("version"),
-		})
-	})
-	Engine.GET("/api/invite", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{
-			"invite_url": fetchData("inviteURL"),
 		})
 	})
 	Engine.GET("/api/guild/:gid", func(context *gin.Context) {
