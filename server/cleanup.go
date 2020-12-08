@@ -6,8 +6,8 @@ import (
 	dcVars "git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 )
 
-func cleanup()  {
-	log.Info("Cleaning up...")
+func cleanup() {
+	log.Info("Running cleanups.")
 	// Close Discord sessions
 	for _, shardSession := range dcVars.ShardSessions {
 		_ = shardSession.Close()
