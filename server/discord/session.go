@@ -61,6 +61,9 @@ func FetchGuildSession(gid string) (*discordgo.Session, error) {
 }
 
 func FetchGuild(gid string) *discordgo.Guild {
+	if _, err := strconv.Atoi(gid); err != nil {
+		return nil
+	}
 	guildSession, err := FetchGuildSession(gid)
 	var guild *discordgo.Guild
 	if err == nil {
