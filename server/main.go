@@ -1,3 +1,4 @@
+// Server program.
 package main
 
 import (

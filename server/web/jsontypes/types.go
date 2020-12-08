@@ -1,3 +1,4 @@
+// Structs used for JSON marshalling by the web server.
 package jsontypes
 
 import "time"

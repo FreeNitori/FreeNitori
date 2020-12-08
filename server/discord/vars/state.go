@@ -1,4 +1,3 @@
-// Important chatbackend-specific variables.
 package vars
 
 import (

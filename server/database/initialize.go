@@ -1,3 +1,4 @@
+// Wrapper around database backend driver.
 package database
 
 import (
