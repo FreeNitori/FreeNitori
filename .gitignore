@@ -3,10 +3,7 @@
 *.test
 *.out
 /.idea/
-/nitori/assets
-/proc/supervisor/confdefault
-/proc/webserver/static/static.go
-/proc/webserver/tmpl/tmpl.go
+/binaries
 /build
 /plugins
 /nitori.conf

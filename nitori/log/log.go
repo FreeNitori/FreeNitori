@@ -2,7 +2,6 @@
 package log
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/vars"
 	"github.com/sirupsen/logrus"
 )
 
@@ -31,20 +30,4 @@ type formatter struct {
 
 func init() {
 	Logger.SetFormatter(&Formatter)
-}
-
-func (formatter *formatter) Format(entry *logrus.Entry) ([]byte, error) {
-	format, err := formatter.TextFormatter.Format(entry)
-	switch vars.ProcessType {
-	case vars.Supervisor:
-		return append([]byte("SV "), format...), err
-	case vars.ChatBackend:
-		return append([]byte("CB "), format...), err
-	case vars.WebServer:
-		return append([]byte("WS "), format...), err
-	case vars.Other:
-		return format, err
-	default:
-		panic("invalid process type")
-	}
 }

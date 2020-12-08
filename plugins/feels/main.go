@@ -2,8 +2,8 @@
 package main
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/handlers"
-	"git.randomchars.net/RandomChars/FreeNitori/proc/chatbackend/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/server/discord/handlers"
+	"git.randomchars.net/RandomChars/FreeNitori/server/discord/multiplexer"
 )
 
 //goland:noinspection GoUnusedGlobalVariable

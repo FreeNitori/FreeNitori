@@ -9,9 +9,9 @@ deps:
 .PHONY: assets
 assets:
 	@echo "Packaging assets..."
-	@$$(go env GOPATH)/bin/go-bindata -o proc/supervisor/confdefault/confdefault.go -pkg confdefault -prefix assets/ ./assets/nitori.conf
-	@$$(go env GOPATH)/bin/go-bindata -o proc/webserver/tmpl/tmpl.go -pkg tmpl -prefix assets/web/templates/ ./assets/web/templates/*
-	@$$(go env GOPATH)/bin/go-bindata -fs -o proc/webserver/static/static.go -pkg static -prefix assets/web/static/ ./assets/web/static/...
+	@$$(go env GOPATH)/bin/go-bindata -o binaries/confdefault/confdefault.go -pkg confdefault -prefix assets/ ./assets/nitori.conf
+	@$$(go env GOPATH)/bin/go-bindata -o binaries/tmpl/tmpl.go -pkg tmpl -prefix assets/web/templates/ ./assets/web/templates/*
+	@$$(go env GOPATH)/bin/go-bindata -fs -o binaries/static/static.go -pkg static -prefix assets/web/static/ ./assets/web/static/...
 
 .PHONY: plugins
 plugins:
@@ -26,8 +26,7 @@ internal:
 .PHONY: build
 build: internal
 	@echo "Building FreeNitori..."
-	@for proc in $(shell ls "proc/"); do /usr/bin/env go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori-$$proc $$PWD/proc/$$proc; echo "Built $${proc}."; done;
-	@cp -f build/freenitori-supervisor build/freenitori
+	@/usr/bin/env go build -tags=jsoniter -ldflags="-s -w" -o build/freenitori $$PWD/server
 
 .PHONY: start
 start:

@@ -5,16 +5,22 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
+	"go/types"
 	"io/ioutil"
 	"math"
 	"os"
 )
 
+// Early initialization quirk again
+var _ = setLogLevel()
+
 // Exported variables for usage in other classes
-var Config = parseConfig()
-var NitoriConfPath string
-var TokenOverride string
-var LogLevel = getLogLevel()
+var (
+	Config = parseConfig()
+    NitoriConfPath string
+    TokenOverride string
+    LogLevel = getLogLevel()
+)
 
 // Configuration related types
 type MessageOutOfBounds struct{}
@@ -25,14 +31,12 @@ type Conf struct {
 	LastFM    LastFMSection
 }
 type SystemSection struct {
-	LogLevel      string
-	Socket        string
-	Database      string
-	Prefix        string
-	ChatBackend   string
-	WebServer     string
-	Administrator int
-	Operator      []int
+	LogLevel       string
+	Socket         string
+	Database       string
+	Prefix         string
+	Administrator  int
+	Operator       []int
 }
 type WebServerSection struct {
 	SecretKey           string
@@ -56,8 +60,9 @@ type LastFMSection struct {
 	ApiSecret string
 }
 
-func init() {
+func setLogLevel() *types.Nil {
 	log.SetLevel(LogLevel)
+	return nil
 }
 
 func (err MessageOutOfBounds) Error() string {
