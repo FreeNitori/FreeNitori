@@ -2,7 +2,7 @@
 package state
 
 // Version information
-const Version = "v0.0.1-rewrite"
+const Version = "v0.1.0"
 
 // Channels
 var (
