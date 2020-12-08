@@ -1,5 +1,7 @@
 package jsontypes
 
+import "time"
+
 type GuildInfo struct {
 	Name    string
 	ID      string
@@ -12,5 +14,6 @@ type UserInfo struct {
 	ID            string
 	AvatarURL     string
 	Discriminator string
+	CreationTime  time.Time
 	Bot           bool
 }

@@ -1,6 +1,7 @@
 package discord
 
 import (
+	"errors"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
@@ -75,4 +76,11 @@ func FetchGuild(gid string) *discordgo.Guild {
 		}
 	}
 	return guild
+}
+
+func FetchUser(uid string) (*discordgo.User, error) {
+	if _, err := strconv.Atoi(uid); err != nil {
+		return nil, errors.New("invalid snowflake")
+	}
+	return vars.RawSession.User(uid)
 }

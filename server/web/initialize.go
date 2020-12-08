@@ -15,6 +15,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Error messages and stuff
@@ -114,6 +115,23 @@ func Initialize() error {
 			"guilds_deployed": strconv.Itoa(len(vars.RawSession.State.Guilds)),
 		})
 	})
+	Engine.GET("/api/user/:uid", func(context *gin.Context) {
+		user, err := discord.FetchUser(context.Param("uid"))
+		if err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+		context.JSON(http.StatusOK, jsontypes.UserInfo{
+			Name:          user.Username,
+			ID:            user.ID,
+			AvatarURL:     user.AvatarURL("4096"),
+			Discriminator: user.Discriminator,
+			CreationTime:  time.Unix(int64(((func() (id int) { id, _ = strconv.Atoi(user.ID); return }()>>22)+1420070400000)/1000), 0),
+			Bot:           user.Bot,
+		})
+	})
 	Engine.GET("/api/guild/:gid", func(context *gin.Context) {
 		guild := discord.FetchGuild(context.Param("gid"))
 		if guild == nil {
@@ -186,7 +204,7 @@ func Initialize() error {
 				}
 				levelData := config.ExpToLevel(expData)
 				entry := leaderboardEntry{
-					User:     &jsontypes.UserInfo{
+					User: &jsontypes.UserInfo{
 						Name:          member.User.Username,
 						ID:            member.User.ID,
 						AvatarURL:     member.User.AvatarURL("128"),
