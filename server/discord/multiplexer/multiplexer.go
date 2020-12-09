@@ -92,10 +92,9 @@ func NewCategory(name string, description string) *CommandCategory {
 
 // Returns a new message route multiplexer
 func New() *Multiplexer {
-	mux := &Multiplexer{
+	return &Multiplexer{
 		Prefix: config.Config.System.Prefix,
 	}
-	return mux
 }
 
 // Register a route

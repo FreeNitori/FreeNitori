@@ -2,15 +2,12 @@
 package main
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/binaries/confdefault"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"git.randomchars.net/RandomChars/FreeNitori/server/database"
 	"git.randomchars.net/RandomChars/FreeNitori/server/database/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web"
-	"io/ioutil"
 	"os"
 	"os/signal"
 	"syscall"
@@ -21,23 +18,6 @@ var err error
 func init() {
 	// Print version information and stuff
 	log.Infof("FreeNitori %s early initialization.", state.Version)
-
-	// Check for configuration, or generate default config if nonexistent
-	if config.Config == nil {
-		defaultConfigFile, err := confdefault.Asset("nitori.conf")
-		if err != nil {
-			log.Fatalf("Failed to extract the default configuration file, %s", err)
-			os.Exit(1)
-		}
-		err = ioutil.WriteFile("nitori.conf", defaultConfigFile, 0644)
-		if err != nil {
-			log.Fatalf("Failed to write the default configuration file, %s", err)
-			os.Exit(1)
-		}
-		log.Fatalf("Generated default configuration file at ./nitori.conf, " +
-			"please edit it before starting FreeNitori.")
-		os.Exit(1)
-	}
 
 	// Check for existence of plugin directory
 	_, err := os.Stat("plugins")

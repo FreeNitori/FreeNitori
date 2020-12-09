@@ -2,6 +2,8 @@
 package config
 
 import (
+	"flag"
+	"git.randomchars.net/RandomChars/FreeNitori/binaries/confdefault"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
@@ -11,15 +13,17 @@ import (
 	"os"
 )
 
-// Early initialization quirk again
+// Early initialization quirk
+var _ = flags()
+var _ = checkConfig()
 var _ = setLogLevel()
 
 // Exported variables for usage in other classes
 var (
-	Config = parseConfig()
-    NitoriConfPath string
-    TokenOverride string
-    LogLevel = getLogLevel()
+	Config         = parseConfig()
+	NitoriConfPath string
+	TokenOverride  string
+	LogLevel       = getLogLevel()
 )
 
 // Configuration related types
@@ -31,12 +35,12 @@ type Conf struct {
 	LastFM    LastFMSection
 }
 type SystemSection struct {
-	LogLevel       string
-	Socket         string
-	Database       string
-	Prefix         string
-	Administrator  int
-	Operator       []int
+	LogLevel      string
+	Socket        string
+	Database      string
+	Prefix        string
+	Administrator int
+	Operator      []int
 }
 type WebServerSection struct {
 	SecretKey           string
@@ -58,6 +62,13 @@ type DiscordSection struct {
 type LastFMSection struct {
 	ApiKey    string
 	ApiSecret string
+}
+
+func flags() *types.Nil {
+	flag.StringVar(&TokenOverride, "a", "", "Override Discord Authorization Token")
+	flag.StringVar(&NitoriConfPath, "c", "", "Specify configuration file path")
+	flag.Parse()
+	return nil
 }
 
 func setLogLevel() *types.Nil {
@@ -99,6 +110,30 @@ func parseConfig() *Conf {
 		os.Exit(1)
 	}
 	return &nitoriConf
+}
+
+// checkConfig checks for a configuration file and generates default if not exists.
+func checkConfig() *types.Nil {
+	var nitoriConf = NitoriConfPath
+	if NitoriConfPath == "" {
+		nitoriConf = "nitori.conf"
+	}
+	if _, err := os.Stat(nitoriConf); os.IsNotExist(err) {
+		defaultConfigFile, err := confdefault.Asset("nitori.conf")
+		if err != nil {
+			log.Fatalf("Failed to extract the default configuration file, %s", err)
+			os.Exit(1)
+		}
+		err = ioutil.WriteFile(nitoriConf, defaultConfigFile, 0644)
+		if err != nil {
+			log.Fatalf("Failed to write the default configuration file, %s", err)
+			os.Exit(1)
+		}
+		log.Fatalf("Generated default configuration file at %s, "+
+			"please edit it before starting FreeNitori.", nitoriConf)
+		os.Exit(1)
+	}
+	return nil
 }
 
 // getLogLevel refers the log level configuration string to a log level integer.
