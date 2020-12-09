@@ -2,7 +2,7 @@
 package state
 
 // Version information
-const Version = "v0.1.0"
+const Version = "v0.2.3"
 
 // Channels
 var (
