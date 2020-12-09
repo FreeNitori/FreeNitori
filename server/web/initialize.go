@@ -66,6 +66,9 @@ func Initialize() error {
 	Engine.GET("/", func(context *gin.Context) {
 		context.HTML(http.StatusOK, "index.html", nil)
 	})
+	Engine.GET("/lookup", func(context *gin.Context) {
+		context.HTML(http.StatusOK, "lookup.html", nil)
+	})
 	Engine.GET("/guild/:gid/leaderboard", func(context *gin.Context) {
 		guild := discord.FetchGuild(context.Param("gid"))
 		if guild == nil {

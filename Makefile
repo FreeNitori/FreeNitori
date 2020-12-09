@@ -1,5 +1,5 @@
 all: deps assets build
-run: build assets start
+run: assets build start
 
 .PHONY: deps
 deps:
