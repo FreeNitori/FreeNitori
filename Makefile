@@ -26,7 +26,7 @@ internal:
 .PHONY: build
 build: internal
 	@echo "Building FreeNitori..."
-	@/usr/bin/env go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.Version=$(shell git describe --tags)'" -o build/freenitori $$PWD/server
+	@/usr/bin/env go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.Version=$(shell echo -n `git describe --tags`; if [[ `git diff --stat` != '' ]]; then echo -n '-dirty'; fi)'" -o build/freenitori $$PWD/server
 
 .PHONY: start
 start:
