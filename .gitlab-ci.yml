@@ -2,8 +2,7 @@ image: golang:1.15.2
 
 cache:
   paths:
-    - /go/pkg
-    - /go/bin
+    - /go
 
 stages:
   - build
