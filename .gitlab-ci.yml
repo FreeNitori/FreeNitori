@@ -1,9 +1,12 @@
 image: golang:1.15.2
 
+variables:
+  GOPATH: "$PWD/build/go"
+
 cache:
   key: FeelsKappa
   paths:
-    - /go/
+    - build/go/
 
 stages:
   - build
