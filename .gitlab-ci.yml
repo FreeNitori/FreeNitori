@@ -1,8 +1,9 @@
 image: golang:1.15.2
 
 cache:
+  key: FeelsKappa
   paths:
-    - /go
+    - /go/
 
 stages:
   - build
