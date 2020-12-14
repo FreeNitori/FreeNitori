@@ -6,7 +6,7 @@ variables:
 cache:
   key: FeelsKappa
   paths:
-    - build/go/
+    - build/go/*
 
 stages:
   - build
