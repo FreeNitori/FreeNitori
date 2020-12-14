@@ -1,8 +1,5 @@
 image: golang:1.15.2
 
-variables:
-  GOPATH: "$PWD/build/go"
-
 cache:
   key: FeelsKappa
   paths:
@@ -14,7 +11,7 @@ stages:
 build:
   stage: build
   script:
-    - make;
+    - GOPATH=$PWD/build/go make;
     - mkdir build/plugins/; cp plugins/*.so build/plugins
     - cd build; tar zcf freenitori.tar.gz freenitori* plugins/*.so; cd ../
   artifacts:
