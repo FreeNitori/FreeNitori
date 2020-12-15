@@ -17,7 +17,7 @@ var err error
 
 func init() {
 	// Print version information and stuff
-	log.Infof("FreeNitori %s early initialization.", state.Version)
+	log.Infof("FreeNitori %s (%s) early initialization.", state.Version, state.Revision)
 
 	// Check for existence of plugin directory
 	_, err := os.Stat("plugins")

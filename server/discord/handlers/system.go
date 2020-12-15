@@ -23,8 +23,9 @@ func about(context *multiplexer.Context) {
 		"Open source, general purpose Discord utility.")
 	embed.Color = vars.KappaColor
 	embed.AddField("Homepage", config.Config.WebServer.BaseURL, true)
+	embed.AddField("Version", state.Version, true)
+	embed.AddField("Git Revision", state.Revision, true)
 	embed.AddField("Processed Messages", strconv.Itoa(config.GetTotalMessages()), true)
-	embed.AddField("License", "GNU General Public License v3.0", false)
 	if vars.Administrator != nil {
 		embed.AddField("Administrator", vars.Administrator.Username+"#"+vars.Administrator.Discriminator, true)
 	}
