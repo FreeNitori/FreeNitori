@@ -26,4 +26,3 @@ var RawSession, _ = discordgo.New()
 var ShardSessions []*discordgo.Session
 var LastFM *lastfm.Api
 var Application *discordgo.Application
-var EventHandlers []interface{}

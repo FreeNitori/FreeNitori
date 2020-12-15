@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/embedutil"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	ModerationCategory.Register(whois, "whois", []string{"lookup", "pfp"},
+	multiplexer.ModerationCategory.Register(whois, "whois", []string{"lookup", "pfp"},
 		"Lookup a user's detailed information by username, nickname or ID")
 }
 

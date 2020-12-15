@@ -4,6 +4,7 @@ import (
 	"errors"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
@@ -41,7 +42,7 @@ func MakeSessions() error {
 		if err != nil {
 			return err
 		}
-		for _, handler := range vars.EventHandlers {
+		for _, handler := range multiplexer.EventHandlers {
 			session.AddHandler(handler)
 		}
 		log.Infof("Shard %s ready.", strconv.Itoa(i))

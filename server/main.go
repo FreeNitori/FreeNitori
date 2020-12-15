@@ -44,10 +44,10 @@ func init() {
 		os.Exit(1)
 	}
 
-	// Initialize discord-related services
+	// Initialize Discord-related services
 	err = discord.Initialize()
 	if err != nil {
-		log.Fatalf("Failed to initialize discord-related services, %s", err)
+		log.Fatalf("Failed to initialize Discord services, %s", err)
 		_ = vars.Database.Close()
 		os.Exit(1)
 	}
@@ -65,10 +65,10 @@ func main() {
 	// Print thing
 	log.Info("Begin late initialization.")
 
-	// Late initialization of discord-related services
+	// Late initialization of Discord-related services
 	err = discord.LateInitialize()
 	if err != nil {
-		log.Fatalf("Failed to initialize discord-related services, %s", err)
+		log.Fatalf("Failed to initialize Discord services, %s", err)
 		_ = vars.Database.Close()
 		os.Exit(1)
 	}

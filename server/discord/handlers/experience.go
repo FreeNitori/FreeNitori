@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/embedutil"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/bwmarrin/discordgo"
 	"math/rand"
@@ -13,8 +13,8 @@ import (
 
 func init() {
 	multiplexer.NotTargeted = append(multiplexer.NotTargeted, AdvanceExperience)
-	ExperienceCategory.Register(level, "level", []string{"rank", "experience", "exp"}, "Query experience level.")
-	ExperienceCategory.Register(setrank, "setrank", []string{"rankset"}, "Configure ranked roles.")
+	multiplexer.ExperienceCategory.Register(level, "level", []string{"rank", "experience", "exp"}, "Query experience level.")
+	multiplexer.ExperienceCategory.Register(setrank, "setrank", []string{"rankset"}, "Configure ranked roles.")
 }
 
 func AdvanceExperience(context *multiplexer.Context) {

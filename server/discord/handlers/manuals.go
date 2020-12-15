@@ -2,14 +2,14 @@ package handlers
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/embedutil"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"strings"
 )
 
 func init() {
-	ManualsCategory.Register(manuals, "man", []string{"manuals", "help"}, "An interface to the system reference manuals.")
+	multiplexer.ManualsCategory.Register(manuals, "man", []string{"manuals", "help"}, "An interface to the system reference manuals.")
 }
 
 func manuals(context *multiplexer.Context) {
@@ -25,7 +25,7 @@ func manuals(context *multiplexer.Context) {
 
 			// The block of text with all categories
 			var catText string
-			for _, category := range Categories {
+			for _, category := range multiplexer.Categories {
 
 				// Only display categories with description set
 				if category.Description == "" {
@@ -46,7 +46,7 @@ func manuals(context *multiplexer.Context) {
 
 			// Figure out if the category exist, and fallthrough if it doesn't
 			var desiredCat *multiplexer.CommandCategory
-			for _, cat := range Categories {
+			for _, cat := range multiplexer.Categories {
 				if strings.EqualFold(cat.Title, context.Fields[1]) {
 					desiredCat = cat
 					break

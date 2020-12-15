@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/embedutil"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/bwmarrin/discordgo"
 	"unicode"
@@ -12,7 +12,7 @@ import (
 var err error
 
 func init() {
-	SystemCategory.Register(configure, "configure", []string{"conf", "settings", "set"}, "Configure per-guild overrides.")
+	multiplexer.SystemCategory.Register(configure, "configure", []string{"conf", "settings", "set"}, "Configure per-guild overrides.")
 	multiplexer.GuildMemberRemove = append(multiplexer.GuildMemberRemove, func(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
 		if remove.User.ID == session.State.User.ID {
 			config.ResetGuild(remove.GuildID)

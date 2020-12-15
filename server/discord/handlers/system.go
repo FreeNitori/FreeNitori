@@ -3,19 +3,19 @@ package handlers
 import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/embedutil"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"strconv"
 )
 
 func init() {
-	SystemCategory.Register(about, "about", []string{"info", "kappa", "information"}, "Display system information.")
-	SystemCategory.Register(invite, "invite", []string{"authorize", "oauth"}, "Display authorization URL.")
-	SystemCategory.Register(resetGuild, "reset-guild", []string{}, "Reset current guild configuration.")
-	SystemCategory.Register(shutdown, "shutdown", []string{}, "")
+	multiplexer.SystemCategory.Register(about, "about", []string{"info", "kappa", "information"}, "Display system information.")
+	multiplexer.SystemCategory.Register(invite, "invite", []string{"authorize", "oauth"}, "Display authorization URL.")
+	multiplexer.SystemCategory.Register(resetGuild, "reset-guild", []string{}, "Reset current guild configuration.")
+	multiplexer.SystemCategory.Register(shutdown, "shutdown", []string{}, "")
 }
 
 func about(context *multiplexer.Context) {

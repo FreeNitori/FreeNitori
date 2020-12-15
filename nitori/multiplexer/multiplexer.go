@@ -1,23 +1,15 @@
-// Command multiplexer.
+// Event multiplexer.
 package multiplexer
 
 import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/bwmarrin/discordgo"
 	"regexp"
 	"strconv"
 	"strings"
 )
-
-var Router = New()
-var Commands []*Route
-var NotTargeted []interface{}
-var GuildMemberAdd []interface{}
-var GuildMemberRemove []interface{}
-var GuildDelete []interface{}
 
 // Context information passed to the handlers
 type Context struct {
@@ -64,10 +56,10 @@ type CommandCategory struct {
 type CommandHandlers struct{}
 
 func init() {
-	vars.EventHandlers = append(vars.EventHandlers, Router.OnMessageCreate)
-	vars.EventHandlers = append(vars.EventHandlers, Router.OnGuildMemberAdd)
-	vars.EventHandlers = append(vars.EventHandlers, Router.OnGuildMemberRemove)
-	vars.EventHandlers = append(vars.EventHandlers, Router.OnGuildDelete)
+	EventHandlers = append(EventHandlers, Router.OnMessageCreate)
+	EventHandlers = append(EventHandlers, Router.OnGuildMemberAdd)
+	EventHandlers = append(EventHandlers, Router.OnGuildMemberRemove)
+	EventHandlers = append(EventHandlers, Router.OnGuildDelete)
 }
 
 // Register new command handler to a category

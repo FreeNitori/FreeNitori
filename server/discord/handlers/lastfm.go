@@ -3,8 +3,8 @@ package handlers
 import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/embedutil"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/shkh/lastfm-go/lastfm"
 	"regexp"
@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	AudioCategory.Register(fm, "fm", []string{"lastfm"}, "Query last song scrobbled to lastfm.")
+	multiplexer.AudioCategory.Register(fm, "fm", []string{"lastfm"}, "Query last song scrobbled to lastfm.")
 	vars.LastFM = lastfm.New(config.Config.LastFM.ApiKey, config.Config.LastFM.ApiSecret)
 }
 
