@@ -1,13 +1,26 @@
-<img style="display: block; margin-left: auto; margin-right: auto; width: 100%;" src="https://git.randomchars.net/RandomChars/FreeNitori/-/raw/master/assets/web/static/banner.png" alt="banner"/>
-<h1 style="text-align: center">FreeNitori</h1>
+<div align="center">
 
-<p style="text-align: center">An open source, general purpose modular Discord bot written in go.</p>
+![banner](https://git.randomchars.net/RandomChars/FreeNitori/-/raw/master/assets/web/static/banner.png "FreeNitori")
+
+An open source, general purpose modular Discord bot written in go.
+
+</div>
 
 ---
 **Project is still in very early stages and documentation is incomplete/nonexistent in most parts, here will be a way to get started if you want to contribute.**
 
-Download that archive from the URL above, extract it somewhere, run `freenitori` once, and edit the configuration file, fill in the credentials and change the path to database, then run the program again.
-
-When using the Makefile, remember to run `make` at least once then use `make run` in development (which remove an extra downloading stage and automatically starts the program).
-
 ---
+
+Building
+---
+You need GNU Make, a POSIX-compliant shell and of course, go. The latest version from your package manager should work as long as you aren't using something ancient. 
+
+To build the project, just run `make` in the root of the project, binaries are produced in `build/`. After building for the first time you can skip the dependency part and have make automatically start Nitori by doing `make run`.
+
+Running
+---
+Nitori produces a configuration file if not present and exits, make sure to edit that file and fill in your stuff before running again.
+
+Discussion
+---
+We currently have a [Discord guild](https://discord.com/invite/Tap77D3) for discussions on development of this project, however any topic is OK.
