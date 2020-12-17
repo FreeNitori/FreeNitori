@@ -7,6 +7,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/server/database"
 	"git.randomchars.net/RandomChars/FreeNitori/server/database/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord"
+	"git.randomchars.net/RandomChars/FreeNitori/server/rpc"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web"
 	"os"
 	"os/signal"
@@ -27,6 +28,13 @@ func init() {
 			log.Fatalf("Failed to create plugin directory, %s", err)
 			os.Exit(1)
 		}
+	}
+
+	// Initialize RPC
+	err = rpc.Initialize()
+	if err != nil {
+		log.Fatalf("Failed to initialize RPC server, %s", err)
+		os.Exit(1)
 	}
 
 	// Initialize database
@@ -58,9 +66,10 @@ func main() {
 	// Cleanup after exit
 	defer cleanup()
 
-	// Start Discord and web services routines
+	// Start service routines
 	go discord.Serve()
 	go web.Serve()
+	go rpc.Serve()
 
 	// Print thing
 	log.Info("Begin late initialization.")
