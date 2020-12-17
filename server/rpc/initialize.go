@@ -26,8 +26,5 @@ func Initialize() error {
 			return errors.New(fmt.Sprintf("another program is listening on %s", config.Config.System.Socket))
 		}
 	}
-
-	// Listen on the socket
-	Listener, err = net.Listen("unix", config.Config.System.Socket)
-	return err
+	return nil
 }

@@ -67,9 +67,9 @@ func main() {
 	defer cleanup()
 
 	// Start service routines
+	go rpc.Serve()
 	go discord.Serve()
 	go web.Serve()
-	go rpc.Serve()
 
 	// Print thing
 	log.Info("Begin late initialization.")

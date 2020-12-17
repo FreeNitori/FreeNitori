@@ -9,6 +9,12 @@ import (
 
 type N bool
 
+func (N) Version(_ []int, reply *[]string) error {
+	*reply = append(*reply, state.Version)
+	*reply = append(*reply, state.Revision)
+	return nil
+}
+
 func (N) Shutdown(_ []int, _ *int) error {
 	state.ExitCode <- 0
 	return nil
