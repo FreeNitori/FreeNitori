@@ -53,7 +53,6 @@ type WebServerSection struct {
 }
 type DiscordSection struct {
 	Token        string
-	ClientID     int
 	ClientSecret string
 	Presence     string
 	Shard        bool

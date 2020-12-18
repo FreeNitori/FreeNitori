@@ -15,7 +15,7 @@ func init() {
 	multiplexer.SystemCategory.Register(about, "about", []string{"info", "kappa", "information"}, "Display system information.")
 	multiplexer.SystemCategory.Register(invite, "invite", []string{"authorize", "oauth"}, "Display authorization URL.")
 	multiplexer.SystemCategory.Register(resetGuild, "reset-guild", []string{}, "Reset current guild configuration.")
-	multiplexer.SystemCategory.Register(shutdown, "shutdown", []string{}, "")
+	multiplexer.SystemCategory.Register(shutdown, "shutdown", []string{"poweroff", "reboot", "restart"}, "")
 }
 
 func about(context *multiplexer.Context) {
@@ -24,7 +24,7 @@ func about(context *multiplexer.Context) {
 	embed.Color = vars.KappaColor
 	embed.AddField("Homepage", config.Config.WebServer.BaseURL, true)
 	embed.AddField("Version", state.Version, true)
-	embed.AddField("Git Revision", state.Revision, true)
+	embed.AddField("Commit Hash", state.Revision, true)
 	embed.AddField("Processed Messages", strconv.Itoa(config.GetTotalMessages()), true)
 	if vars.Administrator != nil {
 		embed.AddField("Administrator", vars.Administrator.Username+"#"+vars.Administrator.Discriminator, true)
@@ -62,6 +62,11 @@ func resetGuild(context *multiplexer.Context) {
 func shutdown(context *multiplexer.Context) {
 	if !context.IsAdministrator() {
 		context.SendMessage(vars.AdminOnly)
+		return
+	}
+	if map[string]bool{"reboot": true, "restart": true, "shutdown": false, "poweroff": false}[context.Fields[0]] {
+		context.SendMessage("Attempting restart...")
+		state.ExitCode <- -1
 		return
 	}
 	context.SendMessage("Performing complete shutdown.")

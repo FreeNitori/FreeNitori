@@ -110,6 +110,10 @@ func main() {
 	// Exit if there's something on that channel
 	exitCode := <-state.ExitCode
 	if exitCode != 0 {
+		if exitCode == -1 {
+			cleanup()
+			restart()
+		}
 		os.Exit(exitCode)
 	}
 }
