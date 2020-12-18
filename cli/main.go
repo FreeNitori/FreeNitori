@@ -35,6 +35,8 @@ func main() {
 		switch action {
 		case "shutdown":
 			_ = client.Client.Call("N.Shutdown", []int{}, nil)
+		case "restart":
+			_ = client.Client.Call("N.Restart", []int{}, nil)
 		}
 		os.Exit(0)
 	}

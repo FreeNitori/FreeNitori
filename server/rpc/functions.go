@@ -20,6 +20,11 @@ func (N) Shutdown(_ []int, _ *int) error {
 	return nil
 }
 
+func (N) Restart(_ []int, _ *int) error {
+	state.ExitCode <- -1
+	return nil
+}
+
 func (N) DatabaseAction(args []string, reply *[]string) error {
 	if len(args) < 2 {
 		return errors.New("invalid action")

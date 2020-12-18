@@ -26,12 +26,18 @@ func shell() {
 		Help: "perform a system action",
 		Func: func(context *ishell.Context) {
 			choice := context.MultiChoice([]string{
-				"Complete Shutdown",
+				"Shutdown",
+				"Restart",
 			}, "Which action to perform?")
 			switch choice {
 			case 0:
 				_ = client.Client.Call("N.Shutdown", []int{}, nil)
 				context.Println("Shutdown call sent.")
+				sh.Close()
+				exitCode <- 0
+			case 1:
+				_ = client.Client.Call("N.Restart", []int{}, nil)
+				context.Println("Restart call sent.")
 				sh.Close()
 				exitCode <- 0
 			}
