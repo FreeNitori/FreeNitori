@@ -13,6 +13,7 @@ require (
 	github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0
 	github.com/sirupsen/logrus v1.7.0
 	github.com/ulule/limiter/v3 v3.7.1
+	go.starlark.net v0.0.0-20201210151846-e81fc95f7bd5
 )
 
 go 1.14
