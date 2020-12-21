@@ -6,5 +6,6 @@
 /binaries
 /build
 /plugins
+/extensions
 /nitori.conf
 /db

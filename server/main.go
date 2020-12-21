@@ -7,6 +7,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/server/database"
 	"git.randomchars.net/RandomChars/FreeNitori/server/database/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord"
+	"git.randomchars.net/RandomChars/FreeNitori/server/extension"
 	"git.randomchars.net/RandomChars/FreeNitori/server/rpc"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web"
 	"os"
@@ -25,7 +26,7 @@ func init() {
 	if os.IsNotExist(err) {
 		err = os.Mkdir("plugins", 0755)
 		if err != nil {
-			log.Fatalf("Failed to create plugin directory, %s", err)
+			log.Fatalf("Unable to create plugin directory, %s", err)
 			os.Exit(1)
 		}
 	}
@@ -33,21 +34,21 @@ func init() {
 	// Initialize RPC
 	err = rpc.Initialize()
 	if err != nil {
-		log.Fatalf("Failed to initialize RPC server, %s", err)
+		log.Fatalf("Unable to initialize RPC server, %s", err)
 		os.Exit(1)
 	}
 
 	// Initialize database
 	err = database.Initialize()
 	if err != nil {
-		log.Fatalf("Failed to initialize database, %s", err)
+		log.Fatalf("Unable to initialize database, %s", err)
 		os.Exit(1)
 	}
 
 	// Initialize web services
 	err = web.Initialize()
 	if err != nil {
-		log.Fatalf("Failed to initialize web services, %s", err)
+		log.Fatalf("Unable to initialize web services, %s", err)
 		_ = vars.Database.Close()
 		os.Exit(1)
 	}
@@ -55,7 +56,7 @@ func init() {
 	// Initialize Discord-related services
 	err = discord.Initialize()
 	if err != nil {
-		log.Fatalf("Failed to initialize Discord services, %s", err)
+		log.Fatalf("Unable to initialize Discord services, %s", err)
 		_ = vars.Database.Close()
 		os.Exit(1)
 	}
@@ -77,10 +78,25 @@ func main() {
 	// Late initialization of Discord-related services
 	err = discord.LateInitialize()
 	if err != nil {
-		log.Fatalf("Failed to initialize Discord services, %s", err)
-		_ = vars.Database.Close()
+		log.Fatalf("Unable to initialize Discord services, %s", err)
+		cleanup()
 		os.Exit(1)
 	}
+
+	// Load Discord extensions
+	err = extension.FindExtensions()
+	if err != nil {
+		log.Fatalf("Unable to find extensions, %s", err)
+		cleanup()
+		os.Exit(1)
+	}
+	err = extension.RegisterHandlers()
+	if err != nil {
+		log.Fatalf("Unable to register event handlers, %s", err)
+		cleanup()
+		os.Exit(1)
+	}
+	log.Info(extension.Commands)
 
 	// Print thing
 	log.Info("Late initialization completed.")
