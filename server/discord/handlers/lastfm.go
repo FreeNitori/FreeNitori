@@ -12,7 +12,13 @@ import (
 )
 
 func init() {
-	multiplexer.AudioCategory.Register(fm, "fm", []string{"lastfm"}, "Query last song scrobbled to lastfm.")
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "fm",
+		AliasPatterns: []string{"lastfm"},
+		Description:   "Query last song scrobbled to lastfm.",
+		Category:      multiplexer.AudioCategory,
+		Handler:       fm,
+	})
 	vars.LastFM = lastfm.New(config.Config.LastFM.ApiKey, config.Config.LastFM.ApiSecret)
 }
 

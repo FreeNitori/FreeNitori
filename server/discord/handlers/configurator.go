@@ -12,7 +12,13 @@ import (
 var err error
 
 func init() {
-	multiplexer.SystemCategory.Register(configure, "configure", []string{"conf", "settings", "set"}, "Configure per-guild overrides.")
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "configure",
+		AliasPatterns: []string{"conf", "settings", "set"},
+		Description:   "Configure per-guild overrides.",
+		Category:      multiplexer.SystemCategory,
+		Handler:       configure,
+	})
 	multiplexer.GuildMemberRemove = append(multiplexer.GuildMemberRemove, func(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
 		if remove.User.ID == session.State.User.ID {
 			config.ResetGuild(remove.GuildID)

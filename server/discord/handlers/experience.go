@@ -13,8 +13,20 @@ import (
 
 func init() {
 	multiplexer.NotTargeted = append(multiplexer.NotTargeted, AdvanceExperience)
-	multiplexer.ExperienceCategory.Register(level, "level", []string{"rank", "experience", "exp"}, "Query experience level.")
-	multiplexer.ExperienceCategory.Register(setrank, "setrank", []string{"rankset"}, "Configure ranked roles.")
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "level",
+		AliasPatterns: []string{"rank", "experience", "exp"},
+		Description:   "Query experience level.",
+		Category:      multiplexer.ExperienceCategory,
+		Handler:       level,
+	})
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "setrank",
+		AliasPatterns: []string{"rankset"},
+		Description:   "Configure ranked roles.",
+		Category:      multiplexer.ExperienceCategory,
+		Handler:       setrank,
+	})
 }
 
 func AdvanceExperience(context *multiplexer.Context) {

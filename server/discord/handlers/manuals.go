@@ -9,7 +9,13 @@ import (
 )
 
 func init() {
-	multiplexer.ManualsCategory.Register(manuals, "man", []string{"manuals", "help"}, "An interface to the system reference manuals.")
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "man",
+		AliasPatterns: []string{"manuals", "help"},
+		Description:   "An interface to the system reference manuals.",
+		Category:      multiplexer.ManualsCategory,
+		Handler:       manuals,
+	})
 }
 
 func manuals(context *multiplexer.Context) {

@@ -17,10 +17,4 @@ func init() {
 			vars.RawSession.AddHandler(handler)
 		}
 	}
-
-	// Add the event handlers
-	for _, route := range multiplexer.Commands {
-		multiplexer.Router.Route(route)
-		log.Debugf("Registered route with pattern '%s'.", route.Pattern)
-	}
 }

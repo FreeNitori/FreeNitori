@@ -47,9 +47,15 @@ func FindExtensions() error {
 
 func RegisterHandlers() error {
 	for pattern, path := range Commands {
-		ExtensionsCategory.Register(func(context *multiplexer.Context) {
-			// TODO: execute extension
-		}, pattern, []string{}, "Extension "+path)
+		multiplexer.Router.Route(&multiplexer.Route{
+			Pattern:       pattern,
+			AliasPatterns: []string{},
+			Description:   "Extension " + path,
+			Category:      ExtensionsCategory,
+			Handler: func(context *multiplexer.Context) {
+				// TODO: execute extension
+			},
+		})
 	}
 	return nil
 }

@@ -41,7 +41,7 @@ type Route struct {
 	Pattern       string
 	AliasPatterns []string
 	Description   string
-	Category      CommandCategory
+	Category      *CommandCategory
 	Handler       CommandHandler
 }
 
@@ -60,19 +60,6 @@ func init() {
 	EventHandlers = append(EventHandlers, Router.OnGuildMemberAdd)
 	EventHandlers = append(EventHandlers, Router.OnGuildMemberRemove)
 	EventHandlers = append(EventHandlers, Router.OnGuildDelete)
-}
-
-// Register new command handler to a category
-func (cat *CommandCategory) Register(handler CommandHandler, pattern string, alias []string, description string) {
-	route := Route{
-		Pattern:       pattern,
-		AliasPatterns: alias,
-		Description:   description,
-		Category:      *cat,
-		Handler:       handler,
-	}
-	Commands = append(Commands, &route)
-	cat.Routes = append(cat.Routes, &route)
 }
 
 // Returns a new command category

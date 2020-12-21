@@ -10,8 +10,13 @@ import (
 )
 
 func init() {
-	multiplexer.ModerationCategory.Register(whois, "whois", []string{"lookup", "pfp"},
-		"Lookup a user's detailed information by username, nickname or ID")
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "whois",
+		AliasPatterns: []string{"lookup", "pfp"},
+		Description:   "Lookup a user's detailed information by username, nickname or snowflake.",
+		Category:      multiplexer.ModerationCategory,
+		Handler:       whois,
+	})
 }
 
 func whois(context *multiplexer.Context) {

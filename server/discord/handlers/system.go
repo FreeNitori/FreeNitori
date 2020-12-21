@@ -12,10 +12,34 @@ import (
 )
 
 func init() {
-	multiplexer.SystemCategory.Register(about, "about", []string{"info", "kappa", "information"}, "Display system information.")
-	multiplexer.SystemCategory.Register(invite, "invite", []string{"authorize", "oauth"}, "Display authorization URL.")
-	multiplexer.SystemCategory.Register(resetGuild, "reset-guild", []string{}, "Reset current guild configuration.")
-	multiplexer.SystemCategory.Register(shutdown, "shutdown", []string{"poweroff", "reboot", "restart"}, "")
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "about",
+		AliasPatterns: []string{"info", "kappa", "information"},
+		Description:   "Display system information.",
+		Category:      multiplexer.SystemCategory,
+		Handler:       about,
+	})
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "invite",
+		AliasPatterns: []string{"authorize", "oauth"},
+		Description:   "Display authorization URL.",
+		Category:      multiplexer.SystemCategory,
+		Handler:       invite,
+	})
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "reset-guild",
+		AliasPatterns: []string{},
+		Description:   "Reset current guild configuration.",
+		Category:      multiplexer.SystemCategory,
+		Handler:       resetGuild,
+	})
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "shutdown",
+		AliasPatterns: []string{"poweroff", "reboot", "restart"},
+		Description:   "",
+		Category:      multiplexer.SystemCategory,
+		Handler:       shutdown,
+	})
 }
 
 func about(context *multiplexer.Context) {
