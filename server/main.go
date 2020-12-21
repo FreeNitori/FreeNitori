@@ -96,7 +96,6 @@ func main() {
 		cleanup()
 		os.Exit(1)
 	}
-	log.Info(extension.Commands)
 
 	// Print thing
 	log.Info("Late initialization completed.")

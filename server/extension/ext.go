@@ -9,6 +9,8 @@ import (
 
 var err error
 var Commands = make(map[string]string)
+var ExtensionsCategory = multiplexer.NewCategory("Extensions",
+	"Commands loaded in as extensions.")
 
 func FindExtensions() error {
 	// Create directories if not exists
@@ -37,12 +39,15 @@ func FindExtensions() error {
 			Commands[path.Name()[:len(path.Name())-5]] = "extensions/commands/" + path.Name()
 		}
 	}
+	if len(Commands) > 0 {
+		multiplexer.Categories = append(multiplexer.Categories, ExtensionsCategory)
+	}
 	return nil
 }
 
 func RegisterHandlers() error {
 	for pattern, path := range Commands {
-		multiplexer.ExtensionsCategory.Register(func(context *multiplexer.Context) {
+		ExtensionsCategory.Register(func(context *multiplexer.Context) {
 			// TODO: execute extension
 		}, pattern, []string{}, "Extension "+path)
 	}

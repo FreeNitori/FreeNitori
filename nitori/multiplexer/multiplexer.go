@@ -63,14 +63,16 @@ func init() {
 }
 
 // Register new command handler to a category
-func (cat CommandCategory) Register(handler CommandHandler, pattern string, alias []string, description string) {
-	Commands = append(Commands, &Route{
+func (cat *CommandCategory) Register(handler CommandHandler, pattern string, alias []string, description string) {
+	route := Route{
 		Pattern:       pattern,
 		AliasPatterns: alias,
 		Description:   description,
-		Category:      cat,
+		Category:      *cat,
 		Handler:       handler,
-	})
+	}
+	Commands = append(Commands, &route)
+	cat.Routes = append(cat.Routes, &route)
 }
 
 // Returns a new command category
