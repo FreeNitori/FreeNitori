@@ -1,7 +1,10 @@
 package extension
 
 import (
+	"errors"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"go.starlark.net/starlark"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -50,10 +53,29 @@ func RegisterHandlers() error {
 		multiplexer.Router.Route(&multiplexer.Route{
 			Pattern:       pattern,
 			AliasPatterns: []string{},
-			Description:   "Extension " + path,
+			Description:   path,
 			Category:      ExtensionsCategory,
 			Handler: func(context *multiplexer.Context) {
-				// TODO: execute extension
+				_, err := starlark.ExecFile(&starlark.Thread{
+					Name:  pattern,
+					Print: func(_ *starlark.Thread, msg string) { log.Info(msg) },
+				}, path, nil, starlark.StringDict{
+					"send_message": starlark.NewBuiltin("send_message", func(thread *starlark.Thread, b *starlark.Builtin, args starlark.Tuple, kwargs []starlark.Tuple) (starlark.Value, error) {
+						if args.Len() != 1 {
+							return starlark.None, errors.New("bad amount of arguments passed to send_message")
+						}
+						context.SendMessage(args.Index(0).String())
+						return starlark.None, nil
+					}),
+				})
+				if err != nil {
+					if evalErr, ok := err.(*starlark.EvalError); ok {
+						log.Errorf("Extension %s encountered error while executing.", path)
+						log.Error(evalErr.Backtrace())
+						return
+					}
+					log.Errorf("Error encountered while executing extension %s, %s", path, err)
+				}
 			},
 		})
 	}
