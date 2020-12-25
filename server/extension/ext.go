@@ -64,7 +64,7 @@ func RegisterHandlers() error {
 						if args.Len() != 1 {
 							return starlark.None, errors.New("bad amount of arguments passed to send_message")
 						}
-						context.SendMessage(args.Index(0).String())
+						context.SendMessage(args.Index(0).String()[:len(args.Index(0).String())-1][1:])
 						return starlark.None, nil
 					}),
 				})
