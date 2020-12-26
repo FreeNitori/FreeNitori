@@ -10,8 +10,8 @@ import (
 type N bool
 
 func (N) Version(_ []int, reply *[]string) error {
-	*reply = append(*reply, state.Version)
-	*reply = append(*reply, state.Revision)
+	*reply = append(*reply, state.Version())
+	*reply = append(*reply, state.Revision())
 	return nil
 }
 

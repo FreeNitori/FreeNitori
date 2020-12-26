@@ -28,7 +28,7 @@ func Initialize() error {
 
 	// Setup some things
 	discordgo.Logger = log.DiscordGoLogger
-	vars.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version + ")"
+	vars.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version() + ")"
 	if config.TokenOverride == "" {
 		vars.RawSession.Token = "Bot " + config.Config.Discord.Token
 	} else {
@@ -61,7 +61,11 @@ func LateInitialize() error {
 			vars.Operator = append(vars.Operator, user)
 		}
 	}
-	state.DiscordReady <- true
+	go func() {
+		for {
+			state.DiscordReady <- true
+		}
+	}()
 	vars.Application, err = vars.RawSession.Application("@me")
 	if err != nil {
 		return errors.New("unable to fetch application information")

@@ -16,7 +16,7 @@ func init() {
 		Pattern:       "fm",
 		AliasPatterns: []string{"lastfm"},
 		Description:   "Query last song scrobbled to lastfm.",
-		Category:      multiplexer.AudioCategory,
+		Category:      multiplexer.MediaCategory,
 		Handler:       fm,
 	})
 	vars.LastFM = lastfm.New(config.Config.LastFM.ApiKey, config.Config.LastFM.ApiSecret)

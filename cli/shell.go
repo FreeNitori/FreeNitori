@@ -10,7 +10,7 @@ import (
 var sh = ishell.New()
 
 func shell() {
-	sh.SetPrompt(fmt.Sprintf("FreeNitori %s(%s) > ", state.Version, socketPath))
+	sh.SetPrompt(fmt.Sprintf("FreeNitori %s(%s) > ", state.Version(), socketPath))
 
 	sh.AddCmd(&ishell.Cmd{
 		Name: "exit",

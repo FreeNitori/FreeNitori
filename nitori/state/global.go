@@ -3,10 +3,13 @@ package state
 
 // Information
 var (
-	Version   = "unknown"
-	Revision  = "unknown"
+	version   = "unknown"
+	revision  = "unknown"
 	InviteURL string
 )
+
+func Version() string  { return version }
+func Revision() string { return revision }
 
 // Channels
 var (

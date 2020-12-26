@@ -108,8 +108,9 @@ func Initialize() error {
 	})
 	Engine.GET("/api/info", func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
-			"nitori_version": state.Version,
-			"invite_url":     state.InviteURL,
+			"nitori_version":  state.Version(),
+			"nitori_revision": state.Revision(),
+			"invite_url":      state.InviteURL,
 		})
 	})
 	Engine.GET("/api/stats", func(context *gin.Context) {
