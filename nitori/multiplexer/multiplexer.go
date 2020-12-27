@@ -205,9 +205,12 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 			if mentionedUser.ID == session.State.User.ID {
 				context.IsTargeted, context.HasMention = true, true
 				mentionRegex := regexp.MustCompile(fmt.Sprintf("<@!?(%s)>", session.State.User.ID))
+				location := mentionRegex.FindStringIndex(context.Content)
 
 				// Figure out if the message started with the ping
-				if mentionRegex.FindStringIndex(context.Content)[0] == 0 {
+				if len(location) == 0 {
+					context.HasLeadingMention = true
+				} else if location[0] == 0 {
 					context.HasLeadingMention = true
 				}
 
