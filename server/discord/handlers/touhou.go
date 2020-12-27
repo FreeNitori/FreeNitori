@@ -165,7 +165,6 @@ func touhou(context *multiplexer.Context) {
 	name := strings.ToLower(context.Fields[1])
 	for _, character := range CharacterList() {
 		if name == strings.ToLower(character.FriendlyName) {
-			// TODO: Implement image fetch
 			response, err := soup.Get("https://gelbooru.com/index.php?page=dapi&s=post&q=index&" +
 				"tags=solo+-underwear+-sideboob+-pov_feet+-underboob+-upskirt+-" +
 				"sexually_suggestive+-ass+-bikini+-6%2Bgirls+-comic+-greyscale+-" +
