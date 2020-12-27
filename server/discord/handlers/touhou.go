@@ -3,7 +3,11 @@ package handlers
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"github.com/anaskhan96/soup"
+	"math/rand"
+	"strconv"
 	"strings"
+	"time"
 )
 
 type CharacterInfo struct {
@@ -162,10 +166,37 @@ func touhou(context *multiplexer.Context) {
 	for _, character := range CharacterList() {
 		if name == strings.ToLower(character.FriendlyName) {
 			// TODO: Implement image fetch
-			embed := embedutil.NewEmbed(character.FriendlyName, "")
+			response, err := soup.Get("https://gelbooru.com/index.php?page=dapi&s=post&q=index&" +
+				"tags=solo+-underwear+-sideboob+-pov_feet+-underboob+-upskirt+-" +
+				"sexually_suggestive+-ass+-bikini+-6%2Bgirls+-comic+-greyscale+-" +
+				"huge_filesize+-lovestruck+-absurdres+-artificial_vagina+-" +
+				"covering_breasts+-huge_breasts+-blood+-penetration_gesture+-" +
+				"animated+-audio+-webm+rating:safe+" + character.SearchString)
+			if !context.HandleError(err) {
+				return
+			}
+			document := soup.HTMLParse(response)
+			posts := document.Find("posts")
+			count, ok := posts.Attrs()["count"]
+			if !ok {
+				context.SendMessage("Unexpected response from upstream, please try again.")
+				return
+			}
+			images := posts.FindAll("post")
+			rand.Seed(time.Now().UnixNano())
+			image := images[rand.Intn(func() int {
+				v, _ := strconv.Atoi(count)
+				if v < 100 {
+					return v
+				} else {
+					return 100
+				}
+			}()-1)].Attrs()
+			embed := embedutil.NewEmbed("", "")
 			embed.Color = character.Color
-			embed.SetImage("")
-			embed.SetFooter("Source URL: " + "")
+			embed.SetImage(image["file_url"])
+			embed.SetAuthor(character.FriendlyName)
+			embed.SetFooter("Source URL: " + image["source"])
 			context.SendEmbed(embed)
 			return
 		}
