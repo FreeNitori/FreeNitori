@@ -11,9 +11,13 @@ An open source, general purpose modular Discord bot written in go.
 
 ---
 
+Special Thanks
+---
+[Rogue](https://twitter.com/RogueDono) (artist)
+
 Building
 ---
-You need GNU Make, a POSIX-compliant shell and of course, go. The latest version from your package manager should work as long as you aren't using something ancient. 
+GNU make is required, FreeBSD's make implementation simply does not work. You also need the go compiler.
 
 To build the project, just run `make` in the root of the project, binaries are produced in `build/`. After building for the first time you can skip the dependency part and have make automatically start Nitori by doing `make run`.
 
