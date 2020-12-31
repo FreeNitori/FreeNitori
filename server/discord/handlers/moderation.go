@@ -60,7 +60,7 @@ func whois(context *multiplexer.Context) {
 	if !context.HandleError(err) {
 		return
 	}
-	creationTime := time.Unix(int64(((userID>>22)+1420070400000)/1000), 0)
+	creationTime := time.Unix(int64(((userID>>22)+1420070400000)/1000), 0).UTC().Format("Mon, 02 Jan 2006 15:04:05")
 	embed := embedutil.NewEmbed("User Information", "")
 	embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
 	embed.SetThumbnail(user.AvatarURL("1024"))
@@ -83,13 +83,13 @@ func whois(context *multiplexer.Context) {
 		}
 		embed.AddField("Roles", roles, false)
 	}
-	embed.AddField("Registration Date", creationTime.String(), true)
+	embed.AddField("Registration Date", creationTime, true)
 	if member != nil {
 		joinTime, err := member.JoinedAt.Parse()
 		if !context.HandleError(err) {
 			return
 		}
-		embed.AddField("Join Date", joinTime.String(), true)
+		embed.AddField("Join Date", joinTime.Format("Mon, 02 Jan 2006 15:04:05"), true)
 	}
 	context.SendEmbed(embed)
 }
