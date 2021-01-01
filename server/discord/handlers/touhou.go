@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-var sessions = map[string]chan string{}
+var sessions = map[string]chan [2]string{}
 
 type CharacterInfo struct {
 	Color        int
@@ -243,7 +243,7 @@ func guessResponse(context *multiplexer.Context) {
 	if !ok {
 		return
 	}
-	channel <- context.Content
+	channel <- [2]string{context.Content, context.Author.Mention()}
 }
 
 func guess(context *multiplexer.Context) {
@@ -270,7 +270,7 @@ func guess(context *multiplexer.Context) {
 	context.SendEmbed(embed)
 	go func() {
 		end := make(chan bool)
-		message := make(chan string)
+		message := make(chan [2]string)
 		sessions[context.Message.ChannelID] = message
 		defer func() { delete(sessions, context.Message.ChannelID) }()
 		go func() { time.Sleep(15 * time.Second); end <- true }()
@@ -280,8 +280,8 @@ func guess(context *multiplexer.Context) {
 				context.SendMessage(fmt.Sprintf("Time's up, the character is %s.", char.FriendlyName))
 				return
 			case msg := <-message:
-				if strings.ToLower(msg) == strings.ToLower(char.FriendlyName) {
-					context.SendMessage(fmt.Sprintf("%s correct! The character is %s.", context.Author.Mention(), char.FriendlyName))
+				if strings.ToLower(msg[0]) == strings.ToLower(char.FriendlyName) {
+					context.SendMessage(fmt.Sprintf("%s correct! The character is %s.", msg[1], char.FriendlyName))
 					return
 				}
 			}
