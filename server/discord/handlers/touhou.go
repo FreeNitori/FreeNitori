@@ -2,14 +2,18 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/anaskhan96/soup"
 	"math/rand"
 	"strconv"
 	"strings"
 	"time"
 )
+
+var sessions = map[string]chan string{}
 
 type CharacterInfo struct {
 	Color        int
@@ -155,6 +159,7 @@ func CharacterList() []CharacterInfo {
 }
 
 func init() {
+	multiplexer.NotTargeted = append(multiplexer.NotTargeted, guessResponse)
 	multiplexer.Router.Route(&multiplexer.Route{
 		Pattern:       "touhou",
 		AliasPatterns: []string{"t", "th"},
@@ -205,30 +210,82 @@ func fetch(character CharacterInfo) (*CharacterArt, error) {
 }
 
 func touhou(context *multiplexer.Context) {
-	if len(context.Fields) < 2 {
-		context.SendMessage("Please specify a character.")
-		return
+	var name string
+	var char *CharacterInfo
+	if len(context.Fields) > 1 {
+		name = strings.ToLower(context.Fields[1])
 	}
-	name := strings.ToLower(context.Fields[1])
+
 	for _, character := range CharacterList() {
 		if name == strings.ToLower(character.FriendlyName) {
-			art, err := fetch(character)
-			if !context.HandleError(err) {
-				return
-			}
-			embed := embedutil.NewEmbed("", "")
-			embed.Color = character.Color
-			embed.SetImage(art.ImageURL)
-			embed.SetAuthor(character.FriendlyName)
-			embed.SetFooter("Source URL: " + art.SourceURL)
-			context.SendEmbed(embed)
-			return
+			char = &character
 		}
 	}
-	context.SendMessage("Your request did not match any character, please try again.")
+
+	if char == nil {
+		char = &CharacterList()[rand.Intn(len(CharacterList()))]
+	}
+
+	art, err := fetch(*char)
+	if !context.HandleError(err) {
+		return
+	}
+	embed := embedutil.NewEmbed("", "")
+	embed.Color = char.Color
+	embed.SetImage(art.ImageURL)
+	embed.SetAuthor(char.FriendlyName)
+	embed.SetFooter("Source URL: " + art.SourceURL)
+	context.SendEmbed(embed)
+}
+
+func guessResponse(context *multiplexer.Context) {
+	channel, ok := sessions[context.Message.ChannelID]
+	if !ok {
+		return
+	}
+	channel <- context.Content
 }
 
 func guess(context *multiplexer.Context) {
-	context.SendMessage("Not implemented.")
+	if context.IsPrivate {
+		context.SendMessage(vars.GuildOnly)
+		return
+	}
 
+	_, ok := sessions[context.Message.ChannelID]
+	if ok {
+		context.SendMessage("A guessing session already exists in this channel.")
+		return
+	}
+
+	char := CharacterList()[rand.Intn(len(CharacterList()))]
+	art, err := fetch(char)
+	if !context.HandleError(err) {
+		return
+	}
+
+	embed := embedutil.NewEmbed("Guess Character", "You have 15 seconds to decide.")
+	embed.Color = char.Color
+	embed.SetImage(art.ImageURL)
+	context.SendEmbed(embed)
+	go func() {
+		end := make(chan bool)
+		message := make(chan string)
+		sessions[context.Message.ChannelID] = message
+		defer func() { delete(sessions, context.Message.ChannelID) }()
+		go func() { time.Sleep(15 * time.Second); end <- true }()
+		for {
+			select {
+			case <-end:
+				context.SendMessage(fmt.Sprintf("Time's up, the character is %s.", char.FriendlyName))
+				return
+			case msg := <-message:
+				if strings.ToLower(msg) == strings.ToLower(char.FriendlyName) {
+					context.SendMessage(fmt.Sprintf("%s correct! The character is %s.", context.Author.Mention(), char.FriendlyName))
+					return
+				}
+			}
+			time.Sleep(100 * time.Millisecond)
+		}
+	}()
 }
