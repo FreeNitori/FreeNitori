@@ -29,11 +29,15 @@ func ship(context *multiplexer.Context) {
 		context.SendMessage(vars.InvalidArgument)
 		return
 	}
-	user1 := context.GetMember(context.Fields[1]).User
-	user2 := context.GetMember(context.Fields[2]).User
-	res := int(math.Mod(float64(func() int { id, _ := strconv.Atoi(user1.ID); return id }()^func() int { id, _ := strconv.Atoi(user2.ID); return id }()), 101))
+	member1 := context.GetMember(context.Fields[1])
+	member2 := context.GetMember(context.Fields[2])
+	if member1 == nil || member2 == nil {
+		context.SendMessage(vars.MissingUser)
+		return
+	}
+	res := int(math.Mod(float64(func() int { id, _ := strconv.Atoi(member1.User.ID); return id }()^func() int { id, _ := strconv.Atoi(member2.User.ID); return id }()), 101))
 	embed := embedutil.NewEmbed(
-		fmt.Sprintf("`%s` ❤️ `%s`", user1.Username, user2.Username),
+		fmt.Sprintf("`%s` ❤️ `%s`", member1.User.Username, member2.User.Username),
 		fmt.Sprintf("[%s%s] %v", strings.Repeat("=", res/2), strings.Repeat("-", 50-res/2), res)+"%")
 	context.SendEmbed(embed)
 }
