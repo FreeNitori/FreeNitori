@@ -194,14 +194,18 @@ func fetch(character CharacterInfo) (*CharacterArt, error) {
 	}
 	images := posts.FindAll("post")
 	rand.Seed(time.Now().UnixNano())
-	image := images[rand.Intn(func() int {
+	target := func() int {
 		v, _ := strconv.Atoi(count)
 		if v < 100 {
 			return v
 		} else {
 			return 100
 		}
-	}()-1)].Attrs()
+	}()
+	if target == 1 {
+		return nil, errors.New("no art available")
+	}
+	image := images[rand.Intn(target-1)].Attrs()
 	return &CharacterArt{
 		ImageURL:  image["file_url"],
 		SourceURL: image["source"],
