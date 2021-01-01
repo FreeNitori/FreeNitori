@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"github.com/anaskhan96/soup"
@@ -14,6 +15,12 @@ type CharacterInfo struct {
 	Color        int
 	FriendlyName string
 	SearchString string
+}
+
+type CharacterArt struct {
+	ImageURL  string
+	SourceURL string
+	Character CharacterInfo
 }
 
 func CharacterList() []CharacterInfo {
@@ -155,6 +162,46 @@ func init() {
 		Category:      multiplexer.MediaCategory,
 		Handler:       touhou,
 	})
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "guess",
+		AliasPatterns: []string{},
+		Description:   "Guess character based on artwork.",
+		Category:      multiplexer.MediaCategory,
+		Handler:       guess,
+	})
+}
+
+func fetch(character CharacterInfo) (*CharacterArt, error) {
+	response, err := soup.Get("https://gelbooru.com/index.php?page=dapi&s=post&q=index&" +
+		"tags=solo+-underwear+-sideboob+-pov_feet+-underboob+-upskirt+-" +
+		"sexually_suggestive+-ass+-bikini+-6%2Bgirls+-comic+-greyscale+-" +
+		"huge_filesize+-lovestruck+-absurdres+-artificial_vagina+-" +
+		"covering_breasts+-huge_breasts+-blood+-penetration_gesture+-" +
+		"animated+-audio+-webm+rating:safe+" + character.SearchString)
+	if err != nil {
+		return nil, err
+	}
+	document := soup.HTMLParse(response)
+	posts := document.Find("posts")
+	count, ok := posts.Attrs()["count"]
+	if !ok {
+		return nil, errors.New("unexpected response from upstream")
+	}
+	images := posts.FindAll("post")
+	rand.Seed(time.Now().UnixNano())
+	image := images[rand.Intn(func() int {
+		v, _ := strconv.Atoi(count)
+		if v < 100 {
+			return v
+		} else {
+			return 100
+		}
+	}()-1)].Attrs()
+	return &CharacterArt{
+		ImageURL:  image["file_url"],
+		SourceURL: image["source"],
+		Character: character,
+	}, nil
 }
 
 func touhou(context *multiplexer.Context) {
@@ -165,40 +212,23 @@ func touhou(context *multiplexer.Context) {
 	name := strings.ToLower(context.Fields[1])
 	for _, character := range CharacterList() {
 		if name == strings.ToLower(character.FriendlyName) {
-			response, err := soup.Get("https://gelbooru.com/index.php?page=dapi&s=post&q=index&" +
-				"tags=solo+-underwear+-sideboob+-pov_feet+-underboob+-upskirt+-" +
-				"sexually_suggestive+-ass+-bikini+-6%2Bgirls+-comic+-greyscale+-" +
-				"huge_filesize+-lovestruck+-absurdres+-artificial_vagina+-" +
-				"covering_breasts+-huge_breasts+-blood+-penetration_gesture+-" +
-				"animated+-audio+-webm+rating:safe+" + character.SearchString)
+			art, err := fetch(character)
 			if !context.HandleError(err) {
 				return
 			}
-			document := soup.HTMLParse(response)
-			posts := document.Find("posts")
-			count, ok := posts.Attrs()["count"]
-			if !ok {
-				context.SendMessage("Unexpected response from upstream, please try again.")
-				return
-			}
-			images := posts.FindAll("post")
-			rand.Seed(time.Now().UnixNano())
-			image := images[rand.Intn(func() int {
-				v, _ := strconv.Atoi(count)
-				if v < 100 {
-					return v
-				} else {
-					return 100
-				}
-			}()-1)].Attrs()
 			embed := embedutil.NewEmbed("", "")
 			embed.Color = character.Color
-			embed.SetImage(image["file_url"])
+			embed.SetImage(art.ImageURL)
 			embed.SetAuthor(character.FriendlyName)
-			embed.SetFooter("Source URL: " + image["source"])
+			embed.SetFooter("Source URL: " + art.SourceURL)
 			context.SendEmbed(embed)
 			return
 		}
 	}
 	context.SendMessage("Your request did not match any character, please try again.")
+}
+
+func guess(context *multiplexer.Context) {
+	context.SendMessage("Not implemented.")
+
 }
