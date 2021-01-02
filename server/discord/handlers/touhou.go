@@ -215,22 +215,22 @@ func fetch(character CharacterInfo) (*CharacterArt, error) {
 
 func touhou(context *multiplexer.Context) {
 	var name string
-	var char *CharacterInfo
+	var char CharacterInfo
 	if len(context.Fields) > 1 {
 		name = strings.ToLower(context.Fields[1])
 	}
 
 	for _, character := range CharacterList() {
 		if name == strings.ToLower(character.FriendlyName) {
-			char = &character
+			char = character
 		}
 	}
 
-	if char == nil {
-		char = &CharacterList()[rand.Intn(len(CharacterList()))]
+	if char.SearchString == "" {
+		char = CharacterList()[rand.Intn(len(CharacterList()))]
 	}
 
-	art, err := fetch(*char)
+	art, err := fetch(char)
 	if !context.HandleError(err) {
 		return
 	}
