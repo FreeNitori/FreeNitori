@@ -262,6 +262,10 @@ func guess(context *multiplexer.Context) {
 		return
 	}
 
+	message := make(chan [2]string)
+	sessions[context.Message.ChannelID] = message
+	defer func() { delete(sessions, context.Message.ChannelID) }()
+
 	char := CharacterList()[rand.Intn(len(CharacterList()))]
 	art, err := fetch(char)
 	if !context.HandleError(err) {
@@ -272,24 +276,21 @@ func guess(context *multiplexer.Context) {
 	embed.Color = char.Color
 	embed.SetImage(art.ImageURL)
 	context.SendEmbed(embed)
-	go func() {
-		end := make(chan bool)
-		message := make(chan [2]string)
-		sessions[context.Message.ChannelID] = message
-		defer func() { delete(sessions, context.Message.ChannelID) }()
-		go func() { time.Sleep(15 * time.Second); end <- true }()
-		for {
-			select {
-			case <-end:
-				context.SendMessage(fmt.Sprintf("Time's up, the character is %s.", char.FriendlyName))
+
+	end := make(chan bool, 1)
+	go func() { time.Sleep(15 * time.Second); end <- true }()
+
+	for {
+		select {
+		case <-end:
+			context.SendMessage(fmt.Sprintf("Time's up, the character is %s.", char.FriendlyName))
+			return
+		case msg := <-message:
+			if strings.ToLower(msg[0]) == strings.ToLower(char.FriendlyName) {
+				context.SendMessage(fmt.Sprintf("%s correct! The character is %s.", msg[1], char.FriendlyName))
 				return
-			case msg := <-message:
-				if strings.ToLower(msg[0]) == strings.ToLower(char.FriendlyName) {
-					context.SendMessage(fmt.Sprintf("%s correct! The character is %s.", msg[1], char.FriendlyName))
-					return
-				}
 			}
-			time.Sleep(100 * time.Millisecond)
 		}
-	}()
+		time.Sleep(100 * time.Millisecond)
+	}
 }
