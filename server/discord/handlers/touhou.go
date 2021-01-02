@@ -286,7 +286,8 @@ func guess(context *multiplexer.Context) {
 			context.SendMessage(fmt.Sprintf("Time's up, the character is %s.", char.FriendlyName))
 			return
 		case msg := <-message:
-			if strings.ToLower(msg[0]) == strings.ToLower(char.FriendlyName) {
+			if strings.ToLower(msg[0]) == strings.ToLower(char.FriendlyName) ||
+				strings.ToLower(msg[0]) == strings.Replace(strings.ToLower(char.SearchString), "_", " ", -1) {
 				context.SendMessage(fmt.Sprintf("%s correct! The character is %s.", msg[1], char.FriendlyName))
 				return
 			}
