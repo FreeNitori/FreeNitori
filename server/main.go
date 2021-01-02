@@ -2,6 +2,7 @@
 package main
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"git.randomchars.net/RandomChars/FreeNitori/server/database"
@@ -18,7 +19,12 @@ import (
 var err error
 
 func init() {
-	// Print version information and stuff
+	if config.VersionStartup {
+		println(state.Version() + " (" + state.Revision() + ")")
+		os.Exit(0)
+	}
+
+	// Print initial message and stuff
 	log.Infof("FreeNitori %s (%s) early initialization.", state.Version(), state.Revision())
 
 	// Check for existence of plugin directory

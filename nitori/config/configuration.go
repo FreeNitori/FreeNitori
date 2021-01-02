@@ -23,6 +23,7 @@ var (
 	Config         = parseConfig()
 	NitoriConfPath string
 	TokenOverride  string
+	VersionStartup bool
 	LogLevel       = getLogLevel()
 )
 
@@ -64,6 +65,7 @@ type LastFMSection struct {
 }
 
 func flags() *types.Nil {
+	flag.BoolVar(&VersionStartup, "v", false, "Display Version information and exit")
 	flag.StringVar(&TokenOverride, "a", "", "Override Discord Authorization Token")
 	flag.StringVar(&NitoriConfPath, "c", "", "Specify configuration file path")
 	flag.Parse()
