@@ -8,6 +8,8 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
+	"os"
+	"runtime"
 	"strconv"
 )
 
@@ -18,6 +20,13 @@ func init() {
 		Description:   "Display system information.",
 		Category:      multiplexer.SystemCategory,
 		Handler:       about,
+	})
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "stats",
+		AliasPatterns: []string{},
+		Description:   "",
+		Category:      multiplexer.SystemCategory,
+		Handler:       stats,
 	})
 	multiplexer.Router.Route(&multiplexer.Route{
 		Pattern:       "invite",
@@ -71,6 +80,21 @@ func about(context *multiplexer.Context) {
 	}
 	embed.SetThumbnail(context.Session.State.User.AvatarURL("256"))
 	embed.SetFooter("A Discord utility by RandomChars", "https://static.randomchars.net/img/RandomChars.png")
+	context.SendEmbed(embed)
+}
+
+func stats(context *multiplexer.Context) {
+	if !context.IsOperator() {
+		context.SendMessage(vars.OperatorOnly)
+		return
+	}
+	embed := embedutil.NewEmbed("System Stats", "")
+	embed.Color = vars.KappaColor
+	var memStats runtime.MemStats
+	runtime.ReadMemStats(&memStats)
+	embed.AddField("PID", strconv.Itoa(os.Getpid()), true)
+	embed.AddField("Heap Allocation", fmt.Sprintf("%.2f MiB", float64(memStats.Alloc)/1048576), true)
+	embed.AddField("Total Allocation", fmt.Sprintf("%.2f MiB", float64(memStats.Sys)/1048576), true)
 	context.SendEmbed(embed)
 }
 
