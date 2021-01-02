@@ -202,7 +202,7 @@ func fetch(character CharacterInfo) (*CharacterArt, error) {
 			return 100
 		}
 	}()
-	if target == 1 {
+	if target <= 1 {
 		return nil, errors.New("no art available")
 	}
 	image := images[rand.Intn(target-1)].Attrs()
