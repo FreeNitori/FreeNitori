@@ -261,7 +261,7 @@ func guess(context *multiplexer.Context) {
 		return
 	}
 
-	message := make(chan [2]string)
+	message := make(chan [2]string, 1)
 	sessions[context.Message.ChannelID] = message
 	defer func() { delete(sessions, context.Message.ChannelID) }()
 
