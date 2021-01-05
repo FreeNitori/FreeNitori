@@ -41,13 +41,25 @@ func configure(context *multiplexer.Context) {
 	if len(context.Fields) == 1 {
 		embed := embedutil.NewEmbed("Configurator", "Configure per-guild overrides.")
 		embed.Color = vars.KappaColor
-		embed.AddField("experience", "Toggle experience system enablement.", false)
+		embed.AddField("experience", "Toggle all experience system.", false)
+		embed.AddField("highlight", "Configure message highlighting system.", false)
 		embed.AddField("message", "Configure customizable messages.", false)
 		embed.AddField("prefix", "Configure command prefix.", false)
 		context.SendEmbed(embed)
 		return
 	}
 	switch context.Fields[1] {
+	case "highlight":
+		switch len(context.Fields) {
+		case 3:
+			// TODO: actual configuration stuff
+		case 2:
+			embed := embedutil.NewEmbed("Message highlighting", "Configure message highlighting related stuff.")
+			embed.Color = vars.KappaColor
+			embed.AddField("channel", "Configure channel for highlighted messages.", false)
+			embed.AddField("emote", "Configure emote used for highlighting a message.", false)
+			embed.AddField("trigger", "Configure amount of reactions to trigger highlighting.", false)
+		}
 	case "prefix":
 		switch len(context.Fields) {
 		case 3:
@@ -71,7 +83,7 @@ func configure(context *multiplexer.Context) {
 			}
 			context.SendMessage("Successfully reset prefix.")
 		default:
-			context.SendMessage("Invalid syntax, please check your parameters and try again.")
+			context.SendMessage(vars.InvalidArgument)
 		}
 	case "experience":
 		pre, err := config.ExpToggle(context.Guild.ID)
