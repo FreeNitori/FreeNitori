@@ -59,6 +59,7 @@ func configure(context *multiplexer.Context) {
 			embed.AddField("channel", "Configure channel for highlighted messages.", false)
 			embed.AddField("emote", "Configure emote used for highlighting a message.", false)
 			embed.AddField("trigger", "Configure amount of reactions to trigger highlighting.", false)
+			context.SendEmbed(embed)
 		}
 	case "prefix":
 		switch len(context.Fields) {
