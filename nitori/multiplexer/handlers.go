@@ -7,8 +7,6 @@ var (
 		"Audio related utilities.")
 	ExperienceCategory = NewCategory("Experience",
 		"Chat experience and ranking system.")
-	HighlightCategory = NewCategory("Highlight",
-		"Message highlighting related utilities.")
 	ManualsCategory = NewCategory("Manuals",
 		"The operation manual pager utility.")
 	MediaCategory = NewCategory("Media",
@@ -19,4 +17,4 @@ var (
 		"System-related utilities.")
 )
 
-var Categories = []*CommandCategory{AudioCategory, ExperienceCategory, HighlightCategory, ManualsCategory, MediaCategory, ModerationCategory, SystemCategory}
+var Categories = []*CommandCategory{AudioCategory, ExperienceCategory, ManualsCategory, MediaCategory, ModerationCategory, SystemCategory}

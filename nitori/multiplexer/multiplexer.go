@@ -235,9 +235,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		// Run all the not targeted hooks and leave
 		go func() {
 			for _, hook := range NotTargeted {
-				if function, success := hook.(func(context *Context)); success {
-					function(context)
-				}
+				hook(context)
 			}
 		}()
 		return
@@ -278,9 +276,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 func (mux *Multiplexer) OnGuildMemberAdd(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
 	go func() {
 		for _, hook := range GuildMemberAdd {
-			if function, success := hook.(func(session *discordgo.Session, add *discordgo.GuildMemberAdd)); success {
-				function(session, add)
-			}
+			hook(session, add)
 		}
 	}()
 	return
@@ -290,9 +286,7 @@ func (mux *Multiplexer) OnGuildMemberAdd(session *discordgo.Session, add *discor
 func (mux *Multiplexer) OnGuildMemberRemove(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
 	go func() {
 		for _, hook := range GuildMemberRemove {
-			if function, success := hook.(func(session *discordgo.Session, remove *discordgo.GuildMemberRemove)); success {
-				function(session, remove)
-			}
+			hook(session, remove)
 		}
 	}()
 	return
@@ -302,10 +296,27 @@ func (mux *Multiplexer) OnGuildMemberRemove(session *discordgo.Session, remove *
 func (mux *Multiplexer) OnGuildDelete(session *discordgo.Session, delete *discordgo.GuildDelete) {
 	go func() {
 		for _, hook := range GuildDelete {
-			if function, success := hook.(func(session *discordgo.Session, delete *discordgo.GuildDelete)); success {
-				function(session, delete)
-			}
+			hook(session, delete)
 		}
 	}()
 	return
+}
+
+// Event handler that fires when a reaction is added
+func (mux *Multiplexer) OnMessageReactionAdd(session *discordgo.Session, add *discordgo.MessageReactionAdd) {
+	go func() {
+		for _, hook := range MessageReactionAdd {
+			hook(session, add)
+		}
+	}()
+	return
+}
+
+// Event handler that fires when a reaction is removed
+func (mux *Multiplexer) OnMessageReactionRemove(session *discordgo.Session, remove *discordgo.MessageReactionRemove) {
+	go func() {
+		for _, hook := range MessageReactionRemove {
+			hook(session, remove)
+		}
+	}()
 }
