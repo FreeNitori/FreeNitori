@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-var prefixes = []string{"conf", "exp", "rank", "exp_bl", "lastfm", "ra_metadata"}
+var prefixes = []string{"conf", "exp", "rank", "exp_bl", "lastfm", "ra_metadata", "highlight"}
 var CustomizableMessages = map[string]string{
 	"levelup": "Congratulations $USER on reaching level $LEVEL.",
 }
@@ -42,7 +42,7 @@ func setMessage(gid string, key string, message string) error {
 		return &MessageOutOfBounds{}
 	}
 	if message == "" {
-		return dbVars.Database.HDel("conf."+gid, []string{"message."+key})
+		return dbVars.Database.HDel("conf."+gid, []string{"message." + key})
 	}
 	return dbVars.Database.HSet("conf."+gid, "message."+key, message)
 }
@@ -151,6 +151,35 @@ func ExpToggle(gid string) (pre bool, err error) {
 		err = dbVars.Database.HSet("conf."+gid, "exp_enable", "true")
 	}
 	return
+}
+
+// GetHighlightChannelID sets highlighted messages channel ID
+func GetHighlightChannelID(guild *discordgo.Guild) (int, error) {
+	result, err := dbVars.Database.HGet("conf."+guild.ID, "highlight_channel")
+	if err != nil {
+		if err == badger.ErrKeyNotFound {
+			return 0, nil
+		}
+		return 0, err
+	}
+	if result == "" {
+		return 0, nil
+	}
+	return strconv.Atoi(result)
+}
+
+// SetHighlightChannelID gets highlighted messages channel ID
+func SetHighlightChannelID(guild *discordgo.Guild, channel *discordgo.Channel) error {
+	return dbVars.Database.HSet("conf."+guild.ID, "highlight_channel", channel.ID)
+}
+
+// ResetHighlightChannelID resets highlighted messages channel ID
+func ResetHighlightChannelID(guild *discordgo.Guild) error {
+	err := dbVars.Database.HDel("conf."+guild.ID, []string{"highlight_channel"})
+	if err == badger.ErrKeyNotFound {
+		return nil
+	}
+	return err
 }
 
 // GetMemberExp obtains experience amount of a guild member.

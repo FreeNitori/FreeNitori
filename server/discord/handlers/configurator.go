@@ -1,11 +1,13 @@
 package handlers
 
 import (
+	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/bwmarrin/discordgo"
+	"strconv"
 	"unicode"
 )
 
@@ -52,7 +54,37 @@ func configure(context *multiplexer.Context) {
 	case "highlight":
 		switch len(context.Fields) {
 		case 3:
-			// TODO: actual configuration stuff
+			switch context.Fields[2] {
+			case "channel":
+				embed := embedutil.NewEmbed("Highlight Channel", "Configure channel for highlighted messages.")
+				id, err := config.GetHighlightChannelID(context.Guild)
+				if !context.HandleError(err) {
+					return
+				}
+				if id == 0 {
+					embed.AddField("No channel was configured", fmt.Sprintf("Configure a message by appending channel ID after this command."), false)
+				} else {
+					ok := false
+					for _, channel := range context.Guild.Channels {
+						if strconv.Itoa(id) == channel.ID {
+							ok = true
+							embed.AddField(channel.Name, channel.ID, false)
+							break
+						}
+					}
+					if !ok {
+						if !context.HandleError(config.ResetHighlightChannelID(context.Guild)) {
+							return
+						}
+						embed.AddField("No channel was configured", fmt.Sprintf("Configure a message by appending channel ID after this command."), false)
+					}
+				}
+				context.SendEmbed(embed)
+			case "emote":
+				// TODO: also help message
+			case "trigger":
+				// TODO: even more help message
+			}
 		case 2:
 			embed := embedutil.NewEmbed("Message highlighting", "Configure message highlighting related stuff.")
 			embed.Color = vars.KappaColor
