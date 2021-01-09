@@ -153,6 +153,32 @@ func ExpToggle(gid string) (pre bool, err error) {
 	return
 }
 
+// GetGuildConfValue gets a configuration value for a specific guild
+func GetGuildConfValue(id, key string) (string, error) {
+	result, err := dbVars.Database.HGet("conf."+id, key)
+	if err != nil {
+		if err == badger.ErrKeyNotFound {
+			return "", nil
+		}
+		return "", err
+	}
+	return result, nil
+}
+
+// SetGuildConfValue sets a configuration value for a specific guild
+func SetGuildConfValue(id, key, value string) error {
+	return dbVars.Database.HSet("conf."+id, key, value)
+}
+
+// ResetGuildConfValue resets a configuration value for a specific guild
+func ResetGuildConfValue(id, key string) error {
+	err := dbVars.Database.HDel("conf."+id, []string{key})
+	if err == badger.ErrKeyNotFound {
+		return nil
+	}
+	return err
+}
+
 // GetHighlightChannelID sets highlighted messages channel ID
 func GetHighlightChannelID(guild *discordgo.Guild) (int, error) {
 	result, err := dbVars.Database.HGet("conf."+guild.ID, "highlight_channel")

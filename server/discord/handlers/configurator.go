@@ -31,7 +31,64 @@ func init() {
 	})
 }
 
+var SimpleEntries []SimpleConfigurationEntry
+var ComplexEntries []ComplexConfigurationEntry
+
+type SimpleConfigurationEntry struct {
+	Name        string
+	Description string
+	DatabaseKey string
+	Validator   func(context *multiplexer.Context, input string) bool
+	Formatter   func(context *multiplexer.Context, value string) (string, string)
+}
+
+type ComplexConfigurationEntry struct {
+	Name        string
+	Description string
+	Entries     []SimpleConfigurationEntry
+}
+
 func configure(context *multiplexer.Context) {
+	if context.IsPrivate {
+		context.SendMessage(vars.GuildOnly)
+		return
+	}
+	if !context.HasPermission(discordgo.PermissionAdministrator) {
+		context.SendMessage(vars.PermissionDenied)
+		return
+	}
+	switch len(context.Fields) {
+	case 1:
+		embed := embedutil.NewEmbed("Configurator", "Configure per-guild overrides.")
+		embed.Color = vars.KappaColor
+		for _, entry := range SimpleEntries {
+			embed.AddField(entry.Name, entry.Description, false)
+		}
+		for _, entry := range ComplexEntries {
+			embed.AddField(entry.Name, entry.Description, false)
+		}
+		context.SendEmbed(embed)
+	case 2:
+		for _, entry := range SimpleEntries {
+			if context.Fields[1] == entry.Name {
+				embed := embedutil.NewEmbed(entry.Name, entry.Description)
+				embed.Color = vars.KappaColor
+				value, err := config.GetGuildConfValue(context.Guild.ID, entry.DatabaseKey)
+				if !context.HandleError(err) {
+					return
+				}
+				title, description := entry.Formatter(context, value)
+				embed.AddField(title, description, true)
+				context.SendEmbed(embed)
+				return
+			}
+		}
+	default:
+		context.SendMessage(vars.InvalidArgument)
+	}
+}
+
+func configureOld(context *multiplexer.Context) {
 	if context.IsPrivate {
 		context.SendMessage(vars.GuildOnly)
 		return

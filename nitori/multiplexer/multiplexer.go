@@ -214,7 +214,6 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 					context.HasLeadingMention = true
 				}
 
-				// Remove the pings so our Kappa doesn't get mad
 				context.Content = mentionRegex.ReplaceAllString(context.Content, "")
 
 				break
@@ -255,11 +254,13 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		context.Message.Content)
 
 	// Figure out the route of the message
-	route, fields := mux.MatchRoute(context.Content)
-	if route != nil {
-		context.Fields = fields
-		route.Handler(context)
-		return
+	if !(context.HasMention && !context.HasLeadingMention) {
+		route, fields := mux.MatchRoute(context.Content)
+		if route != nil {
+			context.Fields = fields
+			route.Handler(context)
+			return
+		}
 	}
 
 	// If no command was matched, resort to either being annoyed by the ping or a command not found message
