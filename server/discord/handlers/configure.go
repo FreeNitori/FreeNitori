@@ -34,6 +34,7 @@ func init() {
 			FriendlyName: "Command Prefix",
 			Description:  "Configure command prefix.",
 			DatabaseKey:  "prefix",
+			Cleanup:      func(context *multiplexer.Context) {},
 			Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
 
 				// Does not exceed length of 16
@@ -60,6 +61,7 @@ func init() {
 			FriendlyName: "Chat Experience System",
 			Description:  "Toggle chat experience system.",
 			DatabaseKey:  "exp_enable",
+			Cleanup:      func(context *multiplexer.Context) {},
 			Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
 				if *input != "toggle" {
 					return false, true
@@ -81,7 +83,7 @@ func init() {
 				if !context.HandleError(err) {
 					return "", "", false
 				}
-				description := fmt.Sprintf("Toggle with `%sconf experience toggle`.", context.GenerateGuildPrefix())
+				description := fmt.Sprintf("Toggle by issuing command `%sconf experience toggle`.", context.Prefix())
 				switch pre {
 				case true:
 					return "Chat experience system enabled", description, true
@@ -90,6 +92,38 @@ func init() {
 				}
 				return "", "", false
 			},
+		})
+	ComplexEntries = append(ComplexEntries,
+		ComplexConfigurationEntry{
+			Name:         "highlight",
+			FriendlyName: "Message Highlighting",
+			Description:  "Configure message highlighting system.",
+			Entries: []SimpleConfigurationEntry{
+				{
+					Name:         "channel",
+					FriendlyName: "Highlighted Message Channel",
+					Description:  "Channel highlighted messages are posted to.",
+					DatabaseKey:  "highlight_channel",
+					Cleanup: func(context *multiplexer.Context) {
+						// TODO: delete all message references
+					},
+					Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
+						for _, channel := range context.Guild.Channels {
+							if *input == channel.ID {
+								return true, true
+							}
+						}
+						return false, true
+					},
+					Format: func(context *multiplexer.Context, value string) (string, string, bool) {
+						for _, channel := range context.Guild.Channels {
+							if value == channel.ID {
+								return channel.Name, channel.ID, true
+							}
+						}
+						return "No channel configured", fmt.Sprintf("Configure it by issuing command `%sconf highlight channel <channelID>`.", context.Prefix()), true
+					},
+				}},
 		})
 	CustomEntries = append(CustomEntries,
 		CustomConfigurationEntry{
@@ -145,6 +179,7 @@ type SimpleConfigurationEntry struct {
 	FriendlyName string
 	Description  string
 	DatabaseKey  string
+	Cleanup      func(context *multiplexer.Context)
 	Validate     func(context *multiplexer.Context, input *string) (bool, bool)
 	Format       func(context *multiplexer.Context, value string) (string, string, bool)
 }
@@ -237,6 +272,7 @@ func configure(context *multiplexer.Context) {
 					if !context.HandleError(err) {
 						return
 					}
+					entry.Cleanup(context)
 					context.SendMessage(fmt.Sprintf("Successfully reset value of `%s`.", entry.DatabaseKey))
 					return
 				}
@@ -277,11 +313,12 @@ func configure(context *multiplexer.Context) {
 							context.SendEmbed(embed)
 							return
 						} else {
-							if context.Fields[2] == "reset" {
+							if context.Fields[3] == "reset" {
 								err := config.ResetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey)
 								if !context.HandleError(err) {
 									return
 								}
+								subEntry.Cleanup(context)
 								context.SendMessage(fmt.Sprintf("Successfully reset value of `%s`.", subEntry.DatabaseKey))
 								return
 							}

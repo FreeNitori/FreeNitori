@@ -197,7 +197,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	}
 
 	// Get guild-specific prefix
-	guildPrefix := context.GenerateGuildPrefix()
+	guildPrefix := context.Prefix()
 
 	// Figure out if the Kappa got pinged
 	if !context.IsTargeted {

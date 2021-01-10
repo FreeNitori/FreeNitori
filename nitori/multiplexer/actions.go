@@ -138,7 +138,7 @@ func (context *Context) StitchFields(start int) string {
 }
 
 // GenerateGuildPrefix returns the command prefix of a context.
-func (context *Context) GenerateGuildPrefix() string {
+func (context *Context) Prefix() string {
 	switch context.IsPrivate {
 	case true:
 		return config.Config.System.Prefix
