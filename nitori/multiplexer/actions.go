@@ -130,7 +130,7 @@ func (context *Context) GetMember(user string) *discordgo.Member {
 
 // StitchFields stitches together fields of the message.
 func (context *Context) StitchFields(start int) string {
-	message := context.Fields[1]
+	message := context.Fields[start]
 	for i := start + 1; i < len(context.Fields); i++ {
 		message += " " + context.Fields[i]
 	}

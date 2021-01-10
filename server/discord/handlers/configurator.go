@@ -7,7 +7,6 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/bwmarrin/discordgo"
-	"strconv"
 	"unicode"
 )
 
@@ -29,23 +28,138 @@ func init() {
 	multiplexer.GuildDelete = append(multiplexer.GuildDelete, func(session *discordgo.Session, delete *discordgo.GuildDelete) {
 		config.ResetGuild(delete.ID)
 	})
+	SimpleEntries = append(SimpleEntries,
+		SimpleConfigurationEntry{
+			Name:         "prefix",
+			FriendlyName: "Command Prefix",
+			Description:  "Configure command prefix.",
+			DatabaseKey:  "prefix",
+			Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
+
+				// Does not exceed length of 16
+				if len(*input) > 16 {
+					return false, true
+				}
+
+				// Add a space if last character is a letter
+				if unicode.IsLetter([]rune((*input)[len(*input)-1:])[0]) {
+					*input += " "
+				}
+
+				return true, true
+			},
+			Format: func(context *multiplexer.Context, value string) (string, string, bool) {
+				if value == "" {
+					return "Current prefix", config.Config.System.Prefix, true
+				}
+				return "Current prefix", value, true
+			},
+		},
+		SimpleConfigurationEntry{
+			Name:         "experience",
+			FriendlyName: "Chat Experience System",
+			Description:  "Toggle chat experience system.",
+			DatabaseKey:  "exp_enable",
+			Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
+				if *input != "toggle" {
+					return false, true
+				}
+				pre, err := config.ExpEnabled(context.Guild.ID)
+				if !context.HandleError(err) {
+					return true, false
+				}
+				switch pre {
+				case true:
+					*input = "false"
+				case false:
+					*input = "true"
+				}
+				return true, true
+			},
+			Format: func(context *multiplexer.Context, value string) (string, string, bool) {
+				pre, err := config.ExpEnabled(context.Guild.ID)
+				if !context.HandleError(err) {
+					return "", "", false
+				}
+				description := fmt.Sprintf("Toggle with `%sconf experience toggle`.", context.GenerateGuildPrefix())
+				switch pre {
+				case true:
+					return "Chat experience system enabled", description, true
+				case false:
+					return "Chat experience system disabled", description, true
+				}
+				return "", "", false
+			},
+		})
+	CustomEntries = append(CustomEntries,
+		CustomConfigurationEntry{
+			Name:        "message",
+			Description: "Configure custom messages.",
+			Handler: func(context *multiplexer.Context) {
+				switch len(context.Fields) {
+				default:
+					err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], context.StitchFields(3))
+					switch err.(type) {
+					default:
+						if !context.HandleError(err) {
+							return
+						}
+					case *config.MessageOutOfBounds:
+						context.SendMessage(vars.InvalidArgument)
+						return
+					}
+					context.SendMessage("Message `" + context.Fields[2] + "` has been set.")
+				case 3:
+					err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], "")
+					switch err.(type) {
+					default:
+						if !context.HandleError(err) {
+							return
+						}
+					case *config.MessageOutOfBounds:
+						context.SendMessage(vars.InvalidArgument)
+						return
+					}
+					context.SendMessage("Message `" + context.Fields[2] + "` has been reset.")
+				case 2:
+					embed := embedutil.NewEmbed("Messages", "Configurable messages.")
+					for identifier := range config.CustomizableMessages {
+						message, err := config.GetCustomizableMessage(context.Guild.ID, identifier)
+						if !context.HandleError(err) {
+							return
+						}
+						embed.AddField(identifier, message, false)
+					}
+					context.SendEmbed(embed)
+				}
+			},
+		})
 }
 
 var SimpleEntries []SimpleConfigurationEntry
 var ComplexEntries []ComplexConfigurationEntry
+var CustomEntries []CustomConfigurationEntry
 
 type SimpleConfigurationEntry struct {
-	Name        string
-	Description string
-	DatabaseKey string
-	Validator   func(context *multiplexer.Context, input string) bool
-	Formatter   func(context *multiplexer.Context, value string) (string, string)
+	Name         string
+	FriendlyName string
+	Description  string
+	DatabaseKey  string
+	Validate     func(context *multiplexer.Context, input *string) (bool, bool)
+	Format       func(context *multiplexer.Context, value string) (string, string, bool)
 }
 
 type ComplexConfigurationEntry struct {
+	Name         string
+	FriendlyName string
+	Description  string
+	Entries      []SimpleConfigurationEntry
+}
+
+type CustomConfigurationEntry struct {
 	Name        string
 	Description string
-	Entries     []SimpleConfigurationEntry
+	Handler     func(context *multiplexer.Context)
 }
 
 func configure(context *multiplexer.Context) {
@@ -57,7 +171,7 @@ func configure(context *multiplexer.Context) {
 		context.SendMessage(vars.PermissionDenied)
 		return
 	}
-	switch len(context.Fields) {
+	switch length := len(context.Fields); length {
 	case 1:
 		embed := embedutil.NewEmbed("Configurator", "Configure per-guild overrides.")
 		embed.Color = vars.KappaColor
@@ -67,161 +181,131 @@ func configure(context *multiplexer.Context) {
 		for _, entry := range ComplexEntries {
 			embed.AddField(entry.Name, entry.Description, false)
 		}
+		for _, entry := range CustomEntries {
+			embed.AddField(entry.Name, entry.Description, false)
+		}
 		context.SendEmbed(embed)
 	case 2:
 		for _, entry := range SimpleEntries {
 			if context.Fields[1] == entry.Name {
-				embed := embedutil.NewEmbed(entry.Name, entry.Description)
+				embed := embedutil.NewEmbed(entry.FriendlyName, entry.Description)
 				embed.Color = vars.KappaColor
 				value, err := config.GetGuildConfValue(context.Guild.ID, entry.DatabaseKey)
 				if !context.HandleError(err) {
 					return
 				}
-				title, description := entry.Formatter(context, value)
+				title, description, ok := entry.Format(context, value)
+				if !ok {
+					return
+				}
 				embed.AddField(title, description, true)
 				context.SendEmbed(embed)
 				return
 			}
 		}
-	default:
-		context.SendMessage(vars.InvalidArgument)
-	}
-}
-
-func configureOld(context *multiplexer.Context) {
-	if context.IsPrivate {
-		context.SendMessage(vars.GuildOnly)
-		return
-	}
-	if !context.HasPermission(discordgo.PermissionAdministrator) {
-		context.SendMessage(vars.PermissionDenied)
-		return
-	}
-	if len(context.Fields) == 1 {
-		embed := embedutil.NewEmbed("Configurator", "Configure per-guild overrides.")
-		embed.Color = vars.KappaColor
-		embed.AddField("experience", "Toggle all experience system.", false)
-		embed.AddField("highlight", "Configure message highlighting system.", false)
-		embed.AddField("message", "Configure customizable messages.", false)
-		embed.AddField("prefix", "Configure command prefix.", false)
-		context.SendEmbed(embed)
-		return
-	}
-	switch context.Fields[1] {
-	case "highlight":
-		switch len(context.Fields) {
-		case 3:
-			switch context.Fields[2] {
-			case "channel":
-				embed := embedutil.NewEmbed("Highlight Channel", "Configure channel for highlighted messages.")
-				id, err := config.GetHighlightChannelID(context.Guild)
-				if !context.HandleError(err) {
-					return
-				}
-				if id == 0 {
-					embed.AddField("No channel was configured", fmt.Sprintf("Configure a message by appending channel ID after this command."), false)
-				} else {
-					ok := false
-					for _, channel := range context.Guild.Channels {
-						if strconv.Itoa(id) == channel.ID {
-							ok = true
-							embed.AddField(channel.Name, channel.ID, false)
-							break
-						}
-					}
-					if !ok {
-						if !context.HandleError(config.ResetHighlightChannelID(context.Guild)) {
-							return
-						}
-						embed.AddField("No channel was configured", fmt.Sprintf("Configure a message by appending channel ID after this command."), false)
-					}
+		for _, entry := range ComplexEntries {
+			if context.Fields[1] == entry.Name {
+				embed := embedutil.NewEmbed(entry.FriendlyName, entry.Description)
+				embed.Color = vars.KappaColor
+				for _, subEntry := range entry.Entries {
+					embed.AddField(subEntry.Name, subEntry.Description, false)
 				}
 				context.SendEmbed(embed)
-			case "emote":
-				// TODO: also help message
-			case "trigger":
-				// TODO: even more help message
+				return
 			}
-		case 2:
-			embed := embedutil.NewEmbed("Message highlighting", "Configure message highlighting related stuff.")
-			embed.Color = vars.KappaColor
-			embed.AddField("channel", "Configure channel for highlighted messages.", false)
-			embed.AddField("emote", "Configure emote used for highlighting a message.", false)
-			embed.AddField("trigger", "Configure amount of reactions to trigger highlighting.", false)
-			context.SendEmbed(embed)
 		}
-	case "prefix":
-		switch len(context.Fields) {
-		case 3:
-			var newPrefix = context.Fields[2]
+		fallthrough
+	default:
+		if length > 1 {
+			for _, entry := range CustomEntries {
+				if context.Fields[1] == entry.Name {
+					entry.Handler(context)
+					return
+				}
+			}
+		}
 
-			// Add a space if last character is a letter
-			if unicode.IsLetter([]rune(newPrefix[len(newPrefix)-1:])[0]) {
-				newPrefix += " "
-			}
-
-			// Actually set the prefix
-			err = config.SetPrefix(context.Guild.ID, newPrefix)
-			if !context.HandleError(err) {
-				return
-			}
-			context.SendMessage("Successfully updated prefix.")
-		case 2:
-			err = config.ResetPrefix(context.Guild.ID)
-			if !context.HandleError(err) {
-				return
-			}
-			context.SendMessage("Successfully reset prefix.")
-		default:
+		if length < 3 {
 			context.SendMessage(vars.InvalidArgument)
-		}
-	case "experience":
-		pre, err := config.ExpToggle(context.Guild.ID)
-		if !context.HandleError(err) {
 			return
 		}
-		switch pre {
-		case false:
-			context.SendMessage("Chat experience system has been enabled.")
-		case true:
-			context.SendMessage("Chat experience system has been disabled.")
-		}
-	case "message":
-		switch len(context.Fields) {
-		default:
-			err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], context.StitchFields(3))
-			switch err.(type) {
-			default:
+
+		for _, entry := range SimpleEntries {
+			if context.Fields[1] == entry.Name {
+				if context.Fields[2] == "reset" {
+					err := config.ResetGuildConfValue(context.Guild.ID, entry.DatabaseKey)
+					if !context.HandleError(err) {
+						return
+					}
+					context.SendMessage(fmt.Sprintf("Successfully reset value of `%s`.", entry.DatabaseKey))
+					return
+				}
+				input := context.StitchFields(2)
+				valid, ok := entry.Validate(context, &input)
+				if !ok {
+					return
+				}
+				if !valid {
+					context.SendMessage(vars.InvalidArgument)
+					return
+				}
+				err := config.SetGuildConfValue(context.Guild.ID, entry.DatabaseKey, input)
 				if !context.HandleError(err) {
 					return
 				}
-			case *config.MessageOutOfBounds:
-				context.SendMessage(vars.InvalidArgument)
+				context.SendMessage(fmt.Sprintf("Successfully set value of `%s` to `%s`.", entry.Name, input))
 				return
 			}
-			context.SendMessage("Message `" + context.Fields[2] + "` has been set.")
-		case 3:
-			err := config.SetCustomizableMessage(context.Guild.ID, context.Fields[2], "")
-			switch err.(type) {
-			default:
-				if !context.HandleError(err) {
-					return
-				}
-			case *config.MessageOutOfBounds:
-				context.SendMessage(vars.InvalidArgument)
-				return
-			}
-			context.SendMessage("Message `" + context.Fields[2] + "` has been reset.")
-		case 2:
-			embed := embedutil.NewEmbed("Messages", "Configurable messages.")
-			for identifier := range config.CustomizableMessages {
-				message, err := config.GetCustomizableMessage(context.Guild.ID, identifier)
-				if !context.HandleError(err) {
-					return
-				}
-				embed.AddField(identifier, message, false)
-			}
-			context.SendEmbed(embed)
 		}
+
+		for _, entry := range ComplexEntries {
+			if context.Fields[1] == entry.Name {
+				for _, subEntry := range entry.Entries {
+					if context.Fields[2] == subEntry.Name {
+						if len(context.Fields) == 3 {
+							embed := embedutil.NewEmbed(subEntry.FriendlyName, subEntry.Description)
+							embed.Color = vars.KappaColor
+							value, err := config.GetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey)
+							if !context.HandleError(err) {
+								return
+							}
+							title, description, ok := subEntry.Format(context, value)
+							if !ok {
+								return
+							}
+							embed.AddField(title, description, true)
+							context.SendEmbed(embed)
+							return
+						} else {
+							if context.Fields[2] == "reset" {
+								err := config.ResetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey)
+								if !context.HandleError(err) {
+									return
+								}
+								context.SendMessage(fmt.Sprintf("Successfully reset value of `%s`.", subEntry.DatabaseKey))
+								return
+							}
+							input := context.StitchFields(3)
+							valid, ok := subEntry.Validate(context, &input)
+							if !ok {
+								return
+							}
+							if !valid {
+								context.SendMessage(vars.InvalidArgument)
+								return
+							}
+							err := config.SetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey, input)
+							if !context.HandleError(err) {
+								return
+							}
+							context.SendMessage(fmt.Sprintf("Successfully set value of `%s.%s` to `%s`.", entry.Name, subEntry.Name, input))
+							return
+						}
+					}
+				}
+				break
+			}
+		}
+		context.SendMessage(vars.InvalidArgument)
 	}
 }

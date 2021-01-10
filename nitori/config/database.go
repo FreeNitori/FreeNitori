@@ -115,16 +115,6 @@ func GetPrefix(gid string) string {
 	return prefix
 }
 
-// SetPrefix sets the command prefix of a guild.
-func SetPrefix(gid string, prefix string) error {
-	return dbVars.Database.HSet("conf."+gid, "prefix", prefix)
-}
-
-// ResetPrefix resets the command prefix of a guild.
-func ResetPrefix(gid string) error {
-	return dbVars.Database.HDel("conf."+gid, []string{"prefix"})
-}
-
 // ExpEnabled queries whether the experience system is enabled for a guild.
 func ExpEnabled(gid string) (enabled bool, err error) {
 	result, err := dbVars.Database.HGet("conf."+gid, "exp_enable")
@@ -138,18 +128,6 @@ func ExpEnabled(gid string) (enabled bool, err error) {
 		return false, nil
 	}
 	enabled, err = strconv.ParseBool(result)
-	return
-}
-
-// ExpToggle toggles the experience system enabler.
-func ExpToggle(gid string) (pre bool, err error) {
-	pre, err = ExpEnabled(gid)
-	switch pre {
-	case true:
-		err = dbVars.Database.HSet("conf."+gid, "exp_enable", "false")
-	case false:
-		err = dbVars.Database.HSet("conf."+gid, "exp_enable", "true")
-	}
 	return
 }
 
@@ -173,35 +151,6 @@ func SetGuildConfValue(id, key, value string) error {
 // ResetGuildConfValue resets a configuration value for a specific guild
 func ResetGuildConfValue(id, key string) error {
 	err := dbVars.Database.HDel("conf."+id, []string{key})
-	if err == badger.ErrKeyNotFound {
-		return nil
-	}
-	return err
-}
-
-// GetHighlightChannelID sets highlighted messages channel ID
-func GetHighlightChannelID(guild *discordgo.Guild) (int, error) {
-	result, err := dbVars.Database.HGet("conf."+guild.ID, "highlight_channel")
-	if err != nil {
-		if err == badger.ErrKeyNotFound {
-			return 0, nil
-		}
-		return 0, err
-	}
-	if result == "" {
-		return 0, nil
-	}
-	return strconv.Atoi(result)
-}
-
-// SetHighlightChannelID gets highlighted messages channel ID
-func SetHighlightChannelID(guild *discordgo.Guild, channel *discordgo.Channel) error {
-	return dbVars.Database.HSet("conf."+guild.ID, "highlight_channel", channel.ID)
-}
-
-// ResetHighlightChannelID resets highlighted messages channel ID
-func ResetHighlightChannelID(guild *discordgo.Guild) error {
-	err := dbVars.Database.HDel("conf."+guild.ID, []string{"highlight_channel"})
 	if err == badger.ErrKeyNotFound {
 		return nil
 	}
