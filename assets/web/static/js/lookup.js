@@ -8,18 +8,17 @@ function lookup(snowflake) {
     let userInfo = fetchJSON("http://localhost:7777/api/user/" + snowflake)
     userInfo.then(function (data) {
 
+        let userData = document.getElementById("result");
+        let ul = document.createElement("ul");
 
-    let userData = document.getElementById("result");  
-    let ul = document.createElement("ul");
+        for (i in data) {
+            let li = document.createElement("LI");
+            let userText = document.createTextNode(data[i]);
+            li.appendChild(userText);
+            ul.appendChild(li);
+        }
 
-for(i in data){
-let li = document.createElement("LI");
-let userText = document.createTextNode(data[i]);
-li.appendChild(userText);
-ul.appendChild(li);
-}
-
-userData.appendChild(ul);
+        userData.appendChild(ul);
 
     })
 }
