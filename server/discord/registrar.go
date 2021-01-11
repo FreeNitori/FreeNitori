@@ -4,6 +4,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	_ "git.randomchars.net/RandomChars/FreeNitori/nitori/routes"
 	_ "git.randomchars.net/RandomChars/FreeNitori/server/discord/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 )
