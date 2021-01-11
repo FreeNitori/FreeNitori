@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/emoji"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/overrides"
 	"github.com/bwmarrin/discordgo"
-	"regexp"
 	"unicode/utf8"
 )
-
-var emojiRegex = regexp.MustCompile(`[\x{1F300}-\x{1F6FF}]`)
 
 func init() {
 	multiplexer.MessageReactionAdd = append(multiplexer.MessageReactionAdd, addReaction)
@@ -26,12 +24,11 @@ func init() {
 				FriendlyName: "Highlighted Message Channel",
 				Description:  "Channel highlighted messages are posted to.",
 				DatabaseKey:  "highlight_channel",
-				Cleanup: func(context *multiplexer.Context) {
-					// TODO: delete all message references
-				},
+				Cleanup:      func(context *multiplexer.Context) { config.ResetGuildMap(context.Guild.ID, "highlight") },
 				Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
 					for _, channel := range context.Guild.Channels {
 						if *input == channel.ID {
+							config.ResetGuildMap(context.Guild.ID, "highlight")
 							return true, true
 						}
 					}
@@ -51,7 +48,7 @@ func init() {
 				FriendlyName: "Emoji",
 				Description:  "Emoji used to vote the message.",
 				DatabaseKey:  "highlight_emoji",
-				Cleanup:      func(context *multiplexer.Context) {},
+				Cleanup:      func(context *multiplexer.Context) { config.ResetGuildMap(context.Guild.ID, "highlight") },
 				Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
 					if utf8.RuneCountInString(*input) != 1 {
 						return false, true
@@ -61,6 +58,9 @@ func init() {
 						key += fmt.Sprintf("%X", r)
 					}
 					_, ok := emoji.Emojis[key]
+					if ok {
+						config.ResetGuildMap(context.Guild.ID, "highlight")
+					}
 					return ok, true
 				},
 				Format: func(context *multiplexer.Context, value string) (string, string, bool) {
@@ -74,12 +74,12 @@ func init() {
 	})
 }
 
-func addReaction(session *discordgo.Session, add *discordgo.MessageReactionAdd) {
-	channelID, err := config.GetGuildConfValue(add.GuildID, "highlight_channel")
+func processReaction(session *discordgo.Session, reaction *discordgo.MessageReaction) {
+	channelID, err := config.GetGuildConfValue(reaction.GuildID, "highlight_channel")
 	if err != nil {
 		return
 	}
-	guild, err := session.State.Guild(add.GuildID)
+	guild, err := session.State.Guild(reaction.GuildID)
 	if err != nil {
 		return
 	}
@@ -93,30 +93,25 @@ func addReaction(session *discordgo.Session, add *discordgo.MessageReactionAdd) 
 	if channel == nil {
 		return
 	}
-	if add.Emoji.ID != "null" {
+	if reaction.Emoji.ID != "null" {
 		return
 	}
-	// TODO: check for emote
+	e, err := config.GetGuildConfValue(guild.ID, "highlight_emoji")
+	if err != nil {
+		return
+	}
+	if reaction.Emoji.Name != e {
+		return
+	}
+	log.Info(reaction.Emoji.Name)
+}
+
+func addReaction(session *discordgo.Session, add *discordgo.MessageReactionAdd) {
+	processReaction(session, interface{}(add).(*discordgo.MessageReaction))
+	// TODO: handler thing
 }
 
 func removeReaction(session *discordgo.Session, remove *discordgo.MessageReactionRemove) {
-	channelID, err := config.GetGuildConfValue(remove.GuildID, "highlight_channel")
-	if err != nil {
-		return
-	}
-	guild, err := session.State.Guild(remove.GuildID)
-	if err != nil {
-		return
-	}
-	var channel *discordgo.Channel
-	for _, c := range guild.Channels {
-		if channelID == c.ID {
-			channel = c
-			break
-		}
-	}
-	if channel == nil {
-		return
-	}
-	// TODO: check for emote
+	processReaction(session, interface{}(remove).(*discordgo.MessageReaction))
+	// TODO: handler thing
 }

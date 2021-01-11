@@ -27,6 +27,18 @@ func ResetGuild(gid string) {
 	}
 }
 
+// ResetGuildMap deletes a map that belongs to a specific guild.
+func ResetGuildMap(gid, key string) {
+	err := dbVars.Database.HDel(fmt.Sprintf("%s.%s", key, gid), []string{})
+	if err != nil {
+		if err == badger.ErrKeyNotFound {
+			return
+		}
+		log.Errorf("Error while resetting guild %s key %s, %s", gid, fmt.Sprintf("%s.%s", key, gid), err)
+	}
+
+}
+
 // getMessage gets a guild-specific string.
 func getMessage(gid string, key string) (string, error) {
 	message, err := dbVars.Database.HGet("conf."+gid, "message."+key)
