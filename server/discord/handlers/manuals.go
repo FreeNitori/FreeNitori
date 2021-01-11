@@ -19,7 +19,7 @@ func init() {
 }
 
 func manuals(context *multiplexer.Context) {
-	guildPrefix := context.GenerateGuildPrefix()
+	guildPrefix := context.Prefix()
 
 	switch {
 	case len(context.Fields) == 1:

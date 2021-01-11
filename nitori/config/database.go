@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-var prefixes = []string{"conf", "exp", "rank", "exp_bl", "lastfm", "ra_metadata"}
+var prefixes = []string{"conf", "exp", "rank", "exp_bl", "lastfm", "ra_metadata", "highlight"}
 var CustomizableMessages = map[string]string{
 	"levelup": "Congratulations $USER on reaching level $LEVEL.",
 }
@@ -42,7 +42,7 @@ func setMessage(gid string, key string, message string) error {
 		return &MessageOutOfBounds{}
 	}
 	if message == "" {
-		return dbVars.Database.HDel("conf."+gid, []string{"message."+key})
+		return dbVars.Database.HDel("conf."+gid, []string{"message." + key})
 	}
 	return dbVars.Database.HSet("conf."+gid, "message."+key, message)
 }
@@ -115,16 +115,6 @@ func GetPrefix(gid string) string {
 	return prefix
 }
 
-// SetPrefix sets the command prefix of a guild.
-func SetPrefix(gid string, prefix string) error {
-	return dbVars.Database.HSet("conf."+gid, "prefix", prefix)
-}
-
-// ResetPrefix resets the command prefix of a guild.
-func ResetPrefix(gid string) error {
-	return dbVars.Database.HDel("conf."+gid, []string{"prefix"})
-}
-
 // ExpEnabled queries whether the experience system is enabled for a guild.
 func ExpEnabled(gid string) (enabled bool, err error) {
 	result, err := dbVars.Database.HGet("conf."+gid, "exp_enable")
@@ -141,16 +131,30 @@ func ExpEnabled(gid string) (enabled bool, err error) {
 	return
 }
 
-// ExpToggle toggles the experience system enabler.
-func ExpToggle(gid string) (pre bool, err error) {
-	pre, err = ExpEnabled(gid)
-	switch pre {
-	case true:
-		err = dbVars.Database.HSet("conf."+gid, "exp_enable", "false")
-	case false:
-		err = dbVars.Database.HSet("conf."+gid, "exp_enable", "true")
+// GetGuildConfValue gets a configuration value for a specific guild
+func GetGuildConfValue(id, key string) (string, error) {
+	result, err := dbVars.Database.HGet("conf."+id, key)
+	if err != nil {
+		if err == badger.ErrKeyNotFound {
+			return "", nil
+		}
+		return "", err
 	}
-	return
+	return result, nil
+}
+
+// SetGuildConfValue sets a configuration value for a specific guild
+func SetGuildConfValue(id, key, value string) error {
+	return dbVars.Database.HSet("conf."+id, key, value)
+}
+
+// ResetGuildConfValue resets a configuration value for a specific guild
+func ResetGuildConfValue(id, key string) error {
+	err := dbVars.Database.HDel("conf."+id, []string{key})
+	if err == badger.ErrKeyNotFound {
+		return nil
+	}
+	return err
 }
 
 // GetMemberExp obtains experience amount of a guild member.

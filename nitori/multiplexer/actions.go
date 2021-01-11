@@ -130,7 +130,7 @@ func (context *Context) GetMember(user string) *discordgo.Member {
 
 // StitchFields stitches together fields of the message.
 func (context *Context) StitchFields(start int) string {
-	message := context.Fields[1]
+	message := context.Fields[start]
 	for i := start + 1; i < len(context.Fields); i++ {
 		message += " " + context.Fields[i]
 	}
@@ -138,7 +138,7 @@ func (context *Context) StitchFields(start int) string {
 }
 
 // GenerateGuildPrefix returns the command prefix of a context.
-func (context *Context) GenerateGuildPrefix() string {
+func (context *Context) Prefix() string {
 	switch context.IsPrivate {
 	case true:
 		return config.Config.System.Prefix

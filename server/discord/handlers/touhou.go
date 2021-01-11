@@ -176,12 +176,13 @@ func init() {
 }
 
 func fetch(character CharacterInfo) (*CharacterArt, error) {
-	response, err := soup.Get("https://gelbooru.com/index.php?page=dapi&s=post&q=index&" +
-		"tags=solo+-underwear+-sideboob+-pov_feet+-underboob+-upskirt+-" +
-		"sexually_suggestive+-ass+-bikini+-6%2Bgirls+-comic+-greyscale+-" +
-		"huge_filesize+-lovestruck+-absurdres+-artificial_vagina+-" +
-		"covering_breasts+-huge_breasts+-blood+-penetration_gesture+-" +
-		"animated+-audio+-webm+rating:safe+" + character.SearchString)
+	response, err := soup.Get(
+		"https://gelbooru.com/index.php?page=dapi&s=post&q=index&" +
+			"tags=solo+-underwear+-sideboob+-pov_feet+-underboob+-upskirt+-" +
+			"sexually_suggestive+-ass+-bikini+-6%2Bgirls+-comic+-greyscale+-" +
+			"huge_filesize+-lovestruck+-absurdres+-artificial_vagina+-cookie_%28touhou%29+-" +
+			"covering_breasts+-huge_breasts+-blood+-penetration_gesture+-" +
+			"animated+-audio+-webm+rating:safe+" + character.SearchString)
 	if err != nil {
 		return nil, err
 	}

@@ -197,7 +197,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 	}
 
 	// Get guild-specific prefix
-	guildPrefix := context.GenerateGuildPrefix()
+	guildPrefix := context.Prefix()
 
 	// Figure out if the Kappa got pinged
 	if !context.IsTargeted {
@@ -214,7 +214,6 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 					context.HasLeadingMention = true
 				}
 
-				// Remove the pings so our Kappa doesn't get mad
 				context.Content = mentionRegex.ReplaceAllString(context.Content, "")
 
 				break
@@ -235,9 +234,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		// Run all the not targeted hooks and leave
 		go func() {
 			for _, hook := range NotTargeted {
-				if function, success := hook.(func(context *Context)); success {
-					function(context)
-				}
+				hook(context)
 			}
 		}()
 		return
@@ -257,11 +254,13 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 		context.Message.Content)
 
 	// Figure out the route of the message
-	route, fields := mux.MatchRoute(context.Content)
-	if route != nil {
-		context.Fields = fields
-		route.Handler(context)
-		return
+	if !(context.HasMention && !context.HasLeadingMention) {
+		route, fields := mux.MatchRoute(context.Content)
+		if route != nil {
+			context.Fields = fields
+			route.Handler(context)
+			return
+		}
 	}
 
 	// If no command was matched, resort to either being annoyed by the ping or a command not found message
@@ -278,9 +277,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 func (mux *Multiplexer) OnGuildMemberAdd(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
 	go func() {
 		for _, hook := range GuildMemberAdd {
-			if function, success := hook.(func(session *discordgo.Session, add *discordgo.GuildMemberAdd)); success {
-				function(session, add)
-			}
+			hook(session, add)
 		}
 	}()
 	return
@@ -290,9 +287,7 @@ func (mux *Multiplexer) OnGuildMemberAdd(session *discordgo.Session, add *discor
 func (mux *Multiplexer) OnGuildMemberRemove(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
 	go func() {
 		for _, hook := range GuildMemberRemove {
-			if function, success := hook.(func(session *discordgo.Session, remove *discordgo.GuildMemberRemove)); success {
-				function(session, remove)
-			}
+			hook(session, remove)
 		}
 	}()
 	return
@@ -302,10 +297,27 @@ func (mux *Multiplexer) OnGuildMemberRemove(session *discordgo.Session, remove *
 func (mux *Multiplexer) OnGuildDelete(session *discordgo.Session, delete *discordgo.GuildDelete) {
 	go func() {
 		for _, hook := range GuildDelete {
-			if function, success := hook.(func(session *discordgo.Session, delete *discordgo.GuildDelete)); success {
-				function(session, delete)
-			}
+			hook(session, delete)
 		}
 	}()
 	return
+}
+
+// Event handler that fires when a reaction is added
+func (mux *Multiplexer) OnMessageReactionAdd(session *discordgo.Session, add *discordgo.MessageReactionAdd) {
+	go func() {
+		for _, hook := range MessageReactionAdd {
+			hook(session, add)
+		}
+	}()
+	return
+}
+
+// Event handler that fires when a reaction is removed
+func (mux *Multiplexer) OnMessageReactionRemove(session *discordgo.Session, remove *discordgo.MessageReactionRemove) {
+	go func() {
+		for _, hook := range MessageReactionRemove {
+			hook(session, remove)
+		}
+	}()
 }

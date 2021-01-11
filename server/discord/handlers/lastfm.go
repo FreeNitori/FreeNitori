@@ -70,7 +70,7 @@ func fm(context *multiplexer.Context) {
 	p := lastfm.P{"user": username, "limit": 1, "extended": 0}
 	result, err := vars.LastFM.User.GetRecentTracks(p)
 	if err != nil {
-		context.SendMessage("Please set your lastfm username `" + context.GenerateGuildPrefix() + "fm set <username>`.")
+		context.SendMessage("Please set your lastfm username `" + context.Prefix() + "fm set <username>`.")
 		return
 	}
 	if len(result.Tracks) < 1 {

@@ -79,7 +79,7 @@ func about(context *multiplexer.Context) {
 		embed.AddField("Operators", usernames, true)
 	}
 	embed.SetThumbnail(context.Session.State.User.AvatarURL("256"))
-	embed.SetFooter("A Discord utility by RandomChars", "https://static.randomchars.net/img/RandomChars.png")
+	embed.SetFooter("FreeNitori Backend", "https://freenitori.jp/static/icon.min.png")
 	context.SendEmbed(embed)
 }
 
