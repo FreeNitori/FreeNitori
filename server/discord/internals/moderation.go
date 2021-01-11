@@ -1,4 +1,4 @@
-package handlers
+package internals
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
