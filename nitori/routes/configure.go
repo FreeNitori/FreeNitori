@@ -174,7 +174,7 @@ func configure(context *multiplexer.Context) {
 						return
 					}
 					entry.Cleanup(context)
-					context.SendMessage(fmt.Sprintf("Successfully reset value of `%s`.", entry.DatabaseKey))
+					context.SendMessage(fmt.Sprintf("Successfully reset value of `%s`.", entry.Name))
 					return
 				}
 				input := context.StitchFields(2)
@@ -220,7 +220,7 @@ func configure(context *multiplexer.Context) {
 									return
 								}
 								subEntry.Cleanup(context)
-								context.SendMessage(fmt.Sprintf("Successfully reset value of `%s`.", subEntry.DatabaseKey))
+								context.SendMessage(fmt.Sprintf("Successfully reset value of `%s.%s`.", entry.Name, subEntry.Name))
 								return
 							}
 							input := context.StitchFields(3)

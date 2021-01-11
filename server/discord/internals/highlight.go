@@ -3,10 +3,15 @@ package internals
 import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/emoji"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/overrides"
 	"github.com/bwmarrin/discordgo"
+	"regexp"
+	"unicode/utf8"
 )
+
+var emojiRegex = regexp.MustCompile(`[\x{1F300}-\x{1F6FF}]`)
 
 func init() {
 	multiplexer.MessageReactionAdd = append(multiplexer.MessageReactionAdd, addReaction)
@@ -48,12 +53,21 @@ func init() {
 				DatabaseKey:  "highlight_emoji",
 				Cleanup:      func(context *multiplexer.Context) {},
 				Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
-					// TODO: check default emoji
-					return false, false
+					if utf8.RuneCountInString(*input) != 1 {
+						return false, true
+					}
+					var key string
+					for _, r := range []rune(*input) {
+						key += fmt.Sprintf("%X", r)
+					}
+					_, ok := emoji.Emojis[key]
+					return ok, true
 				},
 				Format: func(context *multiplexer.Context, value string) (string, string, bool) {
-					// TODO: format stuff
-					return "", "", false
+					if value == "" {
+						return "No emoji is configured", fmt.Sprintf("Configure it by issuing command `%sconf highlight emoji <emoji>`.", context.Prefix()), true
+					}
+					return "Current emoji", value, true
 				},
 			},
 		},
@@ -77,6 +91,9 @@ func addReaction(session *discordgo.Session, add *discordgo.MessageReactionAdd) 
 		}
 	}
 	if channel == nil {
+		return
+	}
+	if add.Emoji.ID != "null" {
 		return
 	}
 	// TODO: check for emote
