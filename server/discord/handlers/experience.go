@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/overrides"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/bwmarrin/discordgo"
 	"math/rand"
@@ -26,6 +28,43 @@ func init() {
 		Description:   "Configure ranked roles.",
 		Category:      multiplexer.ExperienceCategory,
 		Handler:       setrank,
+	})
+	overrides.RegisterSimpleEntry(overrides.SimpleConfigurationEntry{
+		Name:         "experience",
+		FriendlyName: "Chat Experience System",
+		Description:  "Toggle chat experience system.",
+		DatabaseKey:  "exp_enable",
+		Cleanup:      func(context *multiplexer.Context) {},
+		Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
+			if *input != "toggle" {
+				return false, true
+			}
+			pre, err := config.ExpEnabled(context.Guild.ID)
+			if !context.HandleError(err) {
+				return true, false
+			}
+			switch pre {
+			case true:
+				*input = "false"
+			case false:
+				*input = "true"
+			}
+			return true, true
+		},
+		Format: func(context *multiplexer.Context, value string) (string, string, bool) {
+			pre, err := config.ExpEnabled(context.Guild.ID)
+			if !context.HandleError(err) {
+				return "", "", false
+			}
+			description := fmt.Sprintf("Toggle by issuing command `%sconf experience toggle`.", context.Prefix())
+			switch pre {
+			case true:
+				return "Chat experience system enabled", description, true
+			case false:
+				return "Chat experience system disabled", description, true
+			}
+			return "", "", false
+		},
 	})
 }
 
