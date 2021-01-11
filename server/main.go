@@ -11,18 +11,22 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/server/extension"
 	"git.randomchars.net/RandomChars/FreeNitori/server/rpc"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web"
+	"go/types"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
 var err error
-
-func init() {
+var _ = func() *types.Nil {
 	if config.VersionStartup {
 		println(state.Version() + " (" + state.Revision() + ")")
 		os.Exit(0)
 	}
+	return nil
+}()
+
+func init() {
 
 	// Print initial message and stuff
 	log.Infof("FreeNitori %s (%s) early initialization.", state.Version(), state.Revision())
