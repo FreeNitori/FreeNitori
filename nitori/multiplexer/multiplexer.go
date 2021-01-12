@@ -56,10 +56,13 @@ type CommandCategory struct {
 type CommandHandlers struct{}
 
 func init() {
-	EventHandlers = append(EventHandlers, Router.OnMessageCreate)
-	EventHandlers = append(EventHandlers, Router.OnGuildMemberAdd)
-	EventHandlers = append(EventHandlers, Router.OnGuildMemberRemove)
-	EventHandlers = append(EventHandlers, Router.OnGuildDelete)
+	EventHandlers = append(EventHandlers,
+		Router.OnMessageCreate,
+		Router.OnGuildMemberAdd,
+		Router.OnGuildMemberRemove,
+		Router.OnGuildDelete,
+		Router.OnMessageReactionAdd,
+		Router.OnMessageReactionRemove)
 }
 
 // Returns a new command category

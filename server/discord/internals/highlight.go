@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/emoji"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/overrides"
 	"github.com/bwmarrin/discordgo"
@@ -74,12 +73,12 @@ func init() {
 	})
 }
 
-func processReaction(session *discordgo.Session, reaction *discordgo.MessageReaction) {
-	channelID, err := config.GetGuildConfValue(reaction.GuildID, "highlight_channel")
+func addReaction(session *discordgo.Session, add *discordgo.MessageReactionAdd) {
+	channelID, err := config.GetGuildConfValue(add.GuildID, "highlight_channel")
 	if err != nil {
 		return
 	}
-	guild, err := session.State.Guild(reaction.GuildID)
+	guild, err := session.State.Guild(add.GuildID)
 	if err != nil {
 		return
 	}
@@ -93,25 +92,47 @@ func processReaction(session *discordgo.Session, reaction *discordgo.MessageReac
 	if channel == nil {
 		return
 	}
-	if reaction.Emoji.ID != "null" {
+	if add.Emoji.ID != "null" {
 		return
 	}
 	e, err := config.GetGuildConfValue(guild.ID, "highlight_emoji")
 	if err != nil {
 		return
 	}
-	if reaction.Emoji.Name != e {
+	if add.Emoji.Name != e {
 		return
 	}
-	log.Info(reaction.Emoji.Name)
-}
-
-func addReaction(session *discordgo.Session, add *discordgo.MessageReactionAdd) {
-	processReaction(session, interface{}(add).(*discordgo.MessageReaction))
 	// TODO: handler thing
 }
 
 func removeReaction(session *discordgo.Session, remove *discordgo.MessageReactionRemove) {
-	processReaction(session, interface{}(remove).(*discordgo.MessageReaction))
+	channelID, err := config.GetGuildConfValue(remove.GuildID, "highlight_channel")
+	if err != nil {
+		return
+	}
+	guild, err := session.State.Guild(remove.GuildID)
+	if err != nil {
+		return
+	}
+	var channel *discordgo.Channel
+	for _, c := range guild.Channels {
+		if channelID == c.ID {
+			channel = c
+			break
+		}
+	}
+	if channel == nil {
+		return
+	}
+	if remove.Emoji.ID != "null" {
+		return
+	}
+	e, err := config.GetGuildConfValue(guild.ID, "highlight_emoji")
+	if err != nil {
+		return
+	}
+	if remove.Emoji.Name != e {
+		return
+	}
 	// TODO: handler thing
 }
