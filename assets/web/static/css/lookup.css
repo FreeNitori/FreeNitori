@@ -1,0 +1,16 @@
+
+
+#result ul{
+list-style-type: none;
+position:relative;
+display: block;
+text-align: center;
+left:-20px;
+}
+
+#result ul li img{
+height:300px;
+width:300px;
+ border: 3px solid #73AD21;
+}
+

@@ -1,5 +1,6 @@
 document.getElementById("snowflake").addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
+	clearBox('result');
         lookup(document.getElementById('snowflake').value);
     }
 }, false);
@@ -13,8 +14,16 @@ function lookup(snowflake) {
 
         for (i in data) {
             let li = document.createElement("LI");
-            let userText = document.createTextNode(data[i]);
+if(data.AvatarURL == data[i]){
+let userAvatar = document.createElement("IMG");
+userAvatar.setAttribute("src",data.AvatarURL);
+userAvatar.setAttribute("alt","data.AvatarURL");
+
+li.appendChild(userAvatar);
+}else{
+            let userText = document.createTextNode(i + ': ' + data[i]);
             li.appendChild(userText);
+}
             ul.appendChild(li);
         }
 
@@ -22,3 +31,18 @@ function lookup(snowflake) {
 
     })
 }
+
+
+function clearBox(elementID) { 
+
+            var div = document.getElementById(elementID); 
+
+
+
+            while(div.firstChild) { 
+
+                div.removeChild(div.firstChild); 
+
+            } 
+
+        }
