@@ -165,7 +165,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 					return
 				}
 
-				content := fmt.Sprintf("**%d | **%s", reactions.Count, channel.Mention())
+				content := fmt.Sprintf("**%d | **%s", reactions.Count, fmt.Sprintf("<#%s>", message.ChannelID))
 				embed := embedutil.NewEmbed("", message.Content)
 				if len(message.Attachments) > 0 {
 					embed.SetImage(message.Attachments[0].URL)
