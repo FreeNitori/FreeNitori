@@ -159,22 +159,31 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 
 	for _, reactions := range message.Reactions {
 		if reactions.Emoji.Name == e {
-
 			if reactions.Count >= amount {
 				binding, err := config.HighlightGetBinding(guild.ID, message.ID)
 				if err != nil {
 					return
 				}
+
+				content := fmt.Sprintf("**%d | **%s", reactions.Count, channel.Mention())
+				embed := embedutil.NewEmbed("", message.Content)
+				if len(message.Attachments) > 0 {
+					embed.SetImage(message.Attachments[0].URL)
+				}
+				embed.SetAuthor(message.Author.Username+"#"+message.Author.Discriminator, message.Author.AvatarURL("128"))
+				embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
+				embed.Color = vars.KappaColor
+				embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, channel.ID, message.ID), false)
+
 				if binding == "" {
-					embed := embedutil.NewEmbed("", message.Content)
-					if len(message.Attachments) > 0 {
-						embed.SetImage(message.Attachments[0].URL)
-					}
-					embed.SetAuthor(message.Author.Username+"#"+message.Author.Discriminator, message.Author.AvatarURL("128"))
-					embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
-					embed.Color = vars.KappaColor
-					embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, channel.ID, message.ID), false)
-					highlight, err := session.ChannelMessageSendEmbed(channel.ID, embed.MessageEmbed)
+					highlight, err := session.ChannelMessageSendComplex(channel.ID, &discordgo.MessageSend{
+						Content:         content,
+						Embed:           embed.MessageEmbed,
+						TTS:             false,
+						Files:           nil,
+						AllowedMentions: nil,
+						File:            nil,
+					})
 					if err != nil {
 						return
 					}
@@ -182,7 +191,15 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 					if err != nil {
 						return
 					}
+					binding = message.ID
 				}
+				_, _ = session.ChannelMessageEditComplex(&discordgo.MessageEdit{
+					Content:         &content,
+					Embed:           embed.MessageEmbed,
+					AllowedMentions: nil,
+					ID:              binding,
+					Channel:         channel.ID,
+				})
 			}
 			break
 		}
