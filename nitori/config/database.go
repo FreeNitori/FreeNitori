@@ -143,6 +143,29 @@ func ExpEnabled(gid string) (enabled bool, err error) {
 	return
 }
 
+// HighlightBindMessage binds a message with the highlight message.
+func HighlightBindMessage(gid, message, highlight string) error {
+	return dbVars.Database.HSet("highlight."+gid, message, highlight)
+}
+
+// HighlightUnbindMessage unbinds a message with the highlight message.
+func HighlightUnbindMessage(gid, message string) error {
+	err := dbVars.Database.HDel("highlight."+gid, []string{message})
+	if err == badger.ErrKeyNotFound {
+		return nil
+	}
+	return err
+}
+
+// HighlightGetBinding gets the binding of a message.
+func HighlightGetBinding(gid, message string) (string, error) {
+	value, err := dbVars.Database.HGet("highlight."+gid, message)
+	if err == badger.ErrKeyNotFound {
+		return "", nil
+	}
+	return value, err
+}
+
 // GetGuildConfValue gets a configuration value for a specific guild
 func GetGuildConfValue(id, key string) (string, error) {
 	result, err := dbVars.Database.HGet("conf."+id, key)

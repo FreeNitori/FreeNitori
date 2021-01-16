@@ -157,15 +157,27 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 		if reactions.Emoji.Name == e {
 
 			if reactions.Count >= amount {
-				// TODO: database thing
-				embed := embedutil.NewEmbed("", message.Content)
-				embed.SetAuthor(message.Author.Username+message.Author.Discriminator, message.Author.AvatarURL("128"))
-				embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
-				embed.Color = vars.KappaColor
-				embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, channel.ID, message.ID), false)
-				_, err := session.ChannelMessageSendEmbed(channel.ID, embed.MessageEmbed)
+				binding, err := config.HighlightGetBinding(guild.ID, message.ID)
 				if err != nil {
 					return
+				}
+				if binding == "" {
+					embed := embedutil.NewEmbed("", message.Content)
+					if len(message.Attachments) > 0 {
+						embed.SetImage(message.Attachments[0].URL)
+					}
+					embed.SetAuthor(message.Author.Username+message.Author.Discriminator, message.Author.AvatarURL("128"))
+					embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
+					embed.Color = vars.KappaColor
+					embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, channel.ID, message.ID), false)
+					highlight, err := session.ChannelMessageSendEmbed(channel.ID, embed.MessageEmbed)
+					if err != nil {
+						return
+					}
+					err = config.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
+					if err != nil {
+						return
+					}
 				}
 			}
 			break
