@@ -153,6 +153,10 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 		_ = session.State.MessageAdd(message)
 	}
 
+	if message.Author.ID == session.State.User.ID {
+		return
+	}
+
 	for _, reactions := range message.Reactions {
 		if reactions.Emoji.Name == e {
 
@@ -166,7 +170,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 					if len(message.Attachments) > 0 {
 						embed.SetImage(message.Attachments[0].URL)
 					}
-					embed.SetAuthor(message.Author.Username+message.Author.Discriminator, message.Author.AvatarURL("128"))
+					embed.SetAuthor(message.Author.Username+"#"+message.Author.Discriminator, message.Author.AvatarURL("128"))
 					embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
 					embed.Color = vars.KappaColor
 					embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, channel.ID, message.ID), false)
