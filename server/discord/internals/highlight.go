@@ -191,15 +191,37 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 					if err != nil {
 						return
 					}
-					binding = message.ID
+				} else {
+					_, err = session.ChannelMessageEditComplex(&discordgo.MessageEdit{
+						Content:         &content,
+						Embed:           embed.MessageEmbed,
+						AllowedMentions: nil,
+						ID:              binding,
+						Channel:         channel.ID,
+					})
+
+					if fmt.Sprint(err) == "HTTP 404 Not Found, {\"message\": \"Unknown Message\", \"code\": 10008}" {
+						err = config.HighlightUnbindMessage(guild.ID, message.ID)
+						if err != nil {
+							return
+						}
+						highlight, err := session.ChannelMessageSendComplex(channel.ID, &discordgo.MessageSend{
+							Content:         content,
+							Embed:           embed.MessageEmbed,
+							TTS:             false,
+							Files:           nil,
+							AllowedMentions: nil,
+							File:            nil,
+						})
+						if err != nil {
+							return
+						}
+						err = config.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
+						if err != nil {
+							return
+						}
+					}
 				}
-				_, _ = session.ChannelMessageEditComplex(&discordgo.MessageEdit{
-					Content:         &content,
-					Embed:           embed.MessageEmbed,
-					AllowedMentions: nil,
-					ID:              binding,
-					Channel:         channel.ID,
-				})
 			}
 			break
 		}
