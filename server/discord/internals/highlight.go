@@ -120,6 +120,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 		}
 		_ = session.State.GuildAdd(guild)
 	}
+
 	var channel *discordgo.Channel
 	for _, c := range guild.Channels {
 		if channelID == c.ID {
@@ -130,9 +131,11 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 	if channel == nil {
 		return
 	}
-	if reaction.Emoji.ID != "null" {
+
+	if reaction.Emoji.ID != "" {
 		return
 	}
+
 	e, err := config.GetGuildConfValue(guild.ID, "highlight_emoji")
 	if err != nil {
 		return
@@ -152,17 +155,18 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 
 	for _, reactions := range message.Reactions {
 		if reactions.Emoji.Name == e {
+
 			if reactions.Count >= amount {
 				// TODO: database thing
 				embed := embedutil.NewEmbed("", message.Content)
-				embed.SetAuthor(message.Author.Username+message.Author.Discriminator, message.Author.Avatar)
+				embed.SetAuthor(message.Author.Username+message.Author.Discriminator, message.Author.AvatarURL("128"))
+				embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
 				embed.Color = vars.KappaColor
 				embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, channel.ID, message.ID), false)
 				_, err := session.ChannelMessageSendEmbed(channel.ID, embed.MessageEmbed)
 				if err != nil {
 					return
 				}
-				// FIXME: premature return
 			}
 			break
 		}
