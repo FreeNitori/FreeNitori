@@ -173,7 +173,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 				embed.SetAuthor(message.Author.Username+"#"+message.Author.Discriminator, message.Author.AvatarURL("128"))
 				embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
 				embed.Color = vars.KappaColor
-				embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, channel.ID, message.ID), false)
+				embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, message.ChannelID, message.ID), false)
 
 				if binding == "" {
 					highlight, err := session.ChannelMessageSendComplex(channel.ID, &discordgo.MessageSend{
