@@ -98,7 +98,7 @@ func stats(context *multiplexer.Context) {
 	embed = embedutil.NewEmbed("System Stats", "")
 	embed.Color = vars.KappaColor
 	embed.AddField("PID", strconv.Itoa(os.Getpid()), true)
-	embed.AddField("Uptime", uptime.String(), true)
+	embed.AddField("Uptime", uptime.Truncate(time.Second).String(), true)
 	embed.AddField("Goroutines", strconv.Itoa(numGoroutine), true)
 	context.SendEmbed(embed)
 
