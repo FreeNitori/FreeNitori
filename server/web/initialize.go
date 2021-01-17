@@ -98,7 +98,7 @@ func Initialize() error {
 		}
 		context.HTML(http.StatusOK, "leaderboard.html", gin.H{
 			"GuildName": guild.Name,
-			"GuildIcon": guild.IconURL,
+			"GuildIcon": guild.IconURL(),
 		})
 	})
 
