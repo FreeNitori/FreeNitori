@@ -199,8 +199,11 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 
 				content := fmt.Sprintf("**%d | **%s", reactions.Count, fmt.Sprintf("<#%s>", message.ChannelID))
 				embed := embedutil.NewEmbed("", message.Content)
-				if len(message.Attachments) > 0 {
-					embed.SetImage(message.Attachments[0].URL)
+				for _, attachment := range message.Attachments {
+					if attachment.Width != 0 && attachment.Height != 0 {
+						embed.SetImage(attachment.URL, attachment.ProxyURL)
+					}
+					embed.AddField("Attachment", fmt.Sprintf("[%s](%s)", attachment.Filename, attachment.URL), false)
 				}
 				embed.SetAuthor(message.Author.Username+"#"+message.Author.Discriminator, message.Author.AvatarURL("128"))
 				embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
