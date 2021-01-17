@@ -19,10 +19,11 @@ type SimpleConfigurationEntry struct {
 }
 
 type ComplexConfigurationEntry struct {
-	Name         string
-	FriendlyName string
-	Description  string
-	Entries      []SimpleConfigurationEntry
+	Name          string
+	FriendlyName  string
+	Description   string
+	Entries       []SimpleConfigurationEntry
+	CustomEntries []CustomConfigurationEntry
 }
 
 type CustomConfigurationEntry struct {

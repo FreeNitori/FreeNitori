@@ -22,6 +22,29 @@ func init() {
 		Description:  "Configure message highlighting system.",
 		Entries: []overrides.SimpleConfigurationEntry{
 			{
+				Name:         "amount",
+				FriendlyName: "Minimum Requirement",
+				Description:  "Minimum amount of reactions required for highlighting.",
+				DatabaseKey:  "highlight_amount",
+				Cleanup:      func(context *multiplexer.Context) { config.ResetGuildMap(context.Guild.ID, "highlight") },
+				Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
+					amount, err := strconv.Atoi(*input)
+					if err != nil {
+						return false, true
+					}
+					if amount > 16 || amount < 1 {
+						return false, true
+					}
+					return true, true
+				},
+				Format: func(context *multiplexer.Context, value string) (string, string, bool) {
+					if value == "" {
+						return "Not configured", fmt.Sprintf(fmt.Sprintf("Configure by issuing command `%sconf highlight amount <integer>`.", context.Prefix())), true
+					}
+					return "Current requirement", value + " reactions", true
+				},
+			},
+			{
 				Name:         "channel",
 				FriendlyName: "Highlighted Message Channel",
 				Description:  "Channel highlighted messages are posted to.",
@@ -72,27 +95,33 @@ func init() {
 					return "Current emoji", value, true
 				},
 			},
+		},
+		CustomEntries: []overrides.CustomConfigurationEntry{
 			{
-				Name:         "amount",
-				FriendlyName: "Minimum Requirement",
-				Description:  "Minimum amount of reactions required for highlighting.",
-				DatabaseKey:  "highlight_amount",
-				Cleanup:      func(context *multiplexer.Context) { config.ResetGuildMap(context.Guild.ID, "highlight") },
-				Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
-					amount, err := strconv.Atoi(*input)
-					if err != nil {
-						return false, true
+				Name:        "inhibit",
+				Description: "Inhibits highlighting of specified message.",
+				Handler: func(context *multiplexer.Context) {
+					if context.Message.MessageReference == nil {
+						context.SendMessage("Please reply to the message to inhibit.")
+						return
 					}
-					if amount > 16 || amount < 1 {
-						return false, true
+					binding, err := config.HighlightGetBinding(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID)
+					if !context.HandleError(err) {
+						return
 					}
-					return true, true
-				},
-				Format: func(context *multiplexer.Context, value string) (string, string, bool) {
-					if value == "" {
-						return "Not configured", fmt.Sprintf(fmt.Sprintf("Configure by issuing command `%sconf highlight amount <integer>`.", context.Prefix())), true
+					if binding == "-" {
+						err = config.HighlightUnbindMessage(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID)
+						if !context.HandleError(err) {
+							return
+						}
+						context.SendMessage("Successfully uninhibited the message.")
+					} else {
+						err = config.HighlightBindMessage(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID, "-")
+						if !context.HandleError(err) {
+							return
+						}
+						context.SendMessage("Successfully inhibited the message.")
 					}
-					return "Current requirement", value + " reactions", true
 				},
 			},
 		},
@@ -162,6 +191,9 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 			if reactions.Count >= amount {
 				binding, err := config.HighlightGetBinding(guild.ID, message.ID)
 				if err != nil {
+					return
+				}
+				if binding == "-" {
 					return
 				}
 

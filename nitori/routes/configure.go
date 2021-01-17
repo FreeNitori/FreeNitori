@@ -146,6 +146,9 @@ func configure(context *multiplexer.Context) {
 				for _, subEntry := range entry.Entries {
 					embed.AddField(subEntry.Name, subEntry.Description, false)
 				}
+				for _, subEntry := range entry.CustomEntries {
+					embed.AddField(subEntry.Name, subEntry.Description, false)
+				}
 				context.SendEmbed(embed)
 				return
 			}
@@ -197,6 +200,12 @@ func configure(context *multiplexer.Context) {
 
 		for _, entry := range overrides.GetComplexEntries() {
 			if context.Fields[1] == entry.Name {
+				for _, subEntry := range entry.CustomEntries {
+					if context.Fields[2] == subEntry.Name {
+						subEntry.Handler(context)
+						return
+					}
+				}
 				for _, subEntry := range entry.Entries {
 					if context.Fields[2] == subEntry.Name {
 						if len(context.Fields) == 3 {
