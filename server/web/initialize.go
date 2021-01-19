@@ -25,10 +25,16 @@ func (logger) Write(p []byte) (n int, err error) {
 }
 
 func Initialize() error {
-	m.Use(macaron.Recovery())
+	macaron.Env = macaron.PROD
+
 	if config.LogLevel == logrus.DebugLevel {
 		m.Use(macaron.Logger())
+		m.Use(macaron.Recovery())
+		macaron.Env = macaron.DEV
+	} else {
+		m.Use(recovery())
 	}
+
 	m.Use(macaron.Static("static", macaron.StaticOptions{
 		Prefix:      "",
 		SkipLogging: true,
