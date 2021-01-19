@@ -1,5 +1,5 @@
 let leaderboard;
-
+let counter = 0;
 if (self.fetch) {
     const request = async () => {
         const response = await fetch("/api" + window.location.pathname, {method: 'GET'});
@@ -17,7 +17,7 @@ if (self.fetch) {
 
 function makeEntry(key){
 let entry = leaderboard[key];
-
+counter++;
 let li = document.createElement("LI");
 li.setAttribute("class","mdl-list__item mdl-list__item--three-line");
 let span1 = document.createElement("Span");
@@ -58,8 +58,8 @@ span4.appendChild(document.createTextNode(entry["Experience"]));
 let span5 = document.createElement("Span");
 span5.setAttribute("class","mdl-list__item-secondary-content");
 
-let counter = document.createTextNode('#' + (key + 1) );
-span5.appendChild(counter);
+let counterText = document.createTextNode('#' + (counter) );
+span5.appendChild(counterText);
 li.appendChild(span5);
 
 return li;
@@ -86,8 +86,10 @@ function makePage(index) {
 }
 
 function renderLeaderboard() {
+		
     let leaderboardlist = document.getElementById("leaderboard-list");
     for (let i = 0; i < leaderboard.length; i++) {
         leaderboardlist.appendChild(makeEntry(i));
     }
+counter = 0;
 }
