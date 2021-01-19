@@ -47,25 +47,19 @@ span4.setAttribute("class","mdl-list__item-text-body");
 span4.appendChild(document.createTextNode("Level: "));
 span1.appendChild(span4);
 
-let a1 = document.createElement("a");
-span4.appendChild(a1);
-a1.appendChild(document.createTextNode(entry["Level"]));
-a1.appendChild(document.createElement("br"));
-a1.appendChild(document.createTextNode("Experience: "));
 
-let a2 = document.createElement("a");
-a2.appendChild(document.createTextNode(entry["Experience"]));
+span4.appendChild(document.createTextNode(entry["Level"]));
+span4.appendChild(document.createElement("br"));
+span4.appendChild(document.createTextNode("Experience: "));
 
-let a12 = a1.appendChild(a2);
-span4.appendChild(a12);
+
+span4.appendChild(document.createTextNode(entry["Experience"]));
 
 let span5 = document.createElement("Span");
 span5.setAttribute("class","mdl-list__item-secondary-content");
 
-let a3 = document.createElement("a");
-a3.setAttribute("class","mdl-list__item-secondary-action");
-a3.appendChild(document.createTextNode('#' + (key + 1) ));
-span5.appendChild(a3);
+let counter = document.createTextNode('#' + (key + 1) );
+span5.appendChild(counter);
 li.appendChild(span5);
 
 return li;
