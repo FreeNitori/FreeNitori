@@ -9,6 +9,7 @@ import (
 	_ "git.randomchars.net/RandomChars/FreeNitori/server/web/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/routes"
 	"github.com/go-macaron/bindata"
+	"github.com/go-macaron/session"
 	"github.com/sirupsen/logrus"
 	"go/types"
 	"gopkg.in/macaron.v1"
@@ -26,6 +27,7 @@ func (logger) Write(p []byte) (n int, err error) {
 
 func Initialize() error {
 	macaron.Env = macaron.PROD
+	m.Use(session.Sessioner())
 
 	if config.LogLevel == logrus.DebugLevel {
 		m.Use(macaron.Logger())

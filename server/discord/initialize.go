@@ -61,16 +61,16 @@ func LateInitialize() error {
 			vars.Operator = append(vars.Operator, user)
 		}
 	}
-	go func() {
-		for {
-			state.DiscordReady <- true
-		}
-	}()
 	vars.Application, err = vars.RawSession.Application("@me")
 	if err != nil {
 		return errors.New("unable to fetch application information")
 	}
 	state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", vars.Application.ID)
+	go func() {
+		for {
+			state.DiscordReady <- true
+		}
+	}()
 	_, _ = vars.RawSession.UserUpdateStatus("dnd")
 	_ = vars.RawSession.UpdateStatus(0, config.Config.Discord.Presence)
 	if config.Config.Discord.Shard {

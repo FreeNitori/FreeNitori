@@ -44,7 +44,6 @@ type SystemSection struct {
 	Operator      []int
 }
 type WebServerSection struct {
-	SecretKey           string
 	Host                string
 	Port                int
 	BaseURL             string

@@ -6,6 +6,10 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
+	"github.com/bwmarrin/discordgo"
+	"github.com/go-macaron/oauth2"
+	goauth2 "golang.org/x/oauth2"
 	"net"
 	"net/http"
 	"strconv"
@@ -19,6 +23,19 @@ var Server = http.Server{
 
 func Serve() {
 	<-state.DiscordReady
+
+	// Register Discord OAuth stuff
+	m.Use(oauth2.NewOAuth2Provider(&goauth2.Config{
+		ClientID:     vars.Application.ID,
+		ClientSecret: config.Config.Discord.ClientSecret,
+		Endpoint: goauth2.Endpoint{
+			AuthURL:  discordgo.EndpointOauth2 + "authorize",
+			TokenURL: discordgo.EndpointOauth2 + "token",
+		},
+		RedirectURL: config.Config.WebServer.BaseURL + "oauth2callback",
+		Scopes:      []string{ScopeIdentify, ScopeGuilds},
+	}))
+
 	var listener net.Listener
 	switch config.Config.WebServer.Unix {
 	case false:
