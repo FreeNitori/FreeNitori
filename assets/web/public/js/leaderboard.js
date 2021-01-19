@@ -74,18 +74,18 @@ return li;
 function renderLeaderboard(pageNumber) {
                 
     let leaderboardlist = document.getElementById("leaderboard-list");
-        leaderboardlist.appendChild(document.createTextNode("Use the left/right arrow keys to change page"));
-
-
-
+let fragment = document.createDocumentFragment();
+        
 
     for (let i = ((pageNumber-1)*(maxEntries)); i < ((pageNumber)*(maxEntries)); i++) {
         
         counter++;
         if(i < leaderboard.length){
-        leaderboardlist.appendChild(makeEntry(i));
+        fragment.appendChild(makeEntry(i));
+	
 }
     }
+leaderboardlist.appendChild(fragment);
 page = pageNumber;
 
 }
