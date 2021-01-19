@@ -25,7 +25,6 @@ func (logger) Write(p []byte) (n int, err error) {
 }
 
 func Initialize() error {
-	// TODO: Forward by client IP
 	m.Use(macaron.Recovery())
 	if config.LogLevel == logrus.DebugLevel {
 		m.Use(macaron.Logger())

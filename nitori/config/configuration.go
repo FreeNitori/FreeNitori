@@ -48,6 +48,7 @@ type WebServerSection struct {
 	Host                string
 	Port                int
 	BaseURL             string
+	Unix                bool
 	ForwardedByClientIP bool
 	RateLimit           int
 	RateLimitPeriod     int

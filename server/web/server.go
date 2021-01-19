@@ -6,18 +6,45 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"net"
 	"net/http"
 	"strconv"
 )
 
 var err error
+var Server = http.Server{
+	Handler: rateLimiter.Handler(m),
+}
 
 func Serve() {
 	<-state.DiscordReady
-	log.Infof("Web server listening on %s:%s", config.Config.WebServer.Host, strconv.Itoa(config.Config.WebServer.Port))
-	err = http.ListenAndServe(fmt.Sprintf("%s:%s", config.Config.WebServer.Host, strconv.Itoa(config.Config.WebServer.Port)), rateLimiter.Handler(m))
+	var listener net.Listener
+	switch config.Config.WebServer.Unix {
+	case false:
+		listener, err = net.Listen("tcp", fmt.Sprintf("%s:%s", config.Config.WebServer.Host, strconv.Itoa(config.Config.WebServer.Port)))
+		if err != nil {
+			log.Errorf("Unable to listen on %s, %s", fmt.Sprintf("%s:%s", config.Config.WebServer.Host, strconv.Itoa(config.Config.WebServer.Port)), err)
+			state.ExitCode <- 1
+			return
+		}
+		log.Infof("Web server listening on %s:%s.", config.Config.WebServer.Host, strconv.Itoa(config.Config.WebServer.Port))
+	case true:
+		listener, err = net.Listen("unix", config.Config.WebServer.Host)
+		if err != nil {
+			log.Errorf("Unable to listen on %s, %s", config.Config.WebServer.Host, err)
+			state.ExitCode <- 1
+			return
+		}
+		log.Infof("Web server listening on unix socket %s.", config.Config.WebServer.Host)
+	}
+
+	err = Server.Serve(listener)
 	if err != nil {
-		log.Error(fmt.Sprintf("Failed to start web server, %s", err))
-		state.ExitCode <- 1
+		if err == http.ErrServerClosed {
+			log.Info("Web server closed.")
+		} else {
+			log.Errorf("Web server encountered an error, %s", err)
+			state.ExitCode <- 1
+		}
 	}
 }

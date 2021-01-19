@@ -1,13 +1,15 @@
 package main
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"context"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	dbVars "git.randomchars.net/RandomChars/FreeNitori/server/database/vars"
 	dcVars "git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/server/rpc"
+	"git.randomchars.net/RandomChars/FreeNitori/server/web"
 	"os"
 	"syscall"
+	"time"
 )
 
 func init() {
@@ -20,17 +22,34 @@ func cleanup() {
 	log.Info("Running cleanups.")
 
 	// Close RPC connection
-	_ = rpc.Listener.Close()
-	_ = syscall.Unlink(config.Config.System.Socket)
+	err = rpc.Listener.Close()
+	if err != nil {
+		log.Errorf("Error while closing RPC listener, %s", err)
+	}
+
+	// Shutdown web server
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	err = web.Server.Shutdown(ctx)
+	if err != nil {
+		log.Errorf("Error while shutting down web server, %s", err)
+	}
 
 	// Close Discord sessions
-	for _, shardSession := range dcVars.ShardSessions {
-		_ = shardSession.Close()
+	for index, shardSession := range dcVars.ShardSessions {
+		err = shardSession.Close()
+		log.Errorf("Error while shutting down shard %v, %s", index, err)
 	}
-	_ = dcVars.RawSession.Close()
+	err = dcVars.RawSession.Close()
+	if err != nil {
+		log.Errorf("Error while closing session with Discord, %s", err)
+	}
 
 	// Close database
-	_ = dbVars.Database.Close()
+	err = dbVars.Database.Close()
+	if err != nil {
+		log.Errorf("Error while closing database, %s", err)
+	}
 }
 
 func restart() {
