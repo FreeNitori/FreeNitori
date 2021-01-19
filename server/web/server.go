@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"strconv"
+	"syscall"
 )
 
 var err error
@@ -35,6 +36,14 @@ func Serve() {
 			state.ExitCode <- 1
 			return
 		}
+
+		err = syscall.Chmod(config.Config.WebServer.Host, 0777)
+		if err != nil {
+			log.Errorf("Unable to change permission of web server socket, %s", err)
+			state.ExitCode <- 1
+			return
+		}
+
 		log.Infof("Web server listening on unix socket %s.", config.Config.WebServer.Host)
 	}
 
