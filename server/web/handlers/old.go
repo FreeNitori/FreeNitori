@@ -16,7 +16,12 @@ func init() {
 		routes.WebRoute{
 			Pattern:  "/guild/:gid/leaderboard",
 			Handlers: []macaron.Handler{leaderboard},
-		})
+		},
+		routes.WebRoute{
+			Pattern:  "/auth",
+			Handlers: []macaron.Handler{auth},
+		},
+	)
 }
 
 func leaderboard(context *macaron.Context) {
@@ -50,4 +55,8 @@ func leaderboard(context *macaron.Context) {
 		"GuildName": guild.Name,
 		"GuildIcon": guild.IconURL(),
 	})
+}
+
+func auth(context *macaron.Context) {
+	context.Redirect("/", http.StatusMovedPermanently)
 }

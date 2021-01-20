@@ -5,13 +5,18 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/binaries/tmpl"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/datatypes"
 	_ "git.randomchars.net/RandomChars/FreeNitori/server/web/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/routes"
+	"github.com/bwmarrin/discordgo"
 	"github.com/go-macaron/bindata"
+	"github.com/go-macaron/oauth2"
 	"github.com/go-macaron/session"
 	"github.com/sirupsen/logrus"
 	"go/types"
+	goauth2 "golang.org/x/oauth2"
 	"gopkg.in/macaron.v1"
 	"net/http"
 )
@@ -36,6 +41,25 @@ func Initialize() error {
 	} else {
 		m.Use(recovery())
 	}
+
+	go func() {
+		<-state.DiscordReady
+		oauth2.PathCallback = "/auth/callback"
+		oauth2.PathError = "/auth/error"
+		oauth2.PathLogin = "/auth/login"
+		oauth2.PathLogout = "/auth/logout"
+		// Register Discord OAuth stuff after DiscordReady
+		m.Use(oauth2.NewOAuth2Provider(&goauth2.Config{
+			ClientID:     vars.Application.ID,
+			ClientSecret: config.Config.Discord.ClientSecret,
+			Endpoint: goauth2.Endpoint{
+				AuthURL:  discordgo.EndpointOauth2 + "authorize",
+				TokenURL: discordgo.EndpointOauth2 + "token",
+			},
+			RedirectURL: config.Config.WebServer.BaseURL + "auth/callback",
+			Scopes:      []string{ScopeIdentify, ScopeGuilds},
+		}))
+	}()
 
 	m.Use(macaron.Static("static", macaron.StaticOptions{
 		Prefix:      "",
