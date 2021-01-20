@@ -1,10 +1,13 @@
 let leaderboard;
 let counter = 0;
+let page = 1;
+const maxEntries = 50;
+
 if (self.fetch) {
     const request = async () => {
         const response = await fetch("/api" + window.location.pathname, {method: 'GET'});
         leaderboard = await response.json();
-        renderLeaderboard();
+        renderLeaderboard(1);
     }
     request().then();
 } else {
@@ -12,12 +15,12 @@ if (self.fetch) {
     request.open("GET", "/api" + window.location.pathname, false);
     request.send();
     leaderboard = JSON.parse(request.responseText);
-    renderLeaderboard();
+    renderLeaderboard(1);
 }
 
 function makeEntry(key){
 let entry = leaderboard[key];
-counter++;
+
 let li = document.createElement("LI");
 li.setAttribute("class","mdl-list__item mdl-list__item--three-line");
 let span1 = document.createElement("Span");
@@ -67,29 +70,59 @@ return li;
 
 }
 
-function makePage(index) {
-    let page = "";
-    let finalKey = 9;
-    if (leaderboard.length > index * 10) {
-        if (leaderboard.length > (index + 1) * 10) {
-            finalKey = (index + 1) * 10;
-        } else {
-            finalKey = leaderboard.length;
-        }
-        for (let i = index * 10; i < finalKey; i++) {
-            page += makeEntry(i);
-        }
-        return page;
-    } else {
-        return null;
+
+function renderLeaderboard(pageNumber) {
+                
+    let leaderboardlist = document.getElementById("leaderboard-list");
+let fragment = document.createDocumentFragment();
+        
+
+    for (let i = ((pageNumber-1)*(maxEntries)); i < ((pageNumber)*(maxEntries)); i++) {
+        
+        counter++;
+        if(i < leaderboard.length){
+        fragment.appendChild(makeEntry(i));
+	
+}
     }
+leaderboardlist.appendChild(fragment);
+page = pageNumber;
+
 }
 
-function renderLeaderboard() {
-		
-    let leaderboardlist = document.getElementById("leaderboard-list");
-    for (let i = 0; i < leaderboard.length; i++) {
-        leaderboardlist.appendChild(makeEntry(i));
+document.body.addEventListener("keydown", function (event) {
+    
+
+if (event.key === "ArrowRight") {
+        
+        if(page > 0 && ((page)*(maxEntries)) < leaderboard.length){
+        
+        clearBox('leaderboard-list');
+        renderLeaderboard(page + 1)
+    };
+    }else if (event.key === "ArrowLeft") {
+        
+        if(page > 1){
+            clearBox('leaderboard-list');
+                counter -= 2*maxEntries;
+                
+            renderLeaderboard(page-1);
+}
     }
-counter = 0;
+}, false);
+
+
+
+function clearBox(elementID) { 
+
+    var div = document.getElementById(elementID); 
+
+
+
+    while(div.firstChild) { 
+
+        div.removeChild(div.firstChild); 
+
+    } 
+
 }
