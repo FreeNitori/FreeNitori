@@ -1,38 +1,11 @@
 <html lang="en">
 <head>
-    <title>{{ .GuildName }} Leaderboard</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
-    <meta name="robots" content="noindex, nofollow">
-    <link rel="shortcut icon" href="{{ .GuildIcon }}">
-    <link rel="icon" type="image/png" href="{{ .GuildIcon }}">
-    <meta property="og:title" content="{{ .GuildName }} Leaderboard"/>
-    <meta property="og:description" content="Experience leaderboard of {{ .GuildName }}"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="/"/>
-    <meta property="og:image" content="{{ .GuildIcon }}"/>
-    <meta property="og:site_name" content="{{ .GuildName }} Leaderboard"/>
-    <meta itemprop="name" content="{{ .GuildName }} Leaderboard">
-    <meta itemprop="description" content="Experience leaderboard of {{ .GuildName }}">
-    <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:image" content="{{ .GuildIcon }}"/>
-    <meta name="twitter:title" content="{{ .GuildName }} Leaderboard"/>
-    <meta name="twitter:description" content="Experience leaderboard of {{ .GuildName }}"/>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-light_blue.min.css"/>
     <link rel="stylesheet" href="/css/leaderboard.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <style>
-        .guild-icon {
-            background: url({{ .GuildIcon }}?size=512) 50% no-repeat;
-            background-size: cover;
-            height: 150px;
-            width: 150px;
-            margin: auto auto 10px;
-            border-radius: 50%;
-        }
-    </style>
+    
 </head>
 <body>
 <div class="fullscreen">
@@ -40,7 +13,7 @@
         <header class="mdl-layout__header mdl-layout__header--waterfall header-navbar mdl-color--primary">
             <div class="mdl-layout__header-row logo-row">
                   <span class="mdl-layout__title">
-                     <div class="guild-icon"></div>
+                     <div id="guild-icon"></div>
                      <span class="mdl-layout__title">Leaderboard of {{ .GuildName }}.</span>
                   </span>
             </div>

@@ -1,4 +1,6 @@
 let leaderboard;
+let guildname;
+let guildicon;
 let counter = 0;
 let page = 1;
 const maxEntries = 50;
@@ -6,7 +8,10 @@ const maxEntries = 50;
 if (self.fetch) {
     const request = async () => {
         const response = await fetch("/api" + window.location.pathname, {method: 'GET'});
+	const response2 = await fetch("/api" + (window.location.pathname).replace('/leaderboard','/'), {method: 'GET'});
         leaderboard = await response.json();
+	guildname = (response2.json().Name);
+	guildicon = (response2.json().IconURL);
         renderLeaderboard(1);
     }
     request().then();
@@ -17,6 +22,10 @@ if (self.fetch) {
     leaderboard = JSON.parse(request.responseText);
     renderLeaderboard(1);
 }
+
+
+    
+    
 
 function makeEntry(key){
 let entry = leaderboard[key];
@@ -126,3 +135,103 @@ function clearBox(elementID) {
     } 
 
 }
+
+
+
+
+
+
+(document.head).addEventListener('load', () => {
+    let title = document.createElement("title");
+    titleText = document.createTextNode(guildname + ' Leaderboard');
+    title.appendChild(titleText);
+    (document.head).appendChild(title);
+
+    let HTTPHeader = document.createElement("meta");
+    HTTPHeader.setAttribute("http-equiv","Content-Type");
+    HTTPHeader.setAttribute("content","text/html; charset=UTF-8");
+    (document.head).appendChild(HTTPHeader);
+
+    let viewportHeader = document.createElement("meta");
+    viewportHeader.setAttribute("name", "viewport");
+    viewportHeader.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no");
+    (document.head).appendChild(viewportHeader);
+
+    let RobotHeader = document.createElement("meta");
+    RobotHeader.setAttribute("name","robot");
+    RobotHeader.setAttribute("content","noindex, nofollow");
+    (document.head).appendChild(RobotHeader);
+
+    let guildIconLink = document.createElement("link");
+    guildIconLink.setAttribute("rel", "shortcut icon");
+    guildIconLink.setAttribute("href", guildicon);
+    (document.head).appendChild(guildIconLink);
+
+    let guildIconLink2 = document.createElement("link");
+    guildIconLink2.setAttribute("rel","icon");
+    guildIconLink2.setAttribute("href",guildicon);
+    (document.head).appendChild(guildIconLink2);
+
+    let meta1 = document.createElement("meta");
+    meta1.setAttribute("property","og:title");
+    meta1.setAttribute("content",guildname + ' Leaderboard');
+    (document.head).appendChild(meta1);
+
+    let meta2 = document.createElement("meta");
+    meta2.setAttribute("property","og:description");
+    meta2.setAttribute("content",'Experience Leaderboard of ' + guildname)
+    (document.head).appendChild(meta2);
+
+    let meta3 = document.createElement("meta");
+    meta3.setAttribute("property","og:type");
+    meta3.setAttribute("content","website");
+    (document.head).appendChild(meta3);
+
+    let meta4 = document.createElement("meta");
+    meta4.setAttribute("property","og:url");
+    meta4.setAttribute("content","/");
+    (document.head).appendChild(meta4);
+
+    let meta5 = document.createElement("meta");
+    meta5.setAttribute("property","og:image");
+    meta5.setAttribute("content",guildicon);
+    (document.head).appendChild(meta5);
+
+    let meta6 = document.createElement("meta");
+    meta6.setAttribute("property","og:site_name");
+    meta6.setAttribute("content", guildname + ' Leaderboard');
+    (document.head).appendChild(meta6);
+
+    let meta7 = document.createElement("meta");
+    meta7.setAttribute("itemprop","name");
+    meta7.setAttribute("content",guildname + ' Leaderboard');
+    (document.head).appendChild(meta7);
+
+    let meta8 = document.createElement("meta");
+    meta8.setAttribute("itemdrop","description");
+    meta8.setAttribute("content","Experience leaderboard of " + guildname);
+    (document.head).appendChild(meta8);
+
+    let meta9 = document.createElement("meta");
+    meta9.setAttribute("name","twitter:card");
+    meta9.setAttribute("content","summary_large_image");
+    (document.head).appendChild(meta9);
+
+    let meta10 = document.createElement("meta");
+    meta10.setAttribute("name","twitter:image");
+    meta10.setAttribute("content",guildicon);
+    (document.head).appendChild(meta10);
+
+    let meta11 = document.createElement("meta");
+    meta10.setAttribute("name","twitter:title");
+    meta10.setAttribute("content",guildname + ' Leaderboard');
+    (document.head).appendChild(meta11);
+
+    meta12 = document.createElement("meta");
+    meta12.setAttribute("name","twitter:description");
+    meta12.setAttribute("content",'Experience Leaderboard of ' + guildname);
+    (document.head).appendChild(meta12);
+
+    let guildiconID = document.getElementById('guild-icon');
+    guildiconID.style.background = "url( 'guildicon' )"
+  });
