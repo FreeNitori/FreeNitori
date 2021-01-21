@@ -8,10 +8,8 @@ const maxEntries = 50;
 if (self.fetch) {
     const request = async () => {
         const response = await fetch("/api" + window.location.pathname, {method: 'GET'});
-	const response2 = await fetch("/api" + (window.location.pathname).replace('/leaderboard','/'), {method: 'GET'});
         leaderboard = await response.json();
-	guildname = (response2.json().Name);
-	guildicon = (response2.json().IconURL);
+	HeadAppend();
         renderLeaderboard(1);
     }
     request().then();
@@ -20,6 +18,7 @@ if (self.fetch) {
     request.open("GET", "/api" + window.location.pathname, false);
     request.send();
     leaderboard = JSON.parse(request.responseText);
+    HeadAppend();
     renderLeaderboard(1);
 }
 
@@ -28,7 +27,7 @@ if (self.fetch) {
     
 
 function makeEntry(key){
-let entry = leaderboard[key];
+let entry = leaderboard["Leaderboard"][key];
 
 let li = document.createElement("LI");
 li.setAttribute("class","mdl-list__item mdl-list__item--three-line");
@@ -89,7 +88,7 @@ let fragment = document.createDocumentFragment();
     for (let i = ((pageNumber-1)*(maxEntries)); i < ((pageNumber)*(maxEntries)); i++) {
         
         counter++;
-        if(i < leaderboard.length){
+        if(i < leaderboard.Leaderboard.length){
         fragment.appendChild(makeEntry(i));
 	
 }
@@ -141,7 +140,10 @@ function clearBox(elementID) {
 
 
 
-(document.head).addEventListener('load', () => {
+function HeadAppend(){
+	guildname = leaderboard["GuildInfo"]["Name"];
+	guildicon = leaderboard["GuildInfo"]["IconURL"];
+
     let title = document.createElement("title");
     titleText = document.createTextNode(guildname + ' Leaderboard');
     title.appendChild(titleText);
@@ -179,7 +181,7 @@ function clearBox(elementID) {
 
     let meta2 = document.createElement("meta");
     meta2.setAttribute("property","og:description");
-    meta2.setAttribute("content",'Experience Leaderboard of ' + guildname)
+    meta2.setAttribute("content",'Experience Leaderboard of ' + guildname);
     (document.head).appendChild(meta2);
 
     let meta3 = document.createElement("meta");
@@ -232,6 +234,6 @@ function clearBox(elementID) {
     meta12.setAttribute("content",'Experience Leaderboard of ' + guildname);
     (document.head).appendChild(meta12);
 
-    let guildiconID = document.getElementById('guild-icon');
-    guildiconID.style.background = "url( 'guildicon' )"
-  });
+    let guildiconID = document.getElementsByClassName('guild-icon')[0];
+    guildiconID.style.background = 'url(' + guildicon + ')';
+  };

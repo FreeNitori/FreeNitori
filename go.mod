@@ -16,6 +16,7 @@ require (
 	github.com/sirupsen/logrus v1.7.0
 	github.com/ulule/limiter/v3 v3.7.1
 	go.starlark.net v0.0.0-20201210151846-e81fc95f7bd5
+	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 )
 
 go 1.14
