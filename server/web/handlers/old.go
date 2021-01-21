@@ -23,7 +23,7 @@ func init() {
 func leaderboard(context *gin.Context) {
 	guild := discord.FetchGuild(context.Param("gid"))
 	if guild == nil {
-		context.HTML(http.StatusNotFound, "error", datatypes.H{
+		context.HTML(http.StatusNotFound, "error.tmpl", datatypes.H{
 			"Title":    datatypes.NoSuchFileOrDirectory,
 			"Subtitle": "This guild doesn't seem to exist.",
 			"Message":  "Maybe you got the wrong URL?",
@@ -32,7 +32,7 @@ func leaderboard(context *gin.Context) {
 	}
 	expEnabled, err := config.ExpEnabled(guild.ID)
 	if err != nil {
-		context.HTML(http.StatusInternalServerError, "error", datatypes.H{
+		context.HTML(http.StatusInternalServerError, "error.tmpl", datatypes.H{
 			"Title":    datatypes.InternalServerError,
 			"Subtitle": "Failed to fetch experience system enablement status.",
 			"Message":  "Nitori taking a nap?",
@@ -40,14 +40,14 @@ func leaderboard(context *gin.Context) {
 		return
 	}
 	if !expEnabled {
-		context.HTML(http.StatusServiceUnavailable, "error", datatypes.H{
+		context.HTML(http.StatusServiceUnavailable, "error.tmpl", datatypes.H{
 			"Title":    datatypes.ServiceUnavailable,
 			"Subtitle": "This feature is disabled in your guild.",
 			"Message":  "Moderators don't like Nitori?",
 		})
 		return
 	}
-	context.HTML(http.StatusOK, "leaderboard", datatypes.H{
+	context.HTML(http.StatusOK, "leaderboard.tmpl", datatypes.H{
 		"GuildName": guild.Name,
 		"GuildIcon": guild.IconURL(),
 	})
