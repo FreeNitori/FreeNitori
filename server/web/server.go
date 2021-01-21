@@ -13,9 +13,7 @@ import (
 )
 
 var err error
-var Server = http.Server{
-	Handler: rateLimiter.Handler(m),
-}
+var Server = http.Server{}
 
 func Serve() {
 	<-state.DiscordReady
@@ -48,6 +46,7 @@ func Serve() {
 		log.Infof("Web server listening on unix socket %s.", config.Config.WebServer.Host)
 	}
 
+	Server.Handler = router
 	err = Server.Serve(listener)
 	if err != nil {
 		if err == http.ErrServerClosed {

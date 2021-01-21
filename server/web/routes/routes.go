@@ -1,11 +1,12 @@
 package routes
 
-import "gopkg.in/macaron.v1"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 var (
 	GetRoutes     []WebRoute
 	PostRoutes    []WebRoute
-	ComboRoutes   []WebRoute
 	DeleteRoutes  []WebRoute
 	HeadRoutes    []WebRoute
 	OptionsRoutes []WebRoute
@@ -16,5 +17,5 @@ var (
 
 type WebRoute struct {
 	Pattern  string
-	Handlers []macaron.Handler
+	Handlers []gin.HandlerFunc
 }

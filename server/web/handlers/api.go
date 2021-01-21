@@ -7,7 +7,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/datatypes"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/routes"
-	"gopkg.in/macaron.v1"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"sort"
 	"strconv"
@@ -18,38 +18,38 @@ func init() {
 	routes.GetRoutes = append(routes.GetRoutes,
 		routes.WebRoute{
 			Pattern:  "/api",
-			Handlers: []macaron.Handler{api},
+			Handlers: []gin.HandlerFunc{api},
 		},
 		routes.WebRoute{
 			Pattern:  "/api/info",
-			Handlers: []macaron.Handler{apiInfo},
+			Handlers: []gin.HandlerFunc{apiInfo},
 		},
 		routes.WebRoute{
 			Pattern:  "/api/stats",
-			Handlers: []macaron.Handler{apiStats},
+			Handlers: []gin.HandlerFunc{apiStats},
 		},
 		routes.WebRoute{
 			Pattern:  "/api/user/:uid",
-			Handlers: []macaron.Handler{apiUser},
+			Handlers: []gin.HandlerFunc{apiUser},
 		},
 		routes.WebRoute{
 			Pattern:  "/api/guild/:gid",
-			Handlers: []macaron.Handler{apiGuild},
+			Handlers: []gin.HandlerFunc{apiGuild},
 		},
 		routes.WebRoute{
 			Pattern:  "/api/guild/:gid/:key",
-			Handlers: []macaron.Handler{apiGuildKey},
+			Handlers: []gin.HandlerFunc{apiGuildKey},
 		},
 	)
 }
 
-func api(context *macaron.Context) {
+func api(context *gin.Context) {
 	context.JSON(http.StatusOK, datatypes.H{
 		"status": "OK!",
 	})
 }
 
-func apiInfo(context *macaron.Context) {
+func apiInfo(context *gin.Context) {
 	context.JSON(http.StatusOK, datatypes.H{
 		"nitori_version":  state.Version(),
 		"nitori_revision": state.Revision(),
@@ -57,15 +57,15 @@ func apiInfo(context *macaron.Context) {
 	})
 }
 
-func apiStats(context *macaron.Context) {
+func apiStats(context *gin.Context) {
 	context.JSON(http.StatusOK, datatypes.H{
 		"total_messages":  config.GetTotalMessages(),
 		"guilds_deployed": strconv.Itoa(len(vars.RawSession.State.Guilds)),
 	})
 }
 
-func apiUser(context *macaron.Context) {
-	user, err := discord.FetchUser(context.Params("uid"))
+func apiUser(context *gin.Context) {
+	user, err := discord.FetchUser(context.Param("uid"))
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, datatypes.H{
 			"error": err.Error(),
@@ -82,8 +82,8 @@ func apiUser(context *macaron.Context) {
 	})
 }
 
-func apiGuild(context *macaron.Context) {
-	guild := discord.FetchGuild(context.Params("gid"))
+func apiGuild(context *gin.Context) {
+	guild := discord.FetchGuild(context.Param("gid"))
 	if guild == nil {
 		context.JSON(http.StatusNotFound, datatypes.H{
 			"error": "not found",
@@ -109,13 +109,13 @@ func apiGuild(context *macaron.Context) {
 	})
 }
 
-func apiGuildKey(context *macaron.Context) {
-	guild := discord.FetchGuild(context.Params("gid"))
+func apiGuildKey(context *gin.Context) {
+	guild := discord.FetchGuild(context.Param("gid"))
 	if guild == nil {
 		context.JSON(http.StatusNotFound, datatypes.H{})
 		return
 	}
-	switch context.Params("key") {
+	switch context.Param("key") {
 	case "id":
 		context.JSON(http.StatusOK, guild.ID)
 	case "name":
@@ -172,7 +172,15 @@ func apiGuildKey(context *macaron.Context) {
 		sort.Slice(leaderboard, func(i, j int) bool {
 			return leaderboard[i].Experience > leaderboard[j].Experience
 		})
-		context.JSON(http.StatusOK, leaderboard)
+		context.JSON(http.StatusOK, datatypes.H{
+			"Leaderboard": leaderboard,
+			"GuildInfo": datatypes.GuildInfo{
+				Name:    guild.Name,
+				ID:      guild.ID,
+				IconURL: guild.IconURL(),
+				Members: nil,
+			},
+		})
 	default:
 		context.JSON(http.StatusNotFound, datatypes.H{
 			"error": "not found",
