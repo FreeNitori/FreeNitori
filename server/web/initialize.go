@@ -1,22 +1,23 @@
 package web
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/binaries/static"
+	"errors"
 	"git.randomchars.net/RandomChars/FreeNitori/binaries/tmpl"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/datatypes"
 	_ "git.randomchars.net/RandomChars/FreeNitori/server/web/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/routes"
-	"github.com/go-macaron/bindata"
-	"github.com/go-macaron/session"
+	ginStatic "github.com/gin-contrib/static"
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"go/types"
-	"gopkg.in/macaron.v1"
+	"html/template"
 	"net/http"
+	"strings"
 )
 
-var m = macaron.NewWithLogger(logger{})
+var router *gin.Engine
 
 type logger types.Nil
 
@@ -26,81 +27,72 @@ func (logger) Write(p []byte) (n int, err error) {
 }
 
 func Initialize() error {
-	macaron.Env = macaron.PROD
-	m.Use(session.Sessioner())
 
+	// Set debug mode if debug log level and load certain middlewares
 	if config.LogLevel == logrus.DebugLevel {
-		m.Use(macaron.Logger())
-		m.Use(macaron.Recovery())
-		macaron.Env = macaron.DEV
+		gin.SetMode(gin.DebugMode)
 	} else {
-		m.Use(recovery())
+		gin.SetMode(gin.ReleaseMode)
 	}
 
-	m.Use(macaron.Static("static", macaron.StaticOptions{
-		Prefix:      "",
-		SkipLogging: true,
-		IndexFile:   "index.html",
-		ETag:        true,
-		FileSystem: bindata.Static(bindata.Options{
-			Asset:      static.Asset,
-			AssetDir:   static.AssetDir,
-			AssetInfo:  static.AssetInfo,
-			AssetNames: static.AssetNames,
-			Prefix:     ""}),
-	}))
-	m.Use(macaron.Renderer(macaron.RenderOptions{
-		Directory: "templates",
-		TemplateFileSystem: bindata.Templates(bindata.Options{
-			Asset:      tmpl.Asset,
-			AssetDir:   tmpl.AssetDir,
-			AssetInfo:  tmpl.AssetInfo,
-			AssetNames: tmpl.AssetNames,
-			Prefix:     ""}),
-	}))
+	router = gin.New()
+	router.ForwardedByClientIP = config.Config.WebServer.ForwardedByClientIP
+	router.Use(recovery())
+	if config.LogLevel == logrus.DebugLevel {
+		router.Use(gin.LoggerWithWriter(logger{}))
+	}
 
-	m.Router.NotFound(func(context *macaron.Context) {
-		context.HTML(http.StatusNotFound, "error", datatypes.H{
+	// Register templates
+	templates := template.New("/")
+	for _, path := range tmpl.AssetNames() {
+		if strings.HasPrefix(path, "") {
+			templateBin, _ := tmpl.Asset(path)
+			templates, err = templates.New(path).Parse(string(templateBin))
+			if err != nil {
+				return errors.New("unable to parse templates")
+			}
+		}
+	}
+	router.SetHTMLTemplate(templates)
+
+	// Register static
+	router.Use(ginStatic.Serve("/", datatypes.Public()))
+
+	// Register error page
+	router.NoRoute(func(context *gin.Context) {
+		context.HTML(http.StatusNotFound, "error.tmpl", datatypes.H{
 			"Title":    datatypes.NoSuchFileOrDirectory,
 			"Subtitle": "This route doesn't seem to exist.",
 			"Message":  "I wonder how you got here...",
 		})
 	})
 
-	m.Router.InternalServerError(func(context *macaron.Context) {
-		context.HTML(http.StatusInternalServerError, "error", datatypes.H{
-			"Title":    datatypes.InternalServerError,
-			"Subtitle": "Something wrong has occurred!",
-			"Message":  "I wonder what happened...",
-		})
-	})
+	// Register rate limiting middleware
+	router.Use(rateMiddleware)
 
 	for _, route := range routes.GetRoutes {
-		m.Get(route.Pattern, route.Handlers...)
+		router.GET(route.Pattern, route.Handlers...)
 	}
 	for _, route := range routes.PostRoutes {
-		m.Post(route.Pattern, route.Handlers...)
-	}
-	for _, route := range routes.ComboRoutes {
-		m.Combo(route.Pattern, route.Handlers...)
+		router.POST(route.Pattern, route.Handlers...)
 	}
 	for _, route := range routes.DeleteRoutes {
-		m.Delete(route.Pattern, route.Handlers...)
+		router.DELETE(route.Pattern, route.Handlers...)
 	}
 	for _, route := range routes.HeadRoutes {
-		m.Head(route.Pattern, route.Handlers...)
+		router.HEAD(route.Pattern, route.Handlers...)
 	}
 	for _, route := range routes.OptionsRoutes {
-		m.Options(route.Pattern, route.Handlers...)
+		router.OPTIONS(route.Pattern, route.Handlers...)
 	}
 	for _, route := range routes.PatchRoutes {
-		m.Patch(route.Pattern, route.Handlers...)
+		router.PATCH(route.Pattern, route.Handlers...)
 	}
 	for _, route := range routes.PutRoutes {
-		m.Put(route.Pattern, route.Handlers...)
+		router.PUT(route.Pattern, route.Handlers...)
 	}
 	for _, route := range routes.AnyRoutes {
-		m.Any(route.Pattern, route.Handlers...)
+		router.Any(route.Pattern, route.Handlers...)
 	}
 	return nil
 }

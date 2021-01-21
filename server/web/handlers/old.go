@@ -5,7 +5,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/datatypes"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/routes"
-	"gopkg.in/macaron.v1"
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -15,12 +15,13 @@ func init() {
 	routes.GetRoutes = append(routes.GetRoutes,
 		routes.WebRoute{
 			Pattern:  "/guild/:gid/leaderboard",
-			Handlers: []macaron.Handler{leaderboard},
-		})
+			Handlers: []gin.HandlerFunc{leaderboard},
+		},
+	)
 }
 
-func leaderboard(context *macaron.Context) {
-	guild := discord.FetchGuild(context.Params("gid"))
+func leaderboard(context *gin.Context) {
+	guild := discord.FetchGuild(context.Param("gid"))
 	if guild == nil {
 		context.HTML(http.StatusNotFound, "error", datatypes.H{
 			"Title":    datatypes.NoSuchFileOrDirectory,
