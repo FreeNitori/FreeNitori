@@ -6,7 +6,9 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/datatypes"
+	"git.randomchars.net/RandomChars/FreeNitori/server/web/oauth"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/routes"
+	"github.com/bwmarrin/discordgo"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"sort"
@@ -39,6 +41,10 @@ func init() {
 		routes.WebRoute{
 			Pattern:  "/api/guild/:gid/:key",
 			Handlers: []gin.HandlerFunc{apiGuildKey},
+		},
+		routes.WebRoute{
+			Pattern:  "/api/auth",
+			Handlers: []gin.HandlerFunc{apiAuth},
 		},
 	)
 }
@@ -186,4 +192,32 @@ func apiGuildKey(context *gin.Context) {
 			"error": "not found",
 		})
 	}
+}
+
+func apiAuth(context *gin.Context) {
+	token := oauth.GetToken(context)
+	if token == nil {
+		context.JSON(http.StatusOK, datatypes.H{
+			"authorized": false,
+			"user":       datatypes.UserInfo{},
+		})
+		return
+	}
+	client := oauth.Client(context, oauthConf)
+	response, err := client.Get(discordgo.EndpointUser("@me"))
+	if err != nil {
+		panic(err)
+	}
+	if response.StatusCode == http.StatusUnauthorized {
+		oauth.RemoveToken(context)
+		context.JSON(http.StatusOK, datatypes.H{
+			"authorized": false,
+			"user":       datatypes.UserInfo{},
+		})
+		return
+	}
+	context.JSON(http.StatusOK, datatypes.H{
+		"authorized": true,
+		"user":       response.Body,
+	})
 }

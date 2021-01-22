@@ -13,6 +13,7 @@ const (
 	InternalServerError   = "Internal Server Error"
 	NoSuchFileOrDirectory = "No such file or directory"
 	ServiceUnavailable    = "Service Unavailable"
+	BadRequest            = "Bad Request"
 )
 
 type H map[string]interface{}

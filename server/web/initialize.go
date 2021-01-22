@@ -8,6 +8,8 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/datatypes"
 	_ "git.randomchars.net/RandomChars/FreeNitori/server/web/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/routes"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	ginStatic "github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -38,6 +40,10 @@ func Initialize() error {
 	router = gin.New()
 	router.ForwardedByClientIP = config.Config.WebServer.ForwardedByClientIP
 	router.Use(recovery())
+
+	store := cookie.NewStore([]byte(config.Config.WebServer.Secret))
+	router.Use(sessions.Sessions("nitori", store))
+
 	if config.LogLevel == logrus.DebugLevel {
 		router.Use(gin.LoggerWithWriter(logger{}))
 	}

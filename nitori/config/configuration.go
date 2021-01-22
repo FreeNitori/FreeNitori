@@ -49,6 +49,7 @@ type WebServerSection struct {
 	BaseURL             string
 	Unix                bool
 	ForwardedByClientIP bool
+	Secret              string
 	RateLimit           int
 	RateLimitPeriod     int
 }
