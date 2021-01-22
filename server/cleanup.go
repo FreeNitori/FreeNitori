@@ -38,7 +38,9 @@ func cleanup() {
 	// Close Discord sessions
 	for index, shardSession := range dcVars.ShardSessions {
 		err = shardSession.Close()
-		log.Errorf("Error while shutting down shard %v, %s", index, err)
+		if err != nil {
+			log.Errorf("Error while shutting down shard %v, %s", index, err)
+		}
 	}
 	err = dcVars.RawSession.Close()
 	if err != nil {
