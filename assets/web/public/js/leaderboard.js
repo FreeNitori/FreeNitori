@@ -10,6 +10,7 @@ if (self.fetch) {
         const response = await fetch("/api" + window.location.pathname, {method: 'GET'});
         leaderboard = await response.json();
 	HeadAppend();
+	layoutTitle();
         renderLeaderboard(1);
     }
     request().then();
@@ -235,5 +236,11 @@ function HeadAppend(){
     (document.head).appendChild(meta12);
 
     let guildiconID = document.getElementsByClassName('guild-icon')[0];
-    guildiconID.style.background = 'url(' + guildicon + ')';
+    guildiconID.style.background = 'url(' + guildicon + ')  50% no-repeat';
   };
+
+function layoutTitle(){
+let title = document.getElementsByClassName("mdl-layout__title")[0];
+
+title.appendChild(document.createTextNode('Leaderboard of ' + guildname));
+}
