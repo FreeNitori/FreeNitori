@@ -233,7 +233,7 @@ function HeadAppend() {
 };
 
 function layoutTitle() {
-    let title = document.getElementsByClassName("mdl-layout__title")[0];
+    let title = document.getElementsByClassName("mdl-layout__title")[1];
 
     title.appendChild(document.createTextNode('Leaderboard of ' + guildname));
 }
