@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord"
@@ -10,6 +11,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/server/web/routes"
 	"github.com/bwmarrin/discordgo"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"net/http"
 	"sort"
 	"strconv"
@@ -45,6 +47,10 @@ func init() {
 		routes.WebRoute{
 			Pattern:  "/api/auth",
 			Handlers: []gin.HandlerFunc{apiAuth},
+		},
+		routes.WebRoute{
+			Pattern:  "/api/auth/user",
+			Handlers: []gin.HandlerFunc{apiAuthUser},
 		},
 	)
 }
@@ -195,6 +201,12 @@ func apiGuildKey(context *gin.Context) {
 }
 
 func apiAuth(context *gin.Context) {
+	context.JSON(http.StatusOK, datatypes.H{
+		"authorized": oauth.GetToken(context) != nil,
+	})
+}
+
+func apiAuthUser(context *gin.Context) {
 	token := oauth.GetToken(context)
 	if token == nil {
 		context.JSON(http.StatusOK, datatypes.H{
@@ -216,8 +228,26 @@ func apiAuth(context *gin.Context) {
 		})
 		return
 	}
+
+	var user discordgo.User
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(data, &user)
+	if err != nil {
+		panic(err)
+	}
+
 	context.JSON(http.StatusOK, datatypes.H{
 		"authorized": true,
-		"user":       response.Body,
+		"user": datatypes.UserInfo{
+			Name:          user.Username,
+			ID:            user.ID,
+			AvatarURL:     user.AvatarURL("4096"),
+			Discriminator: user.Discriminator,
+			CreationTime:  time.Unix(int64(((func() (id int) { id, _ = strconv.Atoi(user.ID); return }()>>22)+1420070400000)/1000), 0),
+			Bot:           user.Bot,
+		},
 	})
 }
