@@ -17,11 +17,9 @@ var err error
 func Initialize() error {
 
 	// Load plugins if not window
-	if !state.IsWindow() {
-		err = loadPlugins()
-		if err != nil {
-			return err
-		}
+	err = loadPlugins()
+	if err != nil {
+		return err
 	}
 
 	// Setup some things
