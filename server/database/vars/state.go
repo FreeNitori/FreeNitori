@@ -1,7 +1,5 @@
 package vars
 
-import "git.randomchars.net/RandomChars/FreeNitori/nitori/database/badger"
-
 // Interface of a database backend
 type Backend interface {
 	DBType() string
@@ -21,4 +19,4 @@ type Backend interface {
 	Iter(prefetch, includeOffset bool, offset, prefix string, handler func(key, value string) bool) error
 }
 
-var Database = &badger.Database
+var Database Backend

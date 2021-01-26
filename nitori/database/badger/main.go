@@ -6,7 +6,6 @@ import (
 	"github.com/dgraph-io/badger/v2"
 	"github.com/dgraph-io/badger/v2/options"
 	"strings"
-	"sync"
 )
 
 var err error
@@ -14,8 +13,7 @@ var err error
 var Database Badger
 
 type Badger struct {
-	DB     *badger.DB
-	locker sync.RWMutex
+	DB *badger.DB
 }
 
 func (db *Badger) DBType() string {
@@ -37,7 +35,6 @@ func (db *Badger) Open(path string) error {
 	opts.ValueThreshold = 1
 
 	db.DB, err = badger.Open(opts)
-	db.locker = sync.RWMutex{}
 
 	if err != nil {
 		return err
