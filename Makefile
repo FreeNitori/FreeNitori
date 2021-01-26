@@ -8,7 +8,7 @@ endif
 .PHONY: deps
 deps:
 	@echo "Downloading dependencies..."
-	@/usr/bin/env go get -u github.com/go-bindata/go-bindata/...
+	@go get -u github.com/go-bindata/go-bindata/...
 
 .PHONY: assets
 assets:
@@ -20,14 +20,14 @@ assets:
 .PHONY: plugins
 plugins:
 	@echo "Building plugins..."
-	@for pl in $(shell sh -c "ls plugins/*/main.go"); do /usr/bin/env go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
+	@for pl in $(shell sh -c "ls plugins/*/main.go"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
 
 .PHONY: build
 build:
 	@echo "Building FreeNitori..."
-	@/usr/bin/env go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'" -o build/freenitori$(Suffix) $$PWD/server
+	@go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'" -o build/freenitori$(Suffix) $$PWD/server
 	@echo "Building nitorictl..."
-	@/usr/bin/env go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'" -o build/nitorictl$(Suffix) $$PWD/cli
+	@go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'" -o build/nitorictl$(Suffix) $$PWD/cli
 
 .PHONY: start
 start:
