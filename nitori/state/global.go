@@ -9,11 +9,13 @@ var (
 	revision  = "unknown"
 	start     time.Time
 	InviteURL string
+	window    bool
 )
 
 func Version() string       { return version }
 func Revision() string      { return revision }
 func Uptime() time.Duration { return time.Since(start) }
+func IsWindow() bool        { return window }
 
 // Channels
 var (

@@ -1,5 +1,5 @@
 // Badger database backend.
-package main
+package badger
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
@@ -11,7 +11,6 @@ import (
 
 var err error
 
-//goland:noinspection GoUnusedGlobalVariable
 var Database Badger
 
 type Badger struct {

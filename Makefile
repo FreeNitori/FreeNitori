@@ -1,6 +1,10 @@
 all: deps assets build
 run: assets build start
 
+ifeq ($(shell go env GOOS), windows)
+   Suffix = ".exe"
+endif
+
 .PHONY: deps
 deps:
 	@echo "Downloading dependencies..."
@@ -18,17 +22,12 @@ plugins:
 	@echo "Building plugins..."
 	@for pl in $(shell sh -c "ls plugins/*/main.go"); do /usr/bin/env go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
 
-.PHONY: internal
-internal:
-	@echo "Building internal plugins..."
-	@for pl in $(shell ls "internal/"); do /usr/bin/env go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/internal/$$pl; echo "Built $${pl}."; done;
-
 .PHONY: build
-build: internal
+build:
 	@echo "Building FreeNitori..."
-	@/usr/bin/env go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'" -o build/freenitori $$PWD/server
+	@/usr/bin/env go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'" -o build/freenitori$(Suffix) $$PWD/server
 	@echo "Building nitorictl..."
-	@/usr/bin/env go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'" -o build/nitorictl $$PWD/cli
+	@/usr/bin/env go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'" -o build/nitorictl$(Suffix) $$PWD/cli
 
 .PHONY: start
 start:

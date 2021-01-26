@@ -20,10 +20,13 @@ var err error
 
 // Initialize prepares Discord-related functionality
 func Initialize() error {
-	// Load plugins
-	err = loadPlugins()
-	if err != nil {
-		return err
+
+	// Load plugins if not window
+	if !state.IsWindow() {
+		err = loadPlugins()
+		if err != nil {
+			return err
+		}
 	}
 
 	// Setup some things
@@ -85,6 +88,7 @@ func LateInitialize() error {
 		vars.RawSession.State.User.ID)
 	return nil
 }
+
 func loadPlugins() error {
 	stat, err := os.Stat("plugins")
 	if os.IsNotExist(err) {
