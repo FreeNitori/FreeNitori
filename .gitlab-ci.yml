@@ -12,8 +12,7 @@ build:
   stage: build
   script:
     - GOPATH=$PWD/build/go make;
-    - mkdir build/plugins/; cp plugins/*.so build/plugins
-    - cd build; tar zcf freenitori.tar.gz freenitori nitorictl plugins/*.so; cd ../
+    - cd build; tar zcf freenitori.tar.gz freenitori nitorictl; cd ../
   artifacts:
     paths:
       - build/freenitori.tar.gz
