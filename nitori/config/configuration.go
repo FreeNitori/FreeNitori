@@ -131,9 +131,9 @@ func checkConfig() *types.Nil {
 			log.Fatalf("Failed to write the default configuration file, %s", err)
 			os.Exit(1)
 		}
-		log.Fatalf("Generated default configuration file at %s, "+
-			"please edit it before starting FreeNitori.", nitoriConf)
-		os.Exit(1)
+		log.Warnf("Generated default configuration file at %s, "+
+			"please edit it before restarting FreeNitori.", nitoriConf)
+		select {}
 	}
 	return nil
 }
