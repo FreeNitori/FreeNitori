@@ -16,6 +16,7 @@ import (
 	"go/types"
 	"html/template"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -62,7 +63,14 @@ func Initialize() error {
 	router.SetHTMLTemplate(templates)
 
 	// Register static
-	router.Use(ginStatic.Serve("/", datatypes.Public()))
+	var serveFileSystem ginStatic.ServeFileSystem
+	serveFileSystem = datatypes.Public()
+	if stat, err := os.Stat("assets/web/public"); err == nil {
+		if stat.IsDir() {
+			serveFileSystem = ginStatic.LocalFile("assets/web/public", false)
+		}
+	}
+	router.Use(ginStatic.Serve("/", serveFileSystem))
 
 	// Register error page
 	router.NoRoute(func(context *gin.Context) {
