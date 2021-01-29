@@ -161,18 +161,6 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 		return
 	}
 
-	if reaction.Emoji.ID != "" {
-		return
-	}
-
-	e, err := config.GetGuildConfValue(guild.ID, "highlight_emoji")
-	if err != nil {
-		return
-	}
-	if reaction.Emoji.Name != e {
-		return
-	}
-
 	message, err := session.State.Message(reaction.ChannelID, reaction.MessageID)
 	if err != nil {
 		message, err = session.ChannelMessage(reaction.ChannelID, reaction.MessageID)
@@ -186,79 +174,107 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 		return
 	}
 
-	for _, reactions := range message.Reactions {
-		if reactions.Emoji.Name == e {
-			if reactions.Count >= amount {
-				binding, err := config.HighlightGetBinding(guild.ID, message.ID)
+	if reaction.Emoji.ID != "" {
+		return
+	}
+
+	e, err := config.GetGuildConfValue(guild.ID, "highlight_emoji")
+	if err != nil {
+		return
+	}
+	if reaction.Emoji.Name != e {
+		return
+	}
+
+	binding, err := config.HighlightGetBinding(guild.ID, message.ID)
+	if err != nil {
+		return
+	}
+	if binding == "-" {
+		return
+	}
+
+	sufficient, reactions := func() (bool, *discordgo.MessageReactions) {
+		for _, react := range message.Reactions {
+			if react.Emoji.Name == e {
+				if react.Count >= amount {
+					return true, react
+				} else {
+					return false, nil
+				}
+			}
+		}
+		return false, nil
+	}()
+
+	if sufficient {
+		content := fmt.Sprintf("**%d | **%s", reactions.Count, fmt.Sprintf("<#%s>", message.ChannelID))
+		embed := embedutil.NewEmbed("", message.Content)
+		for _, attachment := range message.Attachments {
+			if attachment.Width != 0 && attachment.Height != 0 {
+				embed.SetImage(attachment.URL, attachment.ProxyURL)
+			}
+			embed.AddField("Attachment", fmt.Sprintf("[%s](%s)", attachment.Filename, attachment.URL), false)
+		}
+		embed.SetAuthor(message.Author.Username+"#"+message.Author.Discriminator, message.Author.AvatarURL("128"))
+		embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
+		embed.Color = vars.KappaColor
+		embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, message.ChannelID, message.ID), false)
+
+		if binding == "" {
+			highlight, err := session.ChannelMessageSendComplex(channel.ID, &discordgo.MessageSend{
+				Content:         content,
+				Embed:           embed.MessageEmbed,
+				TTS:             false,
+				Files:           nil,
+				AllowedMentions: nil,
+				File:            nil,
+			})
+			if err != nil {
+				return
+			}
+			err = config.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
+			if err != nil {
+				return
+			}
+		} else {
+			_, err = session.ChannelMessageEditComplex(&discordgo.MessageEdit{
+				Content:         &content,
+				Embed:           embed.MessageEmbed,
+				AllowedMentions: nil,
+				ID:              binding,
+				Channel:         channel.ID,
+			})
+
+			if fmt.Sprint(err) == "HTTP 404 Not Found, {\"message\": \"Unknown Message\", \"code\": 10008}" {
+				err = config.HighlightUnbindMessage(guild.ID, message.ID)
 				if err != nil {
 					return
 				}
-				if binding == "-" {
+				highlight, err := session.ChannelMessageSendComplex(channel.ID, &discordgo.MessageSend{
+					Content:         content,
+					Embed:           embed.MessageEmbed,
+					TTS:             false,
+					Files:           nil,
+					AllowedMentions: nil,
+					File:            nil,
+				})
+				if err != nil {
 					return
 				}
-
-				content := fmt.Sprintf("**%d | **%s", reactions.Count, fmt.Sprintf("<#%s>", message.ChannelID))
-				embed := embedutil.NewEmbed("", message.Content)
-				for _, attachment := range message.Attachments {
-					if attachment.Width != 0 && attachment.Height != 0 {
-						embed.SetImage(attachment.URL, attachment.ProxyURL)
-					}
-					embed.AddField("Attachment", fmt.Sprintf("[%s](%s)", attachment.Filename, attachment.URL), false)
-				}
-				embed.SetAuthor(message.Author.Username+"#"+message.Author.Discriminator, message.Author.AvatarURL("128"))
-				embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
-				embed.Color = vars.KappaColor
-				embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, message.ChannelID, message.ID), false)
-
-				if binding == "" {
-					highlight, err := session.ChannelMessageSendComplex(channel.ID, &discordgo.MessageSend{
-						Content:         content,
-						Embed:           embed.MessageEmbed,
-						TTS:             false,
-						Files:           nil,
-						AllowedMentions: nil,
-						File:            nil,
-					})
-					if err != nil {
-						return
-					}
-					err = config.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
-					if err != nil {
-						return
-					}
-				} else {
-					_, err = session.ChannelMessageEditComplex(&discordgo.MessageEdit{
-						Content:         &content,
-						Embed:           embed.MessageEmbed,
-						AllowedMentions: nil,
-						ID:              binding,
-						Channel:         channel.ID,
-					})
-
-					if fmt.Sprint(err) == "HTTP 404 Not Found, {\"message\": \"Unknown Message\", \"code\": 10008}" {
-						err = config.HighlightUnbindMessage(guild.ID, message.ID)
-						if err != nil {
-							return
-						}
-						highlight, err := session.ChannelMessageSendComplex(channel.ID, &discordgo.MessageSend{
-							Content:         content,
-							Embed:           embed.MessageEmbed,
-							TTS:             false,
-							Files:           nil,
-							AllowedMentions: nil,
-							File:            nil,
-						})
-						if err != nil {
-							return
-						}
-						err = config.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
-						if err != nil {
-							return
-						}
-					}
+				err = config.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
+				if err != nil {
+					return
 				}
 			}
-			break
+		}
+	} else {
+		if binding != "" {
+			_ = session.ChannelMessageDelete(channelID, binding)
+			err = config.HighlightUnbindMessage(guild.ID, binding)
+			if err != nil {
+				return
+			}
 		}
 	}
 }
