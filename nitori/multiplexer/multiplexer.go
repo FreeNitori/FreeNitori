@@ -57,6 +57,7 @@ type CommandHandlers struct{}
 
 func init() {
 	EventHandlers = append(EventHandlers,
+		Router.OnReady,
 		Router.OnMessageCreate,
 		Router.OnGuildMemberAdd,
 		Router.OnGuildMemberRemove,
@@ -274,6 +275,16 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 			fmt.Sprintf("This command does not exist! Issue `%sman` for a list of command manuals.",
 				guildPrefix))
 	}
+}
+
+// Event handler that fires when ready
+func (mux *Multiplexer) OnReady(session *discordgo.Session, ready *discordgo.Ready) {
+	go func() {
+		for _, hook := range Ready {
+			hook(session, ready)
+		}
+	}()
+	return
 }
 
 // Event handler that fires when a guild member is added

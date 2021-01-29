@@ -67,15 +67,14 @@ func LateInitialize() error {
 			state.DiscordReady <- true
 		}
 	}()
-	_, _ = vars.RawSession.UserUpdateStatus("dnd")
-	_ = vars.RawSession.UpdateStatus(0, config.Config.Discord.Presence)
+
 	if config.Config.Discord.Shard {
 		err = MakeSessions()
 		if err != nil {
 			return err
 		}
 	}
-	log.Infof("Nitori has successfully logged in as %s#%s (%s)",
+	log.Infof("Nitori has successfully logged in as %s#%s (%s).",
 		vars.RawSession.State.User.Username,
 		vars.RawSession.State.User.Discriminator,
 		vars.RawSession.State.User.ID)

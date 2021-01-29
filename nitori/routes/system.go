@@ -8,6 +8,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
+	"github.com/bwmarrin/discordgo"
 	"os"
 	"runtime"
 	"strconv"
@@ -15,6 +16,7 @@ import (
 )
 
 func init() {
+	multiplexer.Ready = append(multiplexer.Ready, setStatus)
 	multiplexer.Router.Route(&multiplexer.Route{
 		Pattern:       "about",
 		AliasPatterns: []string{"info", "kappa", "information"},
@@ -204,6 +206,16 @@ func shutdown(context *multiplexer.Context) {
 func invite(context *multiplexer.Context) {
 	embed := embedutil.NewEmbed("Invite", fmt.Sprintf("Click [this](%s) to invite Nitori.", state.InviteURL))
 	context.SendEmbed(embed)
+}
+
+func setStatus(_ *discordgo.Session, ready *discordgo.Ready) {
+	err = vars.RawSession.UpdateStatus(0, config.Config.Discord.Presence)
+	if err != nil {
+		log.Warnf("Unable to update presence, %s", err)
+	}
+
+	log.Debugf("Session %s ready.",
+		ready.SessionID)
 }
 
 func sizeInMiB(size uint64) string {
