@@ -30,39 +30,35 @@ var (
 // Configuration related types
 type MessageOutOfBounds struct{}
 type Conf struct {
-	System    SystemSection
-	WebServer WebServerSection
-	Discord   DiscordSection
-	LastFM    LastFMSection
-}
-type SystemSection struct {
-	LogLevel      string
-	Socket        string
-	Database      string
-	Prefix        string
-	Administrator int
-	Operator      []int
-}
-type WebServerSection struct {
-	Host                string
-	Port                int
-	BaseURL             string
-	Unix                bool
-	ForwardedByClientIP bool
-	Secret              string
-	RateLimit           int
-	RateLimitPeriod     int
-}
-type DiscordSection struct {
-	Token        string
-	ClientSecret string
-	Presence     string
-	Shard        bool
-	ShardCount   int
-}
-type LastFMSection struct {
-	ApiKey    string
-	ApiSecret string
+	System struct {
+		LogLevel      string
+		Socket        string
+		Database      string
+		Prefix        string
+		Administrator int
+		Operator      []int
+	}
+	WebServer struct {
+		Host                string
+		Port                int
+		BaseURL             string
+		Unix                bool
+		ForwardedByClientIP bool
+		Secret              string
+		RateLimit           int
+		RateLimitPeriod     int
+	}
+	Discord struct {
+		Token        string
+		ClientSecret string
+		Presence     string
+		Shard        bool
+		ShardCount   int
+	}
+	LastFM struct {
+		ApiKey    string
+		ApiSecret string
+	}
 }
 
 func flags() *types.Nil {
