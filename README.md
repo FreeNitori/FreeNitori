@@ -1,6 +1,6 @@
 <div align="center">
 
-![banner](https://git.randomchars.net/RandomChars/FreeNitori/-/raw/master/assets/web/public/img/banner.png "FreeNitori")
+![banner](https://freenitori.jp/img/banner.png "FreeNitori")
 
 An open source, general purpose modular Discord bot written in go.
 
