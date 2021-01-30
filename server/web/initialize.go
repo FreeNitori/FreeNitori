@@ -84,6 +84,7 @@ func Initialize() error {
 	// Register rate limiting middleware
 	router.Use(rateMiddleware)
 
+	// Register routes
 	for _, route := range routes.GetRoutes {
 		router.GET(route.Pattern, route.Handlers...)
 	}
