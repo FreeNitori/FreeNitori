@@ -9,8 +9,6 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/bwmarrin/discordgo"
-	"os"
-	"runtime"
 	"strconv"
 	"time"
 )
@@ -92,90 +90,56 @@ func stats(context *multiplexer.Context) {
 		return
 	}
 
-	var embed *embedutil.Embed
+	stats := state.Stats()
 
-	uptime := state.Uptime()
-	numGoroutine := runtime.NumGoroutine()
+	var embed *embedutil.Embed
 
 	embed = embedutil.NewEmbed("System Stats", "")
 	embed.Color = vars.KappaColor
-	embed.AddField("PID", strconv.Itoa(os.Getpid()), true)
-	embed.AddField("Uptime", uptime.Truncate(time.Second).String(), true)
-	embed.AddField("Goroutines", strconv.Itoa(numGoroutine), true)
-	context.SendEmbed(embed)
+	embed.AddField("PID", strconv.Itoa(stats.Process.PID), true)
+	embed.AddField("Uptime", stats.Process.Uptime.Truncate(time.Second).String(), true)
+	embed.AddField("Goroutines", strconv.Itoa(stats.Process.NumGoroutine), true)
 
-	var memStats runtime.MemStats
-	runtime.ReadMemStats(&memStats)
-	memAllocated := sizeInMiB(memStats.Alloc)
-	memTotal := sizeInMiB(memStats.TotalAlloc)
-	memSys := sizeInMiB(memStats.Sys)
-	lookups := memStats.Lookups
-	memMallocs := memStats.Mallocs
-	memFrees := memStats.Frees
+	embed.AddField("Operating System", stats.Platform.GOOS, true)
+	embed.AddField("Architecture", stats.Platform.GOARCH, true)
+	embed.AddField("Go Root", stats.Platform.GOROOT, true)
+	embed.AddField("Go Version", stats.Platform.GoVersion, true)
+	context.SendEmbed(embed)
 
 	embed = embedutil.NewEmbed("", "")
 	embed.Color = vars.KappaColor
-	embed.AddField("Current Memory Allocated", memAllocated, true)
-	embed.AddField("Total Memory Allocated", memTotal, true)
-	embed.AddField("System Reported Allocation", memSys, true)
-	embed.AddField("Pointer Lookups", strconv.Itoa(int(lookups)), true)
-	embed.AddField("Memory Allocations", strconv.Itoa(int(memMallocs)), true)
-	embed.AddField("Memory Frees", strconv.Itoa(int(memFrees)), true)
-	context.SendEmbed(embed)
+	embed.AddField("Current Memory Allocated", stats.Mem.Allocated, true)
+	embed.AddField("Total Memory Allocated", stats.Mem.Total, true)
+	embed.AddField("System Reported Allocation", stats.Mem.Sys, true)
+	embed.AddField("Pointer Lookups", strconv.Itoa(int(stats.Mem.Lookups)), true)
+	embed.AddField("Memory Allocations", strconv.Itoa(int(stats.Mem.Mallocs)), true)
+	embed.AddField("Memory Frees", strconv.Itoa(int(stats.Mem.Frees)), true)
 
-	heapAlloc := sizeInMiB(memStats.HeapAlloc)
-	heapSys := sizeInMiB(memStats.HeapSys)
-	heapIdle := sizeInMiB(memStats.HeapIdle)
-	heapInuse := sizeInMiB(memStats.HeapInuse)
-	heapReleased := sizeInMiB(memStats.HeapReleased)
-	heapObjects := memStats.HeapObjects
+	embed.AddField("Current Heap Usage", stats.Heap.Alloc, true)
+	embed.AddField("System Reported Usage", stats.Heap.Sys, true)
+	embed.AddField("Heap Idle", stats.Heap.Idle, true)
+	embed.AddField("Heap In Use", stats.Heap.Inuse, true)
+	embed.AddField("Heap Released", stats.Heap.Released, true)
+	embed.AddField("Heap Objects", strconv.Itoa(int(stats.Heap.Objects)), true)
+
+	embed.AddField("Bootstrap Stack Usage", stats.Misc.StackInuse, true)
+	embed.AddField("System Reported Stack", stats.Misc.StackSys, true)
+	embed.AddField("MSpan Structures Usage", stats.Misc.MSpanInuse, true)
+	embed.AddField("System Reported MSpan", stats.Misc.MSpanSys, true)
+	embed.AddField("MCache Structures Usage", stats.Misc.MCacheInuse, true)
+	embed.AddField("System Reported MCache", stats.Misc.MCacheSys, true)
+	embed.AddField("GC Metadata Size", stats.Misc.GCSys, true)
+	embed.AddField("Profiling Bucket Hash Tables Size", stats.Misc.BuckHashSys, true)
+	embed.AddField("Miscellaneous Off-heap Allocations", stats.Misc.OtherSys, true)
+	context.SendEmbed(embed)
 
 	embed = embedutil.NewEmbed("", "")
 	embed.Color = vars.KappaColor
-	embed.AddField("Current Heap Usage", heapAlloc, true)
-	embed.AddField("System Reported Usage", heapSys, true)
-	embed.AddField("Heap Idle", heapIdle, true)
-	embed.AddField("Heap In Use", heapInuse, true)
-	embed.AddField("Heap Released", heapReleased, true)
-	embed.AddField("Heap Objects", strconv.Itoa(int(heapObjects)), true)
-	context.SendEmbed(embed)
-
-	stackInuse := sizeInMiB(memStats.StackInuse)
-	stackSys := sizeInMiB(memStats.StackSys)
-	mspanInuse := sizeInMiB(memStats.MSpanInuse)
-	mspanSys := sizeInMiB(memStats.MSpanSys)
-	mcacheInuse := sizeInMiB(memStats.MCacheInuse)
-	mcacheSys := sizeInMiB(memStats.MCacheSys)
-	gcSys := sizeInMiB(memStats.GCSys)
-	buckHashSys := sizeInMiB(memStats.BuckHashSys)
-	otherSys := sizeInMiB(memStats.OtherSys)
-
-	embed = embedutil.NewEmbed("", "")
-	embed.Color = vars.KappaColor
-	embed.AddField("Bootstrap Stack Usage", stackInuse, true)
-	embed.AddField("System Reported Stack", stackSys, true)
-	embed.AddField("MSpan Structures Usage", mspanInuse, true)
-	embed.AddField("System Reported MSpan", mspanSys, true)
-	embed.AddField("MCache Structures Usage", mcacheInuse, true)
-	embed.AddField("System Reported MCache", mcacheSys, true)
-	embed.AddField("GC Metadata Size", gcSys, true)
-	embed.AddField("Profiling Bucket Hash Tables Size", buckHashSys, true)
-	embed.AddField("Miscellaneous Off-heap Allocations", otherSys, true)
-	context.SendEmbed(embed)
-
-	nextGC := sizeInMiB(memStats.NextGC)
-	lastGC := fmt.Sprintf("%.1fs", float64(time.Now().UnixNano()-int64(memStats.LastGC))/1000/1000/1000)
-	pauseTotalNs := fmt.Sprintf("%.1fs", float64(memStats.PauseTotalNs)/1000/1000/1000)
-	pauseNs := fmt.Sprintf("%.3fs", float64(memStats.PauseNs[(memStats.NumGC+255)%256])/1000/1000/1000)
-	numGC := memStats.NumGC
-
-	embed = embedutil.NewEmbed("", "")
-	embed.Color = vars.KappaColor
-	embed.AddField("Next GC Recycle", nextGC, true)
-	embed.AddField("Time Since Last GC", lastGC, true)
-	embed.AddField("Total GC Pause", pauseTotalNs, true)
-	embed.AddField("Last GC Pause", pauseNs, true)
-	embed.AddField("Number of GCs", strconv.Itoa(int(numGC)), true)
+	embed.AddField("Next GC Recycle", stats.GC.NextGC, true)
+	embed.AddField("Time Since Last GC", stats.GC.LastGC, true)
+	embed.AddField("Total GC Pause", stats.GC.PauseTotalNs, true)
+	embed.AddField("Last GC Pause", stats.GC.PauseNs, true)
+	embed.AddField("Number of GCs", strconv.Itoa(int(stats.GC.NumGC)), true)
 	context.SendEmbed(embed)
 }
 
@@ -216,8 +180,4 @@ func setStatus(_ *discordgo.Session, ready *discordgo.Ready) {
 
 	log.Debugf("Session %s ready.",
 		ready.SessionID)
-}
-
-func sizeInMiB(size uint64) string {
-	return fmt.Sprintf("%.2f MiB", float64(size)/1048576)
 }
