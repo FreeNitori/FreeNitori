@@ -1,10 +1,10 @@
 package multiplexer
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"github.com/sirupsen/logrus"
 	"regexp"
@@ -27,22 +27,35 @@ func (context *Context) SendMessage(message string) *discordgo.Message {
 		}
 		log.Errorf("Error while sending message to guild %s, %s", context.Message.GuildID, err)
 		_, _ = context.Session.ChannelMessageSend(context.Message.ChannelID,
-			vars.ErrorOccurred)
+			state.ErrorOccurred)
 		return nil
 	}
 	return resultMessage
 }
 
 // SendEmbed sends an embedutil message in the current channel and returns the message.
-func (context *Context) SendEmbed(embed *embedutil.Embed) *discordgo.Message {
-	resultMessage, err := context.Session.ChannelMessageSendEmbed(context.Message.ChannelID, embed.MessageEmbed)
+func (context *Context) SendEmbed(message string, embed embedutil.Embed) *discordgo.Message {
+	var resultMessage *discordgo.Message
+	var err error
+	if message == "" {
+		resultMessage, err = context.Session.ChannelMessageSendEmbed(context.Message.ChannelID, embed.MessageEmbed)
+	} else {
+		resultMessage, err = context.Session.ChannelMessageSendComplex(context.Message.ChannelID, &discordgo.MessageSend{
+			Content:         message,
+			Embed:           embed.MessageEmbed,
+			TTS:             false,
+			Files:           nil,
+			AllowedMentions: nil,
+			File:            nil,
+		})
+	}
 	if err != nil {
 		if err == discordgo.ErrUnauthorized {
 			return nil
 		}
 		log.Errorf("Error while sending embedutil to guild %s, %s", context.Message.GuildID, err)
 		_, _ = context.Session.ChannelMessageSend(context.Message.ChannelID,
-			vars.ErrorOccurred)
+			state.ErrorOccurred)
 		return nil
 	}
 	return resultMessage
@@ -52,7 +65,7 @@ func (context *Context) SendEmbed(embed *embedutil.Embed) *discordgo.Message {
 func (context *Context) HandleError(err error) bool {
 	if err != nil {
 		log.Errorf("Error occurred while executing command, %s", err)
-		context.SendMessage(vars.ErrorOccurred)
+		context.SendMessage(state.ErrorOccurred)
 		if log.GetLevel() == logrus.DebugLevel {
 			context.SendMessage(err.Error())
 		}
@@ -64,10 +77,10 @@ func (context *Context) HandleError(err error) bool {
 // HasPermission checks a user for a permission.
 func (context *Context) HasPermission(permission int) bool {
 	// Override check for operators and system administrators
-	if context.Author.ID == vars.Administrator.ID {
+	if context.Author.ID == state.Administrator.ID {
 		return true
 	} else {
-		for _, user := range vars.Operator {
+		for _, user := range state.Operator {
 			if context.Author.ID == user.ID {
 				return true
 			}

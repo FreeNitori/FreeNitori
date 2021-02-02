@@ -2,9 +2,9 @@ package routes
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"strings"
 )
 
@@ -44,7 +44,7 @@ func manuals(context *multiplexer.Context) {
 
 			// Add list of categories to the Embed
 			embed.AddField("Categories", catText, false)
-			_ = context.SendEmbed(embed)
+			_ = context.SendEmbed("", embed)
 		}
 
 	case len(context.Fields) == 2:
@@ -61,14 +61,14 @@ func manuals(context *multiplexer.Context) {
 
 			// Break out of the case if no category was matched
 			if desiredCat == nil {
-				context.SendMessage(vars.InvalidArgument)
+				context.SendMessage(state.InvalidArgument)
 				break
 			}
 
 			// Generate list of all commands in one specific category
 			embed := embedutil.NewEmbed(desiredCat.Title,
 				desiredCat.Description)
-			embed.Color = vars.KappaColor
+			embed.Color = state.KappaColor
 
 			for _, route := range desiredCat.Routes {
 
@@ -80,14 +80,14 @@ func manuals(context *multiplexer.Context) {
 				// Just add the stuff as an entry, it will do on this level
 				embed.AddField(route.Pattern, route.Description, false)
 			}
-			context.SendEmbed(embed)
+			context.SendEmbed("", embed)
 
 		}
 
 	case len(context.Fields) > 2:
 		{
 			// Some catch-all case I guess, though there will be a command-specific thing later maybe
-			context.SendMessage(vars.InvalidArgument)
+			context.SendMessage(state.InvalidArgument)
 		}
 	}
 }

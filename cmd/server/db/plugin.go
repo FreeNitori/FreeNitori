@@ -1,10 +1,10 @@
 // +build linux freebsd darwin
 
-package database
+package db
 
 import (
 	"errors"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/database/vars"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/database/badger"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"io/ioutil"
@@ -38,21 +38,21 @@ func loadDatabaseBackend() error {
 		if err != nil {
 			continue
 		}
-		db, ok := symbol.(vars.Backend)
+		db, ok := symbol.(database.Backend)
 		if !ok {
 			log.Warnf("No database backend found in %s.", path.Name())
 			continue
 		}
-		if vars.Database != nil {
-			log.Warnf("Already loaded database backend %s, skipping plugin %s.", vars.Database.DBType(), path.Name())
+		if database.Database != nil {
+			log.Warnf("Already loaded database backend %s, skipping plugin %s.", database.Database.DBType(), path.Name())
 			continue
 		}
-		vars.Database = db
+		database.Database = db
 		log.Infof("Loaded plugin %s implementing database backend %s.", path.Name(), db.DBType())
 	}
-	if vars.Database == nil {
+	if database.Database == nil {
 		log.Info("No database backend loaded from plugins, using built-in database.")
-		vars.Database = &badger.Database
+		database.Database = &badger.Database
 	}
 	return nil
 }

@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	dbVars "git.randomchars.net/RandomChars/FreeNitori/cmd/server/database/vars"
-	dcVars "git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/rpc"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"os"
 	"syscall"
 	"time"
@@ -36,19 +36,19 @@ func cleanup() {
 	}
 
 	// Close Discord sessions
-	for index, shardSession := range dcVars.ShardSessions {
+	for index, shardSession := range state.ShardSessions {
 		err = shardSession.Close()
 		if err != nil {
 			log.Errorf("Error while shutting down shard %v, %s", index, err)
 		}
 	}
-	err = dcVars.RawSession.Close()
+	err = state.RawSession.Close()
 	if err != nil {
 		log.Errorf("Error while closing session with Discord, %s", err)
 	}
 
 	// Close database
-	err = dbVars.Database.Close()
+	err = database.Database.Close()
 	if err != nil {
 		log.Errorf("Error while closing database, %s", err)
 	}

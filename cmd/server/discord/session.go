@@ -2,10 +2,10 @@ package discord
 
 import (
 	"errors"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"time"
@@ -16,7 +16,7 @@ func MakeSessions() error {
 
 	// Get recommended shard count from Discord
 	if config.Config.Discord.ShardCount < 1 {
-		gatewayBot, err := vars.RawSession.GatewayBot()
+		gatewayBot, err := state.RawSession.GatewayBot()
 		if err != nil {
 			return err
 		}
@@ -34,10 +34,10 @@ func MakeSessions() error {
 		session, _ := discordgo.New()
 		session.ShardCount = config.Config.Discord.ShardCount
 		session.ShardID = i
-		session.Token = vars.RawSession.Token
-		session.UserAgent = vars.RawSession.UserAgent
-		session.ShouldReconnectOnError = vars.RawSession.ShouldReconnectOnError
-		session.Identify.Intents = vars.RawSession.Identify.Intents
+		session.Token = state.RawSession.Token
+		session.UserAgent = state.RawSession.UserAgent
+		session.ShouldReconnectOnError = state.RawSession.ShouldReconnectOnError
+		session.Identify.Intents = state.RawSession.Identify.Intents
 		err = session.Open()
 		if err != nil {
 			return err
@@ -46,20 +46,20 @@ func MakeSessions() error {
 			session.AddHandler(handler)
 		}
 		log.Infof("Shard %s ready.", strconv.Itoa(i))
-		vars.ShardSessions = append(vars.ShardSessions, session)
+		state.ShardSessions = append(state.ShardSessions, session)
 	}
 	return nil
 }
 
 func FetchGuildSession(gid string) (*discordgo.Session, error) {
 	if !config.Config.Discord.Shard {
-		return vars.RawSession, nil
+		return state.RawSession, nil
 	}
 	ID, err := strconv.ParseInt(gid, 10, 64)
 	if err != nil {
 		return nil, err
 	}
-	return vars.ShardSessions[(ID>>22)%int64(config.Config.Discord.ShardCount)], nil
+	return state.ShardSessions[(ID>>22)%int64(config.Config.Discord.ShardCount)], nil
 }
 
 func FetchGuild(gid string) *discordgo.Guild {
@@ -83,5 +83,5 @@ func FetchUser(uid string) (*discordgo.User, error) {
 	if _, err := strconv.Atoi(uid); err != nil {
 		return nil, errors.New("invalid snowflake")
 	}
-	return vars.RawSession.User(uid)
+	return state.RawSession.User(uid)
 }

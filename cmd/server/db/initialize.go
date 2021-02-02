@@ -1,9 +1,9 @@
 // Wrapper around database backend driver.
-package database
+package db
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/database/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 )
 
 var err error
@@ -17,7 +17,7 @@ func Initialize() error {
 	}
 
 	// Open the database
-	err = vars.Database.Open(config.Config.System.Database)
+	err = database.Database.Open(config.Config.System.Database)
 	if err != nil {
 		return err
 	}

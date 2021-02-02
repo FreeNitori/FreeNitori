@@ -2,7 +2,7 @@ package rpc
 
 import (
 	"errors"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/database/vars"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"strconv"
 )
@@ -32,26 +32,26 @@ func (N) DatabaseAction(args []string, reply *[]string) error {
 	var response = []string{""}
 	switch args[0] {
 	case "size":
-		response[0] = strconv.Itoa(int(vars.Database.Size()))
+		response[0] = strconv.Itoa(int(database.Database.Size()))
 	case "gc":
-		err = vars.Database.GC()
+		err = database.Database.GC()
 	case "set":
-		err = vars.Database.Set(args[1], args[2])
+		err = database.Database.Set(args[1], args[2])
 	case "get":
-		response[0], err = vars.Database.Get(args[1])
+		response[0], err = database.Database.Get(args[1])
 	case "del":
-		err = vars.Database.Del(args[1:])
+		err = database.Database.Del(args[1:])
 	case "hset":
-		err = vars.Database.HSet(args[1], args[2], args[3])
+		err = database.Database.HSet(args[1], args[2], args[3])
 	case "hget":
-		response[0], err = vars.Database.HGet(args[1], args[2])
+		response[0], err = database.Database.HGet(args[1], args[2])
 	case "hdel":
-		err = vars.Database.HDel(args[1], args[2:])
+		err = database.Database.HDel(args[1], args[2:])
 	case "hkeys":
-		response, err = vars.Database.HKeys(args[1])
+		response, err = database.Database.HKeys(args[1])
 	case "hlen":
 		var result int
-		result, err = vars.Database.HLen(args[1])
+		result, err = database.Database.HLen(args[1])
 		response[0] = strconv.Itoa(result)
 	default:
 		return errors.New("invalid operation")
@@ -67,7 +67,7 @@ func (N) DatabaseActionHashmap(args []string, reply *[]map[string]string) error 
 	var response = []map[string]string{make(map[string]string)}
 	switch args[0] {
 	case "hgetall":
-		response[0], err = vars.Database.HGetAll(args[1])
+		response[0], err = database.Database.HGetAll(args[1])
 	default:
 		return errors.New("invalid operation")
 	}

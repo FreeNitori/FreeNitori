@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/oauth"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/routes"
@@ -21,7 +20,7 @@ func init() {
 	go func() {
 		<-state.DiscordReady
 		oauthConf = &oauth2.Config{
-			ClientID:     vars.Application.ID,
+			ClientID:     state.Application.ID,
 			ClientSecret: config.Config.Discord.ClientSecret,
 			Endpoint:     oauth.Endpoint(),
 			RedirectURL:  config.Config.WebServer.BaseURL + "auth/callback",

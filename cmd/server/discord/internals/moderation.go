@@ -1,9 +1,9 @@
 package internals
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"time"
@@ -41,7 +41,7 @@ func whois(context *multiplexer.Context) {
 
 	// Fail if unable to make sense of the arguments passed
 	if user == nil {
-		context.SendMessage(vars.MissingUser)
+		context.SendMessage(state.MissingUser)
 		return
 	}
 
@@ -51,7 +51,7 @@ func whois(context *multiplexer.Context) {
 		embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
 		embed.SetAuthor(user.Username, user.AvatarURL("128"))
 		embed.SetImage(user.AvatarURL("4096"))
-		context.SendEmbed(embed)
+		context.SendEmbed("", embed)
 		return
 	}
 
@@ -91,5 +91,5 @@ func whois(context *multiplexer.Context) {
 		}
 		embed.AddField("Join Date", joinTime.Format("Mon, 02 Jan 2006 15:04:05"), true)
 	}
-	context.SendEmbed(embed)
+	context.SendEmbed("", embed)
 }

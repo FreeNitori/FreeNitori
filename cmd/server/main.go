@@ -2,13 +2,13 @@
 package main
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/database"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/database/vars"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/db"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/extension"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/rpc"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"go/types"
@@ -39,7 +39,7 @@ func init() {
 	}
 
 	// Initialize database
-	err = database.Initialize()
+	err = db.Initialize()
 	if err != nil {
 		log.Fatalf("Unable to initialize database, %s", err)
 		os.Exit(1)
@@ -49,7 +49,7 @@ func init() {
 	err = web.Initialize()
 	if err != nil {
 		log.Fatalf("Unable to initialize web services, %s", err)
-		_ = vars.Database.Close()
+		_ = database.Database.Close()
 		os.Exit(1)
 	}
 
@@ -57,7 +57,7 @@ func init() {
 	err = discord.Initialize()
 	if err != nil {
 		log.Fatalf("Unable to initialize Discord services, %s", err)
-		_ = vars.Database.Close()
+		_ = database.Database.Close()
 		os.Exit(1)
 	}
 }

@@ -3,9 +3,9 @@ package internals
 import (
 	"errors"
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/anaskhan96/soup"
 	"math/rand"
 	"strconv"
@@ -216,6 +216,8 @@ func fetch(character CharacterInfo) (*CharacterArt, error) {
 func touhou(context *multiplexer.Context) {
 	var name string
 	var char CharacterInfo
+	var text string
+
 	if len(context.Fields) > 1 {
 		name = strings.ToLower(context.Fields[1])
 	}
@@ -227,6 +229,7 @@ func touhou(context *multiplexer.Context) {
 	}
 
 	if char.SearchString == "" {
+		text = "No character matched your query, displaying random character."
 		char = CharacterList()[rand.Intn(len(CharacterList()))]
 	}
 
@@ -239,7 +242,7 @@ func touhou(context *multiplexer.Context) {
 	embed.SetImage(art.ImageURL)
 	embed.SetAuthor(char.FriendlyName)
 	embed.SetFooter("Source URL: " + art.SourceURL)
-	context.SendEmbed(embed)
+	context.SendEmbed(text, embed)
 }
 
 func guessResponse(context *multiplexer.Context) {
@@ -252,7 +255,7 @@ func guessResponse(context *multiplexer.Context) {
 
 func guess(context *multiplexer.Context) {
 	if context.IsPrivate {
-		context.SendMessage(vars.GuildOnly)
+		context.SendMessage(state.GuildOnly)
 		return
 	}
 
@@ -275,7 +278,7 @@ func guess(context *multiplexer.Context) {
 	embed := embedutil.NewEmbed("Guess Character", "You have 15 seconds to decide.")
 	embed.Color = char.Color
 	embed.SetImage(art.ImageURL)
-	context.SendEmbed(embed)
+	context.SendEmbed("", embed)
 
 	end := make(chan bool, 1)
 	go func() { time.Sleep(15 * time.Second); end <- true }()

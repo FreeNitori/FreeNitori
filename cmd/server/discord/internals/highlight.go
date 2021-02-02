@@ -2,12 +2,12 @@ package internals
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/emoji"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/overrides"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"unicode/utf8"
@@ -218,7 +218,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 		}
 		embed.SetAuthor(message.Author.Username+"#"+message.Author.Discriminator, message.Author.AvatarURL("128"))
 		embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
-		embed.Color = vars.KappaColor
+		embed.Color = state.KappaColor
 		embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, message.ChannelID, message.ID), false)
 
 		if binding == "" {

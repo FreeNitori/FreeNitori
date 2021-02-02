@@ -2,11 +2,11 @@ package internals
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/overrides"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"math/rand"
 	"strconv"
@@ -114,7 +114,7 @@ func level(context *multiplexer.Context) {
 
 	// Doesn't work in private messages
 	if context.IsPrivate {
-		context.SendMessage(vars.GuildOnly)
+		context.SendMessage(state.GuildOnly)
 	}
 
 	// Checks if feature is enabled
@@ -123,7 +123,7 @@ func level(context *multiplexer.Context) {
 		return
 	}
 	if !expEnabled {
-		context.SendMessage(vars.FeatureDisabled)
+		context.SendMessage(state.FeatureDisabled)
 		return
 	}
 
@@ -138,7 +138,7 @@ func level(context *multiplexer.Context) {
 
 	// Bail out if nothing is get
 	if member == nil {
-		context.SendMessage(vars.MissingUser)
+		context.SendMessage(state.MissingUser)
 		return
 	}
 
@@ -154,14 +154,14 @@ func level(context *multiplexer.Context) {
 	embed.AddField("Level", strconv.Itoa(levelValue), true)
 	embed.AddField("Experience", strconv.Itoa(expValue-baseExpValue)+"/"+strconv.Itoa(config.LevelToExp(levelValue+1)-baseExpValue), true)
 	embed.SetThumbnail(member.User.AvatarURL("128"))
-	context.SendEmbed(embed)
+	context.SendEmbed("", embed)
 }
 
 func setrank(context *multiplexer.Context) {
 
 	// Doesn't work in private messages
 	if context.IsPrivate {
-		context.SendMessage(vars.GuildOnly)
+		context.SendMessage(state.GuildOnly)
 	}
 
 	// Checks if feature is enabled
@@ -170,19 +170,19 @@ func setrank(context *multiplexer.Context) {
 		return
 	}
 	if !expEnabled {
-		context.SendMessage(vars.FeatureDisabled)
+		context.SendMessage(state.FeatureDisabled)
 		return
 	}
 
 	// Deny access to anyone that does not have permission Administrator
 	if !context.HasPermission(discordgo.PermissionAdministrator) {
-		context.SendMessage(vars.PermissionDenied)
+		context.SendMessage(state.PermissionDenied)
 		return
 	}
 
 	switch len(context.Fields) {
 	case 0:
 		embed := embedutil.NewEmbed("Ranked Roles", "Configure ranked roles.")
-		context.SendEmbed(embed)
+		context.SendEmbed("", embed)
 	}
 }

@@ -20,7 +20,7 @@ const (
 )
 
 // NewEmbed makes a new Embed object.
-func NewEmbed(title string, description string) *Embed {
+func NewEmbed(title string, description string) Embed {
 	embed := Embed{&discordgo.MessageEmbed{}}
 
 	if len(title) > LimitTitle {
@@ -33,7 +33,7 @@ func NewEmbed(title string, description string) *Embed {
 
 	embed.Title = title
 	embed.Description = description
-	return &embed
+	return embed
 }
 
 // AddField adds a field to the embedutil.

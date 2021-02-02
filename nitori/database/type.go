@@ -1,4 +1,4 @@
-package vars
+package database
 
 // Interface of a database backend
 type Backend interface {

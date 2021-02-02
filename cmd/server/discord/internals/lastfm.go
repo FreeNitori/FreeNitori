@@ -2,14 +2,16 @@ package internals
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/shkh/lastfm-go/lastfm"
 	"regexp"
 	"strconv"
 )
+
+var LastFM *lastfm.Api
 
 func init() {
 	multiplexer.Router.Route(&multiplexer.Route{
@@ -19,7 +21,7 @@ func init() {
 		Category:      multiplexer.MediaCategory,
 		Handler:       fm,
 	})
-	vars.LastFM = lastfm.New(config.Config.LastFM.ApiKey, config.Config.LastFM.ApiSecret)
+	LastFM = lastfm.New(config.Config.LastFM.ApiKey, config.Config.LastFM.ApiSecret)
 }
 
 func fm(context *multiplexer.Context) {
@@ -40,7 +42,7 @@ func fm(context *multiplexer.Context) {
 		switch context.Fields[1] {
 		case "set":
 			if b, _ := regexp.MatchString(`^[a-zA-Z0-9_]+$`, context.Fields[2]); !b || len(context.Fields[2]) < 2 || len(context.Fields[2]) > 15 {
-				context.SendMessage(vars.InvalidArgument)
+				context.SendMessage(state.InvalidArgument)
 				return
 			}
 			err = config.SetLastfm(context.Author, context.Guild, context.Fields[2])
@@ -57,7 +59,7 @@ func fm(context *multiplexer.Context) {
 			context.SendMessage("Successfully reset lastfm username.")
 			return
 		default:
-			context.SendMessage(vars.InvalidArgument)
+			context.SendMessage(state.InvalidArgument)
 			return
 		}
 	}
@@ -68,7 +70,7 @@ func fm(context *multiplexer.Context) {
 		return
 	}
 	p := lastfm.P{"user": username, "limit": 1, "extended": 0}
-	result, err := vars.LastFM.User.GetRecentTracks(p)
+	result, err := LastFM.User.GetRecentTracks(p)
 	if err != nil {
 		context.SendMessage("Please set your lastfm username `" + context.Prefix() + "fm set <username>`.")
 		return
@@ -85,5 +87,5 @@ func fm(context *multiplexer.Context) {
 	if len(result.Tracks[0].Images) == 4 {
 		embed.SetThumbnail(result.Tracks[0].Images[3].Url)
 	}
-	context.SendEmbed(embed)
+	context.SendEmbed("", embed)
 }

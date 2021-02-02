@@ -2,7 +2,6 @@ package routes
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
@@ -55,21 +54,21 @@ func init() {
 func about(context *multiplexer.Context) {
 	embed := embedutil.NewEmbed(context.Session.State.User.Username,
 		"Open source, general purpose Discord utility.")
-	embed.Color = vars.KappaColor
+	embed.Color = state.KappaColor
 	embed.AddField("Homepage", config.Config.WebServer.BaseURL, true)
 	embed.AddField("Version", state.Version(), true)
 	embed.AddField("Commit Hash", state.Revision(), true)
 	embed.AddField("Processed Messages", strconv.Itoa(config.GetTotalMessages()), true)
-	if vars.Administrator != nil {
-		embed.AddField("Administrator", vars.Administrator.Username+"#"+vars.Administrator.Discriminator, true)
+	if state.Administrator != nil {
+		embed.AddField("Administrator", state.Administrator.Username+"#"+state.Administrator.Discriminator, true)
 	}
-	switch len(vars.Operator) {
+	switch len(state.Operator) {
 	case 0:
 	case 1:
-		embed.AddField("Operator", vars.Operator[0].Username+"#"+vars.Operator[0].Discriminator, true)
+		embed.AddField("Operator", state.Operator[0].Username+"#"+state.Operator[0].Discriminator, true)
 	default:
 		var usernames string
-		for i, user := range vars.Operator {
+		for i, user := range state.Operator {
 			switch i {
 			case 0:
 				usernames += user.Username + "#" + user.Discriminator
@@ -81,21 +80,21 @@ func about(context *multiplexer.Context) {
 	}
 	embed.SetThumbnail(context.Session.State.User.AvatarURL("256"))
 	embed.SetFooter("FreeNitori Backend", "https://freenitori.jp/static/icon.min.png")
-	context.SendEmbed(embed)
+	context.SendEmbed("", embed)
 }
 
 func stats(context *multiplexer.Context) {
 	if !context.IsOperator() {
-		context.SendMessage(vars.OperatorOnly)
+		context.SendMessage(state.OperatorOnly)
 		return
 	}
 
 	stats := state.Stats()
 
-	var embed *embedutil.Embed
+	var embed embedutil.Embed
 
 	embed = embedutil.NewEmbed("System Stats", "")
-	embed.Color = vars.KappaColor
+	embed.Color = state.KappaColor
 	embed.AddField("PID", strconv.Itoa(stats.Process.PID), true)
 	embed.AddField("Uptime", stats.Process.Uptime.Truncate(time.Second).String(), true)
 	embed.AddField("Goroutines", strconv.Itoa(stats.Process.NumGoroutine), true)
@@ -104,10 +103,10 @@ func stats(context *multiplexer.Context) {
 	embed.AddField("Architecture", stats.Platform.GOARCH, true)
 	embed.AddField("Go Root", stats.Platform.GOROOT, true)
 	embed.AddField("Go Version", stats.Platform.GoVersion, true)
-	context.SendEmbed(embed)
+	context.SendEmbed("", embed)
 
 	embed = embedutil.NewEmbed("", "")
-	embed.Color = vars.KappaColor
+	embed.Color = state.KappaColor
 	embed.AddField("Current Memory Allocated", stats.Mem.Allocated, true)
 	embed.AddField("Total Memory Allocated", stats.Mem.Total, true)
 	embed.AddField("System Reported Allocation", stats.Mem.Sys, true)
@@ -131,21 +130,21 @@ func stats(context *multiplexer.Context) {
 	embed.AddField("GC Metadata Size", stats.Misc.GCSys, true)
 	embed.AddField("Profiling Bucket Hash Tables Size", stats.Misc.BuckHashSys, true)
 	embed.AddField("Miscellaneous Off-heap Allocations", stats.Misc.OtherSys, true)
-	context.SendEmbed(embed)
+	context.SendEmbed("", embed)
 
 	embed = embedutil.NewEmbed("", "")
-	embed.Color = vars.KappaColor
+	embed.Color = state.KappaColor
 	embed.AddField("Next GC Recycle", stats.GC.NextGC, true)
 	embed.AddField("Time Since Last GC", stats.GC.LastGC, true)
 	embed.AddField("Total GC Pause", stats.GC.PauseTotalNs, true)
 	embed.AddField("Last GC Pause", stats.GC.PauseNs, true)
 	embed.AddField("Number of GCs", strconv.Itoa(int(stats.GC.NumGC)), true)
-	context.SendEmbed(embed)
+	context.SendEmbed("", embed)
 }
 
 func resetGuild(context *multiplexer.Context) {
 	if !context.IsOperator() {
-		context.SendMessage(vars.OperatorOnly)
+		context.SendMessage(state.OperatorOnly)
 		return
 	}
 	config.ResetGuild(context.Guild.ID)
@@ -154,7 +153,7 @@ func resetGuild(context *multiplexer.Context) {
 
 func shutdown(context *multiplexer.Context) {
 	if !context.IsAdministrator() {
-		context.SendMessage(vars.AdminOnly)
+		context.SendMessage(state.AdminOnly)
 		return
 	}
 	if map[string]bool{"reboot": true, "restart": true, "shutdown": false, "poweroff": false}[context.Fields[0]] {
@@ -169,11 +168,11 @@ func shutdown(context *multiplexer.Context) {
 
 func invite(context *multiplexer.Context) {
 	embed := embedutil.NewEmbed("Invite", fmt.Sprintf("Click [this](%s) to invite Nitori.", state.InviteURL))
-	context.SendEmbed(embed)
+	context.SendEmbed("", embed)
 }
 
 func setStatus(_ *discordgo.Session, ready *discordgo.Ready) {
-	err = vars.RawSession.UpdateStatus(0, config.Config.Discord.Presence)
+	err = state.RawSession.UpdateStatus(0, config.Config.Discord.Presence)
 	if err != nil {
 		log.Warnf("Unable to update presence, %s", err)
 	}

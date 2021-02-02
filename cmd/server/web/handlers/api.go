@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/oauth"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/routes"
@@ -72,7 +71,7 @@ func apiInfo(context *gin.Context) {
 func apiStats(context *gin.Context) {
 	context.JSON(http.StatusOK, datatypes.H{
 		"total_messages":  config.GetTotalMessages(),
-		"guilds_deployed": strconv.Itoa(len(vars.RawSession.State.Guilds)),
+		"guilds_deployed": strconv.Itoa(len(state.RawSession.State.Guilds)),
 	})
 }
 

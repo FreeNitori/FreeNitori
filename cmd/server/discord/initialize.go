@@ -3,7 +3,6 @@ package discord
 import (
 	"errors"
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
@@ -24,44 +23,44 @@ func Initialize() error {
 
 	// Setup some things
 	discordgo.Logger = log.DiscordGoLogger
-	vars.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version() + ")"
+	state.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version() + ")"
 	if config.TokenOverride == "" {
-		vars.RawSession.Token = "Bot " + config.Config.Discord.Token
+		state.RawSession.Token = "Bot " + config.Config.Discord.Token
 	} else {
-		vars.RawSession.Token = "Bot " + config.TokenOverride
+		state.RawSession.Token = "Bot " + config.TokenOverride
 	}
-	vars.RawSession.ShouldReconnectOnError = true
-	vars.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAll)
+	state.RawSession.ShouldReconnectOnError = true
+	state.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAll)
 
 	return nil
 }
 
 func LateInitialize() error {
 	// Authenticate and make session
-	err = vars.RawSession.Open()
+	err = state.RawSession.Open()
 	if err != nil {
-		vars.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAllWithoutPrivileged)
-		err = vars.RawSession.Open()
+		state.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAllWithoutPrivileged)
+		err = state.RawSession.Open()
 		if err != nil {
 			return errors.New("unable to open session with Discord")
 		}
 	}
 	log.Info("Raw session with Discord opened.")
-	vars.Administrator, err = vars.RawSession.User(strconv.Itoa(config.Config.System.Administrator))
+	state.Administrator, err = state.RawSession.User(strconv.Itoa(config.Config.System.Administrator))
 	if err != nil {
 		return errors.New("unable to get system administrator")
 	}
 	for _, id := range config.Config.System.Operator {
-		user, err := vars.RawSession.User(strconv.Itoa(id))
+		user, err := state.RawSession.User(strconv.Itoa(id))
 		if err == nil {
-			vars.Operator = append(vars.Operator, user)
+			state.Operator = append(state.Operator, user)
 		}
 	}
-	vars.Application, err = vars.RawSession.Application("@me")
+	state.Application, err = state.RawSession.Application("@me")
 	if err != nil {
 		return errors.New("unable to fetch application information")
 	}
-	state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", vars.Application.ID)
+	state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", state.Application.ID)
 	go func() {
 		for {
 			state.DiscordReady <- true
@@ -75,8 +74,8 @@ func LateInitialize() error {
 		}
 	}
 	log.Infof("Nitori has successfully logged in as %s#%s (%s).",
-		vars.RawSession.State.User.Username,
-		vars.RawSession.State.User.Discriminator,
-		vars.RawSession.State.User.ID)
+		state.RawSession.State.User.Username,
+		state.RawSession.State.User.Discriminator,
+		state.RawSession.State.User.ID)
 	return nil
 }
