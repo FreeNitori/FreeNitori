@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
+	dbVars "git.randomchars.net/RandomChars/FreeNitori/cmd/server/database/vars"
+	dcVars "git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/rpc"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	dbVars "git.randomchars.net/RandomChars/FreeNitori/server/database/vars"
-	dcVars "git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
-	"git.randomchars.net/RandomChars/FreeNitori/server/rpc"
-	"git.randomchars.net/RandomChars/FreeNitori/server/web"
 	"os"
 	"syscall"
 	"time"

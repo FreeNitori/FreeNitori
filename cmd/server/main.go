@@ -2,15 +2,15 @@
 package main
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/database"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/database/vars"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/extension"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/rpc"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
-	"git.randomchars.net/RandomChars/FreeNitori/server/database"
-	"git.randomchars.net/RandomChars/FreeNitori/server/database/vars"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord"
-	"git.randomchars.net/RandomChars/FreeNitori/server/extension"
-	"git.randomchars.net/RandomChars/FreeNitori/server/rpc"
-	"git.randomchars.net/RandomChars/FreeNitori/server/web"
 	"go/types"
 	"os"
 	"os/signal"

@@ -1,6 +1,7 @@
 all: deps assets build
 run: assets build start
 
+LDFLAGS = "-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'"
 ifeq ($(shell go env GOOS), windows)
    Suffix = ".exe"
 endif
@@ -25,9 +26,9 @@ plugins:
 .PHONY: build
 build:
 	@echo "Building FreeNitori..."
-	@go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'" -o build/freenitori$(Suffix) $$PWD/server
+	@go build -tags=jsoniter -ldflags=$(LDFLAGS) -o build/freenitori$(Suffix) $$PWD/cmd/server
 	@echo "Building nitorictl..."
-	@go build -tags=jsoniter -ldflags="-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'" -o build/nitorictl$(Suffix) $$PWD/cli
+	@go build -tags=jsoniter -ldflags=$(LDFLAGS) -o build/nitorictl$(Suffix) $$PWD/cmd/cli
 
 .PHONY: start
 start:

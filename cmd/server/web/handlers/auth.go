@@ -1,12 +1,12 @@
 package handlers
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/oauth"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/routes"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
-	"git.randomchars.net/RandomChars/FreeNitori/server/web/datatypes"
-	"git.randomchars.net/RandomChars/FreeNitori/server/web/oauth"
-	"git.randomchars.net/RandomChars/FreeNitori/server/web/routes"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"

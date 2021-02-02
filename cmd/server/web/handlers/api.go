@@ -2,13 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/oauth"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/routes"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
-	"git.randomchars.net/RandomChars/FreeNitori/server/web/datatypes"
-	"git.randomchars.net/RandomChars/FreeNitori/server/web/oauth"
-	"git.randomchars.net/RandomChars/FreeNitori/server/web/routes"
 	"github.com/bwmarrin/discordgo"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"

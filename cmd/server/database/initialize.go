@@ -2,8 +2,8 @@
 package database
 
 import (
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/database/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/server/database/vars"
 )
 
 var err error

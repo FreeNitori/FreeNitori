@@ -2,8 +2,8 @@ package config
 
 import (
 	"fmt"
+	dbVars "git.randomchars.net/RandomChars/FreeNitori/cmd/server/database/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	dbVars "git.randomchars.net/RandomChars/FreeNitori/server/database/vars"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dgraph-io/badger/v2"
 	"strconv"

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/cli/client"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/cli/client"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/abiosoft/ishell"
 )

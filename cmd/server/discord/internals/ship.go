@@ -2,9 +2,9 @@ package internals
 
 import (
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"strconv"
 	"strings"
 )

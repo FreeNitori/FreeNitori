@@ -3,9 +3,9 @@ package internals
 import (
 	"errors"
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/vars"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"git.randomchars.net/RandomChars/FreeNitori/server/discord/vars"
 	"github.com/anaskhan96/soup"
 	"math/rand"
 	"strconv"

@@ -1,7 +1,7 @@
 package database
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/cli/client"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/cli/client"
 	"strconv"
 )
 
