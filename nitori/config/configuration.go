@@ -32,6 +32,7 @@ type MessageOutOfBounds struct{}
 type Conf struct {
 	System struct {
 		LogLevel      string
+		LogPath       string
 		Socket        string
 		Database      string
 		Prefix        string

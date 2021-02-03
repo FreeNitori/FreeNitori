@@ -10,11 +10,13 @@ require (
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/flynn-archive/go-shlex v0.0.0-20150515145356-3f9db97f8568 // indirect
 	github.com/gin-contrib/sessions v0.0.3
-	github.com/gin-contrib/static v0.0.0-20200916080430-d45d9a37d28e
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
 	github.com/google/uuid v1.1.5
 	github.com/json-iterator/go v1.1.9
+	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/lestrrat-go/strftime v1.0.4 // indirect
+	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0
 	github.com/sirupsen/logrus v1.7.0
 	github.com/ulule/limiter/v3 v3.7.1

@@ -2,15 +2,16 @@ package web
 
 import (
 	"errors"
+	"git.randomchars.net/RandomChars/FreeNitori/binaries/public"
 	"git.randomchars.net/RandomChars/FreeNitori/binaries/tmpl"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
 	_ "git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/routes"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/static"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
-	ginStatic "github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"go/types"
@@ -63,14 +64,14 @@ func Initialize() error {
 	router.SetHTMLTemplate(templates)
 
 	// Register static
-	var serveFileSystem ginStatic.ServeFileSystem
-	serveFileSystem = datatypes.Public()
+	var serveFileSystem static.ServeFileSystem
+	serveFileSystem = static.FileSystem(public.AssetFile())
 	if stat, err := os.Stat("assets/web/public"); err == nil {
 		if stat.IsDir() {
-			serveFileSystem = ginStatic.LocalFile("assets/web/public", false)
+			serveFileSystem = static.LocalFile("assets/web/public", false)
 		}
 	}
-	router.Use(ginStatic.Serve("/", serveFileSystem))
+	router.Use(static.Serve("/", serveFileSystem))
 
 	// Register error page
 	router.NoRoute(func(context *gin.Context) {
