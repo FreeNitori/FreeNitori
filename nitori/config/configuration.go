@@ -137,24 +137,12 @@ func checkConfig() *types.Nil {
 
 // getLogLevel refers the log level configuration string to a log level integer.
 func getLogLevel() logrus.Level {
-	switch Config.System.LogLevel {
-	case "panic":
-		return logrus.PanicLevel
-	case "fatal":
-		return logrus.FatalLevel
-	case "error":
-		return logrus.ErrorLevel
-	case "warn":
-		return logrus.WarnLevel
-	case "info":
-		return logrus.InfoLevel
-	case "debug":
-		return logrus.DebugLevel
-	default:
-		log.Fatalf("Unknown log level \"%s\"", Config.System.LogLevel)
+	level, err := logrus.ParseLevel(Config.System.LogLevel)
+	if err != nil {
+		log.Fatalf("Unable to parse log level, %s", err)
 		os.Exit(1)
 	}
-	return logrus.InfoLevel
+	return level
 }
 
 // LevelToExp calculates amount of experience from a level integer.
