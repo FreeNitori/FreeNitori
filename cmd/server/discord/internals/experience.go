@@ -8,6 +8,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/overrides"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
+	"math"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -99,8 +100,8 @@ func AdvanceExperience(context *multiplexer.Context) {
 	}
 
 	// Calculate new level value and see if it is advanced as well, and congratulate user if it did
-	advancedLevel := config.ExpToLevel(advancedExp)
-	if advancedLevel > config.ExpToLevel(previousExp) {
+	advancedLevel := ExpToLevel(advancedExp)
+	if advancedLevel > ExpToLevel(previousExp) {
 		levelupMessage, err := config.GetCustomizableMessage(context.Guild.ID, "levelup")
 		if !context.HandleError(err) {
 			return
@@ -150,10 +151,10 @@ func level(context *multiplexer.Context) {
 	if !context.HandleError(err) {
 		return
 	}
-	levelValue := config.ExpToLevel(expValue)
-	baseExpValue := config.LevelToExp(levelValue)
+	levelValue := ExpToLevel(expValue)
+	baseExpValue := LevelToExp(levelValue)
 	embed.AddField("Level", strconv.Itoa(levelValue), true)
-	embed.AddField("Experience", strconv.Itoa(expValue-baseExpValue)+"/"+strconv.Itoa(config.LevelToExp(levelValue+1)-baseExpValue), true)
+	embed.AddField("Experience", strconv.Itoa(expValue-baseExpValue)+"/"+strconv.Itoa(LevelToExp(levelValue+1)-baseExpValue), true)
 	embed.SetThumbnail(member.User.AvatarURL("128"))
 	context.SendEmbed("", embed)
 }
@@ -177,4 +178,14 @@ func leaderboard(context *multiplexer.Context) {
 			context.Guild.ID))
 	embed.Color = state.KappaColor
 	context.SendEmbed("", embed)
+}
+
+// ExpToLevel calculates amount of experience from a level integer.
+func LevelToExp(level int) int {
+	return int(1000.0 * (math.Pow(float64(level), 1.25)))
+}
+
+// ExpToLevel calculates amount of levels from an experience integer.
+func ExpToLevel(exp int) int {
+	return int(math.Pow(float64(exp)/1000, 1.0/1.25))
 }

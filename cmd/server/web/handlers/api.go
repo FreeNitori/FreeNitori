@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/internals"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/oauth"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/routes"
@@ -166,7 +167,7 @@ func apiGuildKey(context *gin.Context) {
 				context.JSON(http.StatusInternalServerError, datatypes.H{})
 				return
 			}
-			levelData := config.ExpToLevel(expData)
+			levelData := internals.ExpToLevel(expData)
 			entry := datatypes.LeaderboardEntry{
 				User: datatypes.UserInfo{
 					Name:          member.User.Username,

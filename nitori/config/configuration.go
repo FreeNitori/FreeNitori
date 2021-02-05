@@ -9,7 +9,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"go/types"
 	"io/ioutil"
-	"math"
 	"os"
 )
 
@@ -143,14 +142,4 @@ func getLogLevel() logrus.Level {
 		os.Exit(1)
 	}
 	return level
-}
-
-// LevelToExp calculates amount of experience from a level integer.
-func LevelToExp(level int) int {
-	return int(1000.0 * (math.Pow(float64(level), 1.25)))
-}
-
-// ExpToLevel calculates amount of levels from an experience integer.
-func ExpToLevel(exp int) int {
-	return int(math.Pow(float64(exp)/1000, 1.0/1.25))
 }
