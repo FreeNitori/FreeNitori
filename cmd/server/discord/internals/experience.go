@@ -23,11 +23,11 @@ func init() {
 		Handler:       level,
 	})
 	multiplexer.Router.Route(&multiplexer.Route{
-		Pattern:       "setrank",
-		AliasPatterns: []string{"rankset"},
-		Description:   "Configure ranked roles.",
+		Pattern:       "leaderboard",
+		AliasPatterns: []string{"lb"},
+		Description:   "Display URL of leaderboard.",
 		Category:      multiplexer.ExperienceCategory,
-		Handler:       setrank,
+		Handler:       leaderboard,
 	})
 	overrides.RegisterSimpleEntry(overrides.SimpleConfigurationEntry{
 		Name:         "experience",
@@ -158,32 +158,23 @@ func level(context *multiplexer.Context) {
 	context.SendEmbed("", embed)
 }
 
-func setrank(context *multiplexer.Context) {
-
-	// Doesn't work in private messages
+func leaderboard(context *multiplexer.Context) {
 	if context.IsPrivate {
 		context.SendMessage(state.GuildOnly)
+		return
 	}
-
-	// Checks if feature is enabled
-	expEnabled, err := config.ExpEnabled(context.Guild.ID)
+	enabled, err := config.ExpEnabled(context.Guild.ID)
 	if !context.HandleError(err) {
 		return
 	}
-	if !expEnabled {
+	if !enabled {
 		context.SendMessage(state.FeatureDisabled)
 		return
 	}
-
-	// Deny access to anyone that does not have permission Administrator
-	if !context.HasPermission(discordgo.PermissionAdministrator) {
-		context.SendMessage(state.PermissionDenied)
-		return
-	}
-
-	switch len(context.Fields) {
-	case 0:
-		embed := embedutil.NewEmbed("Ranked Roles", "Configure ranked roles.")
-		context.SendEmbed("", embed)
-	}
+	embed := embedutil.NewEmbed("Leaderboard",
+		fmt.Sprintf("Click [here](%sleaderboard.html#%s) to view the leaderboard.",
+			config.Config.WebServer.BaseURL,
+			context.Guild.ID))
+	embed.Color = state.KappaColor
+	context.SendEmbed("", embed)
 }
