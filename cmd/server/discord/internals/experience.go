@@ -115,6 +115,7 @@ func level(context *multiplexer.Context) {
 	// Doesn't work in private messages
 	if context.IsPrivate {
 		context.SendMessage(state.GuildOnly)
+		return
 	}
 
 	// Checks if feature is enabled

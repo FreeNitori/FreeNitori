@@ -1,6 +1,7 @@
 package multiplexer
 
 import (
+	"errors"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
@@ -13,9 +14,15 @@ import (
 )
 
 var numericalRegex *regexp.Regexp
+var ErrUserNotFound = errors.New("user not found")
 
 func init() {
 	numericalRegex, _ = regexp.Compile("[^0-9]+")
+}
+
+// NumericalRegex returns a compiled regular expression that matches only numbers.
+func (Context) NumericalRegex() *regexp.Regexp {
+	return numericalRegex
 }
 
 // SendMessage sends a text message in the current channel and returns the message.
@@ -247,3 +254,35 @@ func (context *Context) MakeVoiceConnection() (*discordgo.VoiceConnection, error
 	}
 	return context.Session.ChannelVoiceJoin(voiceState.GuildID, voiceState.ChannelID, false, true)
 }
+
+// Ban creates a ban on the specified user.
+func (context *Context) Ban(query string) error {
+	// If Nitori has permission
+	permissions, err := context.Session.State.UserChannelPermissions(context.Session.State.User.ID, context.Message.ChannelID)
+	if !(err == nil && (permissions&discordgo.PermissionBanMembers == discordgo.PermissionBanMembers)) {
+		return discordgo.ErrUnauthorized
+	}
+
+	// Check if it's a mention or the string is numerical
+	_, err = strconv.Atoi(query)
+	if strings.HasPrefix(query, "<@") && strings.HasSuffix(query, ">") || err == nil {
+		// Strip off the mention thingy
+		userID := context.NumericalRegex().ReplaceAllString(query, "")
+		// Length of a real snowflake after stripping off stuff
+		if len(userID) == 18 {
+			err = context.Session.GuildBanCreate(context.Guild.ID, userID, 0)
+			return err
+		}
+	} else {
+		member := context.GetMember(query)
+		if member == nil {
+			return ErrUserNotFound
+		} else {
+			err = context.Session.GuildBanCreate(context.Guild.ID, member.User.ID, 0)
+			return err
+		}
+	}
+	return ErrUserNotFound
+}
+
+// TODO: wrap around role assignment

@@ -11,15 +11,29 @@ import (
 
 func init() {
 	multiplexer.Router.Route(&multiplexer.Route{
-		Pattern:       "whois",
-		AliasPatterns: []string{"lookup", "pfp"},
+		Pattern:       "userinfo",
+		AliasPatterns: []string{"whois", "lookup", "pfp"},
 		Description:   "Lookup a user's detailed information by username, nickname or snowflake.",
 		Category:      multiplexer.ModerationCategory,
-		Handler:       whois,
+		Handler:       userinfo,
+	})
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "guildinfo",
+		AliasPatterns: []string{"pfp"},
+		Description:   "Lookup a guild's detailed information by snowflake.",
+		Category:      multiplexer.ModerationCategory,
+		Handler:       guildinfo,
+	})
+	multiplexer.Router.Route(&multiplexer.Route{
+		Pattern:       "ban",
+		AliasPatterns: []string{""},
+		Description:   "Ban a user from the guild",
+		Category:      multiplexer.ModerationCategory,
+		Handler:       ban,
 	})
 }
 
-func whois(context *multiplexer.Context) {
+func userinfo(context *multiplexer.Context) {
 	var user *discordgo.User
 	var member *discordgo.Member
 
@@ -92,4 +106,37 @@ func whois(context *multiplexer.Context) {
 		embed.AddField("Join Date", joinTime.Format("Mon, 02 Jan 2006 15:04:05"), true)
 	}
 	context.SendEmbed("", embed)
+}
+
+func guildinfo(context *multiplexer.Context) {
+	// TODO
+}
+
+func ban(context *multiplexer.Context) {
+	// Guild only
+	if context.IsPrivate {
+		context.SendMessage(state.GuildOnly)
+		return
+	}
+
+	// Has permission
+	if !context.HasPermission(discordgo.PermissionBanMembers) {
+		context.SendMessage(state.PermissionDenied)
+		return
+	}
+
+	query := context.StitchFields(1)
+	err = context.Ban(query)
+	if err == discordgo.ErrUnauthorized {
+		context.SendMessage(state.LackingPermission)
+		return
+	}
+	if err == multiplexer.ErrUserNotFound {
+		context.SendMessage(state.MissingUser)
+		return
+	}
+	if !context.HandleError(err) {
+		return
+	}
+	context.SendMessage("Successfully performed ban on specified user.")
 }
