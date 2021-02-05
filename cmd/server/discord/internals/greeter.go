@@ -26,20 +26,18 @@ func init() {
 				DatabaseKey:  "greet_channel",
 				Cleanup:      func(context *multiplexer.Context) {},
 				Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
-					for _, channel := range context.Guild.Channels {
-						if *input == channel.ID {
-							return true, true
-						}
+					if channel := context.GetChannel(*input); channel != nil {
+						*input = channel.ID
+						return true, true
+					} else {
+						return false, true
 					}
-					return false, true
 				},
 				Format: func(context *multiplexer.Context, value string) (string, string, bool) {
-					for _, channel := range context.Guild.Channels {
-						if value == channel.ID {
-							return channel.Name, channel.ID, true
-						}
+					if channel := context.GetChannel(value); channel != nil {
+						return channel.Name, channel.ID, true
 					}
-					return "No channel configured", fmt.Sprintf("Configure it by issuing command `%sconf greet channel <channelID>`.", context.Prefix()), true
+					return "No channel configured", fmt.Sprintf("Configure it by issuing command `%sconf greet channel <channel>`.", context.Prefix()), true
 				},
 			},
 			{

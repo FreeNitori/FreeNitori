@@ -111,18 +111,18 @@ func (context *Context) IsAdministrator() bool {
 }
 
 // GetMember gets a member from a string representing it.
-func (context *Context) GetMember(user string) *discordgo.Member {
+func (context *Context) GetMember(query string) *discordgo.Member {
 	// Guild only function
 	if context.IsPrivate {
 		return nil
 	}
 
 	// Check if it's a mention or the string is numerical
-	_, err := strconv.Atoi(user)
-	if strings.HasPrefix(user, "<@") && strings.HasSuffix(user, ">") || err == nil {
+	_, err := strconv.Atoi(query)
+	if strings.HasPrefix(query, "<@") && strings.HasSuffix(query, ">") || err == nil {
 		// Strip off the mention thingy
-		userID := numericalRegex.ReplaceAllString(user, "")
-		// Length of a real user ID after stripping off stuff
+		userID := numericalRegex.ReplaceAllString(query, "")
+		// Length of a real snowflake after stripping off stuff
 		if len(userID) == 18 {
 			for _, member := range context.Guild.Members {
 				if member.User.ID == userID {
@@ -133,8 +133,70 @@ func (context *Context) GetMember(user string) *discordgo.Member {
 	} else {
 		// Find as username or nickname
 		for _, member := range context.Guild.Members {
-			if member.User.Username == user || member.Nick == user {
+			if member.User.Username == query || member.Nick == query {
 				return member
+			}
+		}
+	}
+	return nil
+}
+
+// GetChannel gets a channel from a string representing it.
+func (context *Context) GetChannel(query string) *discordgo.Channel {
+	// Guild only function
+	if context.IsPrivate {
+		return nil
+	}
+
+	// Check if it's a mention or the string is numerical
+	_, err := strconv.Atoi(query)
+	if strings.HasPrefix(query, "<#") && strings.HasSuffix(query, ">") || err == nil {
+		// Strip off the mention thingy
+		channelID := numericalRegex.ReplaceAllString(query, "")
+		// Length of a real snowflake after stripping off stuff
+		if len(channelID) == 18 {
+			for _, channel := range context.Guild.Channels {
+				if channel.ID == channelID {
+					return channel
+				}
+			}
+		}
+	} else {
+		// Find as channel name
+		for _, channel := range context.Guild.Channels {
+			if channel.Name == query {
+				return channel
+			}
+		}
+	}
+	return nil
+}
+
+// GetRole gets a channel from a string representing it.
+func (context *Context) GetRole(query string) *discordgo.Role {
+	// Guild only function
+	if context.IsPrivate {
+		return nil
+	}
+
+	// Check if it's a mention or the string is numerical
+	_, err := strconv.Atoi(query)
+	if strings.HasPrefix(query, "<@&") && strings.HasSuffix(query, ">") || err == nil {
+		// Strip off the mention thingy
+		roleID := numericalRegex.ReplaceAllString(query, "")
+		// Length of a real snowflake after stripping off stuff
+		if len(roleID) == 18 {
+			for _, role := range context.Guild.Roles {
+				if role.ID == roleID {
+					return role
+				}
+			}
+		}
+	} else {
+		// Find as channel name
+		for _, role := range context.Guild.Roles {
+			if role.Name == query {
+				return role
 			}
 		}
 	}

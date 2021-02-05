@@ -51,21 +51,19 @@ func init() {
 				DatabaseKey:  "highlight_channel",
 				Cleanup:      func(context *multiplexer.Context) { config.ResetGuildMap(context.Guild.ID, "highlight") },
 				Validate: func(context *multiplexer.Context, input *string) (bool, bool) {
-					for _, channel := range context.Guild.Channels {
-						if *input == channel.ID {
-							config.ResetGuildMap(context.Guild.ID, "highlight")
-							return true, true
-						}
+					if channel := context.GetChannel(*input); channel != nil {
+						*input = channel.ID
+						config.ResetGuildMap(context.Guild.ID, "highlight")
+						return true, true
+					} else {
+						return false, true
 					}
-					return false, true
 				},
 				Format: func(context *multiplexer.Context, value string) (string, string, bool) {
-					for _, channel := range context.Guild.Channels {
-						if value == channel.ID {
-							return channel.Name, channel.ID, true
-						}
+					if channel := context.GetChannel(value); channel != nil {
+						return channel.Name, channel.ID, true
 					}
-					return "No channel configured", fmt.Sprintf("Configure it by issuing command `%sconf highlight channel <channelID>`.", context.Prefix()), true
+					return "No channel configured", fmt.Sprintf("Configure it by issuing command `%sconf highlight channel <channel>`.", context.Prefix()), true
 				},
 			},
 			{

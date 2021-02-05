@@ -60,7 +60,7 @@ func LateInitialize() error {
 	if err != nil {
 		return errors.New("unable to fetch application information")
 	}
-	state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=2146958847", state.Application.ID)
+	state.InviteURL = fmt.Sprintf("https://discord.com/oauth2/authorize?client_id=%s&scope=bot&permissions=8", state.Application.ID)
 	go func() {
 		for {
 			state.DiscordReady <- true
