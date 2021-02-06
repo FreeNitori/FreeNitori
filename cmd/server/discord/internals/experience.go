@@ -98,6 +98,10 @@ func init() {
 							context.SendMessage(state.InvalidArgument)
 							return
 						}
+						if level < 0 {
+							context.SendMessage(state.InvalidArgument)
+							return
+						}
 						bindings, err := db.GetRankBinds(context.Guild)
 						if !context.HandleError(err) {
 							return
