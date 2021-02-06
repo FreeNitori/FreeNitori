@@ -74,7 +74,6 @@ func userinfo(context *multiplexer.Context) {
 	if !context.HandleError(err) {
 		return
 	}
-	creationTime := time.Unix(int64(((userID>>22)+1420070400000)/1000), 0).UTC().Format("Mon, 02 Jan 2006 15:04:05")
 	embed := embedutil.NewEmbed("User Information", "")
 	embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
 	embed.SetThumbnail(user.AvatarURL("1024"))
@@ -97,7 +96,7 @@ func userinfo(context *multiplexer.Context) {
 		}
 		embed.AddField("Roles", roles, false)
 	}
-	embed.AddField("Registration Date", creationTime, true)
+	embed.AddField("Registration Date", time.Unix(int64(((userID>>22)+1420070400000)/1000), 0).UTC().Format("Mon, 02 Jan 2006 15:04:05"), true)
 	if member != nil {
 		joinTime, err := member.JoinedAt.Parse()
 		if !context.HandleError(err) {
@@ -105,11 +104,37 @@ func userinfo(context *multiplexer.Context) {
 		}
 		embed.AddField("Join Date", joinTime.Format("Mon, 02 Jan 2006 15:04:05"), true)
 	}
+	embed.SetFooter("ID: " + user.ID)
 	context.SendEmbed("", embed)
 }
 
 func guildinfo(context *multiplexer.Context) {
-	// TODO
+	// Guild only
+	if context.IsPrivate {
+		context.SendMessage(state.GuildOnly)
+		return
+	}
+	guildID, err := strconv.Atoi(context.Guild.ID)
+	if !context.HandleError(err) {
+		return
+	}
+	embed := embedutil.NewEmbed("Guild Information", "")
+	embed.Color = state.KappaColor
+	embed.SetThumbnail(context.Guild.IconURL())
+	embed.AddField("Guild Name", context.Guild.Name, true)
+	embed.AddField("Member Count", strconv.Itoa(context.Guild.MemberCount), true)
+	if len(context.Guild.Roles) > 0 {
+		var roles string
+		for i := 0; i < len(context.Guild.Roles); i++ {
+			roles += context.Guild.Roles[i].Mention() + "\n"
+		}
+		embed.AddField("Roles", roles, false)
+	}
+	embed.AddField("Region", context.Guild.Region, true)
+	embed.AddField("Locale", context.Guild.PreferredLocale, true)
+	embed.AddField("Creation Date", time.Unix(int64(((guildID>>22)+1420070400000)/1000), 0).UTC().Format("Mon, 02 Jan 2006 15:04:05"), true)
+	embed.SetFooter("ID: " + context.Guild.ID)
+	context.SendEmbed("", embed)
 }
 
 func ban(context *multiplexer.Context) {
