@@ -42,14 +42,7 @@ func init() {
 }
 
 func autoRoleHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
-	role := false
-	roleID, err := config.GetGuildConfValue(add.GuildID, "role_join")
-	if err != nil {
-		return
-	}
-	if roleID == "" {
-		return
-	}
+
 	guild, err := session.State.Guild(add.GuildID)
 	if err != nil {
 		guild, err = session.Guild(add.GuildID)
@@ -57,6 +50,25 @@ func autoRoleHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) 
 			return
 		}
 		_ = session.State.GuildAdd(guild)
+	}
+
+	if len(guild.Channels) == 0 {
+		return
+	}
+
+	// If Nitori has permission
+	permissions, err := session.State.UserChannelPermissions(session.State.User.ID, guild.Channels[0].ID)
+	if !(err == nil && (permissions&discordgo.PermissionManageRoles == discordgo.PermissionManageRoles)) {
+		return
+	}
+
+	role := false
+	roleID, err := config.GetGuildConfValue(add.GuildID, "role_join")
+	if err != nil {
+		return
+	}
+	if roleID == "" {
+		return
 	}
 
 	for _, r := range guild.Roles {

@@ -27,11 +27,13 @@ func (Context) NumericalRegex() *regexp.Regexp {
 
 // SendMessage sends a text message in the current channel and returns the message.
 func (context *Context) SendMessage(message string) *discordgo.Message {
+	permissions, err := context.Session.State.UserChannelPermissions(context.Author.ID, context.Message.ChannelID)
+	if !(err == nil && (permissions&discordgo.PermissionSendMessages == discordgo.PermissionSendMessages)) {
+		return nil
+	}
+
 	resultMessage, err := context.Session.ChannelMessageSend(context.Message.ChannelID, message)
 	if err != nil {
-		if err == discordgo.ErrUnauthorized {
-			return nil
-		}
 		log.Errorf("Error while sending message to guild %s, %s", context.Message.GuildID, err)
 		_, _ = context.Session.ChannelMessageSend(context.Message.ChannelID,
 			state.ErrorOccurred)
@@ -42,8 +44,13 @@ func (context *Context) SendMessage(message string) *discordgo.Message {
 
 // SendEmbed sends an embedutil message in the current channel and returns the message.
 func (context *Context) SendEmbed(message string, embed embedutil.Embed) *discordgo.Message {
-	var resultMessage *discordgo.Message
 	var err error
+	permissions, err := context.Session.State.UserChannelPermissions(context.Author.ID, context.Message.ChannelID)
+	if !(err == nil && (permissions&discordgo.PermissionSendMessages == discordgo.PermissionSendMessages)) {
+		return nil
+	}
+
+	var resultMessage *discordgo.Message
 	if message == "" {
 		resultMessage, err = context.Session.ChannelMessageSendEmbed(context.Message.ChannelID, embed.MessageEmbed)
 	} else {
@@ -57,9 +64,6 @@ func (context *Context) SendEmbed(message string, embed embedutil.Embed) *discor
 		})
 	}
 	if err != nil {
-		if err == discordgo.ErrUnauthorized {
-			return nil
-		}
 		log.Errorf("Error while sending embedutil to guild %s, %s", context.Message.GuildID, err)
 		_, _ = context.Session.ChannelMessageSend(context.Message.ChannelID,
 			state.ErrorOccurred)
@@ -284,5 +288,3 @@ func (context *Context) Ban(query string) error {
 	}
 	return ErrUserNotFound
 }
-
-// TODO: wrap around role assignment
