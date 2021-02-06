@@ -2,6 +2,7 @@ package internals
 
 import (
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/db"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
@@ -30,7 +31,7 @@ func fm(context *multiplexer.Context) {
 	case 1:
 	case 2:
 		if context.Fields[1] == "unset" {
-			err = config.ResetLastfm(context.Author, context.Guild)
+			err = db.ResetLastfm(context.Author, context.Guild)
 			if !context.HandleError(err) {
 				return
 			}
@@ -45,14 +46,14 @@ func fm(context *multiplexer.Context) {
 				context.SendMessage(state.InvalidArgument)
 				return
 			}
-			err = config.SetLastfm(context.Author, context.Guild, context.Fields[2])
+			err = db.SetLastfm(context.Author, context.Guild, context.Fields[2])
 			if !context.HandleError(err) {
 				return
 			}
 			context.SendMessage("Successfully set lastfm username to `" + context.Fields[2] + "`.")
 			return
 		case "unset":
-			err = config.ResetLastfm(context.Author, context.Guild)
+			err = db.ResetLastfm(context.Author, context.Guild)
 			if !context.HandleError(err) {
 				return
 			}
@@ -64,7 +65,7 @@ func fm(context *multiplexer.Context) {
 		}
 	}
 	if username == "" {
-		username, err = config.GetLastfm(context.Author, context.Guild)
+		username, err = db.GetLastfm(context.Author, context.Guild)
 	}
 	if !context.HandleError(err) {
 		return

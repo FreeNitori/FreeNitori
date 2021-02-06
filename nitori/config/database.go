@@ -4,19 +4,16 @@ import (
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"github.com/bwmarrin/discordgo"
 	"github.com/dgraph-io/badger/v2"
 	"strconv"
 )
 
-var prefixes = []string{"conf", "exp", "rank", "exp_bl", "lastfm", "ra_metadata", "highlight"}
-var CustomizableMessages = map[string]string{
-	"levelup": "Congratulations $USER on reaching level $LEVEL.",
-}
+var Prefixes = []string{"conf"}
+var CustomizableMessages = map[string]string{}
 
 // ResetGuild deletes all db values that belongs to a specific guild.
 func ResetGuild(gid string) {
-	for _, prefix := range prefixes {
+	for _, prefix := range Prefixes {
 		err := database.Database.HDel(fmt.Sprintf("%s.%s", prefix, gid), []string{})
 		if err != nil {
 			if err == badger.ErrKeyNotFound {
@@ -127,45 +124,6 @@ func GetPrefix(gid string) string {
 	return prefix
 }
 
-// ExpEnabled queries whether the experience system is enabled for a guild.
-func ExpEnabled(gid string) (enabled bool, err error) {
-	result, err := database.Database.HGet("conf."+gid, "exp_enable")
-	if err != nil {
-		if err == badger.ErrKeyNotFound {
-			return false, nil
-		}
-		return false, err
-	}
-	if result == "" {
-		return false, nil
-	}
-	enabled, err = strconv.ParseBool(result)
-	return
-}
-
-// HighlightBindMessage binds a message with the highlight message.
-func HighlightBindMessage(gid, message, highlight string) error {
-	return database.Database.HSet("highlight."+gid, message, highlight)
-}
-
-// HighlightUnbindMessage unbinds a message with the highlight message.
-func HighlightUnbindMessage(gid, message string) error {
-	err := database.Database.HDel("highlight."+gid, []string{message})
-	if err == badger.ErrKeyNotFound {
-		return nil
-	}
-	return err
-}
-
-// HighlightGetBinding gets the binding of a message.
-func HighlightGetBinding(gid, message string) (string, error) {
-	value, err := database.Database.HGet("highlight."+gid, message)
-	if err == badger.ErrKeyNotFound {
-		return "", nil
-	}
-	return value, err
-}
-
 // GetGuildConfValue gets a configuration value for a specific guild
 func GetGuildConfValue(id, key string) (string, error) {
 	result, err := database.Database.HGet("conf."+id, key)
@@ -186,52 +144,6 @@ func SetGuildConfValue(id, key, value string) error {
 // ResetGuildConfValue resets a configuration value for a specific guild
 func ResetGuildConfValue(id, key string) error {
 	err := database.Database.HDel("conf."+id, []string{key})
-	if err == badger.ErrKeyNotFound {
-		return nil
-	}
-	return err
-}
-
-// GetMemberExp obtains experience amount of a guild member.
-func GetMemberExp(user *discordgo.User, guild *discordgo.Guild) (int, error) {
-	result, err := database.Database.HGet("exp."+guild.ID, user.ID)
-	if err != nil {
-		if err == badger.ErrKeyNotFound {
-			return 0, nil
-		}
-		return 0, err
-	}
-	if result == "" {
-		return 0, nil
-	}
-	return strconv.Atoi(result)
-}
-
-// SetMemberExp sets a member's experience amount.
-func SetMemberExp(user *discordgo.User, guild *discordgo.Guild, exp int) error {
-	return database.Database.HSet("exp."+guild.ID, user.ID, strconv.Itoa(exp))
-}
-
-// GetLastfm gets a user's lastfm username.
-func GetLastfm(user *discordgo.User, guild *discordgo.Guild) (string, error) {
-	result, err := database.Database.HGet("lastfm."+guild.ID, user.ID)
-	if err != nil {
-		if err == badger.ErrKeyNotFound {
-			return "", nil
-		}
-		return "", err
-	}
-	return result, err
-}
-
-// SetLastfm sets a user's lastfm username.
-func SetLastfm(user *discordgo.User, guild *discordgo.Guild, username string) error {
-	return database.Database.HSet("lastfm."+guild.ID, user.ID, username)
-}
-
-// ResetLastfm resets a user's lastfm username.
-func ResetLastfm(user *discordgo.User, guild *discordgo.Guild) error {
-	err := database.Database.HDel("lastfm."+guild.ID, []string{user.ID})
 	if err == badger.ErrKeyNotFound {
 		return nil
 	}

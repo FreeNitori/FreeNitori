@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/db"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/internals"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
@@ -148,7 +149,7 @@ func apiGuildKey(context *gin.Context) {
 		}
 		context.JSON(http.StatusOK, members)
 	case "leaderboard":
-		expEnabled, err := config.ExpEnabled(guild.ID)
+		expEnabled, err := db.ExpEnabled(guild.ID)
 		if err != nil {
 			context.JSON(http.StatusInternalServerError, datatypes.H{})
 			return
@@ -162,7 +163,7 @@ func apiGuildKey(context *gin.Context) {
 			if member.User.Bot {
 				continue
 			}
-			expData, err := config.GetMemberExp(member.User, guild)
+			expData, err := db.GetMemberExp(member.User, guild)
 			if err != nil {
 				context.JSON(http.StatusInternalServerError, datatypes.H{})
 				return

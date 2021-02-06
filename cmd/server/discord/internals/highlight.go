@@ -2,6 +2,7 @@ package internals
 
 import (
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/db"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/emoji"
@@ -103,18 +104,18 @@ func init() {
 						context.SendMessage("Please reply to the message to inhibit.")
 						return
 					}
-					binding, err := config.HighlightGetBinding(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID)
+					binding, err := db.HighlightGetBinding(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID)
 					if !context.HandleError(err) {
 						return
 					}
 					if binding == "-" {
-						err = config.HighlightUnbindMessage(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID)
+						err = db.HighlightUnbindMessage(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID)
 						if !context.HandleError(err) {
 							return
 						}
 						context.SendMessage("Successfully uninhibited the message.")
 					} else {
-						err = config.HighlightBindMessage(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID, "-")
+						err = db.HighlightBindMessage(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID, "-")
 						if !context.HandleError(err) {
 							return
 						}
@@ -184,7 +185,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 		return
 	}
 
-	binding, err := config.HighlightGetBinding(guild.ID, message.ID)
+	binding, err := db.HighlightGetBinding(guild.ID, message.ID)
 	if err != nil {
 		return
 	}
@@ -231,7 +232,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 			if err != nil {
 				return
 			}
-			err = config.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
+			err = db.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
 			if err != nil {
 				return
 			}
@@ -245,7 +246,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 			})
 
 			if fmt.Sprint(err) == "HTTP 404 Not Found, {\"message\": \"Unknown Message\", \"code\": 10008}" {
-				err = config.HighlightUnbindMessage(guild.ID, message.ID)
+				err = db.HighlightUnbindMessage(guild.ID, message.ID)
 				if err != nil {
 					return
 				}
@@ -260,7 +261,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 				if err != nil {
 					return
 				}
-				err = config.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
+				err = db.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
 				if err != nil {
 					return
 				}
@@ -269,7 +270,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 	} else {
 		if binding != "" {
 			_ = session.ChannelMessageDelete(channelID, binding)
-			err = config.HighlightUnbindMessage(guild.ID, binding)
+			err = db.HighlightUnbindMessage(guild.ID, binding)
 			if err != nil {
 				return
 			}
