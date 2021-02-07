@@ -58,10 +58,12 @@ type CommandHandlers struct{}
 func init() {
 	EventHandlers = append(EventHandlers,
 		Router.OnReady,
-		Router.OnMessageCreate,
+		Router.HandleMessage,
 		Router.OnGuildMemberAdd,
 		Router.OnGuildMemberRemove,
 		Router.OnGuildDelete,
+		Router.OnMessageCreate,
+		Router.OnMessageDelete,
 		Router.OnMessageReactionAdd,
 		Router.OnMessageReactionRemove)
 }
@@ -130,8 +132,7 @@ func (mux *Multiplexer) MatchRoute(message string) (*Route, []string) {
 	return route, fields[fieldIndex:]
 }
 
-// DiscordGo library event handler registered into the session
-func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *discordgo.MessageCreate) {
+func (mux *Multiplexer) HandleMessage(session *discordgo.Session, create *discordgo.MessageCreate) {
 	var err error
 
 	// Ignore self and bot messages
@@ -310,6 +311,26 @@ func (mux *Multiplexer) OnGuildMemberRemove(session *discordgo.Session, remove *
 func (mux *Multiplexer) OnGuildDelete(session *discordgo.Session, delete *discordgo.GuildDelete) {
 	go func() {
 		for _, hook := range GuildDelete {
+			hook(session, delete)
+		}
+	}()
+	return
+}
+
+// Event handler that fires when a message is created
+func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *discordgo.MessageCreate) {
+	go func() {
+		for _, hook := range MessageCreate {
+			hook(session, create)
+		}
+	}()
+	return
+}
+
+// Event handler that fires when a message is deleted
+func (mux *Multiplexer) OnMessageDelete(session *discordgo.Session, delete *discordgo.MessageDelete) {
+	go func() {
+		for _, hook := range MessageDelete {
 			hook(session, delete)
 		}
 	}()

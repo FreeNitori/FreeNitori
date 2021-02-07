@@ -132,6 +132,9 @@ func init() {
 							return
 						}
 						binding, err := db.GetRankBind(context.Guild, level)
+						if !context.HandleError(err) {
+							return
+						}
 						if binding == "" {
 							context.SendMessage(state.InvalidArgument)
 							return
