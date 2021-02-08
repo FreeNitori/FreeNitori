@@ -14,6 +14,8 @@ import (
 )
 
 var numericalRegex *regexp.Regexp
+
+// ErrUserNotFound represents the error returned when a user is not found.
 var ErrUserNotFound = errors.New("user not found")
 
 func init() {
@@ -90,11 +92,10 @@ func (context *Context) HasPermission(permission int) bool {
 	// Override check for operators and system administrators
 	if context.Author.ID == state.Administrator.ID {
 		return true
-	} else {
-		for _, user := range state.Operator {
-			if context.Author.ID == user.ID {
-				return true
-			}
+	}
+	for _, user := range state.Operator {
+		if context.Author.ID == user.ID {
+			return true
 		}
 	}
 
@@ -223,7 +224,7 @@ func (context *Context) StitchFields(start int) string {
 	return message
 }
 
-// GenerateGuildPrefix returns the command prefix of a context.
+// Prefix returns the command prefix of a context.
 func (context *Context) Prefix() string {
 	switch context.IsPrivate {
 	case true:
@@ -281,10 +282,9 @@ func (context *Context) Ban(query string) error {
 		member := context.GetMember(query)
 		if member == nil {
 			return ErrUserNotFound
-		} else {
-			err = context.Session.GuildBanCreate(context.Guild.ID, member.User.ID, 0)
-			return err
 		}
+		err = context.Session.GuildBanCreate(context.Guild.ID, member.User.ID, 0)
+		return err
 	}
 	return ErrUserNotFound
 }

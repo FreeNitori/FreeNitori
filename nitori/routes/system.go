@@ -98,6 +98,7 @@ func stats(context *multiplexer.Context) {
 	embed.AddField("PID", strconv.Itoa(stats.Process.PID), true)
 	embed.AddField("Uptime", stats.Process.Uptime.Truncate(time.Second).String(), true)
 	embed.AddField("Goroutines", strconv.Itoa(stats.Process.NumGoroutine), true)
+	embed.AddField("Database Size", strconv.Itoa(int(stats.Process.DBSize)), true)
 
 	embed.AddField("Operating System", stats.Platform.GOOS, true)
 	embed.AddField("Architecture", stats.Platform.GOARCH, true)

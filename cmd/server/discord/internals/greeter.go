@@ -29,9 +29,8 @@ func init() {
 					if channel := context.GetChannel(*input); channel != nil {
 						*input = channel.ID
 						return true, true
-					} else {
-						return false, true
 					}
+					return false, true
 				},
 				Format: func(context *multiplexer.Context, value string) (string, string, bool) {
 					if channel := context.GetChannel(value); channel != nil {

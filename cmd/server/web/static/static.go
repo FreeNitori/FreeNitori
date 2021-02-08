@@ -10,26 +10,30 @@ import (
 
 const index = "index.html"
 
+// ServeFileSystem represents a static filesystem that can be served.
 type ServeFileSystem interface {
 	http.FileSystem
 	Exists(prefix string, path string) bool
 }
 
-type localFileSystem struct {
+// LocalFileSystem represents a local file system.
+type LocalFileSystem struct {
 	http.FileSystem
 	root    string
 	indexes bool
 }
 
-func LocalFile(root string, indexes bool) *localFileSystem {
-	return &localFileSystem{
+// LocalFile returns an instance of a LocalFileSystem serving from a specified directory.
+func LocalFile(root string, indexes bool) *LocalFileSystem {
+	return &LocalFileSystem{
 		FileSystem: gin.Dir(root, indexes),
 		root:       root,
 		indexes:    indexes,
 	}
 }
 
-func (l *localFileSystem) Exists(prefix string, filepath string) bool {
+// Exists returns if a path exists.
+func (l *LocalFileSystem) Exists(prefix string, filepath string) bool {
 	if p := strings.TrimPrefix(filepath, prefix); len(p) < len(filepath) {
 		name := path.Join(l.root, p)
 		stats, err := os.Stat(name)
@@ -50,11 +54,12 @@ func (l *localFileSystem) Exists(prefix string, filepath string) bool {
 	return false
 }
 
+// ServeRoot returns a middleware handler that serves from a filesystem directory.
 func ServeRoot(urlPrefix, root string) gin.HandlerFunc {
 	return Serve(urlPrefix, LocalFile(root, false))
 }
 
-// Static returns a middleware handler that serves static files in the given directory.
+// Serve returns a middleware handler that serves static files in the given directory.
 func Serve(urlPrefix string, fs ServeFileSystem) gin.HandlerFunc {
 	fileServer := http.FileServer(fs)
 	if urlPrefix != "" {

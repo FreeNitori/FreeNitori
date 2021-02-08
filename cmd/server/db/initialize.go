@@ -1,4 +1,4 @@
-// Wrapper around database backend driver.
+// Package db provides a wrapper around database backend.
 package db
 
 import (

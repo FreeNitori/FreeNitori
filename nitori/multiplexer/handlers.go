@@ -1,7 +1,6 @@
-// Integrated command handlers.
 package multiplexer
 
-// Define the categories here
+// Predefined command categories.
 var (
 	AudioCategory = NewCategory("Audio",
 		"Audio related utilities.")
@@ -17,4 +16,5 @@ var (
 		"System-related utilities.")
 )
 
+// Categories is a slice of pointers to command categories.
 var Categories = []*CommandCategory{AudioCategory, ExperienceCategory, ManualsCategory, MediaCategory, ModerationCategory, SystemCategory}

@@ -8,7 +8,10 @@ import (
 	"strconv"
 )
 
+// Prefixes holds a slice of strings that prefixes guild configuration hashmaps.
 var Prefixes = []string{"conf"}
+
+// CustomizableMessages maps customizable messages to their default values.
 var CustomizableMessages = map[string]string{}
 
 // ResetGuild deletes all db values that belongs to a specific guild.

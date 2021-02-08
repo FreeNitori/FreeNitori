@@ -9,8 +9,10 @@ import (
 	"net/rpc"
 )
 
+// Listener is an instance of net.Listener used by the RPC server.
 var Listener net.Listener
 
+// Serve starts RPC server.
 func Serve() {
 	<-state.DiscordReady
 	var Functions = new(N)

@@ -5,6 +5,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
 )
 
+// CommandRoute contains information of a command route.
 //goland:noinspection GoUnusedGlobalVariable
 var CommandRoute = multiplexer.Route{
 	Pattern:       "feels",

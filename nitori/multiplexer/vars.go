@@ -2,9 +2,12 @@ package multiplexer
 
 import "github.com/bwmarrin/discordgo"
 
+// Router is the command router instance.
+var Router = New()
+
+// Slice of event handlers.
 var (
 	EventHandlers         []interface{}
-	Router                = New()
 	NotTargeted           []func(context *Context)
 	Ready                 []func(session *discordgo.Session, ready *discordgo.Ready)
 	GuildMemberAdd        []func(session *discordgo.Session, add *discordgo.GuildMemberAdd)

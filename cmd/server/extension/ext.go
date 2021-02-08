@@ -11,10 +11,15 @@ import (
 )
 
 var err error
+
+// Commands contains a map of command patterns mapped to their extension paths.
 var Commands = make(map[string]string)
+
+// ExtensionsCategory is a category for commands loaded from extensions.
 var ExtensionsCategory = multiplexer.NewCategory("Extensions",
 	"Commands loaded in as extensions.")
 
+// FindExtensions finds and registers all extensions.
 func FindExtensions() error {
 	// Create directories if not exists
 	_, err = os.Stat("extensions")
@@ -48,6 +53,7 @@ func FindExtensions() error {
 	return nil
 }
 
+// RegisterHandlers makes and registers event handler for each extension.
 func RegisterHandlers() error {
 	for pattern, path := range Commands {
 		multiplexer.Router.Route(&multiplexer.Route{

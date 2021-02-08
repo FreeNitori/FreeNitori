@@ -12,6 +12,7 @@ import (
 	"strconv"
 )
 
+// LastFM points to an instance of LastFM API client.
 var LastFM *lastfm.Api
 
 func init() {
@@ -22,7 +23,7 @@ func init() {
 		Category:      multiplexer.MediaCategory,
 		Handler:       fm,
 	})
-	LastFM = lastfm.New(config.Config.LastFM.ApiKey, config.Config.LastFM.ApiSecret)
+	LastFM = lastfm.New(config.Config.LastFM.APIKey, config.Config.LastFM.APISecret)
 }
 
 func fm(context *multiplexer.Context) {

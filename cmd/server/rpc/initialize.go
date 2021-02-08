@@ -1,7 +1,6 @@
 package rpc
 
 import (
-	"errors"
 	"fmt"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"net"
@@ -11,6 +10,7 @@ import (
 
 var err error
 
+// Initialize early initializes RPC server.
 func Initialize() error {
 
 	// Check for an existing instance
@@ -23,7 +23,7 @@ func Initialize() error {
 				return err
 			}
 		} else {
-			return errors.New(fmt.Sprintf("another program is listening on %s", config.Config.System.Socket))
+			return fmt.Errorf("another program is listening on %s", config.Config.System.Socket)
 		}
 	}
 	return nil

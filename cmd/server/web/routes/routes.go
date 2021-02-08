@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// WebRoutes of specific requests.
 var (
 	GetRoutes     []WebRoute
 	PostRoutes    []WebRoute
@@ -15,6 +16,7 @@ var (
 	AnyRoutes     []WebRoute
 )
 
+// WebRoute represents a route on the web server.
 type WebRoute struct {
 	Pattern  string
 	Handlers []gin.HandlerFunc

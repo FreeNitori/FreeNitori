@@ -229,6 +229,7 @@ func memberAddRank(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
 	}
 }
 
+// AdvanceExperience advances experience of author.
 func AdvanceExperience(context *multiplexer.Context) {
 	var err error
 
@@ -358,7 +359,7 @@ func leaderboard(context *multiplexer.Context) {
 	context.SendEmbed("", embed)
 }
 
-// ExpToLevel calculates amount of experience from a level integer.
+// LevelToExp calculates amount of experience from a level integer.
 func LevelToExp(level int) int {
 	return int(1000.0 * (math.Pow(float64(level), 1.25)))
 }

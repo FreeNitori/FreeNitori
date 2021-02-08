@@ -2,16 +2,19 @@ package state
 
 import (
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 	"os"
 	"runtime"
 	"time"
 )
 
+// SystemStats represents stats of the instance.
 type SystemStats struct {
 	Process struct {
 		PID          int
 		Uptime       time.Duration
 		NumGoroutine int
+		DBSize       int64
 	}
 	Platform struct {
 		GoVersion string
@@ -55,12 +58,14 @@ type SystemStats struct {
 	}
 }
 
+// Stats returns a populated SystemStats.
 func Stats() SystemStats {
 	var systemStats SystemStats
 
 	systemStats.Process.PID = os.Getpid()
 	systemStats.Process.Uptime = Uptime()
 	systemStats.Process.NumGoroutine = runtime.NumGoroutine()
+	systemStats.Process.DBSize = database.Database.Size()
 
 	systemStats.Platform.GoVersion = runtime.Version()
 	systemStats.Platform.GOOS = runtime.GOOS

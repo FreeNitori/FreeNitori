@@ -1,4 +1,4 @@
-// Functions to interact with global and guild-specific configuration values.
+// Package config contains configuration related stuff.
 package config
 
 import (
@@ -17,17 +17,23 @@ var _ = flags()
 var _ = checkConfig()
 var _ = setLogLevel()
 
-// Exported variables for usage in other classes
 var (
-	Config         = parseConfig()
+	// Config contains data loaded from configuration file.
+	Config = parseConfig()
+	// NitoriConfPath contains path to configuration file.
 	NitoriConfPath string
-	TokenOverride  string
+	// TokenOverride contains the override token passed from command-line arguments.
+	TokenOverride string
+	// VersionStartup indicates weather the program should display version information and exit.
 	VersionStartup bool
-	LogLevel       = getLogLevel()
+	// LogLevel is the log level.
+	LogLevel = getLogLevel()
 )
 
-// Configuration related types
+// MessageOutOfBounds represents an out of bounds message.
 type MessageOutOfBounds struct{}
+
+// Conf represents data of a configuration file.
 type Conf struct {
 	System struct {
 		LogLevel      string
@@ -56,8 +62,8 @@ type Conf struct {
 		ShardCount   int
 	}
 	LastFM struct {
-		ApiKey    string
-		ApiSecret string
+		APIKey    string
+		APISecret string
 	}
 }
 
@@ -90,9 +96,8 @@ func parseConfig() *Conf {
 			if err != nil {
 				log.Debugf("Configuration file inaccessible, %s", err)
 				return nil
-			} else {
-				NitoriConfPath = "nitori.conf"
 			}
+			NitoriConfPath = "nitori.conf"
 		} else {
 			NitoriConfPath = "/etc/nitori.conf"
 		}

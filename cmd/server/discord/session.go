@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// MakeSessions opens all sessions of shards.
 func MakeSessions() error {
 	var err error
 
@@ -51,6 +52,7 @@ func MakeSessions() error {
 	return nil
 }
 
+// FetchGuildSession fetches a session containing a guild from an ID, useful for shard scenario.
 func FetchGuildSession(gid string) (*discordgo.Session, error) {
 	if !config.Config.Discord.Shard {
 		return state.RawSession, nil
@@ -62,6 +64,7 @@ func FetchGuildSession(gid string) (*discordgo.Session, error) {
 	return state.ShardSessions[(ID>>22)%int64(config.Config.Discord.ShardCount)], nil
 }
 
+// FetchGuild fetches a guild from an ID.
 func FetchGuild(gid string) *discordgo.Guild {
 	if _, err := strconv.Atoi(gid); err != nil {
 		return nil
@@ -79,6 +82,7 @@ func FetchGuild(gid string) *discordgo.Guild {
 	return guild
 }
 
+// FetchUser fetches a user from an ID.
 func FetchUser(uid string) (*discordgo.User, error) {
 	if _, err := strconv.Atoi(uid); err != nil {
 		return nil, errors.New("invalid snowflake")

@@ -5,15 +5,18 @@ import (
 	"strings"
 )
 
-type fileSystem struct {
+// HTTPFileSystem wraps around http.FileSystem.
+type HTTPFileSystem struct {
 	filesystem http.FileSystem
 }
 
-func (instance *fileSystem) Open(name string) (http.File, error) {
+// Open opens a file.
+func (instance *HTTPFileSystem) Open(name string) (http.File, error) {
 	return instance.filesystem.Open(name)
 }
 
-func (instance *fileSystem) Exists(prefix string, filepath string) bool {
+// Exists returns if a path exists or not.
+func (instance *HTTPFileSystem) Exists(prefix string, filepath string) bool {
 
 	if p := strings.TrimPrefix(filepath, prefix); len(p) < len(filepath) {
 		if _, err := instance.filesystem.Open(p); err != nil {
@@ -24,8 +27,9 @@ func (instance *fileSystem) Exists(prefix string, filepath string) bool {
 	return false
 }
 
-func FileSystem(fs http.FileSystem) *fileSystem {
-	return &fileSystem{
+// FileSystem returns an HTTPFileSystem.
+func FileSystem(fs http.FileSystem) *HTTPFileSystem {
+	return &HTTPFileSystem{
 		filesystem: fs,
 	}
 }

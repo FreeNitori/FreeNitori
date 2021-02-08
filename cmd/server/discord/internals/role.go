@@ -25,9 +25,8 @@ func init() {
 					if role := context.GetRole(*input); role != nil {
 						*input = role.ID
 						return true, true
-					} else {
-						return false, true
 					}
+					return false, true
 				},
 				Format: func(context *multiplexer.Context, value string) (string, string, bool) {
 					if role := context.GetRole(value); role != nil {

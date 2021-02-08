@@ -7,24 +7,29 @@ import (
 	"strconv"
 )
 
+// N represents an instance of exported stuff with all RPC receiver functions.
 type N bool
 
+// Version returns version information.
 func (N) Version(_ []int, reply *[]string) error {
 	*reply = append(*reply, state.Version())
 	*reply = append(*reply, state.Revision())
 	return nil
 }
 
+// Shutdown initiates a shutdown.
 func (N) Shutdown(_ []int, _ *int) error {
 	state.ExitCode <- 0
 	return nil
 }
 
+// Restart initiates a restart.
 func (N) Restart(_ []int, _ *int) error {
 	state.ExitCode <- -1
 	return nil
 }
 
+// DatabaseAction performs a database action.
 func (N) DatabaseAction(args []string, reply *[]string) error {
 	if len(args) < 2 {
 		return errors.New("invalid action")
@@ -60,6 +65,7 @@ func (N) DatabaseAction(args []string, reply *[]string) error {
 	return err
 }
 
+// DatabaseActionHashmap performs a database action with hashmaps.
 func (N) DatabaseActionHashmap(args []string, reply *[]map[string]string) error {
 	if len(args) < 2 {
 		return errors.New("invalid action")

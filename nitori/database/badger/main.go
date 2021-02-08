@@ -1,4 +1,4 @@
-// Badger database backend.
+// Package badger implements database backend based on badger.
 package badger
 
 import (
@@ -10,16 +10,20 @@ import (
 
 var err error
 
+// Database is an instance of the database backend.
 var Database Badger
 
+// Badger represents a badger database instance.
 type Badger struct {
 	DB *badger.DB
 }
 
+// DBType returns the name of the database as a string.
 func (db *Badger) DBType() string {
 	return "Badger"
 }
 
+// Open opens the database.
 func (db *Badger) Open(path string) error {
 	opts := badger.DefaultOptions(path)
 	opts.Dir = path
@@ -48,15 +52,18 @@ func (db *Badger) Open(path string) error {
 	return nil
 }
 
+// Close closes the database.
 func (db *Badger) Close() error {
 	return db.DB.Close()
 }
 
+// Size returns the size of the database.
 func (db *Badger) Size() int64 {
 	lsm, vlog := db.DB.Size()
 	return lsm + vlog
 }
 
+// GC triggers a value log garbage collection.
 func (db *Badger) GC() error {
 	var err error
 	for {
@@ -68,12 +75,14 @@ func (db *Badger) GC() error {
 	return err
 }
 
+// Set adds a key-value pair to the database.
 func (db *Badger) Set(key, value string) error {
 	return db.DB.Update(func(txn *badger.Txn) (err error) {
 		return txn.Set([]byte(key), []byte(value))
 	})
 }
 
+// Get gets the value of a key from the database.
 func (db *Badger) Get(key string) (string, error) {
 	var data string
 
@@ -96,6 +105,7 @@ func (db *Badger) Get(key string) (string, error) {
 	return data, err
 }
 
+// Del deletes a key from the database.
 func (db *Badger) Del(keys []string) error {
 	return db.DB.Update(func(txn *badger.Txn) error {
 		for _, key := range keys {
@@ -109,15 +119,18 @@ func (db *Badger) Del(keys []string) error {
 	})
 }
 
+// HSet adds a key-value pair to a hashmap.
 func (db *Badger) HSet(hashmap, key, value string) error {
 	err := db.Set(hashmap+"/{HASH}/"+key, value)
 	return err
 }
 
+// HGet gets the value of a key from a hashmap.
 func (db *Badger) HGet(hashmap, key string) (string, error) {
 	return db.Get(hashmap + "/{HASH}/" + key)
 }
 
+// HDel deletes a key from a hashmap.
 func (db *Badger) HDel(hashmap string, keys []string) error {
 	if len(keys) > 0 {
 		for i, key := range keys {
@@ -135,6 +148,7 @@ func (db *Badger) HDel(hashmap string, keys []string) error {
 	return db.Del(keys)
 }
 
+// HGetAll gets all key-value pairs of a hashmap.
 func (db *Badger) HGetAll(hashmap string) (map[string]string, error) {
 	result := map[string]string{}
 	err := db.Iter(true, true, hashmap+"/{HASH}/", hashmap+"/{HASH}/",
@@ -149,6 +163,7 @@ func (db *Badger) HGetAll(hashmap string) (map[string]string, error) {
 	return result, err
 }
 
+// HKeys gets all keys of a hashmap.
 func (db *Badger) HKeys(hashmap string) ([]string, error) {
 	var result []string
 	err := db.Iter(false, true, hashmap+"/{HASH}/", hashmap+"/{HASH}/",
@@ -163,6 +178,7 @@ func (db *Badger) HKeys(hashmap string) ([]string, error) {
 	return result, err
 }
 
+// HLen gets the length of a hashmap.
 func (db *Badger) HLen(hashmap string) (int, error) {
 	length := 0
 	err := db.Iter(false, true, hashmap+"/{HASH}/", hashmap+"/{HASH}/",
@@ -194,6 +210,7 @@ func validate(prefix string, iterator *badger.Iterator) bool {
 	return true
 }
 
+// Iter iterates through stuff in the database.
 func (db *Badger) Iter(prefetch, includeOffset bool, offset, prefix string, handler func(key, value string) bool) error {
 	return db.DB.View(func(txn *badger.Txn) error {
 		opts := badger.DefaultIteratorOptions

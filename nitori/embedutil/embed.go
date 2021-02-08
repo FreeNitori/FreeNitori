@@ -1,4 +1,4 @@
-// Embed formatting utility.
+// Package embedutil deals with embeds.
 package embedutil
 
 import (
@@ -6,10 +6,12 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+// Embed represents a discord embed.
 type Embed struct {
 	*discordgo.MessageEmbed
 }
 
+// Embed limits.
 const (
 	LimitTitle       = 256
 	LimitDescription = 2048
@@ -38,7 +40,6 @@ func NewEmbed(title string, description string) Embed {
 
 // AddField adds a field to the embedutil.
 func (embed *Embed) AddField(name, value string, inline bool) *Embed {
-
 	if len(embed.Fields) == LimitField {
 		log.Warnf("Embed with name \"%s\" exceeded limit!", name)
 		return embed

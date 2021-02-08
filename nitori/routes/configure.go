@@ -222,32 +222,31 @@ func configure(context *multiplexer.Context) {
 							embed.AddField(title, description, true)
 							context.SendEmbed("", embed)
 							return
-						} else {
-							if context.Fields[3] == "reset" {
-								err := config.ResetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey)
-								if !context.HandleError(err) {
-									return
-								}
-								subEntry.Cleanup(context)
-								context.SendMessage(fmt.Sprintf("Successfully reset value of `%s.%s`.", entry.Name, subEntry.Name))
-								return
-							}
-							input := context.StitchFields(3)
-							valid, ok := subEntry.Validate(context, &input)
-							if !ok {
-								return
-							}
-							if !valid {
-								context.SendMessage(state.InvalidArgument)
-								return
-							}
-							err := config.SetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey, input)
+						}
+						if context.Fields[3] == "reset" {
+							err := config.ResetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey)
 							if !context.HandleError(err) {
 								return
 							}
-							context.SendMessage(fmt.Sprintf("Successfully set value of `%s.%s` to `%s`.", entry.Name, subEntry.Name, input))
+							subEntry.Cleanup(context)
+							context.SendMessage(fmt.Sprintf("Successfully reset value of `%s.%s`.", entry.Name, subEntry.Name))
 							return
 						}
+						input := context.StitchFields(3)
+						valid, ok := subEntry.Validate(context, &input)
+						if !ok {
+							return
+						}
+						if !valid {
+							context.SendMessage(state.InvalidArgument)
+							return
+						}
+						err := config.SetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey, input)
+						if !context.HandleError(err) {
+							return
+						}
+						context.SendMessage(fmt.Sprintf("Successfully set value of `%s.%s` to `%s`.", entry.Name, subEntry.Name, input))
+						return
 					}
 				}
 				break

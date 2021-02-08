@@ -56,9 +56,8 @@ func init() {
 						*input = channel.ID
 						config.ResetGuildMap(context.Guild.ID, "highlight")
 						return true, true
-					} else {
-						return false, true
 					}
+					return false, true
 				},
 				Format: func(context *multiplexer.Context, value string) (string, string, bool) {
 					if channel := context.GetChannel(value); channel != nil {
@@ -198,9 +197,8 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 			if react.Emoji.Name == e {
 				if react.Count >= amount {
 					return true, react
-				} else {
-					return false, nil
 				}
+				return false, nil
 			}
 		}
 		return false, nil

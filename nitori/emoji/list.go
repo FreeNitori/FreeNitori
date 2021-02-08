@@ -1,11 +1,14 @@
+// Package emoji contains information on every emoji.
 package emoji
 
+// Emoji represents an emoji.
 type Emoji struct {
 	Key        string
 	Value      string
 	Descriptor string
 }
 
+// Emojis is a map of every single emoji to ever exist.
 var Emojis = map[string]Emoji{
 	"1F004": {
 		Key:        "1F004",
@@ -2434,12 +2437,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3C3-1F3FB-200D-2640-FE0F": {
 		Key:        "1F3C3-1F3FB-200D-2640-FE0F",
-		Value:      "🏃🏻‍♀️",
+		Value:      "🏃🏻\u200d♀️",
 		Descriptor: "Woman Running: Light Skin Tone",
 	},
 	"1F3C3-1F3FB-200D-2642-FE0F": {
 		Key:        "1F3C3-1F3FB-200D-2642-FE0F",
-		Value:      "🏃🏻‍♂️",
+		Value:      "🏃🏻\u200d♂️",
 		Descriptor: "Man Running: Light Skin Tone",
 	},
 	"1F3C3-1F3FC": {
@@ -2449,12 +2452,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3C3-1F3FC-200D-2640-FE0F": {
 		Key:        "1F3C3-1F3FC-200D-2640-FE0F",
-		Value:      "🏃🏼‍♀️",
+		Value:      "🏃🏼\u200d♀️",
 		Descriptor: "Woman Running: Medium-Light Skin Tone",
 	},
 	"1F3C3-1F3FC-200D-2642-FE0F": {
 		Key:        "1F3C3-1F3FC-200D-2642-FE0F",
-		Value:      "🏃🏼‍♂️",
+		Value:      "🏃🏼\u200d♂️",
 		Descriptor: "Man Running: Medium-Light Skin Tone",
 	},
 	"1F3C3-1F3FD": {
@@ -2464,12 +2467,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3C3-1F3FD-200D-2640-FE0F": {
 		Key:        "1F3C3-1F3FD-200D-2640-FE0F",
-		Value:      "🏃🏽‍♀️",
+		Value:      "🏃🏽\u200d♀️",
 		Descriptor: "Woman Running: Medium Skin Tone",
 	},
 	"1F3C3-1F3FD-200D-2642-FE0F": {
 		Key:        "1F3C3-1F3FD-200D-2642-FE0F",
-		Value:      "🏃🏽‍♂️",
+		Value:      "🏃🏽\u200d♂️",
 		Descriptor: "Man Running: Medium Skin Tone",
 	},
 	"1F3C3-1F3FE": {
@@ -2479,12 +2482,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3C3-1F3FE-200D-2640-FE0F": {
 		Key:        "1F3C3-1F3FE-200D-2640-FE0F",
-		Value:      "🏃🏾‍♀️",
+		Value:      "🏃🏾\u200d♀️",
 		Descriptor: "Woman Running: Medium-Dark Skin Tone",
 	},
 	"1F3C3-1F3FE-200D-2642-FE0F": {
 		Key:        "1F3C3-1F3FE-200D-2642-FE0F",
-		Value:      "🏃🏾‍♂️",
+		Value:      "🏃🏾\u200d♂️",
 		Descriptor: "Man Running: Medium-Dark Skin Tone",
 	},
 	"1F3C3-1F3FF": {
@@ -2494,22 +2497,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3C3-1F3FF-200D-2640-FE0F": {
 		Key:        "1F3C3-1F3FF-200D-2640-FE0F",
-		Value:      "🏃🏿‍♀️",
+		Value:      "🏃🏿\u200d♀️",
 		Descriptor: "Woman Running: Dark Skin Tone",
 	},
 	"1F3C3-1F3FF-200D-2642-FE0F": {
 		Key:        "1F3C3-1F3FF-200D-2642-FE0F",
-		Value:      "🏃🏿‍♂️",
+		Value:      "🏃🏿\u200d♂️",
 		Descriptor: "Man Running: Dark Skin Tone",
 	},
 	"1F3C3-200D-2640-FE0F": {
 		Key:        "1F3C3-200D-2640-FE0F",
-		Value:      "🏃‍♀️",
+		Value:      "🏃\u200d♀️",
 		Descriptor: "Woman Running",
 	},
 	"1F3C3-200D-2642-FE0F": {
 		Key:        "1F3C3-200D-2642-FE0F",
-		Value:      "🏃‍♂️",
+		Value:      "🏃\u200d♂️",
 		Descriptor: "Man Running",
 	},
 	"1F3C4": {
@@ -2524,12 +2527,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3C4-1F3FB-200D-2640-FE0F": {
 		Key:        "1F3C4-1F3FB-200D-2640-FE0F",
-		Value:      "🏄🏻‍♀️",
+		Value:      "🏄🏻\u200d♀️",
 		Descriptor: "Woman Surfing: Light Skin Tone",
 	},
 	"1F3C4-1F3FB-200D-2642-FE0F": {
 		Key:        "1F3C4-1F3FB-200D-2642-FE0F",
-		Value:      "🏄🏻‍♂️",
+		Value:      "🏄🏻\u200d♂️",
 		Descriptor: "Man Surfing: Light Skin Tone",
 	},
 	"1F3C4-1F3FC": {
@@ -2539,12 +2542,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3C4-1F3FC-200D-2640-FE0F": {
 		Key:        "1F3C4-1F3FC-200D-2640-FE0F",
-		Value:      "🏄🏼‍♀️",
+		Value:      "🏄🏼\u200d♀️",
 		Descriptor: "Woman Surfing: Medium-Light Skin Tone",
 	},
 	"1F3C4-1F3FC-200D-2642-FE0F": {
 		Key:        "1F3C4-1F3FC-200D-2642-FE0F",
-		Value:      "🏄🏼‍♂️",
+		Value:      "🏄🏼\u200d♂️",
 		Descriptor: "Man Surfing: Medium-Light Skin Tone",
 	},
 	"1F3C4-1F3FD": {
@@ -2554,12 +2557,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3C4-1F3FD-200D-2640-FE0F": {
 		Key:        "1F3C4-1F3FD-200D-2640-FE0F",
-		Value:      "🏄🏽‍♀️",
+		Value:      "🏄🏽\u200d♀️",
 		Descriptor: "Woman Surfing: Medium Skin Tone",
 	},
 	"1F3C4-1F3FD-200D-2642-FE0F": {
 		Key:        "1F3C4-1F3FD-200D-2642-FE0F",
-		Value:      "🏄🏽‍♂️",
+		Value:      "🏄🏽\u200d♂️",
 		Descriptor: "Man Surfing: Medium Skin Tone",
 	},
 	"1F3C4-1F3FE": {
@@ -2569,12 +2572,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3C4-1F3FE-200D-2640-FE0F": {
 		Key:        "1F3C4-1F3FE-200D-2640-FE0F",
-		Value:      "🏄🏾‍♀️",
+		Value:      "🏄🏾\u200d♀️",
 		Descriptor: "Woman Surfing: Medium-Dark Skin Tone",
 	},
 	"1F3C4-1F3FE-200D-2642-FE0F": {
 		Key:        "1F3C4-1F3FE-200D-2642-FE0F",
-		Value:      "🏄🏾‍♂️",
+		Value:      "🏄🏾\u200d♂️",
 		Descriptor: "Man Surfing: Medium-Dark Skin Tone",
 	},
 	"1F3C4-1F3FF": {
@@ -2584,22 +2587,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3C4-1F3FF-200D-2640-FE0F": {
 		Key:        "1F3C4-1F3FF-200D-2640-FE0F",
-		Value:      "🏄🏿‍♀️",
+		Value:      "🏄🏿\u200d♀️",
 		Descriptor: "Woman Surfing: Dark Skin Tone",
 	},
 	"1F3C4-1F3FF-200D-2642-FE0F": {
 		Key:        "1F3C4-1F3FF-200D-2642-FE0F",
-		Value:      "🏄🏿‍♂️",
+		Value:      "🏄🏿\u200d♂️",
 		Descriptor: "Man Surfing: Dark Skin Tone",
 	},
 	"1F3C4-200D-2640-FE0F": {
 		Key:        "1F3C4-200D-2640-FE0F",
-		Value:      "🏄‍♀️",
+		Value:      "🏄\u200d♀️",
 		Descriptor: "Woman Surfing",
 	},
 	"1F3C4-200D-2642-FE0F": {
 		Key:        "1F3C4-200D-2642-FE0F",
-		Value:      "🏄‍♂️",
+		Value:      "🏄\u200d♂️",
 		Descriptor: "Man Surfing",
 	},
 	"1F3C5": {
@@ -2664,12 +2667,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CA-1F3FB-200D-2640-FE0F": {
 		Key:        "1F3CA-1F3FB-200D-2640-FE0F",
-		Value:      "🏊🏻‍♀️",
+		Value:      "🏊🏻\u200d♀️",
 		Descriptor: "Woman Swimming: Light Skin Tone",
 	},
 	"1F3CA-1F3FB-200D-2642-FE0F": {
 		Key:        "1F3CA-1F3FB-200D-2642-FE0F",
-		Value:      "🏊🏻‍♂️",
+		Value:      "🏊🏻\u200d♂️",
 		Descriptor: "Man Swimming: Light Skin Tone",
 	},
 	"1F3CA-1F3FC": {
@@ -2679,12 +2682,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CA-1F3FC-200D-2640-FE0F": {
 		Key:        "1F3CA-1F3FC-200D-2640-FE0F",
-		Value:      "🏊🏼‍♀️",
+		Value:      "🏊🏼\u200d♀️",
 		Descriptor: "Woman Swimming: Medium-Light Skin Tone",
 	},
 	"1F3CA-1F3FC-200D-2642-FE0F": {
 		Key:        "1F3CA-1F3FC-200D-2642-FE0F",
-		Value:      "🏊🏼‍♂️",
+		Value:      "🏊🏼\u200d♂️",
 		Descriptor: "Man Swimming: Medium-Light Skin Tone",
 	},
 	"1F3CA-1F3FD": {
@@ -2694,12 +2697,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CA-1F3FD-200D-2640-FE0F": {
 		Key:        "1F3CA-1F3FD-200D-2640-FE0F",
-		Value:      "🏊🏽‍♀️",
+		Value:      "🏊🏽\u200d♀️",
 		Descriptor: "Woman Swimming: Medium Skin Tone",
 	},
 	"1F3CA-1F3FD-200D-2642-FE0F": {
 		Key:        "1F3CA-1F3FD-200D-2642-FE0F",
-		Value:      "🏊🏽‍♂️",
+		Value:      "🏊🏽\u200d♂️",
 		Descriptor: "Man Swimming: Medium Skin Tone",
 	},
 	"1F3CA-1F3FE": {
@@ -2709,12 +2712,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CA-1F3FE-200D-2640-FE0F": {
 		Key:        "1F3CA-1F3FE-200D-2640-FE0F",
-		Value:      "🏊🏾‍♀️",
+		Value:      "🏊🏾\u200d♀️",
 		Descriptor: "Woman Swimming: Medium-Dark Skin Tone",
 	},
 	"1F3CA-1F3FE-200D-2642-FE0F": {
 		Key:        "1F3CA-1F3FE-200D-2642-FE0F",
-		Value:      "🏊🏾‍♂️",
+		Value:      "🏊🏾\u200d♂️",
 		Descriptor: "Man Swimming: Medium-Dark Skin Tone",
 	},
 	"1F3CA-1F3FF": {
@@ -2724,22 +2727,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CA-1F3FF-200D-2640-FE0F": {
 		Key:        "1F3CA-1F3FF-200D-2640-FE0F",
-		Value:      "🏊🏿‍♀️",
+		Value:      "🏊🏿\u200d♀️",
 		Descriptor: "Woman Swimming: Dark Skin Tone",
 	},
 	"1F3CA-1F3FF-200D-2642-FE0F": {
 		Key:        "1F3CA-1F3FF-200D-2642-FE0F",
-		Value:      "🏊🏿‍♂️",
+		Value:      "🏊🏿\u200d♂️",
 		Descriptor: "Man Swimming: Dark Skin Tone",
 	},
 	"1F3CA-200D-2640-FE0F": {
 		Key:        "1F3CA-200D-2640-FE0F",
-		Value:      "🏊‍♀️",
+		Value:      "🏊\u200d♀️",
 		Descriptor: "Woman Swimming",
 	},
 	"1F3CA-200D-2642-FE0F": {
 		Key:        "1F3CA-200D-2642-FE0F",
-		Value:      "🏊‍♂️",
+		Value:      "🏊\u200d♂️",
 		Descriptor: "Man Swimming",
 	},
 	"1F3CB-1F3FB": {
@@ -2749,12 +2752,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CB-1F3FB-200D-2640-FE0F": {
 		Key:        "1F3CB-1F3FB-200D-2640-FE0F",
-		Value:      "🏋🏻‍♀️",
+		Value:      "🏋🏻\u200d♀️",
 		Descriptor: "Woman Lifting Weights: Light Skin Tone",
 	},
 	"1F3CB-1F3FB-200D-2642-FE0F": {
 		Key:        "1F3CB-1F3FB-200D-2642-FE0F",
-		Value:      "🏋🏻‍♂️",
+		Value:      "🏋🏻\u200d♂️",
 		Descriptor: "Man Lifting Weights: Light Skin Tone",
 	},
 	"1F3CB-1F3FC": {
@@ -2764,12 +2767,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CB-1F3FC-200D-2640-FE0F": {
 		Key:        "1F3CB-1F3FC-200D-2640-FE0F",
-		Value:      "🏋🏼‍♀️",
+		Value:      "🏋🏼\u200d♀️",
 		Descriptor: "Woman Lifting Weights: Medium-Light Skin Tone",
 	},
 	"1F3CB-1F3FC-200D-2642-FE0F": {
 		Key:        "1F3CB-1F3FC-200D-2642-FE0F",
-		Value:      "🏋🏼‍♂️",
+		Value:      "🏋🏼\u200d♂️",
 		Descriptor: "Man Lifting Weights: Medium-Light Skin Tone",
 	},
 	"1F3CB-1F3FD": {
@@ -2779,12 +2782,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CB-1F3FD-200D-2640-FE0F": {
 		Key:        "1F3CB-1F3FD-200D-2640-FE0F",
-		Value:      "🏋🏽‍♀️",
+		Value:      "🏋🏽\u200d♀️",
 		Descriptor: "Woman Lifting Weights: Medium Skin Tone",
 	},
 	"1F3CB-1F3FD-200D-2642-FE0F": {
 		Key:        "1F3CB-1F3FD-200D-2642-FE0F",
-		Value:      "🏋🏽‍♂️",
+		Value:      "🏋🏽\u200d♂️",
 		Descriptor: "Man Lifting Weights: Medium Skin Tone",
 	},
 	"1F3CB-1F3FE": {
@@ -2794,12 +2797,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CB-1F3FE-200D-2640-FE0F": {
 		Key:        "1F3CB-1F3FE-200D-2640-FE0F",
-		Value:      "🏋🏾‍♀️",
+		Value:      "🏋🏾\u200d♀️",
 		Descriptor: "Woman Lifting Weights: Medium-Dark Skin Tone",
 	},
 	"1F3CB-1F3FE-200D-2642-FE0F": {
 		Key:        "1F3CB-1F3FE-200D-2642-FE0F",
-		Value:      "🏋🏾‍♂️",
+		Value:      "🏋🏾\u200d♂️",
 		Descriptor: "Man Lifting Weights: Medium-Dark Skin Tone",
 	},
 	"1F3CB-1F3FF": {
@@ -2809,12 +2812,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CB-1F3FF-200D-2640-FE0F": {
 		Key:        "1F3CB-1F3FF-200D-2640-FE0F",
-		Value:      "🏋🏿‍♀️",
+		Value:      "🏋🏿\u200d♀️",
 		Descriptor: "Woman Lifting Weights: Dark Skin Tone",
 	},
 	"1F3CB-1F3FF-200D-2642-FE0F": {
 		Key:        "1F3CB-1F3FF-200D-2642-FE0F",
-		Value:      "🏋🏿‍♂️",
+		Value:      "🏋🏿\u200d♂️",
 		Descriptor: "Man Lifting Weights: Dark Skin Tone",
 	},
 	"1F3CB-FE0F": {
@@ -2824,12 +2827,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CB-FE0F-200D-2640-FE0F": {
 		Key:        "1F3CB-FE0F-200D-2640-FE0F",
-		Value:      "🏋️‍♀️",
+		Value:      "🏋️\u200d♀️",
 		Descriptor: "Woman Lifting Weights",
 	},
 	"1F3CB-FE0F-200D-2642-FE0F": {
 		Key:        "1F3CB-FE0F-200D-2642-FE0F",
-		Value:      "🏋️‍♂️",
+		Value:      "🏋️\u200d♂️",
 		Descriptor: "Man Lifting Weights",
 	},
 	"1F3CC-1F3FB": {
@@ -2839,12 +2842,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CC-1F3FB-200D-2640-FE0F": {
 		Key:        "1F3CC-1F3FB-200D-2640-FE0F",
-		Value:      "🏌🏻‍♀️",
+		Value:      "🏌🏻\u200d♀️",
 		Descriptor: "Woman Golfing: Light Skin Tone",
 	},
 	"1F3CC-1F3FB-200D-2642-FE0F": {
 		Key:        "1F3CC-1F3FB-200D-2642-FE0F",
-		Value:      "🏌🏻‍♂️",
+		Value:      "🏌🏻\u200d♂️",
 		Descriptor: "Man Golfing: Light Skin Tone",
 	},
 	"1F3CC-1F3FC": {
@@ -2854,12 +2857,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CC-1F3FC-200D-2640-FE0F": {
 		Key:        "1F3CC-1F3FC-200D-2640-FE0F",
-		Value:      "🏌🏼‍♀️",
+		Value:      "🏌🏼\u200d♀️",
 		Descriptor: "Woman Golfing: Medium-Light Skin Tone",
 	},
 	"1F3CC-1F3FC-200D-2642-FE0F": {
 		Key:        "1F3CC-1F3FC-200D-2642-FE0F",
-		Value:      "🏌🏼‍♂️",
+		Value:      "🏌🏼\u200d♂️",
 		Descriptor: "Man Golfing: Medium-Light Skin Tone",
 	},
 	"1F3CC-1F3FD": {
@@ -2869,12 +2872,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CC-1F3FD-200D-2640-FE0F": {
 		Key:        "1F3CC-1F3FD-200D-2640-FE0F",
-		Value:      "🏌🏽‍♀️",
+		Value:      "🏌🏽\u200d♀️",
 		Descriptor: "Woman Golfing: Medium Skin Tone",
 	},
 	"1F3CC-1F3FD-200D-2642-FE0F": {
 		Key:        "1F3CC-1F3FD-200D-2642-FE0F",
-		Value:      "🏌🏽‍♂️",
+		Value:      "🏌🏽\u200d♂️",
 		Descriptor: "Man Golfing: Medium Skin Tone",
 	},
 	"1F3CC-1F3FE": {
@@ -2884,12 +2887,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CC-1F3FE-200D-2640-FE0F": {
 		Key:        "1F3CC-1F3FE-200D-2640-FE0F",
-		Value:      "🏌🏾‍♀️",
+		Value:      "🏌🏾\u200d♀️",
 		Descriptor: "Woman Golfing: Medium-Dark Skin Tone",
 	},
 	"1F3CC-1F3FE-200D-2642-FE0F": {
 		Key:        "1F3CC-1F3FE-200D-2642-FE0F",
-		Value:      "🏌🏾‍♂️",
+		Value:      "🏌🏾\u200d♂️",
 		Descriptor: "Man Golfing: Medium-Dark Skin Tone",
 	},
 	"1F3CC-1F3FF": {
@@ -2899,12 +2902,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CC-1F3FF-200D-2640-FE0F": {
 		Key:        "1F3CC-1F3FF-200D-2640-FE0F",
-		Value:      "🏌🏿‍♀️",
+		Value:      "🏌🏿\u200d♀️",
 		Descriptor: "Woman Golfing: Dark Skin Tone",
 	},
 	"1F3CC-1F3FF-200D-2642-FE0F": {
 		Key:        "1F3CC-1F3FF-200D-2642-FE0F",
-		Value:      "🏌🏿‍♂️",
+		Value:      "🏌🏿\u200d♂️",
 		Descriptor: "Man Golfing: Dark Skin Tone",
 	},
 	"1F3CC-FE0F": {
@@ -2914,12 +2917,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3CC-FE0F-200D-2640-FE0F": {
 		Key:        "1F3CC-FE0F-200D-2640-FE0F",
-		Value:      "🏌️‍♀️",
+		Value:      "🏌️\u200d♀️",
 		Descriptor: "Woman Golfing",
 	},
 	"1F3CC-FE0F-200D-2642-FE0F": {
 		Key:        "1F3CC-FE0F-200D-2642-FE0F",
-		Value:      "🏌️‍♂️",
+		Value:      "🏌️\u200d♂️",
 		Descriptor: "Man Golfing",
 	},
 	"1F3CD-FE0F": {
@@ -3109,7 +3112,7 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3F3-FE0F-200D-1F308": {
 		Key:        "1F3F3-FE0F-200D-1F308",
-		Value:      "🏳️‍🌈",
+		Value:      "🏳️\u200d🌈",
 		Descriptor: "Rainbow Flag",
 	},
 	"1F3F4": {
@@ -3119,7 +3122,7 @@ var Emojis = map[string]Emoji{
 	},
 	"1F3F4-200D-2620-FE0F": {
 		Key:        "1F3F4-200D-2620-FE0F",
-		Value:      "🏴‍☠️",
+		Value:      "🏴\u200d☠️",
 		Descriptor: "Pirate Flag",
 	},
 	"1F3F4-E0067-E0062-E0065-E006E-E0067-E007F": {
@@ -3299,7 +3302,7 @@ var Emojis = map[string]Emoji{
 	},
 	"1F415-200D-1F9BA": {
 		Key:        "1F415-200D-1F9BA",
-		Value:      "🐕‍🦺",
+		Value:      "🐕\u200d🦺",
 		Descriptor: "Service Dog",
 	},
 	"1F416": {
@@ -3524,7 +3527,7 @@ var Emojis = map[string]Emoji{
 	},
 	"1F441-FE0F-200D-1F5E8-FE0F": {
 		Key:        "1F441-FE0F-200D-1F5E8-FE0F",
-		Value:      "👁️‍🗨️",
+		Value:      "👁️\u200d🗨️",
 		Descriptor: "Eye in Speech Bubble",
 	},
 	"1F442": {
@@ -4104,67 +4107,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-1F3FB-200D-1F33E": {
 		Key:        "1F468-1F3FB-200D-1F33E",
-		Value:      "👨🏻‍🌾",
+		Value:      "👨🏻\u200d🌾",
 		Descriptor: "Man Farmer: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F373": {
 		Key:        "1F468-1F3FB-200D-1F373",
-		Value:      "👨🏻‍🍳",
+		Value:      "👨🏻\u200d🍳",
 		Descriptor: "Man Cook: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F393": {
 		Key:        "1F468-1F3FB-200D-1F393",
-		Value:      "👨🏻‍🎓",
+		Value:      "👨🏻\u200d🎓",
 		Descriptor: "Man Student: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F3A4": {
 		Key:        "1F468-1F3FB-200D-1F3A4",
-		Value:      "👨🏻‍🎤",
+		Value:      "👨🏻\u200d🎤",
 		Descriptor: "Man Singer: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F3A8": {
 		Key:        "1F468-1F3FB-200D-1F3A8",
-		Value:      "👨🏻‍🎨",
+		Value:      "👨🏻\u200d🎨",
 		Descriptor: "Man Artist: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F3EB": {
 		Key:        "1F468-1F3FB-200D-1F3EB",
-		Value:      "👨🏻‍🏫",
+		Value:      "👨🏻\u200d🏫",
 		Descriptor: "Man Teacher: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F3ED": {
 		Key:        "1F468-1F3FB-200D-1F3ED",
-		Value:      "👨🏻‍🏭",
+		Value:      "👨🏻\u200d🏭",
 		Descriptor: "Man Factory Worker: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F4BB": {
 		Key:        "1F468-1F3FB-200D-1F4BB",
-		Value:      "👨🏻‍💻",
+		Value:      "👨🏻\u200d💻",
 		Descriptor: "Man Technologist: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F4BC": {
 		Key:        "1F468-1F3FB-200D-1F4BC",
-		Value:      "👨🏻‍💼",
+		Value:      "👨🏻\u200d💼",
 		Descriptor: "Man Office Worker: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F527": {
 		Key:        "1F468-1F3FB-200D-1F527",
-		Value:      "👨🏻‍🔧",
+		Value:      "👨🏻\u200d🔧",
 		Descriptor: "Man Mechanic: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F52C": {
 		Key:        "1F468-1F3FB-200D-1F52C",
-		Value:      "👨🏻‍🔬",
+		Value:      "👨🏻\u200d🔬",
 		Descriptor: "Man Scientist: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F680": {
 		Key:        "1F468-1F3FB-200D-1F680",
-		Value:      "👨🏻‍🚀",
+		Value:      "👨🏻\u200d🚀",
 		Descriptor: "Man Astronaut: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F692": {
 		Key:        "1F468-1F3FB-200D-1F692",
-		Value:      "👨🏻‍🚒",
+		Value:      "👨🏻\u200d🚒",
 		Descriptor: "Man Firefighter: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F91D-200D-1F468-1F3FC": {
@@ -4189,52 +4192,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-1F3FB-200D-1F9AF": {
 		Key:        "1F468-1F3FB-200D-1F9AF",
-		Value:      "👨🏻‍🦯",
+		Value:      "👨🏻\u200d🦯",
 		Descriptor: "Man With Probing Cane: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F9B0": {
 		Key:        "1F468-1F3FB-200D-1F9B0",
-		Value:      "👨🏻‍🦰",
+		Value:      "👨🏻\u200d🦰",
 		Descriptor: "Man: Light Skin Tone, Red Hair",
 	},
 	"1F468-1F3FB-200D-1F9B1": {
 		Key:        "1F468-1F3FB-200D-1F9B1",
-		Value:      "👨🏻‍🦱",
+		Value:      "👨🏻\u200d🦱",
 		Descriptor: "Man: Light Skin Tone, Curly Hair",
 	},
 	"1F468-1F3FB-200D-1F9B2": {
 		Key:        "1F468-1F3FB-200D-1F9B2",
-		Value:      "👨🏻‍🦲",
+		Value:      "👨🏻\u200d🦲",
 		Descriptor: "Man: Light Skin Tone, Bald",
 	},
 	"1F468-1F3FB-200D-1F9B3": {
 		Key:        "1F468-1F3FB-200D-1F9B3",
-		Value:      "👨🏻‍🦳",
+		Value:      "👨🏻\u200d🦳",
 		Descriptor: "Man: Light Skin Tone, White Hair",
 	},
 	"1F468-1F3FB-200D-1F9BC": {
 		Key:        "1F468-1F3FB-200D-1F9BC",
-		Value:      "👨🏻‍🦼",
+		Value:      "👨🏻\u200d🦼",
 		Descriptor: "Man in Motorized Wheelchair: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-1F9BD": {
 		Key:        "1F468-1F3FB-200D-1F9BD",
-		Value:      "👨🏻‍🦽",
+		Value:      "👨🏻\u200d🦽",
 		Descriptor: "Man in Manual Wheelchair: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-2695-FE0F": {
 		Key:        "1F468-1F3FB-200D-2695-FE0F",
-		Value:      "👨🏻‍⚕️",
+		Value:      "👨🏻\u200d⚕️",
 		Descriptor: "Man Health Worker: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-2696-FE0F": {
 		Key:        "1F468-1F3FB-200D-2696-FE0F",
-		Value:      "👨🏻‍⚖️",
+		Value:      "👨🏻\u200d⚖️",
 		Descriptor: "Man Judge: Light Skin Tone",
 	},
 	"1F468-1F3FB-200D-2708-FE0F": {
 		Key:        "1F468-1F3FB-200D-2708-FE0F",
-		Value:      "👨🏻‍✈️",
+		Value:      "👨🏻\u200d✈️",
 		Descriptor: "Man Pilot: Light Skin Tone",
 	},
 	"1F468-1F3FC": {
@@ -4244,67 +4247,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-1F3FC-200D-1F33E": {
 		Key:        "1F468-1F3FC-200D-1F33E",
-		Value:      "👨🏼‍🌾",
+		Value:      "👨🏼\u200d🌾",
 		Descriptor: "Man Farmer: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F373": {
 		Key:        "1F468-1F3FC-200D-1F373",
-		Value:      "👨🏼‍🍳",
+		Value:      "👨🏼\u200d🍳",
 		Descriptor: "Man Cook: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F393": {
 		Key:        "1F468-1F3FC-200D-1F393",
-		Value:      "👨🏼‍🎓",
+		Value:      "👨🏼\u200d🎓",
 		Descriptor: "Man Student: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F3A4": {
 		Key:        "1F468-1F3FC-200D-1F3A4",
-		Value:      "👨🏼‍🎤",
+		Value:      "👨🏼\u200d🎤",
 		Descriptor: "Man Singer: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F3A8": {
 		Key:        "1F468-1F3FC-200D-1F3A8",
-		Value:      "👨🏼‍🎨",
+		Value:      "👨🏼\u200d🎨",
 		Descriptor: "Man Artist: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F3EB": {
 		Key:        "1F468-1F3FC-200D-1F3EB",
-		Value:      "👨🏼‍🏫",
+		Value:      "👨🏼\u200d🏫",
 		Descriptor: "Man Teacher: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F3ED": {
 		Key:        "1F468-1F3FC-200D-1F3ED",
-		Value:      "👨🏼‍🏭",
+		Value:      "👨🏼\u200d🏭",
 		Descriptor: "Man Factory Worker: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F4BB": {
 		Key:        "1F468-1F3FC-200D-1F4BB",
-		Value:      "👨🏼‍💻",
+		Value:      "👨🏼\u200d💻",
 		Descriptor: "Man Technologist: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F4BC": {
 		Key:        "1F468-1F3FC-200D-1F4BC",
-		Value:      "👨🏼‍💼",
+		Value:      "👨🏼\u200d💼",
 		Descriptor: "Man Office Worker: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F527": {
 		Key:        "1F468-1F3FC-200D-1F527",
-		Value:      "👨🏼‍🔧",
+		Value:      "👨🏼\u200d🔧",
 		Descriptor: "Man Mechanic: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F52C": {
 		Key:        "1F468-1F3FC-200D-1F52C",
-		Value:      "👨🏼‍🔬",
+		Value:      "👨🏼\u200d🔬",
 		Descriptor: "Man Scientist: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F680": {
 		Key:        "1F468-1F3FC-200D-1F680",
-		Value:      "👨🏼‍🚀",
+		Value:      "👨🏼\u200d🚀",
 		Descriptor: "Man Astronaut: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F692": {
 		Key:        "1F468-1F3FC-200D-1F692",
-		Value:      "👨🏼‍🚒",
+		Value:      "👨🏼\u200d🚒",
 		Descriptor: "Man Firefighter: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F91D-200D-1F468-1F3FB": {
@@ -4329,52 +4332,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-1F3FC-200D-1F9AF": {
 		Key:        "1F468-1F3FC-200D-1F9AF",
-		Value:      "👨🏼‍🦯",
+		Value:      "👨🏼\u200d🦯",
 		Descriptor: "Man With Probing Cane: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F9B0": {
 		Key:        "1F468-1F3FC-200D-1F9B0",
-		Value:      "👨🏼‍🦰",
+		Value:      "👨🏼\u200d🦰",
 		Descriptor: "Man: Medium-Light Skin Tone, Red Hair",
 	},
 	"1F468-1F3FC-200D-1F9B1": {
 		Key:        "1F468-1F3FC-200D-1F9B1",
-		Value:      "👨🏼‍🦱",
+		Value:      "👨🏼\u200d🦱",
 		Descriptor: "Man: Medium-Light Skin Tone, Curly Hair",
 	},
 	"1F468-1F3FC-200D-1F9B2": {
 		Key:        "1F468-1F3FC-200D-1F9B2",
-		Value:      "👨🏼‍🦲",
+		Value:      "👨🏼\u200d🦲",
 		Descriptor: "Man: Medium-Light Skin Tone, Bald",
 	},
 	"1F468-1F3FC-200D-1F9B3": {
 		Key:        "1F468-1F3FC-200D-1F9B3",
-		Value:      "👨🏼‍🦳",
+		Value:      "👨🏼\u200d🦳",
 		Descriptor: "Man: Medium-Light Skin Tone, White Hair",
 	},
 	"1F468-1F3FC-200D-1F9BC": {
 		Key:        "1F468-1F3FC-200D-1F9BC",
-		Value:      "👨🏼‍🦼",
+		Value:      "👨🏼\u200d🦼",
 		Descriptor: "Man in Motorized Wheelchair: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-1F9BD": {
 		Key:        "1F468-1F3FC-200D-1F9BD",
-		Value:      "👨🏼‍🦽",
+		Value:      "👨🏼\u200d🦽",
 		Descriptor: "Man in Manual Wheelchair: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-2695-FE0F": {
 		Key:        "1F468-1F3FC-200D-2695-FE0F",
-		Value:      "👨🏼‍⚕️",
+		Value:      "👨🏼\u200d⚕️",
 		Descriptor: "Man Health Worker: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-2696-FE0F": {
 		Key:        "1F468-1F3FC-200D-2696-FE0F",
-		Value:      "👨🏼‍⚖️",
+		Value:      "👨🏼\u200d⚖️",
 		Descriptor: "Man Judge: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FC-200D-2708-FE0F": {
 		Key:        "1F468-1F3FC-200D-2708-FE0F",
-		Value:      "👨🏼‍✈️",
+		Value:      "👨🏼\u200d✈️",
 		Descriptor: "Man Pilot: Medium-Light Skin Tone",
 	},
 	"1F468-1F3FD": {
@@ -4384,67 +4387,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-1F3FD-200D-1F33E": {
 		Key:        "1F468-1F3FD-200D-1F33E",
-		Value:      "👨🏽‍🌾",
+		Value:      "👨🏽\u200d🌾",
 		Descriptor: "Man Farmer: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F373": {
 		Key:        "1F468-1F3FD-200D-1F373",
-		Value:      "👨🏽‍🍳",
+		Value:      "👨🏽\u200d🍳",
 		Descriptor: "Man Cook: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F393": {
 		Key:        "1F468-1F3FD-200D-1F393",
-		Value:      "👨🏽‍🎓",
+		Value:      "👨🏽\u200d🎓",
 		Descriptor: "Man Student: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F3A4": {
 		Key:        "1F468-1F3FD-200D-1F3A4",
-		Value:      "👨🏽‍🎤",
+		Value:      "👨🏽\u200d🎤",
 		Descriptor: "Man Singer: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F3A8": {
 		Key:        "1F468-1F3FD-200D-1F3A8",
-		Value:      "👨🏽‍🎨",
+		Value:      "👨🏽\u200d🎨",
 		Descriptor: "Man Artist: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F3EB": {
 		Key:        "1F468-1F3FD-200D-1F3EB",
-		Value:      "👨🏽‍🏫",
+		Value:      "👨🏽\u200d🏫",
 		Descriptor: "Man Teacher: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F3ED": {
 		Key:        "1F468-1F3FD-200D-1F3ED",
-		Value:      "👨🏽‍🏭",
+		Value:      "👨🏽\u200d🏭",
 		Descriptor: "Man Factory Worker: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F4BB": {
 		Key:        "1F468-1F3FD-200D-1F4BB",
-		Value:      "👨🏽‍💻",
+		Value:      "👨🏽\u200d💻",
 		Descriptor: "Man Technologist: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F4BC": {
 		Key:        "1F468-1F3FD-200D-1F4BC",
-		Value:      "👨🏽‍💼",
+		Value:      "👨🏽\u200d💼",
 		Descriptor: "Man Office Worker: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F527": {
 		Key:        "1F468-1F3FD-200D-1F527",
-		Value:      "👨🏽‍🔧",
+		Value:      "👨🏽\u200d🔧",
 		Descriptor: "Man Mechanic: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F52C": {
 		Key:        "1F468-1F3FD-200D-1F52C",
-		Value:      "👨🏽‍🔬",
+		Value:      "👨🏽\u200d🔬",
 		Descriptor: "Man Scientist: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F680": {
 		Key:        "1F468-1F3FD-200D-1F680",
-		Value:      "👨🏽‍🚀",
+		Value:      "👨🏽\u200d🚀",
 		Descriptor: "Man Astronaut: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F692": {
 		Key:        "1F468-1F3FD-200D-1F692",
-		Value:      "👨🏽‍🚒",
+		Value:      "👨🏽\u200d🚒",
 		Descriptor: "Man Firefighter: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F91D-200D-1F468-1F3FB": {
@@ -4469,52 +4472,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-1F3FD-200D-1F9AF": {
 		Key:        "1F468-1F3FD-200D-1F9AF",
-		Value:      "👨🏽‍🦯",
+		Value:      "👨🏽\u200d🦯",
 		Descriptor: "Man With Probing Cane: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F9B0": {
 		Key:        "1F468-1F3FD-200D-1F9B0",
-		Value:      "👨🏽‍🦰",
+		Value:      "👨🏽\u200d🦰",
 		Descriptor: "Man: Medium Skin Tone, Red Hair",
 	},
 	"1F468-1F3FD-200D-1F9B1": {
 		Key:        "1F468-1F3FD-200D-1F9B1",
-		Value:      "👨🏽‍🦱",
+		Value:      "👨🏽\u200d🦱",
 		Descriptor: "Man: Medium Skin Tone, Curly Hair",
 	},
 	"1F468-1F3FD-200D-1F9B2": {
 		Key:        "1F468-1F3FD-200D-1F9B2",
-		Value:      "👨🏽‍🦲",
+		Value:      "👨🏽\u200d🦲",
 		Descriptor: "Man: Medium Skin Tone, Bald",
 	},
 	"1F468-1F3FD-200D-1F9B3": {
 		Key:        "1F468-1F3FD-200D-1F9B3",
-		Value:      "👨🏽‍🦳",
+		Value:      "👨🏽\u200d🦳",
 		Descriptor: "Man: Medium Skin Tone, White Hair",
 	},
 	"1F468-1F3FD-200D-1F9BC": {
 		Key:        "1F468-1F3FD-200D-1F9BC",
-		Value:      "👨🏽‍🦼",
+		Value:      "👨🏽\u200d🦼",
 		Descriptor: "Man in Motorized Wheelchair: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-1F9BD": {
 		Key:        "1F468-1F3FD-200D-1F9BD",
-		Value:      "👨🏽‍🦽",
+		Value:      "👨🏽\u200d🦽",
 		Descriptor: "Man in Manual Wheelchair: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-2695-FE0F": {
 		Key:        "1F468-1F3FD-200D-2695-FE0F",
-		Value:      "👨🏽‍⚕️",
+		Value:      "👨🏽\u200d⚕️",
 		Descriptor: "Man Health Worker: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-2696-FE0F": {
 		Key:        "1F468-1F3FD-200D-2696-FE0F",
-		Value:      "👨🏽‍⚖️",
+		Value:      "👨🏽\u200d⚖️",
 		Descriptor: "Man Judge: Medium Skin Tone",
 	},
 	"1F468-1F3FD-200D-2708-FE0F": {
 		Key:        "1F468-1F3FD-200D-2708-FE0F",
-		Value:      "👨🏽‍✈️",
+		Value:      "👨🏽\u200d✈️",
 		Descriptor: "Man Pilot: Medium Skin Tone",
 	},
 	"1F468-1F3FE": {
@@ -4524,67 +4527,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-1F3FE-200D-1F33E": {
 		Key:        "1F468-1F3FE-200D-1F33E",
-		Value:      "👨🏾‍🌾",
+		Value:      "👨🏾\u200d🌾",
 		Descriptor: "Man Farmer: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F373": {
 		Key:        "1F468-1F3FE-200D-1F373",
-		Value:      "👨🏾‍🍳",
+		Value:      "👨🏾\u200d🍳",
 		Descriptor: "Man Cook: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F393": {
 		Key:        "1F468-1F3FE-200D-1F393",
-		Value:      "👨🏾‍🎓",
+		Value:      "👨🏾\u200d🎓",
 		Descriptor: "Man Student: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F3A4": {
 		Key:        "1F468-1F3FE-200D-1F3A4",
-		Value:      "👨🏾‍🎤",
+		Value:      "👨🏾\u200d🎤",
 		Descriptor: "Man Singer: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F3A8": {
 		Key:        "1F468-1F3FE-200D-1F3A8",
-		Value:      "👨🏾‍🎨",
+		Value:      "👨🏾\u200d🎨",
 		Descriptor: "Man Artist: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F3EB": {
 		Key:        "1F468-1F3FE-200D-1F3EB",
-		Value:      "👨🏾‍🏫",
+		Value:      "👨🏾\u200d🏫",
 		Descriptor: "Man Teacher: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F3ED": {
 		Key:        "1F468-1F3FE-200D-1F3ED",
-		Value:      "👨🏾‍🏭",
+		Value:      "👨🏾\u200d🏭",
 		Descriptor: "Man Factory Worker: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F4BB": {
 		Key:        "1F468-1F3FE-200D-1F4BB",
-		Value:      "👨🏾‍💻",
+		Value:      "👨🏾\u200d💻",
 		Descriptor: "Man Technologist: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F4BC": {
 		Key:        "1F468-1F3FE-200D-1F4BC",
-		Value:      "👨🏾‍💼",
+		Value:      "👨🏾\u200d💼",
 		Descriptor: "Man Office Worker: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F527": {
 		Key:        "1F468-1F3FE-200D-1F527",
-		Value:      "👨🏾‍🔧",
+		Value:      "👨🏾\u200d🔧",
 		Descriptor: "Man Mechanic: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F52C": {
 		Key:        "1F468-1F3FE-200D-1F52C",
-		Value:      "👨🏾‍🔬",
+		Value:      "👨🏾\u200d🔬",
 		Descriptor: "Man Scientist: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F680": {
 		Key:        "1F468-1F3FE-200D-1F680",
-		Value:      "👨🏾‍🚀",
+		Value:      "👨🏾\u200d🚀",
 		Descriptor: "Man Astronaut: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F692": {
 		Key:        "1F468-1F3FE-200D-1F692",
-		Value:      "👨🏾‍🚒",
+		Value:      "👨🏾\u200d🚒",
 		Descriptor: "Man Firefighter: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F91D-200D-1F468-1F3FB": {
@@ -4609,52 +4612,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-1F3FE-200D-1F9AF": {
 		Key:        "1F468-1F3FE-200D-1F9AF",
-		Value:      "👨🏾‍🦯",
+		Value:      "👨🏾\u200d🦯",
 		Descriptor: "Man With Probing Cane: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F9B0": {
 		Key:        "1F468-1F3FE-200D-1F9B0",
-		Value:      "👨🏾‍🦰",
+		Value:      "👨🏾\u200d🦰",
 		Descriptor: "Man: Medium-Dark Skin Tone, Red Hair",
 	},
 	"1F468-1F3FE-200D-1F9B1": {
 		Key:        "1F468-1F3FE-200D-1F9B1",
-		Value:      "👨🏾‍🦱",
+		Value:      "👨🏾\u200d🦱",
 		Descriptor: "Man: Medium-Dark Skin Tone, Curly Hair",
 	},
 	"1F468-1F3FE-200D-1F9B2": {
 		Key:        "1F468-1F3FE-200D-1F9B2",
-		Value:      "👨🏾‍🦲",
+		Value:      "👨🏾\u200d🦲",
 		Descriptor: "Man: Medium-Dark Skin Tone, Bald",
 	},
 	"1F468-1F3FE-200D-1F9B3": {
 		Key:        "1F468-1F3FE-200D-1F9B3",
-		Value:      "👨🏾‍🦳",
+		Value:      "👨🏾\u200d🦳",
 		Descriptor: "Man: Medium-Dark Skin Tone, White Hair",
 	},
 	"1F468-1F3FE-200D-1F9BC": {
 		Key:        "1F468-1F3FE-200D-1F9BC",
-		Value:      "👨🏾‍🦼",
+		Value:      "👨🏾\u200d🦼",
 		Descriptor: "Man in Motorized Wheelchair: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-1F9BD": {
 		Key:        "1F468-1F3FE-200D-1F9BD",
-		Value:      "👨🏾‍🦽",
+		Value:      "👨🏾\u200d🦽",
 		Descriptor: "Man in Manual Wheelchair: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-2695-FE0F": {
 		Key:        "1F468-1F3FE-200D-2695-FE0F",
-		Value:      "👨🏾‍⚕️",
+		Value:      "👨🏾\u200d⚕️",
 		Descriptor: "Man Health Worker: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-2696-FE0F": {
 		Key:        "1F468-1F3FE-200D-2696-FE0F",
-		Value:      "👨🏾‍⚖️",
+		Value:      "👨🏾\u200d⚖️",
 		Descriptor: "Man Judge: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FE-200D-2708-FE0F": {
 		Key:        "1F468-1F3FE-200D-2708-FE0F",
-		Value:      "👨🏾‍✈️",
+		Value:      "👨🏾\u200d✈️",
 		Descriptor: "Man Pilot: Medium-Dark Skin Tone",
 	},
 	"1F468-1F3FF": {
@@ -4664,67 +4667,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-1F3FF-200D-1F33E": {
 		Key:        "1F468-1F3FF-200D-1F33E",
-		Value:      "👨🏿‍🌾",
+		Value:      "👨🏿\u200d🌾",
 		Descriptor: "Man Farmer: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F373": {
 		Key:        "1F468-1F3FF-200D-1F373",
-		Value:      "👨🏿‍🍳",
+		Value:      "👨🏿\u200d🍳",
 		Descriptor: "Man Cook: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F393": {
 		Key:        "1F468-1F3FF-200D-1F393",
-		Value:      "👨🏿‍🎓",
+		Value:      "👨🏿\u200d🎓",
 		Descriptor: "Man Student: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F3A4": {
 		Key:        "1F468-1F3FF-200D-1F3A4",
-		Value:      "👨🏿‍🎤",
+		Value:      "👨🏿\u200d🎤",
 		Descriptor: "Man Singer: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F3A8": {
 		Key:        "1F468-1F3FF-200D-1F3A8",
-		Value:      "👨🏿‍🎨",
+		Value:      "👨🏿\u200d🎨",
 		Descriptor: "Man Artist: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F3EB": {
 		Key:        "1F468-1F3FF-200D-1F3EB",
-		Value:      "👨🏿‍🏫",
+		Value:      "👨🏿\u200d🏫",
 		Descriptor: "Man Teacher: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F3ED": {
 		Key:        "1F468-1F3FF-200D-1F3ED",
-		Value:      "👨🏿‍🏭",
+		Value:      "👨🏿\u200d🏭",
 		Descriptor: "Man Factory Worker: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F4BB": {
 		Key:        "1F468-1F3FF-200D-1F4BB",
-		Value:      "👨🏿‍💻",
+		Value:      "👨🏿\u200d💻",
 		Descriptor: "Man Technologist: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F4BC": {
 		Key:        "1F468-1F3FF-200D-1F4BC",
-		Value:      "👨🏿‍💼",
+		Value:      "👨🏿\u200d💼",
 		Descriptor: "Man Office Worker: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F527": {
 		Key:        "1F468-1F3FF-200D-1F527",
-		Value:      "👨🏿‍🔧",
+		Value:      "👨🏿\u200d🔧",
 		Descriptor: "Man Mechanic: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F52C": {
 		Key:        "1F468-1F3FF-200D-1F52C",
-		Value:      "👨🏿‍🔬",
+		Value:      "👨🏿\u200d🔬",
 		Descriptor: "Man Scientist: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F680": {
 		Key:        "1F468-1F3FF-200D-1F680",
-		Value:      "👨🏿‍🚀",
+		Value:      "👨🏿\u200d🚀",
 		Descriptor: "Man Astronaut: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F692": {
 		Key:        "1F468-1F3FF-200D-1F692",
-		Value:      "👨🏿‍🚒",
+		Value:      "👨🏿\u200d🚒",
 		Descriptor: "Man Firefighter: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F91D-200D-1F468-1F3FB": {
@@ -4749,92 +4752,92 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-1F3FF-200D-1F9AF": {
 		Key:        "1F468-1F3FF-200D-1F9AF",
-		Value:      "👨🏿‍🦯",
+		Value:      "👨🏿\u200d🦯",
 		Descriptor: "Man With Probing Cane: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F9B0": {
 		Key:        "1F468-1F3FF-200D-1F9B0",
-		Value:      "👨🏿‍🦰",
+		Value:      "👨🏿\u200d🦰",
 		Descriptor: "Man: Dark Skin Tone, Red Hair",
 	},
 	"1F468-1F3FF-200D-1F9B1": {
 		Key:        "1F468-1F3FF-200D-1F9B1",
-		Value:      "👨🏿‍🦱",
+		Value:      "👨🏿\u200d🦱",
 		Descriptor: "Man: Dark Skin Tone, Curly Hair",
 	},
 	"1F468-1F3FF-200D-1F9B2": {
 		Key:        "1F468-1F3FF-200D-1F9B2",
-		Value:      "👨🏿‍🦲",
+		Value:      "👨🏿\u200d🦲",
 		Descriptor: "Man: Dark Skin Tone, Bald",
 	},
 	"1F468-1F3FF-200D-1F9B3": {
 		Key:        "1F468-1F3FF-200D-1F9B3",
-		Value:      "👨🏿‍🦳",
+		Value:      "👨🏿\u200d🦳",
 		Descriptor: "Man: Dark Skin Tone, White Hair",
 	},
 	"1F468-1F3FF-200D-1F9BC": {
 		Key:        "1F468-1F3FF-200D-1F9BC",
-		Value:      "👨🏿‍🦼",
+		Value:      "👨🏿\u200d🦼",
 		Descriptor: "Man in Motorized Wheelchair: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-1F9BD": {
 		Key:        "1F468-1F3FF-200D-1F9BD",
-		Value:      "👨🏿‍🦽",
+		Value:      "👨🏿\u200d🦽",
 		Descriptor: "Man in Manual Wheelchair: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-2695-FE0F": {
 		Key:        "1F468-1F3FF-200D-2695-FE0F",
-		Value:      "👨🏿‍⚕️",
+		Value:      "👨🏿\u200d⚕️",
 		Descriptor: "Man Health Worker: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-2696-FE0F": {
 		Key:        "1F468-1F3FF-200D-2696-FE0F",
-		Value:      "👨🏿‍⚖️",
+		Value:      "👨🏿\u200d⚖️",
 		Descriptor: "Man Judge: Dark Skin Tone",
 	},
 	"1F468-1F3FF-200D-2708-FE0F": {
 		Key:        "1F468-1F3FF-200D-2708-FE0F",
-		Value:      "👨🏿‍✈️",
+		Value:      "👨🏿\u200d✈️",
 		Descriptor: "Man Pilot: Dark Skin Tone",
 	},
 	"1F468-200D-1F33E": {
 		Key:        "1F468-200D-1F33E",
-		Value:      "👨‍🌾",
+		Value:      "👨\u200d🌾",
 		Descriptor: "Man Farmer",
 	},
 	"1F468-200D-1F373": {
 		Key:        "1F468-200D-1F373",
-		Value:      "👨‍🍳",
+		Value:      "👨\u200d🍳",
 		Descriptor: "Man Cook",
 	},
 	"1F468-200D-1F393": {
 		Key:        "1F468-200D-1F393",
-		Value:      "👨‍🎓",
+		Value:      "👨\u200d🎓",
 		Descriptor: "Man Student",
 	},
 	"1F468-200D-1F3A4": {
 		Key:        "1F468-200D-1F3A4",
-		Value:      "👨‍🎤",
+		Value:      "👨\u200d🎤",
 		Descriptor: "Man Singer",
 	},
 	"1F468-200D-1F3A8": {
 		Key:        "1F468-200D-1F3A8",
-		Value:      "👨‍🎨",
+		Value:      "👨\u200d🎨",
 		Descriptor: "Man Artist",
 	},
 	"1F468-200D-1F3EB": {
 		Key:        "1F468-200D-1F3EB",
-		Value:      "👨‍🏫",
+		Value:      "👨\u200d🏫",
 		Descriptor: "Man Teacher",
 	},
 	"1F468-200D-1F3ED": {
 		Key:        "1F468-200D-1F3ED",
-		Value:      "👨‍🏭",
+		Value:      "👨\u200d🏭",
 		Descriptor: "Man Factory Worker",
 	},
 	"1F468-200D-1F466": {
 		Key:        "1F468-200D-1F466",
-		Value:      "👨‍👦",
+		Value:      "👨\u200d👦",
 		Descriptor: "Family: Man, Boy",
 	},
 	"1F468-200D-1F466-200D-1F466": {
@@ -4844,7 +4847,7 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-200D-1F467": {
 		Key:        "1F468-200D-1F467",
-		Value:      "👨‍👧",
+		Value:      "👨\u200d👧",
 		Descriptor: "Family: Man, Girl",
 	},
 	"1F468-200D-1F467-200D-1F466": {
@@ -4909,82 +4912,82 @@ var Emojis = map[string]Emoji{
 	},
 	"1F468-200D-1F4BB": {
 		Key:        "1F468-200D-1F4BB",
-		Value:      "👨‍💻",
+		Value:      "👨\u200d💻",
 		Descriptor: "Man Technologist",
 	},
 	"1F468-200D-1F4BC": {
 		Key:        "1F468-200D-1F4BC",
-		Value:      "👨‍💼",
+		Value:      "👨\u200d💼",
 		Descriptor: "Man Office Worker",
 	},
 	"1F468-200D-1F527": {
 		Key:        "1F468-200D-1F527",
-		Value:      "👨‍🔧",
+		Value:      "👨\u200d🔧",
 		Descriptor: "Man Mechanic",
 	},
 	"1F468-200D-1F52C": {
 		Key:        "1F468-200D-1F52C",
-		Value:      "👨‍🔬",
+		Value:      "👨\u200d🔬",
 		Descriptor: "Man Scientist",
 	},
 	"1F468-200D-1F680": {
 		Key:        "1F468-200D-1F680",
-		Value:      "👨‍🚀",
+		Value:      "👨\u200d🚀",
 		Descriptor: "Man Astronaut",
 	},
 	"1F468-200D-1F692": {
 		Key:        "1F468-200D-1F692",
-		Value:      "👨‍🚒",
+		Value:      "👨\u200d🚒",
 		Descriptor: "Man Firefighter",
 	},
 	"1F468-200D-1F9AF": {
 		Key:        "1F468-200D-1F9AF",
-		Value:      "👨‍🦯",
+		Value:      "👨\u200d🦯",
 		Descriptor: "Man With Probing Cane",
 	},
 	"1F468-200D-1F9B0": {
 		Key:        "1F468-200D-1F9B0",
-		Value:      "👨‍🦰",
+		Value:      "👨\u200d🦰",
 		Descriptor: "Man: Red Hair",
 	},
 	"1F468-200D-1F9B1": {
 		Key:        "1F468-200D-1F9B1",
-		Value:      "👨‍🦱",
+		Value:      "👨\u200d🦱",
 		Descriptor: "Man: Curly Hair",
 	},
 	"1F468-200D-1F9B2": {
 		Key:        "1F468-200D-1F9B2",
-		Value:      "👨‍🦲",
+		Value:      "👨\u200d🦲",
 		Descriptor: "Man: Bald",
 	},
 	"1F468-200D-1F9B3": {
 		Key:        "1F468-200D-1F9B3",
-		Value:      "👨‍🦳",
+		Value:      "👨\u200d🦳",
 		Descriptor: "Man: White Hair",
 	},
 	"1F468-200D-1F9BC": {
 		Key:        "1F468-200D-1F9BC",
-		Value:      "👨‍🦼",
+		Value:      "👨\u200d🦼",
 		Descriptor: "Man in Motorized Wheelchair",
 	},
 	"1F468-200D-1F9BD": {
 		Key:        "1F468-200D-1F9BD",
-		Value:      "👨‍🦽",
+		Value:      "👨\u200d🦽",
 		Descriptor: "Man in Manual Wheelchair",
 	},
 	"1F468-200D-2695-FE0F": {
 		Key:        "1F468-200D-2695-FE0F",
-		Value:      "👨‍⚕️",
+		Value:      "👨\u200d⚕️",
 		Descriptor: "Man Health Worker",
 	},
 	"1F468-200D-2696-FE0F": {
 		Key:        "1F468-200D-2696-FE0F",
-		Value:      "👨‍⚖️",
+		Value:      "👨\u200d⚖️",
 		Descriptor: "Man Judge",
 	},
 	"1F468-200D-2708-FE0F": {
 		Key:        "1F468-200D-2708-FE0F",
-		Value:      "👨‍✈️",
+		Value:      "👨\u200d✈️",
 		Descriptor: "Man Pilot",
 	},
 	"1F468-200D-2764-FE0F-200D-1F468": {
@@ -5009,67 +5012,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-1F3FB-200D-1F33E": {
 		Key:        "1F469-1F3FB-200D-1F33E",
-		Value:      "👩🏻‍🌾",
+		Value:      "👩🏻\u200d🌾",
 		Descriptor: "Woman Farmer: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F373": {
 		Key:        "1F469-1F3FB-200D-1F373",
-		Value:      "👩🏻‍🍳",
+		Value:      "👩🏻\u200d🍳",
 		Descriptor: "Woman Cook: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F393": {
 		Key:        "1F469-1F3FB-200D-1F393",
-		Value:      "👩🏻‍🎓",
+		Value:      "👩🏻\u200d🎓",
 		Descriptor: "Woman Student: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F3A4": {
 		Key:        "1F469-1F3FB-200D-1F3A4",
-		Value:      "👩🏻‍🎤",
+		Value:      "👩🏻\u200d🎤",
 		Descriptor: "Woman Singer: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F3A8": {
 		Key:        "1F469-1F3FB-200D-1F3A8",
-		Value:      "👩🏻‍🎨",
+		Value:      "👩🏻\u200d🎨",
 		Descriptor: "Woman Artist: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F3EB": {
 		Key:        "1F469-1F3FB-200D-1F3EB",
-		Value:      "👩🏻‍🏫",
+		Value:      "👩🏻\u200d🏫",
 		Descriptor: "Woman Teacher: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F3ED": {
 		Key:        "1F469-1F3FB-200D-1F3ED",
-		Value:      "👩🏻‍🏭",
+		Value:      "👩🏻\u200d🏭",
 		Descriptor: "Woman Factory Worker: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F4BB": {
 		Key:        "1F469-1F3FB-200D-1F4BB",
-		Value:      "👩🏻‍💻",
+		Value:      "👩🏻\u200d💻",
 		Descriptor: "Woman Technologist: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F4BC": {
 		Key:        "1F469-1F3FB-200D-1F4BC",
-		Value:      "👩🏻‍💼",
+		Value:      "👩🏻\u200d💼",
 		Descriptor: "Woman Office Worker: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F527": {
 		Key:        "1F469-1F3FB-200D-1F527",
-		Value:      "👩🏻‍🔧",
+		Value:      "👩🏻\u200d🔧",
 		Descriptor: "Woman Mechanic: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F52C": {
 		Key:        "1F469-1F3FB-200D-1F52C",
-		Value:      "👩🏻‍🔬",
+		Value:      "👩🏻\u200d🔬",
 		Descriptor: "Woman Scientist: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F680": {
 		Key:        "1F469-1F3FB-200D-1F680",
-		Value:      "👩🏻‍🚀",
+		Value:      "👩🏻\u200d🚀",
 		Descriptor: "Woman Astronaut: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F692": {
 		Key:        "1F469-1F3FB-200D-1F692",
-		Value:      "👩🏻‍🚒",
+		Value:      "👩🏻\u200d🚒",
 		Descriptor: "Woman Firefighter: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F91D-200D-1F468-1F3FC": {
@@ -5114,52 +5117,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-1F3FB-200D-1F9AF": {
 		Key:        "1F469-1F3FB-200D-1F9AF",
-		Value:      "👩🏻‍🦯",
+		Value:      "👩🏻\u200d🦯",
 		Descriptor: "Woman With Probing Cane: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F9B0": {
 		Key:        "1F469-1F3FB-200D-1F9B0",
-		Value:      "👩🏻‍🦰",
+		Value:      "👩🏻\u200d🦰",
 		Descriptor: "Woman: Light Skin Tone, Red Hair",
 	},
 	"1F469-1F3FB-200D-1F9B1": {
 		Key:        "1F469-1F3FB-200D-1F9B1",
-		Value:      "👩🏻‍🦱",
+		Value:      "👩🏻\u200d🦱",
 		Descriptor: "Woman: Light Skin Tone, Curly Hair",
 	},
 	"1F469-1F3FB-200D-1F9B2": {
 		Key:        "1F469-1F3FB-200D-1F9B2",
-		Value:      "👩🏻‍🦲",
+		Value:      "👩🏻\u200d🦲",
 		Descriptor: "Woman: Light Skin Tone, Bald",
 	},
 	"1F469-1F3FB-200D-1F9B3": {
 		Key:        "1F469-1F3FB-200D-1F9B3",
-		Value:      "👩🏻‍🦳",
+		Value:      "👩🏻\u200d🦳",
 		Descriptor: "Woman: Light Skin Tone, White Hair",
 	},
 	"1F469-1F3FB-200D-1F9BC": {
 		Key:        "1F469-1F3FB-200D-1F9BC",
-		Value:      "👩🏻‍🦼",
+		Value:      "👩🏻\u200d🦼",
 		Descriptor: "Woman in Motorized Wheelchair: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-1F9BD": {
 		Key:        "1F469-1F3FB-200D-1F9BD",
-		Value:      "👩🏻‍🦽",
+		Value:      "👩🏻\u200d🦽",
 		Descriptor: "Woman in Manual Wheelchair: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-2695-FE0F": {
 		Key:        "1F469-1F3FB-200D-2695-FE0F",
-		Value:      "👩🏻‍⚕️",
+		Value:      "👩🏻\u200d⚕️",
 		Descriptor: "Woman Health Worker: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-2696-FE0F": {
 		Key:        "1F469-1F3FB-200D-2696-FE0F",
-		Value:      "👩🏻‍⚖️",
+		Value:      "👩🏻\u200d⚖️",
 		Descriptor: "Woman Judge: Light Skin Tone",
 	},
 	"1F469-1F3FB-200D-2708-FE0F": {
 		Key:        "1F469-1F3FB-200D-2708-FE0F",
-		Value:      "👩🏻‍✈️",
+		Value:      "👩🏻\u200d✈️",
 		Descriptor: "Woman Pilot: Light Skin Tone",
 	},
 	"1F469-1F3FC": {
@@ -5169,67 +5172,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-1F3FC-200D-1F33E": {
 		Key:        "1F469-1F3FC-200D-1F33E",
-		Value:      "👩🏼‍🌾",
+		Value:      "👩🏼\u200d🌾",
 		Descriptor: "Woman Farmer: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F373": {
 		Key:        "1F469-1F3FC-200D-1F373",
-		Value:      "👩🏼‍🍳",
+		Value:      "👩🏼\u200d🍳",
 		Descriptor: "Woman Cook: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F393": {
 		Key:        "1F469-1F3FC-200D-1F393",
-		Value:      "👩🏼‍🎓",
+		Value:      "👩🏼\u200d🎓",
 		Descriptor: "Woman Student: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F3A4": {
 		Key:        "1F469-1F3FC-200D-1F3A4",
-		Value:      "👩🏼‍🎤",
+		Value:      "👩🏼\u200d🎤",
 		Descriptor: "Woman Singer: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F3A8": {
 		Key:        "1F469-1F3FC-200D-1F3A8",
-		Value:      "👩🏼‍🎨",
+		Value:      "👩🏼\u200d🎨",
 		Descriptor: "Woman Artist: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F3EB": {
 		Key:        "1F469-1F3FC-200D-1F3EB",
-		Value:      "👩🏼‍🏫",
+		Value:      "👩🏼\u200d🏫",
 		Descriptor: "Woman Teacher: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F3ED": {
 		Key:        "1F469-1F3FC-200D-1F3ED",
-		Value:      "👩🏼‍🏭",
+		Value:      "👩🏼\u200d🏭",
 		Descriptor: "Woman Factory Worker: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F4BB": {
 		Key:        "1F469-1F3FC-200D-1F4BB",
-		Value:      "👩🏼‍💻",
+		Value:      "👩🏼\u200d💻",
 		Descriptor: "Woman Technologist: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F4BC": {
 		Key:        "1F469-1F3FC-200D-1F4BC",
-		Value:      "👩🏼‍💼",
+		Value:      "👩🏼\u200d💼",
 		Descriptor: "Woman Office Worker: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F527": {
 		Key:        "1F469-1F3FC-200D-1F527",
-		Value:      "👩🏼‍🔧",
+		Value:      "👩🏼\u200d🔧",
 		Descriptor: "Woman Mechanic: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F52C": {
 		Key:        "1F469-1F3FC-200D-1F52C",
-		Value:      "👩🏼‍🔬",
+		Value:      "👩🏼\u200d🔬",
 		Descriptor: "Woman Scientist: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F680": {
 		Key:        "1F469-1F3FC-200D-1F680",
-		Value:      "👩🏼‍🚀",
+		Value:      "👩🏼\u200d🚀",
 		Descriptor: "Woman Astronaut: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F692": {
 		Key:        "1F469-1F3FC-200D-1F692",
-		Value:      "👩🏼‍🚒",
+		Value:      "👩🏼\u200d🚒",
 		Descriptor: "Woman Firefighter: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F91D-200D-1F468-1F3FB": {
@@ -5274,52 +5277,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-1F3FC-200D-1F9AF": {
 		Key:        "1F469-1F3FC-200D-1F9AF",
-		Value:      "👩🏼‍🦯",
+		Value:      "👩🏼\u200d🦯",
 		Descriptor: "Woman With Probing Cane: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F9B0": {
 		Key:        "1F469-1F3FC-200D-1F9B0",
-		Value:      "👩🏼‍🦰",
+		Value:      "👩🏼\u200d🦰",
 		Descriptor: "Woman: Medium-Light Skin Tone, Red Hair",
 	},
 	"1F469-1F3FC-200D-1F9B1": {
 		Key:        "1F469-1F3FC-200D-1F9B1",
-		Value:      "👩🏼‍🦱",
+		Value:      "👩🏼\u200d🦱",
 		Descriptor: "Woman: Medium-Light Skin Tone, Curly Hair",
 	},
 	"1F469-1F3FC-200D-1F9B2": {
 		Key:        "1F469-1F3FC-200D-1F9B2",
-		Value:      "👩🏼‍🦲",
+		Value:      "👩🏼\u200d🦲",
 		Descriptor: "Woman: Medium-Light Skin Tone, Bald",
 	},
 	"1F469-1F3FC-200D-1F9B3": {
 		Key:        "1F469-1F3FC-200D-1F9B3",
-		Value:      "👩🏼‍🦳",
+		Value:      "👩🏼\u200d🦳",
 		Descriptor: "Woman: Medium-Light Skin Tone, White Hair",
 	},
 	"1F469-1F3FC-200D-1F9BC": {
 		Key:        "1F469-1F3FC-200D-1F9BC",
-		Value:      "👩🏼‍🦼",
+		Value:      "👩🏼\u200d🦼",
 		Descriptor: "Woman in Motorized Wheelchair: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-1F9BD": {
 		Key:        "1F469-1F3FC-200D-1F9BD",
-		Value:      "👩🏼‍🦽",
+		Value:      "👩🏼\u200d🦽",
 		Descriptor: "Woman in Manual Wheelchair: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-2695-FE0F": {
 		Key:        "1F469-1F3FC-200D-2695-FE0F",
-		Value:      "👩🏼‍⚕️",
+		Value:      "👩🏼\u200d⚕️",
 		Descriptor: "Woman Health Worker: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-2696-FE0F": {
 		Key:        "1F469-1F3FC-200D-2696-FE0F",
-		Value:      "👩🏼‍⚖️",
+		Value:      "👩🏼\u200d⚖️",
 		Descriptor: "Woman Judge: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FC-200D-2708-FE0F": {
 		Key:        "1F469-1F3FC-200D-2708-FE0F",
-		Value:      "👩🏼‍✈️",
+		Value:      "👩🏼\u200d✈️",
 		Descriptor: "Woman Pilot: Medium-Light Skin Tone",
 	},
 	"1F469-1F3FD": {
@@ -5329,67 +5332,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-1F3FD-200D-1F33E": {
 		Key:        "1F469-1F3FD-200D-1F33E",
-		Value:      "👩🏽‍🌾",
+		Value:      "👩🏽\u200d🌾",
 		Descriptor: "Woman Farmer: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F373": {
 		Key:        "1F469-1F3FD-200D-1F373",
-		Value:      "👩🏽‍🍳",
+		Value:      "👩🏽\u200d🍳",
 		Descriptor: "Woman Cook: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F393": {
 		Key:        "1F469-1F3FD-200D-1F393",
-		Value:      "👩🏽‍🎓",
+		Value:      "👩🏽\u200d🎓",
 		Descriptor: "Woman Student: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F3A4": {
 		Key:        "1F469-1F3FD-200D-1F3A4",
-		Value:      "👩🏽‍🎤",
+		Value:      "👩🏽\u200d🎤",
 		Descriptor: "Woman Singer: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F3A8": {
 		Key:        "1F469-1F3FD-200D-1F3A8",
-		Value:      "👩🏽‍🎨",
+		Value:      "👩🏽\u200d🎨",
 		Descriptor: "Woman Artist: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F3EB": {
 		Key:        "1F469-1F3FD-200D-1F3EB",
-		Value:      "👩🏽‍🏫",
+		Value:      "👩🏽\u200d🏫",
 		Descriptor: "Woman Teacher: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F3ED": {
 		Key:        "1F469-1F3FD-200D-1F3ED",
-		Value:      "👩🏽‍🏭",
+		Value:      "👩🏽\u200d🏭",
 		Descriptor: "Woman Factory Worker: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F4BB": {
 		Key:        "1F469-1F3FD-200D-1F4BB",
-		Value:      "👩🏽‍💻",
+		Value:      "👩🏽\u200d💻",
 		Descriptor: "Woman Technologist: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F4BC": {
 		Key:        "1F469-1F3FD-200D-1F4BC",
-		Value:      "👩🏽‍💼",
+		Value:      "👩🏽\u200d💼",
 		Descriptor: "Woman Office Worker: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F527": {
 		Key:        "1F469-1F3FD-200D-1F527",
-		Value:      "👩🏽‍🔧",
+		Value:      "👩🏽\u200d🔧",
 		Descriptor: "Woman Mechanic: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F52C": {
 		Key:        "1F469-1F3FD-200D-1F52C",
-		Value:      "👩🏽‍🔬",
+		Value:      "👩🏽\u200d🔬",
 		Descriptor: "Woman Scientist: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F680": {
 		Key:        "1F469-1F3FD-200D-1F680",
-		Value:      "👩🏽‍🚀",
+		Value:      "👩🏽\u200d🚀",
 		Descriptor: "Woman Astronaut: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F692": {
 		Key:        "1F469-1F3FD-200D-1F692",
-		Value:      "👩🏽‍🚒",
+		Value:      "👩🏽\u200d🚒",
 		Descriptor: "Woman Firefighter: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F91D-200D-1F468-1F3FB": {
@@ -5434,52 +5437,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-1F3FD-200D-1F9AF": {
 		Key:        "1F469-1F3FD-200D-1F9AF",
-		Value:      "👩🏽‍🦯",
+		Value:      "👩🏽\u200d🦯",
 		Descriptor: "Woman With Probing Cane: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F9B0": {
 		Key:        "1F469-1F3FD-200D-1F9B0",
-		Value:      "👩🏽‍🦰",
+		Value:      "👩🏽\u200d🦰",
 		Descriptor: "Woman: Medium Skin Tone, Red Hair",
 	},
 	"1F469-1F3FD-200D-1F9B1": {
 		Key:        "1F469-1F3FD-200D-1F9B1",
-		Value:      "👩🏽‍🦱",
+		Value:      "👩🏽\u200d🦱",
 		Descriptor: "Woman: Medium Skin Tone, Curly Hair",
 	},
 	"1F469-1F3FD-200D-1F9B2": {
 		Key:        "1F469-1F3FD-200D-1F9B2",
-		Value:      "👩🏽‍🦲",
+		Value:      "👩🏽\u200d🦲",
 		Descriptor: "Woman: Medium Skin Tone, Bald",
 	},
 	"1F469-1F3FD-200D-1F9B3": {
 		Key:        "1F469-1F3FD-200D-1F9B3",
-		Value:      "👩🏽‍🦳",
+		Value:      "👩🏽\u200d🦳",
 		Descriptor: "Woman: Medium Skin Tone, White Hair",
 	},
 	"1F469-1F3FD-200D-1F9BC": {
 		Key:        "1F469-1F3FD-200D-1F9BC",
-		Value:      "👩🏽‍🦼",
+		Value:      "👩🏽\u200d🦼",
 		Descriptor: "Woman in Motorized Wheelchair: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-1F9BD": {
 		Key:        "1F469-1F3FD-200D-1F9BD",
-		Value:      "👩🏽‍🦽",
+		Value:      "👩🏽\u200d🦽",
 		Descriptor: "Woman in Manual Wheelchair: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-2695-FE0F": {
 		Key:        "1F469-1F3FD-200D-2695-FE0F",
-		Value:      "👩🏽‍⚕️",
+		Value:      "👩🏽\u200d⚕️",
 		Descriptor: "Woman Health Worker: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-2696-FE0F": {
 		Key:        "1F469-1F3FD-200D-2696-FE0F",
-		Value:      "👩🏽‍⚖️",
+		Value:      "👩🏽\u200d⚖️",
 		Descriptor: "Woman Judge: Medium Skin Tone",
 	},
 	"1F469-1F3FD-200D-2708-FE0F": {
 		Key:        "1F469-1F3FD-200D-2708-FE0F",
-		Value:      "👩🏽‍✈️",
+		Value:      "👩🏽\u200d✈️",
 		Descriptor: "Woman Pilot: Medium Skin Tone",
 	},
 	"1F469-1F3FE": {
@@ -5489,67 +5492,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-1F3FE-200D-1F33E": {
 		Key:        "1F469-1F3FE-200D-1F33E",
-		Value:      "👩🏾‍🌾",
+		Value:      "👩🏾\u200d🌾",
 		Descriptor: "Woman Farmer: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F373": {
 		Key:        "1F469-1F3FE-200D-1F373",
-		Value:      "👩🏾‍🍳",
+		Value:      "👩🏾\u200d🍳",
 		Descriptor: "Woman Cook: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F393": {
 		Key:        "1F469-1F3FE-200D-1F393",
-		Value:      "👩🏾‍🎓",
+		Value:      "👩🏾\u200d🎓",
 		Descriptor: "Woman Student: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F3A4": {
 		Key:        "1F469-1F3FE-200D-1F3A4",
-		Value:      "👩🏾‍🎤",
+		Value:      "👩🏾\u200d🎤",
 		Descriptor: "Woman Singer: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F3A8": {
 		Key:        "1F469-1F3FE-200D-1F3A8",
-		Value:      "👩🏾‍🎨",
+		Value:      "👩🏾\u200d🎨",
 		Descriptor: "Woman Artist: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F3EB": {
 		Key:        "1F469-1F3FE-200D-1F3EB",
-		Value:      "👩🏾‍🏫",
+		Value:      "👩🏾\u200d🏫",
 		Descriptor: "Woman Teacher: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F3ED": {
 		Key:        "1F469-1F3FE-200D-1F3ED",
-		Value:      "👩🏾‍🏭",
+		Value:      "👩🏾\u200d🏭",
 		Descriptor: "Woman Factory Worker: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F4BB": {
 		Key:        "1F469-1F3FE-200D-1F4BB",
-		Value:      "👩🏾‍💻",
+		Value:      "👩🏾\u200d💻",
 		Descriptor: "Woman Technologist: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F4BC": {
 		Key:        "1F469-1F3FE-200D-1F4BC",
-		Value:      "👩🏾‍💼",
+		Value:      "👩🏾\u200d💼",
 		Descriptor: "Woman Office Worker: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F527": {
 		Key:        "1F469-1F3FE-200D-1F527",
-		Value:      "👩🏾‍🔧",
+		Value:      "👩🏾\u200d🔧",
 		Descriptor: "Woman Mechanic: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F52C": {
 		Key:        "1F469-1F3FE-200D-1F52C",
-		Value:      "👩🏾‍🔬",
+		Value:      "👩🏾\u200d🔬",
 		Descriptor: "Woman Scientist: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F680": {
 		Key:        "1F469-1F3FE-200D-1F680",
-		Value:      "👩🏾‍🚀",
+		Value:      "👩🏾\u200d🚀",
 		Descriptor: "Woman Astronaut: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F692": {
 		Key:        "1F469-1F3FE-200D-1F692",
-		Value:      "👩🏾‍🚒",
+		Value:      "👩🏾\u200d🚒",
 		Descriptor: "Woman Firefighter: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F91D-200D-1F468-1F3FB": {
@@ -5594,52 +5597,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-1F3FE-200D-1F9AF": {
 		Key:        "1F469-1F3FE-200D-1F9AF",
-		Value:      "👩🏾‍🦯",
+		Value:      "👩🏾\u200d🦯",
 		Descriptor: "Woman With Probing Cane: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F9B0": {
 		Key:        "1F469-1F3FE-200D-1F9B0",
-		Value:      "👩🏾‍🦰",
+		Value:      "👩🏾\u200d🦰",
 		Descriptor: "Woman: Medium-Dark Skin Tone, Red Hair",
 	},
 	"1F469-1F3FE-200D-1F9B1": {
 		Key:        "1F469-1F3FE-200D-1F9B1",
-		Value:      "👩🏾‍🦱",
+		Value:      "👩🏾\u200d🦱",
 		Descriptor: "Woman: Medium-Dark Skin Tone, Curly Hair",
 	},
 	"1F469-1F3FE-200D-1F9B2": {
 		Key:        "1F469-1F3FE-200D-1F9B2",
-		Value:      "👩🏾‍🦲",
+		Value:      "👩🏾\u200d🦲",
 		Descriptor: "Woman: Medium-Dark Skin Tone, Bald",
 	},
 	"1F469-1F3FE-200D-1F9B3": {
 		Key:        "1F469-1F3FE-200D-1F9B3",
-		Value:      "👩🏾‍🦳",
+		Value:      "👩🏾\u200d🦳",
 		Descriptor: "Woman: Medium-Dark Skin Tone, White Hair",
 	},
 	"1F469-1F3FE-200D-1F9BC": {
 		Key:        "1F469-1F3FE-200D-1F9BC",
-		Value:      "👩🏾‍🦼",
+		Value:      "👩🏾\u200d🦼",
 		Descriptor: "Woman in Motorized Wheelchair: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-1F9BD": {
 		Key:        "1F469-1F3FE-200D-1F9BD",
-		Value:      "👩🏾‍🦽",
+		Value:      "👩🏾\u200d🦽",
 		Descriptor: "Woman in Manual Wheelchair: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-2695-FE0F": {
 		Key:        "1F469-1F3FE-200D-2695-FE0F",
-		Value:      "👩🏾‍⚕️",
+		Value:      "👩🏾\u200d⚕️",
 		Descriptor: "Woman Health Worker: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-2696-FE0F": {
 		Key:        "1F469-1F3FE-200D-2696-FE0F",
-		Value:      "👩🏾‍⚖️",
+		Value:      "👩🏾\u200d⚖️",
 		Descriptor: "Woman Judge: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FE-200D-2708-FE0F": {
 		Key:        "1F469-1F3FE-200D-2708-FE0F",
-		Value:      "👩🏾‍✈️",
+		Value:      "👩🏾\u200d✈️",
 		Descriptor: "Woman Pilot: Medium-Dark Skin Tone",
 	},
 	"1F469-1F3FF": {
@@ -5649,67 +5652,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-1F3FF-200D-1F33E": {
 		Key:        "1F469-1F3FF-200D-1F33E",
-		Value:      "👩🏿‍🌾",
+		Value:      "👩🏿\u200d🌾",
 		Descriptor: "Woman Farmer: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F373": {
 		Key:        "1F469-1F3FF-200D-1F373",
-		Value:      "👩🏿‍🍳",
+		Value:      "👩🏿\u200d🍳",
 		Descriptor: "Woman Cook: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F393": {
 		Key:        "1F469-1F3FF-200D-1F393",
-		Value:      "👩🏿‍🎓",
+		Value:      "👩🏿\u200d🎓",
 		Descriptor: "Woman Student: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F3A4": {
 		Key:        "1F469-1F3FF-200D-1F3A4",
-		Value:      "👩🏿‍🎤",
+		Value:      "👩🏿\u200d🎤",
 		Descriptor: "Woman Singer: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F3A8": {
 		Key:        "1F469-1F3FF-200D-1F3A8",
-		Value:      "👩🏿‍🎨",
+		Value:      "👩🏿\u200d🎨",
 		Descriptor: "Woman Artist: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F3EB": {
 		Key:        "1F469-1F3FF-200D-1F3EB",
-		Value:      "👩🏿‍🏫",
+		Value:      "👩🏿\u200d🏫",
 		Descriptor: "Woman Teacher: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F3ED": {
 		Key:        "1F469-1F3FF-200D-1F3ED",
-		Value:      "👩🏿‍🏭",
+		Value:      "👩🏿\u200d🏭",
 		Descriptor: "Woman Factory Worker: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F4BB": {
 		Key:        "1F469-1F3FF-200D-1F4BB",
-		Value:      "👩🏿‍💻",
+		Value:      "👩🏿\u200d💻",
 		Descriptor: "Woman Technologist: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F4BC": {
 		Key:        "1F469-1F3FF-200D-1F4BC",
-		Value:      "👩🏿‍💼",
+		Value:      "👩🏿\u200d💼",
 		Descriptor: "Woman Office Worker: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F527": {
 		Key:        "1F469-1F3FF-200D-1F527",
-		Value:      "👩🏿‍🔧",
+		Value:      "👩🏿\u200d🔧",
 		Descriptor: "Woman Mechanic: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F52C": {
 		Key:        "1F469-1F3FF-200D-1F52C",
-		Value:      "👩🏿‍🔬",
+		Value:      "👩🏿\u200d🔬",
 		Descriptor: "Woman Scientist: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F680": {
 		Key:        "1F469-1F3FF-200D-1F680",
-		Value:      "👩🏿‍🚀",
+		Value:      "👩🏿\u200d🚀",
 		Descriptor: "Woman Astronaut: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F692": {
 		Key:        "1F469-1F3FF-200D-1F692",
-		Value:      "👩🏿‍🚒",
+		Value:      "👩🏿\u200d🚒",
 		Descriptor: "Woman Firefighter: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F91D-200D-1F468-1F3FB": {
@@ -5754,92 +5757,92 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-1F3FF-200D-1F9AF": {
 		Key:        "1F469-1F3FF-200D-1F9AF",
-		Value:      "👩🏿‍🦯",
+		Value:      "👩🏿\u200d🦯",
 		Descriptor: "Woman With Probing Cane: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F9B0": {
 		Key:        "1F469-1F3FF-200D-1F9B0",
-		Value:      "👩🏿‍🦰",
+		Value:      "👩🏿\u200d🦰",
 		Descriptor: "Woman: Dark Skin Tone, Red Hair",
 	},
 	"1F469-1F3FF-200D-1F9B1": {
 		Key:        "1F469-1F3FF-200D-1F9B1",
-		Value:      "👩🏿‍🦱",
+		Value:      "👩🏿\u200d🦱",
 		Descriptor: "Woman: Dark Skin Tone, Curly Hair",
 	},
 	"1F469-1F3FF-200D-1F9B2": {
 		Key:        "1F469-1F3FF-200D-1F9B2",
-		Value:      "👩🏿‍🦲",
+		Value:      "👩🏿\u200d🦲",
 		Descriptor: "Woman: Dark Skin Tone, Bald",
 	},
 	"1F469-1F3FF-200D-1F9B3": {
 		Key:        "1F469-1F3FF-200D-1F9B3",
-		Value:      "👩🏿‍🦳",
+		Value:      "👩🏿\u200d🦳",
 		Descriptor: "Woman: Dark Skin Tone, White Hair",
 	},
 	"1F469-1F3FF-200D-1F9BC": {
 		Key:        "1F469-1F3FF-200D-1F9BC",
-		Value:      "👩🏿‍🦼",
+		Value:      "👩🏿\u200d🦼",
 		Descriptor: "Woman in Motorized Wheelchair: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-1F9BD": {
 		Key:        "1F469-1F3FF-200D-1F9BD",
-		Value:      "👩🏿‍🦽",
+		Value:      "👩🏿\u200d🦽",
 		Descriptor: "Woman in Manual Wheelchair: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-2695-FE0F": {
 		Key:        "1F469-1F3FF-200D-2695-FE0F",
-		Value:      "👩🏿‍⚕️",
+		Value:      "👩🏿\u200d⚕️",
 		Descriptor: "Woman Health Worker: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-2696-FE0F": {
 		Key:        "1F469-1F3FF-200D-2696-FE0F",
-		Value:      "👩🏿‍⚖️",
+		Value:      "👩🏿\u200d⚖️",
 		Descriptor: "Woman Judge: Dark Skin Tone",
 	},
 	"1F469-1F3FF-200D-2708-FE0F": {
 		Key:        "1F469-1F3FF-200D-2708-FE0F",
-		Value:      "👩🏿‍✈️",
+		Value:      "👩🏿\u200d✈️",
 		Descriptor: "Woman Pilot: Dark Skin Tone",
 	},
 	"1F469-200D-1F33E": {
 		Key:        "1F469-200D-1F33E",
-		Value:      "👩‍🌾",
+		Value:      "👩\u200d🌾",
 		Descriptor: "Woman Farmer",
 	},
 	"1F469-200D-1F373": {
 		Key:        "1F469-200D-1F373",
-		Value:      "👩‍🍳",
+		Value:      "👩\u200d🍳",
 		Descriptor: "Woman Cook",
 	},
 	"1F469-200D-1F393": {
 		Key:        "1F469-200D-1F393",
-		Value:      "👩‍🎓",
+		Value:      "👩\u200d🎓",
 		Descriptor: "Woman Student",
 	},
 	"1F469-200D-1F3A4": {
 		Key:        "1F469-200D-1F3A4",
-		Value:      "👩‍🎤",
+		Value:      "👩\u200d🎤",
 		Descriptor: "Woman Singer",
 	},
 	"1F469-200D-1F3A8": {
 		Key:        "1F469-200D-1F3A8",
-		Value:      "👩‍🎨",
+		Value:      "👩\u200d🎨",
 		Descriptor: "Woman Artist",
 	},
 	"1F469-200D-1F3EB": {
 		Key:        "1F469-200D-1F3EB",
-		Value:      "👩‍🏫",
+		Value:      "👩\u200d🏫",
 		Descriptor: "Woman Teacher",
 	},
 	"1F469-200D-1F3ED": {
 		Key:        "1F469-200D-1F3ED",
-		Value:      "👩‍🏭",
+		Value:      "👩\u200d🏭",
 		Descriptor: "Woman Factory Worker",
 	},
 	"1F469-200D-1F466": {
 		Key:        "1F469-200D-1F466",
-		Value:      "👩‍👦",
+		Value:      "👩\u200d👦",
 		Descriptor: "Family: Woman, Boy",
 	},
 	"1F469-200D-1F466-200D-1F466": {
@@ -5849,7 +5852,7 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-200D-1F467": {
 		Key:        "1F469-200D-1F467",
-		Value:      "👩‍👧",
+		Value:      "👩\u200d👧",
 		Descriptor: "Family: Woman, Girl",
 	},
 	"1F469-200D-1F467-200D-1F466": {
@@ -5889,82 +5892,82 @@ var Emojis = map[string]Emoji{
 	},
 	"1F469-200D-1F4BB": {
 		Key:        "1F469-200D-1F4BB",
-		Value:      "👩‍💻",
+		Value:      "👩\u200d💻",
 		Descriptor: "Woman Technologist",
 	},
 	"1F469-200D-1F4BC": {
 		Key:        "1F469-200D-1F4BC",
-		Value:      "👩‍💼",
+		Value:      "👩\u200d💼",
 		Descriptor: "Woman Office Worker",
 	},
 	"1F469-200D-1F527": {
 		Key:        "1F469-200D-1F527",
-		Value:      "👩‍🔧",
+		Value:      "👩\u200d🔧",
 		Descriptor: "Woman Mechanic",
 	},
 	"1F469-200D-1F52C": {
 		Key:        "1F469-200D-1F52C",
-		Value:      "👩‍🔬",
+		Value:      "👩\u200d🔬",
 		Descriptor: "Woman Scientist",
 	},
 	"1F469-200D-1F680": {
 		Key:        "1F469-200D-1F680",
-		Value:      "👩‍🚀",
+		Value:      "👩\u200d🚀",
 		Descriptor: "Woman Astronaut",
 	},
 	"1F469-200D-1F692": {
 		Key:        "1F469-200D-1F692",
-		Value:      "👩‍🚒",
+		Value:      "👩\u200d🚒",
 		Descriptor: "Woman Firefighter",
 	},
 	"1F469-200D-1F9AF": {
 		Key:        "1F469-200D-1F9AF",
-		Value:      "👩‍🦯",
+		Value:      "👩\u200d🦯",
 		Descriptor: "Woman With Probing Cane",
 	},
 	"1F469-200D-1F9B0": {
 		Key:        "1F469-200D-1F9B0",
-		Value:      "👩‍🦰",
+		Value:      "👩\u200d🦰",
 		Descriptor: "Woman: Red Hair",
 	},
 	"1F469-200D-1F9B1": {
 		Key:        "1F469-200D-1F9B1",
-		Value:      "👩‍🦱",
+		Value:      "👩\u200d🦱",
 		Descriptor: "Woman: Curly Hair",
 	},
 	"1F469-200D-1F9B2": {
 		Key:        "1F469-200D-1F9B2",
-		Value:      "👩‍🦲",
+		Value:      "👩\u200d🦲",
 		Descriptor: "Woman: Bald",
 	},
 	"1F469-200D-1F9B3": {
 		Key:        "1F469-200D-1F9B3",
-		Value:      "👩‍🦳",
+		Value:      "👩\u200d🦳",
 		Descriptor: "Woman: White Hair",
 	},
 	"1F469-200D-1F9BC": {
 		Key:        "1F469-200D-1F9BC",
-		Value:      "👩‍🦼",
+		Value:      "👩\u200d🦼",
 		Descriptor: "Woman in Motorized Wheelchair",
 	},
 	"1F469-200D-1F9BD": {
 		Key:        "1F469-200D-1F9BD",
-		Value:      "👩‍🦽",
+		Value:      "👩\u200d🦽",
 		Descriptor: "Woman in Manual Wheelchair",
 	},
 	"1F469-200D-2695-FE0F": {
 		Key:        "1F469-200D-2695-FE0F",
-		Value:      "👩‍⚕️",
+		Value:      "👩\u200d⚕️",
 		Descriptor: "Woman Health Worker",
 	},
 	"1F469-200D-2696-FE0F": {
 		Key:        "1F469-200D-2696-FE0F",
-		Value:      "👩‍⚖️",
+		Value:      "👩\u200d⚖️",
 		Descriptor: "Woman Judge",
 	},
 	"1F469-200D-2708-FE0F": {
 		Key:        "1F469-200D-2708-FE0F",
-		Value:      "👩‍✈️",
+		Value:      "👩\u200d✈️",
 		Descriptor: "Woman Pilot",
 	},
 	"1F469-200D-2764-FE0F-200D-1F468": {
@@ -6094,12 +6097,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F46E-1F3FB-200D-2640-FE0F": {
 		Key:        "1F46E-1F3FB-200D-2640-FE0F",
-		Value:      "👮🏻‍♀️",
+		Value:      "👮🏻\u200d♀️",
 		Descriptor: "Woman Police Officer: Light Skin Tone",
 	},
 	"1F46E-1F3FB-200D-2642-FE0F": {
 		Key:        "1F46E-1F3FB-200D-2642-FE0F",
-		Value:      "👮🏻‍♂️",
+		Value:      "👮🏻\u200d♂️",
 		Descriptor: "Man Police Officer: Light Skin Tone",
 	},
 	"1F46E-1F3FC": {
@@ -6109,12 +6112,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F46E-1F3FC-200D-2640-FE0F": {
 		Key:        "1F46E-1F3FC-200D-2640-FE0F",
-		Value:      "👮🏼‍♀️",
+		Value:      "👮🏼\u200d♀️",
 		Descriptor: "Woman Police Officer: Medium-Light Skin Tone",
 	},
 	"1F46E-1F3FC-200D-2642-FE0F": {
 		Key:        "1F46E-1F3FC-200D-2642-FE0F",
-		Value:      "👮🏼‍♂️",
+		Value:      "👮🏼\u200d♂️",
 		Descriptor: "Man Police Officer: Medium-Light Skin Tone",
 	},
 	"1F46E-1F3FD": {
@@ -6124,12 +6127,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F46E-1F3FD-200D-2640-FE0F": {
 		Key:        "1F46E-1F3FD-200D-2640-FE0F",
-		Value:      "👮🏽‍♀️",
+		Value:      "👮🏽\u200d♀️",
 		Descriptor: "Woman Police Officer: Medium Skin Tone",
 	},
 	"1F46E-1F3FD-200D-2642-FE0F": {
 		Key:        "1F46E-1F3FD-200D-2642-FE0F",
-		Value:      "👮🏽‍♂️",
+		Value:      "👮🏽\u200d♂️",
 		Descriptor: "Man Police Officer: Medium Skin Tone",
 	},
 	"1F46E-1F3FE": {
@@ -6139,12 +6142,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F46E-1F3FE-200D-2640-FE0F": {
 		Key:        "1F46E-1F3FE-200D-2640-FE0F",
-		Value:      "👮🏾‍♀️",
+		Value:      "👮🏾\u200d♀️",
 		Descriptor: "Woman Police Officer: Medium-Dark Skin Tone",
 	},
 	"1F46E-1F3FE-200D-2642-FE0F": {
 		Key:        "1F46E-1F3FE-200D-2642-FE0F",
-		Value:      "👮🏾‍♂️",
+		Value:      "👮🏾\u200d♂️",
 		Descriptor: "Man Police Officer: Medium-Dark Skin Tone",
 	},
 	"1F46E-1F3FF": {
@@ -6154,22 +6157,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F46E-1F3FF-200D-2640-FE0F": {
 		Key:        "1F46E-1F3FF-200D-2640-FE0F",
-		Value:      "👮🏿‍♀️",
+		Value:      "👮🏿\u200d♀️",
 		Descriptor: "Woman Police Officer: Dark Skin Tone",
 	},
 	"1F46E-1F3FF-200D-2642-FE0F": {
 		Key:        "1F46E-1F3FF-200D-2642-FE0F",
-		Value:      "👮🏿‍♂️",
+		Value:      "👮🏿\u200d♂️",
 		Descriptor: "Man Police Officer: Dark Skin Tone",
 	},
 	"1F46E-200D-2640-FE0F": {
 		Key:        "1F46E-200D-2640-FE0F",
-		Value:      "👮‍♀️",
+		Value:      "👮\u200d♀️",
 		Descriptor: "Woman Police Officer",
 	},
 	"1F46E-200D-2642-FE0F": {
 		Key:        "1F46E-200D-2642-FE0F",
-		Value:      "👮‍♂️",
+		Value:      "👮\u200d♂️",
 		Descriptor: "Man Police Officer",
 	},
 	"1F46F": {
@@ -6179,12 +6182,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F46F-200D-2640-FE0F": {
 		Key:        "1F46F-200D-2640-FE0F",
-		Value:      "👯‍♀️",
+		Value:      "👯\u200d♀️",
 		Descriptor: "Women With Bunny Ears",
 	},
 	"1F46F-200D-2642-FE0F": {
 		Key:        "1F46F-200D-2642-FE0F",
-		Value:      "👯‍♂️",
+		Value:      "👯\u200d♂️",
 		Descriptor: "Men With Bunny Ears",
 	},
 	"1F470": {
@@ -6229,12 +6232,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F471-1F3FB-200D-2640-FE0F": {
 		Key:        "1F471-1F3FB-200D-2640-FE0F",
-		Value:      "👱🏻‍♀️",
+		Value:      "👱🏻\u200d♀️",
 		Descriptor: "Woman: Light Skin Tone, Blond Hair",
 	},
 	"1F471-1F3FB-200D-2642-FE0F": {
 		Key:        "1F471-1F3FB-200D-2642-FE0F",
-		Value:      "👱🏻‍♂️",
+		Value:      "👱🏻\u200d♂️",
 		Descriptor: "Man: Light Skin Tone, Blond Hair",
 	},
 	"1F471-1F3FC": {
@@ -6244,12 +6247,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F471-1F3FC-200D-2640-FE0F": {
 		Key:        "1F471-1F3FC-200D-2640-FE0F",
-		Value:      "👱🏼‍♀️",
+		Value:      "👱🏼\u200d♀️",
 		Descriptor: "Woman: Medium-Light Skin Tone, Blond Hair",
 	},
 	"1F471-1F3FC-200D-2642-FE0F": {
 		Key:        "1F471-1F3FC-200D-2642-FE0F",
-		Value:      "👱🏼‍♂️",
+		Value:      "👱🏼\u200d♂️",
 		Descriptor: "Man: Medium-Light Skin Tone, Blond Hair",
 	},
 	"1F471-1F3FD": {
@@ -6259,12 +6262,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F471-1F3FD-200D-2640-FE0F": {
 		Key:        "1F471-1F3FD-200D-2640-FE0F",
-		Value:      "👱🏽‍♀️",
+		Value:      "👱🏽\u200d♀️",
 		Descriptor: "Woman: Medium Skin Tone, Blond Hair",
 	},
 	"1F471-1F3FD-200D-2642-FE0F": {
 		Key:        "1F471-1F3FD-200D-2642-FE0F",
-		Value:      "👱🏽‍♂️",
+		Value:      "👱🏽\u200d♂️",
 		Descriptor: "Man: Medium Skin Tone, Blond Hair",
 	},
 	"1F471-1F3FE": {
@@ -6274,12 +6277,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F471-1F3FE-200D-2640-FE0F": {
 		Key:        "1F471-1F3FE-200D-2640-FE0F",
-		Value:      "👱🏾‍♀️",
+		Value:      "👱🏾\u200d♀️",
 		Descriptor: "Woman: Medium-Dark Skin Tone, Blond Hair",
 	},
 	"1F471-1F3FE-200D-2642-FE0F": {
 		Key:        "1F471-1F3FE-200D-2642-FE0F",
-		Value:      "👱🏾‍♂️",
+		Value:      "👱🏾\u200d♂️",
 		Descriptor: "Man: Medium-Dark Skin Tone, Blond Hair",
 	},
 	"1F471-1F3FF": {
@@ -6289,22 +6292,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F471-1F3FF-200D-2640-FE0F": {
 		Key:        "1F471-1F3FF-200D-2640-FE0F",
-		Value:      "👱🏿‍♀️",
+		Value:      "👱🏿\u200d♀️",
 		Descriptor: "Woman: Dark Skin Tone, Blond Hair",
 	},
 	"1F471-1F3FF-200D-2642-FE0F": {
 		Key:        "1F471-1F3FF-200D-2642-FE0F",
-		Value:      "👱🏿‍♂️",
+		Value:      "👱🏿\u200d♂️",
 		Descriptor: "Man: Dark Skin Tone, Blond Hair",
 	},
 	"1F471-200D-2640-FE0F": {
 		Key:        "1F471-200D-2640-FE0F",
-		Value:      "👱‍♀️",
+		Value:      "👱\u200d♀️",
 		Descriptor: "Woman: Blond Hair",
 	},
 	"1F471-200D-2642-FE0F": {
 		Key:        "1F471-200D-2642-FE0F",
-		Value:      "👱‍♂️",
+		Value:      "👱\u200d♂️",
 		Descriptor: "Man: Blond Hair",
 	},
 	"1F472": {
@@ -6349,12 +6352,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F473-1F3FB-200D-2640-FE0F": {
 		Key:        "1F473-1F3FB-200D-2640-FE0F",
-		Value:      "👳🏻‍♀️",
+		Value:      "👳🏻\u200d♀️",
 		Descriptor: "Woman Wearing Turban: Light Skin Tone",
 	},
 	"1F473-1F3FB-200D-2642-FE0F": {
 		Key:        "1F473-1F3FB-200D-2642-FE0F",
-		Value:      "👳🏻‍♂️",
+		Value:      "👳🏻\u200d♂️",
 		Descriptor: "Man Wearing Turban: Light Skin Tone",
 	},
 	"1F473-1F3FC": {
@@ -6364,12 +6367,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F473-1F3FC-200D-2640-FE0F": {
 		Key:        "1F473-1F3FC-200D-2640-FE0F",
-		Value:      "👳🏼‍♀️",
+		Value:      "👳🏼\u200d♀️",
 		Descriptor: "Woman Wearing Turban: Medium-Light Skin Tone",
 	},
 	"1F473-1F3FC-200D-2642-FE0F": {
 		Key:        "1F473-1F3FC-200D-2642-FE0F",
-		Value:      "👳🏼‍♂️",
+		Value:      "👳🏼\u200d♂️",
 		Descriptor: "Man Wearing Turban: Medium-Light Skin Tone",
 	},
 	"1F473-1F3FD": {
@@ -6379,12 +6382,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F473-1F3FD-200D-2640-FE0F": {
 		Key:        "1F473-1F3FD-200D-2640-FE0F",
-		Value:      "👳🏽‍♀️",
+		Value:      "👳🏽\u200d♀️",
 		Descriptor: "Woman Wearing Turban: Medium Skin Tone",
 	},
 	"1F473-1F3FD-200D-2642-FE0F": {
 		Key:        "1F473-1F3FD-200D-2642-FE0F",
-		Value:      "👳🏽‍♂️",
+		Value:      "👳🏽\u200d♂️",
 		Descriptor: "Man Wearing Turban: Medium Skin Tone",
 	},
 	"1F473-1F3FE": {
@@ -6394,12 +6397,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F473-1F3FE-200D-2640-FE0F": {
 		Key:        "1F473-1F3FE-200D-2640-FE0F",
-		Value:      "👳🏾‍♀️",
+		Value:      "👳🏾\u200d♀️",
 		Descriptor: "Woman Wearing Turban: Medium-Dark Skin Tone",
 	},
 	"1F473-1F3FE-200D-2642-FE0F": {
 		Key:        "1F473-1F3FE-200D-2642-FE0F",
-		Value:      "👳🏾‍♂️",
+		Value:      "👳🏾\u200d♂️",
 		Descriptor: "Man Wearing Turban: Medium-Dark Skin Tone",
 	},
 	"1F473-1F3FF": {
@@ -6409,22 +6412,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F473-1F3FF-200D-2640-FE0F": {
 		Key:        "1F473-1F3FF-200D-2640-FE0F",
-		Value:      "👳🏿‍♀️",
+		Value:      "👳🏿\u200d♀️",
 		Descriptor: "Woman Wearing Turban: Dark Skin Tone",
 	},
 	"1F473-1F3FF-200D-2642-FE0F": {
 		Key:        "1F473-1F3FF-200D-2642-FE0F",
-		Value:      "👳🏿‍♂️",
+		Value:      "👳🏿\u200d♂️",
 		Descriptor: "Man Wearing Turban: Dark Skin Tone",
 	},
 	"1F473-200D-2640-FE0F": {
 		Key:        "1F473-200D-2640-FE0F",
-		Value:      "👳‍♀️",
+		Value:      "👳\u200d♀️",
 		Descriptor: "Woman Wearing Turban",
 	},
 	"1F473-200D-2642-FE0F": {
 		Key:        "1F473-200D-2642-FE0F",
-		Value:      "👳‍♂️",
+		Value:      "👳\u200d♂️",
 		Descriptor: "Man Wearing Turban",
 	},
 	"1F474": {
@@ -6529,12 +6532,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F477-1F3FB-200D-2640-FE0F": {
 		Key:        "1F477-1F3FB-200D-2640-FE0F",
-		Value:      "👷🏻‍♀️",
+		Value:      "👷🏻\u200d♀️",
 		Descriptor: "Woman Construction Worker: Light Skin Tone",
 	},
 	"1F477-1F3FB-200D-2642-FE0F": {
 		Key:        "1F477-1F3FB-200D-2642-FE0F",
-		Value:      "👷🏻‍♂️",
+		Value:      "👷🏻\u200d♂️",
 		Descriptor: "Man Construction Worker: Light Skin Tone",
 	},
 	"1F477-1F3FC": {
@@ -6544,12 +6547,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F477-1F3FC-200D-2640-FE0F": {
 		Key:        "1F477-1F3FC-200D-2640-FE0F",
-		Value:      "👷🏼‍♀️",
+		Value:      "👷🏼\u200d♀️",
 		Descriptor: "Woman Construction Worker: Medium-Light Skin Tone",
 	},
 	"1F477-1F3FC-200D-2642-FE0F": {
 		Key:        "1F477-1F3FC-200D-2642-FE0F",
-		Value:      "👷🏼‍♂️",
+		Value:      "👷🏼\u200d♂️",
 		Descriptor: "Man Construction Worker: Medium-Light Skin Tone",
 	},
 	"1F477-1F3FD": {
@@ -6559,12 +6562,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F477-1F3FD-200D-2640-FE0F": {
 		Key:        "1F477-1F3FD-200D-2640-FE0F",
-		Value:      "👷🏽‍♀️",
+		Value:      "👷🏽\u200d♀️",
 		Descriptor: "Woman Construction Worker: Medium Skin Tone",
 	},
 	"1F477-1F3FD-200D-2642-FE0F": {
 		Key:        "1F477-1F3FD-200D-2642-FE0F",
-		Value:      "👷🏽‍♂️",
+		Value:      "👷🏽\u200d♂️",
 		Descriptor: "Man Construction Worker: Medium Skin Tone",
 	},
 	"1F477-1F3FE": {
@@ -6574,12 +6577,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F477-1F3FE-200D-2640-FE0F": {
 		Key:        "1F477-1F3FE-200D-2640-FE0F",
-		Value:      "👷🏾‍♀️",
+		Value:      "👷🏾\u200d♀️",
 		Descriptor: "Woman Construction Worker: Medium-Dark Skin Tone",
 	},
 	"1F477-1F3FE-200D-2642-FE0F": {
 		Key:        "1F477-1F3FE-200D-2642-FE0F",
-		Value:      "👷🏾‍♂️",
+		Value:      "👷🏾\u200d♂️",
 		Descriptor: "Man Construction Worker: Medium-Dark Skin Tone",
 	},
 	"1F477-1F3FF": {
@@ -6589,22 +6592,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F477-1F3FF-200D-2640-FE0F": {
 		Key:        "1F477-1F3FF-200D-2640-FE0F",
-		Value:      "👷🏿‍♀️",
+		Value:      "👷🏿\u200d♀️",
 		Descriptor: "Woman Construction Worker: Dark Skin Tone",
 	},
 	"1F477-1F3FF-200D-2642-FE0F": {
 		Key:        "1F477-1F3FF-200D-2642-FE0F",
-		Value:      "👷🏿‍♂️",
+		Value:      "👷🏿\u200d♂️",
 		Descriptor: "Man Construction Worker: Dark Skin Tone",
 	},
 	"1F477-200D-2640-FE0F": {
 		Key:        "1F477-200D-2640-FE0F",
-		Value:      "👷‍♀️",
+		Value:      "👷\u200d♀️",
 		Descriptor: "Woman Construction Worker",
 	},
 	"1F477-200D-2642-FE0F": {
 		Key:        "1F477-200D-2642-FE0F",
-		Value:      "👷‍♂️",
+		Value:      "👷\u200d♂️",
 		Descriptor: "Man Construction Worker",
 	},
 	"1F478": {
@@ -6714,12 +6717,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F481-1F3FB-200D-2640-FE0F": {
 		Key:        "1F481-1F3FB-200D-2640-FE0F",
-		Value:      "💁🏻‍♀️",
+		Value:      "💁🏻\u200d♀️",
 		Descriptor: "Woman Tipping Hand: Light Skin Tone",
 	},
 	"1F481-1F3FB-200D-2642-FE0F": {
 		Key:        "1F481-1F3FB-200D-2642-FE0F",
-		Value:      "💁🏻‍♂️",
+		Value:      "💁🏻\u200d♂️",
 		Descriptor: "Man Tipping Hand: Light Skin Tone",
 	},
 	"1F481-1F3FC": {
@@ -6729,12 +6732,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F481-1F3FC-200D-2640-FE0F": {
 		Key:        "1F481-1F3FC-200D-2640-FE0F",
-		Value:      "💁🏼‍♀️",
+		Value:      "💁🏼\u200d♀️",
 		Descriptor: "Woman Tipping Hand: Medium-Light Skin Tone",
 	},
 	"1F481-1F3FC-200D-2642-FE0F": {
 		Key:        "1F481-1F3FC-200D-2642-FE0F",
-		Value:      "💁🏼‍♂️",
+		Value:      "💁🏼\u200d♂️",
 		Descriptor: "Man Tipping Hand: Medium-Light Skin Tone",
 	},
 	"1F481-1F3FD": {
@@ -6744,12 +6747,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F481-1F3FD-200D-2640-FE0F": {
 		Key:        "1F481-1F3FD-200D-2640-FE0F",
-		Value:      "💁🏽‍♀️",
+		Value:      "💁🏽\u200d♀️",
 		Descriptor: "Woman Tipping Hand: Medium Skin Tone",
 	},
 	"1F481-1F3FD-200D-2642-FE0F": {
 		Key:        "1F481-1F3FD-200D-2642-FE0F",
-		Value:      "💁🏽‍♂️",
+		Value:      "💁🏽\u200d♂️",
 		Descriptor: "Man Tipping Hand: Medium Skin Tone",
 	},
 	"1F481-1F3FE": {
@@ -6759,12 +6762,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F481-1F3FE-200D-2640-FE0F": {
 		Key:        "1F481-1F3FE-200D-2640-FE0F",
-		Value:      "💁🏾‍♀️",
+		Value:      "💁🏾\u200d♀️",
 		Descriptor: "Woman Tipping Hand: Medium-Dark Skin Tone",
 	},
 	"1F481-1F3FE-200D-2642-FE0F": {
 		Key:        "1F481-1F3FE-200D-2642-FE0F",
-		Value:      "💁🏾‍♂️",
+		Value:      "💁🏾\u200d♂️",
 		Descriptor: "Man Tipping Hand: Medium-Dark Skin Tone",
 	},
 	"1F481-1F3FF": {
@@ -6774,22 +6777,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F481-1F3FF-200D-2640-FE0F": {
 		Key:        "1F481-1F3FF-200D-2640-FE0F",
-		Value:      "💁🏿‍♀️",
+		Value:      "💁🏿\u200d♀️",
 		Descriptor: "Woman Tipping Hand: Dark Skin Tone",
 	},
 	"1F481-1F3FF-200D-2642-FE0F": {
 		Key:        "1F481-1F3FF-200D-2642-FE0F",
-		Value:      "💁🏿‍♂️",
+		Value:      "💁🏿\u200d♂️",
 		Descriptor: "Man Tipping Hand: Dark Skin Tone",
 	},
 	"1F481-200D-2640-FE0F": {
 		Key:        "1F481-200D-2640-FE0F",
-		Value:      "💁‍♀️",
+		Value:      "💁\u200d♀️",
 		Descriptor: "Woman Tipping Hand",
 	},
 	"1F481-200D-2642-FE0F": {
 		Key:        "1F481-200D-2642-FE0F",
-		Value:      "💁‍♂️",
+		Value:      "💁\u200d♂️",
 		Descriptor: "Man Tipping Hand",
 	},
 	"1F482": {
@@ -6804,12 +6807,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F482-1F3FB-200D-2640-FE0F": {
 		Key:        "1F482-1F3FB-200D-2640-FE0F",
-		Value:      "💂🏻‍♀️",
+		Value:      "💂🏻\u200d♀️",
 		Descriptor: "Woman Guard: Light Skin Tone",
 	},
 	"1F482-1F3FB-200D-2642-FE0F": {
 		Key:        "1F482-1F3FB-200D-2642-FE0F",
-		Value:      "💂🏻‍♂️",
+		Value:      "💂🏻\u200d♂️",
 		Descriptor: "Man Guard: Light Skin Tone",
 	},
 	"1F482-1F3FC": {
@@ -6819,12 +6822,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F482-1F3FC-200D-2640-FE0F": {
 		Key:        "1F482-1F3FC-200D-2640-FE0F",
-		Value:      "💂🏼‍♀️",
+		Value:      "💂🏼\u200d♀️",
 		Descriptor: "Woman Guard: Medium-Light Skin Tone",
 	},
 	"1F482-1F3FC-200D-2642-FE0F": {
 		Key:        "1F482-1F3FC-200D-2642-FE0F",
-		Value:      "💂🏼‍♂️",
+		Value:      "💂🏼\u200d♂️",
 		Descriptor: "Man Guard: Medium-Light Skin Tone",
 	},
 	"1F482-1F3FD": {
@@ -6834,12 +6837,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F482-1F3FD-200D-2640-FE0F": {
 		Key:        "1F482-1F3FD-200D-2640-FE0F",
-		Value:      "💂🏽‍♀️",
+		Value:      "💂🏽\u200d♀️",
 		Descriptor: "Woman Guard: Medium Skin Tone",
 	},
 	"1F482-1F3FD-200D-2642-FE0F": {
 		Key:        "1F482-1F3FD-200D-2642-FE0F",
-		Value:      "💂🏽‍♂️",
+		Value:      "💂🏽\u200d♂️",
 		Descriptor: "Man Guard: Medium Skin Tone",
 	},
 	"1F482-1F3FE": {
@@ -6849,12 +6852,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F482-1F3FE-200D-2640-FE0F": {
 		Key:        "1F482-1F3FE-200D-2640-FE0F",
-		Value:      "💂🏾‍♀️",
+		Value:      "💂🏾\u200d♀️",
 		Descriptor: "Woman Guard: Medium-Dark Skin Tone",
 	},
 	"1F482-1F3FE-200D-2642-FE0F": {
 		Key:        "1F482-1F3FE-200D-2642-FE0F",
-		Value:      "💂🏾‍♂️",
+		Value:      "💂🏾\u200d♂️",
 		Descriptor: "Man Guard: Medium-Dark Skin Tone",
 	},
 	"1F482-1F3FF": {
@@ -6864,22 +6867,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F482-1F3FF-200D-2640-FE0F": {
 		Key:        "1F482-1F3FF-200D-2640-FE0F",
-		Value:      "💂🏿‍♀️",
+		Value:      "💂🏿\u200d♀️",
 		Descriptor: "Woman Guard: Dark Skin Tone",
 	},
 	"1F482-1F3FF-200D-2642-FE0F": {
 		Key:        "1F482-1F3FF-200D-2642-FE0F",
-		Value:      "💂🏿‍♂️",
+		Value:      "💂🏿\u200d♂️",
 		Descriptor: "Man Guard: Dark Skin Tone",
 	},
 	"1F482-200D-2640-FE0F": {
 		Key:        "1F482-200D-2640-FE0F",
-		Value:      "💂‍♀️",
+		Value:      "💂\u200d♀️",
 		Descriptor: "Woman Guard",
 	},
 	"1F482-200D-2642-FE0F": {
 		Key:        "1F482-200D-2642-FE0F",
-		Value:      "💂‍♂️",
+		Value:      "💂\u200d♂️",
 		Descriptor: "Man Guard",
 	},
 	"1F483": {
@@ -6959,12 +6962,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F486-1F3FB-200D-2640-FE0F": {
 		Key:        "1F486-1F3FB-200D-2640-FE0F",
-		Value:      "💆🏻‍♀️",
+		Value:      "💆🏻\u200d♀️",
 		Descriptor: "Woman Getting Massage: Light Skin Tone",
 	},
 	"1F486-1F3FB-200D-2642-FE0F": {
 		Key:        "1F486-1F3FB-200D-2642-FE0F",
-		Value:      "💆🏻‍♂️",
+		Value:      "💆🏻\u200d♂️",
 		Descriptor: "Man Getting Massage: Light Skin Tone",
 	},
 	"1F486-1F3FC": {
@@ -6974,12 +6977,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F486-1F3FC-200D-2640-FE0F": {
 		Key:        "1F486-1F3FC-200D-2640-FE0F",
-		Value:      "💆🏼‍♀️",
+		Value:      "💆🏼\u200d♀️",
 		Descriptor: "Woman Getting Massage: Medium-Light Skin Tone",
 	},
 	"1F486-1F3FC-200D-2642-FE0F": {
 		Key:        "1F486-1F3FC-200D-2642-FE0F",
-		Value:      "💆🏼‍♂️",
+		Value:      "💆🏼\u200d♂️",
 		Descriptor: "Man Getting Massage: Medium-Light Skin Tone",
 	},
 	"1F486-1F3FD": {
@@ -6989,12 +6992,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F486-1F3FD-200D-2640-FE0F": {
 		Key:        "1F486-1F3FD-200D-2640-FE0F",
-		Value:      "💆🏽‍♀️",
+		Value:      "💆🏽\u200d♀️",
 		Descriptor: "Woman Getting Massage: Medium Skin Tone",
 	},
 	"1F486-1F3FD-200D-2642-FE0F": {
 		Key:        "1F486-1F3FD-200D-2642-FE0F",
-		Value:      "💆🏽‍♂️",
+		Value:      "💆🏽\u200d♂️",
 		Descriptor: "Man Getting Massage: Medium Skin Tone",
 	},
 	"1F486-1F3FE": {
@@ -7004,12 +7007,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F486-1F3FE-200D-2640-FE0F": {
 		Key:        "1F486-1F3FE-200D-2640-FE0F",
-		Value:      "💆🏾‍♀️",
+		Value:      "💆🏾\u200d♀️",
 		Descriptor: "Woman Getting Massage: Medium-Dark Skin Tone",
 	},
 	"1F486-1F3FE-200D-2642-FE0F": {
 		Key:        "1F486-1F3FE-200D-2642-FE0F",
-		Value:      "💆🏾‍♂️",
+		Value:      "💆🏾\u200d♂️",
 		Descriptor: "Man Getting Massage: Medium-Dark Skin Tone",
 	},
 	"1F486-1F3FF": {
@@ -7019,22 +7022,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F486-1F3FF-200D-2640-FE0F": {
 		Key:        "1F486-1F3FF-200D-2640-FE0F",
-		Value:      "💆🏿‍♀️",
+		Value:      "💆🏿\u200d♀️",
 		Descriptor: "Woman Getting Massage: Dark Skin Tone",
 	},
 	"1F486-1F3FF-200D-2642-FE0F": {
 		Key:        "1F486-1F3FF-200D-2642-FE0F",
-		Value:      "💆🏿‍♂️",
+		Value:      "💆🏿\u200d♂️",
 		Descriptor: "Man Getting Massage: Dark Skin Tone",
 	},
 	"1F486-200D-2640-FE0F": {
 		Key:        "1F486-200D-2640-FE0F",
-		Value:      "💆‍♀️",
+		Value:      "💆\u200d♀️",
 		Descriptor: "Woman Getting Massage",
 	},
 	"1F486-200D-2642-FE0F": {
 		Key:        "1F486-200D-2642-FE0F",
-		Value:      "💆‍♂️",
+		Value:      "💆\u200d♂️",
 		Descriptor: "Man Getting Massage",
 	},
 	"1F487": {
@@ -7049,12 +7052,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F487-1F3FB-200D-2640-FE0F": {
 		Key:        "1F487-1F3FB-200D-2640-FE0F",
-		Value:      "💇🏻‍♀️",
+		Value:      "💇🏻\u200d♀️",
 		Descriptor: "Woman Getting Haircut: Light Skin Tone",
 	},
 	"1F487-1F3FB-200D-2642-FE0F": {
 		Key:        "1F487-1F3FB-200D-2642-FE0F",
-		Value:      "💇🏻‍♂️",
+		Value:      "💇🏻\u200d♂️",
 		Descriptor: "Man Getting Haircut: Light Skin Tone",
 	},
 	"1F487-1F3FC": {
@@ -7064,12 +7067,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F487-1F3FC-200D-2640-FE0F": {
 		Key:        "1F487-1F3FC-200D-2640-FE0F",
-		Value:      "💇🏼‍♀️",
+		Value:      "💇🏼\u200d♀️",
 		Descriptor: "Woman Getting Haircut: Medium-Light Skin Tone",
 	},
 	"1F487-1F3FC-200D-2642-FE0F": {
 		Key:        "1F487-1F3FC-200D-2642-FE0F",
-		Value:      "💇🏼‍♂️",
+		Value:      "💇🏼\u200d♂️",
 		Descriptor: "Man Getting Haircut: Medium-Light Skin Tone",
 	},
 	"1F487-1F3FD": {
@@ -7079,12 +7082,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F487-1F3FD-200D-2640-FE0F": {
 		Key:        "1F487-1F3FD-200D-2640-FE0F",
-		Value:      "💇🏽‍♀️",
+		Value:      "💇🏽\u200d♀️",
 		Descriptor: "Woman Getting Haircut: Medium Skin Tone",
 	},
 	"1F487-1F3FD-200D-2642-FE0F": {
 		Key:        "1F487-1F3FD-200D-2642-FE0F",
-		Value:      "💇🏽‍♂️",
+		Value:      "💇🏽\u200d♂️",
 		Descriptor: "Man Getting Haircut: Medium Skin Tone",
 	},
 	"1F487-1F3FE": {
@@ -7094,12 +7097,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F487-1F3FE-200D-2640-FE0F": {
 		Key:        "1F487-1F3FE-200D-2640-FE0F",
-		Value:      "💇🏾‍♀️",
+		Value:      "💇🏾\u200d♀️",
 		Descriptor: "Woman Getting Haircut: Medium-Dark Skin Tone",
 	},
 	"1F487-1F3FE-200D-2642-FE0F": {
 		Key:        "1F487-1F3FE-200D-2642-FE0F",
-		Value:      "💇🏾‍♂️",
+		Value:      "💇🏾\u200d♂️",
 		Descriptor: "Man Getting Haircut: Medium-Dark Skin Tone",
 	},
 	"1F487-1F3FF": {
@@ -7109,22 +7112,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F487-1F3FF-200D-2640-FE0F": {
 		Key:        "1F487-1F3FF-200D-2640-FE0F",
-		Value:      "💇🏿‍♀️",
+		Value:      "💇🏿\u200d♀️",
 		Descriptor: "Woman Getting Haircut: Dark Skin Tone",
 	},
 	"1F487-1F3FF-200D-2642-FE0F": {
 		Key:        "1F487-1F3FF-200D-2642-FE0F",
-		Value:      "💇🏿‍♂️",
+		Value:      "💇🏿\u200d♂️",
 		Descriptor: "Man Getting Haircut: Dark Skin Tone",
 	},
 	"1F487-200D-2640-FE0F": {
 		Key:        "1F487-200D-2640-FE0F",
-		Value:      "💇‍♀️",
+		Value:      "💇\u200d♀️",
 		Descriptor: "Woman Getting Haircut",
 	},
 	"1F487-200D-2642-FE0F": {
 		Key:        "1F487-200D-2642-FE0F",
-		Value:      "💇‍♂️",
+		Value:      "💇\u200d♂️",
 		Descriptor: "Man Getting Haircut",
 	},
 	"1F488": {
@@ -8259,12 +8262,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F575-1F3FB-200D-2640-FE0F": {
 		Key:        "1F575-1F3FB-200D-2640-FE0F",
-		Value:      "🕵🏻‍♀️",
+		Value:      "🕵🏻\u200d♀️",
 		Descriptor: "Woman Detective: Light Skin Tone",
 	},
 	"1F575-1F3FB-200D-2642-FE0F": {
 		Key:        "1F575-1F3FB-200D-2642-FE0F",
-		Value:      "🕵🏻‍♂️",
+		Value:      "🕵🏻\u200d♂️",
 		Descriptor: "Man Detective: Light Skin Tone",
 	},
 	"1F575-1F3FC": {
@@ -8274,12 +8277,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F575-1F3FC-200D-2640-FE0F": {
 		Key:        "1F575-1F3FC-200D-2640-FE0F",
-		Value:      "🕵🏼‍♀️",
+		Value:      "🕵🏼\u200d♀️",
 		Descriptor: "Woman Detective: Medium-Light Skin Tone",
 	},
 	"1F575-1F3FC-200D-2642-FE0F": {
 		Key:        "1F575-1F3FC-200D-2642-FE0F",
-		Value:      "🕵🏼‍♂️",
+		Value:      "🕵🏼\u200d♂️",
 		Descriptor: "Man Detective: Medium-Light Skin Tone",
 	},
 	"1F575-1F3FD": {
@@ -8289,12 +8292,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F575-1F3FD-200D-2640-FE0F": {
 		Key:        "1F575-1F3FD-200D-2640-FE0F",
-		Value:      "🕵🏽‍♀️",
+		Value:      "🕵🏽\u200d♀️",
 		Descriptor: "Woman Detective: Medium Skin Tone",
 	},
 	"1F575-1F3FD-200D-2642-FE0F": {
 		Key:        "1F575-1F3FD-200D-2642-FE0F",
-		Value:      "🕵🏽‍♂️",
+		Value:      "🕵🏽\u200d♂️",
 		Descriptor: "Man Detective: Medium Skin Tone",
 	},
 	"1F575-1F3FE": {
@@ -8304,12 +8307,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F575-1F3FE-200D-2640-FE0F": {
 		Key:        "1F575-1F3FE-200D-2640-FE0F",
-		Value:      "🕵🏾‍♀️",
+		Value:      "🕵🏾\u200d♀️",
 		Descriptor: "Woman Detective: Medium-Dark Skin Tone",
 	},
 	"1F575-1F3FE-200D-2642-FE0F": {
 		Key:        "1F575-1F3FE-200D-2642-FE0F",
-		Value:      "🕵🏾‍♂️",
+		Value:      "🕵🏾\u200d♂️",
 		Descriptor: "Man Detective: Medium-Dark Skin Tone",
 	},
 	"1F575-1F3FF": {
@@ -8319,12 +8322,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F575-1F3FF-200D-2640-FE0F": {
 		Key:        "1F575-1F3FF-200D-2640-FE0F",
-		Value:      "🕵🏿‍♀️",
+		Value:      "🕵🏿\u200d♀️",
 		Descriptor: "Woman Detective: Dark Skin Tone",
 	},
 	"1F575-1F3FF-200D-2642-FE0F": {
 		Key:        "1F575-1F3FF-200D-2642-FE0F",
-		Value:      "🕵🏿‍♂️",
+		Value:      "🕵🏿\u200d♂️",
 		Descriptor: "Man Detective: Dark Skin Tone",
 	},
 	"1F575-FE0F": {
@@ -8334,12 +8337,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F575-FE0F-200D-2640-FE0F": {
 		Key:        "1F575-FE0F-200D-2640-FE0F",
-		Value:      "🕵️‍♀️",
+		Value:      "🕵️\u200d♀️",
 		Descriptor: "Woman Detective",
 	},
 	"1F575-FE0F-200D-2642-FE0F": {
 		Key:        "1F575-FE0F-200D-2642-FE0F",
-		Value:      "🕵️‍♂️",
+		Value:      "🕵️\u200d♂️",
 		Descriptor: "Man Detective",
 	},
 	"1F576-FE0F": {
@@ -8994,12 +8997,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F645-1F3FB-200D-2640-FE0F": {
 		Key:        "1F645-1F3FB-200D-2640-FE0F",
-		Value:      "🙅🏻‍♀️",
+		Value:      "🙅🏻\u200d♀️",
 		Descriptor: "Woman Gesturing No: Light Skin Tone",
 	},
 	"1F645-1F3FB-200D-2642-FE0F": {
 		Key:        "1F645-1F3FB-200D-2642-FE0F",
-		Value:      "🙅🏻‍♂️",
+		Value:      "🙅🏻\u200d♂️",
 		Descriptor: "Man Gesturing No: Light Skin Tone",
 	},
 	"1F645-1F3FC": {
@@ -9009,12 +9012,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F645-1F3FC-200D-2640-FE0F": {
 		Key:        "1F645-1F3FC-200D-2640-FE0F",
-		Value:      "🙅🏼‍♀️",
+		Value:      "🙅🏼\u200d♀️",
 		Descriptor: "Woman Gesturing No: Medium-Light Skin Tone",
 	},
 	"1F645-1F3FC-200D-2642-FE0F": {
 		Key:        "1F645-1F3FC-200D-2642-FE0F",
-		Value:      "🙅🏼‍♂️",
+		Value:      "🙅🏼\u200d♂️",
 		Descriptor: "Man Gesturing No: Medium-Light Skin Tone",
 	},
 	"1F645-1F3FD": {
@@ -9024,12 +9027,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F645-1F3FD-200D-2640-FE0F": {
 		Key:        "1F645-1F3FD-200D-2640-FE0F",
-		Value:      "🙅🏽‍♀️",
+		Value:      "🙅🏽\u200d♀️",
 		Descriptor: "Woman Gesturing No: Medium Skin Tone",
 	},
 	"1F645-1F3FD-200D-2642-FE0F": {
 		Key:        "1F645-1F3FD-200D-2642-FE0F",
-		Value:      "🙅🏽‍♂️",
+		Value:      "🙅🏽\u200d♂️",
 		Descriptor: "Man Gesturing No: Medium Skin Tone",
 	},
 	"1F645-1F3FE": {
@@ -9039,12 +9042,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F645-1F3FE-200D-2640-FE0F": {
 		Key:        "1F645-1F3FE-200D-2640-FE0F",
-		Value:      "🙅🏾‍♀️",
+		Value:      "🙅🏾\u200d♀️",
 		Descriptor: "Woman Gesturing No: Medium-Dark Skin Tone",
 	},
 	"1F645-1F3FE-200D-2642-FE0F": {
 		Key:        "1F645-1F3FE-200D-2642-FE0F",
-		Value:      "🙅🏾‍♂️",
+		Value:      "🙅🏾\u200d♂️",
 		Descriptor: "Man Gesturing No: Medium-Dark Skin Tone",
 	},
 	"1F645-1F3FF": {
@@ -9054,22 +9057,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F645-1F3FF-200D-2640-FE0F": {
 		Key:        "1F645-1F3FF-200D-2640-FE0F",
-		Value:      "🙅🏿‍♀️",
+		Value:      "🙅🏿\u200d♀️",
 		Descriptor: "Woman Gesturing No: Dark Skin Tone",
 	},
 	"1F645-1F3FF-200D-2642-FE0F": {
 		Key:        "1F645-1F3FF-200D-2642-FE0F",
-		Value:      "🙅🏿‍♂️",
+		Value:      "🙅🏿\u200d♂️",
 		Descriptor: "Man Gesturing No: Dark Skin Tone",
 	},
 	"1F645-200D-2640-FE0F": {
 		Key:        "1F645-200D-2640-FE0F",
-		Value:      "🙅‍♀️",
+		Value:      "🙅\u200d♀️",
 		Descriptor: "Woman Gesturing No",
 	},
 	"1F645-200D-2642-FE0F": {
 		Key:        "1F645-200D-2642-FE0F",
-		Value:      "🙅‍♂️",
+		Value:      "🙅\u200d♂️",
 		Descriptor: "Man Gesturing No",
 	},
 	"1F646": {
@@ -9084,12 +9087,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F646-1F3FB-200D-2640-FE0F": {
 		Key:        "1F646-1F3FB-200D-2640-FE0F",
-		Value:      "🙆🏻‍♀️",
+		Value:      "🙆🏻\u200d♀️",
 		Descriptor: "Woman Gesturing OK: Light Skin Tone",
 	},
 	"1F646-1F3FB-200D-2642-FE0F": {
 		Key:        "1F646-1F3FB-200D-2642-FE0F",
-		Value:      "🙆🏻‍♂️",
+		Value:      "🙆🏻\u200d♂️",
 		Descriptor: "Man Gesturing OK: Light Skin Tone",
 	},
 	"1F646-1F3FC": {
@@ -9099,12 +9102,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F646-1F3FC-200D-2640-FE0F": {
 		Key:        "1F646-1F3FC-200D-2640-FE0F",
-		Value:      "🙆🏼‍♀️",
+		Value:      "🙆🏼\u200d♀️",
 		Descriptor: "Woman Gesturing OK: Medium-Light Skin Tone",
 	},
 	"1F646-1F3FC-200D-2642-FE0F": {
 		Key:        "1F646-1F3FC-200D-2642-FE0F",
-		Value:      "🙆🏼‍♂️",
+		Value:      "🙆🏼\u200d♂️",
 		Descriptor: "Man Gesturing OK: Medium-Light Skin Tone",
 	},
 	"1F646-1F3FD": {
@@ -9114,12 +9117,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F646-1F3FD-200D-2640-FE0F": {
 		Key:        "1F646-1F3FD-200D-2640-FE0F",
-		Value:      "🙆🏽‍♀️",
+		Value:      "🙆🏽\u200d♀️",
 		Descriptor: "Woman Gesturing OK: Medium Skin Tone",
 	},
 	"1F646-1F3FD-200D-2642-FE0F": {
 		Key:        "1F646-1F3FD-200D-2642-FE0F",
-		Value:      "🙆🏽‍♂️",
+		Value:      "🙆🏽\u200d♂️",
 		Descriptor: "Man Gesturing OK: Medium Skin Tone",
 	},
 	"1F646-1F3FE": {
@@ -9129,12 +9132,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F646-1F3FE-200D-2640-FE0F": {
 		Key:        "1F646-1F3FE-200D-2640-FE0F",
-		Value:      "🙆🏾‍♀️",
+		Value:      "🙆🏾\u200d♀️",
 		Descriptor: "Woman Gesturing OK: Medium-Dark Skin Tone",
 	},
 	"1F646-1F3FE-200D-2642-FE0F": {
 		Key:        "1F646-1F3FE-200D-2642-FE0F",
-		Value:      "🙆🏾‍♂️",
+		Value:      "🙆🏾\u200d♂️",
 		Descriptor: "Man Gesturing OK: Medium-Dark Skin Tone",
 	},
 	"1F646-1F3FF": {
@@ -9144,22 +9147,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F646-1F3FF-200D-2640-FE0F": {
 		Key:        "1F646-1F3FF-200D-2640-FE0F",
-		Value:      "🙆🏿‍♀️",
+		Value:      "🙆🏿\u200d♀️",
 		Descriptor: "Woman Gesturing OK: Dark Skin Tone",
 	},
 	"1F646-1F3FF-200D-2642-FE0F": {
 		Key:        "1F646-1F3FF-200D-2642-FE0F",
-		Value:      "🙆🏿‍♂️",
+		Value:      "🙆🏿\u200d♂️",
 		Descriptor: "Man Gesturing OK: Dark Skin Tone",
 	},
 	"1F646-200D-2640-FE0F": {
 		Key:        "1F646-200D-2640-FE0F",
-		Value:      "🙆‍♀️",
+		Value:      "🙆\u200d♀️",
 		Descriptor: "Woman Gesturing OK",
 	},
 	"1F646-200D-2642-FE0F": {
 		Key:        "1F646-200D-2642-FE0F",
-		Value:      "🙆‍♂️",
+		Value:      "🙆\u200d♂️",
 		Descriptor: "Man Gesturing OK",
 	},
 	"1F647": {
@@ -9174,12 +9177,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F647-1F3FB-200D-2640-FE0F": {
 		Key:        "1F647-1F3FB-200D-2640-FE0F",
-		Value:      "🙇🏻‍♀️",
+		Value:      "🙇🏻\u200d♀️",
 		Descriptor: "Woman Bowing: Light Skin Tone",
 	},
 	"1F647-1F3FB-200D-2642-FE0F": {
 		Key:        "1F647-1F3FB-200D-2642-FE0F",
-		Value:      "🙇🏻‍♂️",
+		Value:      "🙇🏻\u200d♂️",
 		Descriptor: "Man Bowing: Light Skin Tone",
 	},
 	"1F647-1F3FC": {
@@ -9189,12 +9192,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F647-1F3FC-200D-2640-FE0F": {
 		Key:        "1F647-1F3FC-200D-2640-FE0F",
-		Value:      "🙇🏼‍♀️",
+		Value:      "🙇🏼\u200d♀️",
 		Descriptor: "Woman Bowing: Medium-Light Skin Tone",
 	},
 	"1F647-1F3FC-200D-2642-FE0F": {
 		Key:        "1F647-1F3FC-200D-2642-FE0F",
-		Value:      "🙇🏼‍♂️",
+		Value:      "🙇🏼\u200d♂️",
 		Descriptor: "Man Bowing: Medium-Light Skin Tone",
 	},
 	"1F647-1F3FD": {
@@ -9204,12 +9207,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F647-1F3FD-200D-2640-FE0F": {
 		Key:        "1F647-1F3FD-200D-2640-FE0F",
-		Value:      "🙇🏽‍♀️",
+		Value:      "🙇🏽\u200d♀️",
 		Descriptor: "Woman Bowing: Medium Skin Tone",
 	},
 	"1F647-1F3FD-200D-2642-FE0F": {
 		Key:        "1F647-1F3FD-200D-2642-FE0F",
-		Value:      "🙇🏽‍♂️",
+		Value:      "🙇🏽\u200d♂️",
 		Descriptor: "Man Bowing: Medium Skin Tone",
 	},
 	"1F647-1F3FE": {
@@ -9219,12 +9222,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F647-1F3FE-200D-2640-FE0F": {
 		Key:        "1F647-1F3FE-200D-2640-FE0F",
-		Value:      "🙇🏾‍♀️",
+		Value:      "🙇🏾\u200d♀️",
 		Descriptor: "Woman Bowing: Medium-Dark Skin Tone",
 	},
 	"1F647-1F3FE-200D-2642-FE0F": {
 		Key:        "1F647-1F3FE-200D-2642-FE0F",
-		Value:      "🙇🏾‍♂️",
+		Value:      "🙇🏾\u200d♂️",
 		Descriptor: "Man Bowing: Medium-Dark Skin Tone",
 	},
 	"1F647-1F3FF": {
@@ -9234,22 +9237,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F647-1F3FF-200D-2640-FE0F": {
 		Key:        "1F647-1F3FF-200D-2640-FE0F",
-		Value:      "🙇🏿‍♀️",
+		Value:      "🙇🏿\u200d♀️",
 		Descriptor: "Woman Bowing: Dark Skin Tone",
 	},
 	"1F647-1F3FF-200D-2642-FE0F": {
 		Key:        "1F647-1F3FF-200D-2642-FE0F",
-		Value:      "🙇🏿‍♂️",
+		Value:      "🙇🏿\u200d♂️",
 		Descriptor: "Man Bowing: Dark Skin Tone",
 	},
 	"1F647-200D-2640-FE0F": {
 		Key:        "1F647-200D-2640-FE0F",
-		Value:      "🙇‍♀️",
+		Value:      "🙇\u200d♀️",
 		Descriptor: "Woman Bowing",
 	},
 	"1F647-200D-2642-FE0F": {
 		Key:        "1F647-200D-2642-FE0F",
-		Value:      "🙇‍♂️",
+		Value:      "🙇\u200d♂️",
 		Descriptor: "Man Bowing",
 	},
 	"1F648": {
@@ -9279,12 +9282,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64B-1F3FB-200D-2640-FE0F": {
 		Key:        "1F64B-1F3FB-200D-2640-FE0F",
-		Value:      "🙋🏻‍♀️",
+		Value:      "🙋🏻\u200d♀️",
 		Descriptor: "Woman Raising Hand: Light Skin Tone",
 	},
 	"1F64B-1F3FB-200D-2642-FE0F": {
 		Key:        "1F64B-1F3FB-200D-2642-FE0F",
-		Value:      "🙋🏻‍♂️",
+		Value:      "🙋🏻\u200d♂️",
 		Descriptor: "Man Raising Hand: Light Skin Tone",
 	},
 	"1F64B-1F3FC": {
@@ -9294,12 +9297,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64B-1F3FC-200D-2640-FE0F": {
 		Key:        "1F64B-1F3FC-200D-2640-FE0F",
-		Value:      "🙋🏼‍♀️",
+		Value:      "🙋🏼\u200d♀️",
 		Descriptor: "Woman Raising Hand: Medium-Light Skin Tone",
 	},
 	"1F64B-1F3FC-200D-2642-FE0F": {
 		Key:        "1F64B-1F3FC-200D-2642-FE0F",
-		Value:      "🙋🏼‍♂️",
+		Value:      "🙋🏼\u200d♂️",
 		Descriptor: "Man Raising Hand: Medium-Light Skin Tone",
 	},
 	"1F64B-1F3FD": {
@@ -9309,12 +9312,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64B-1F3FD-200D-2640-FE0F": {
 		Key:        "1F64B-1F3FD-200D-2640-FE0F",
-		Value:      "🙋🏽‍♀️",
+		Value:      "🙋🏽\u200d♀️",
 		Descriptor: "Woman Raising Hand: Medium Skin Tone",
 	},
 	"1F64B-1F3FD-200D-2642-FE0F": {
 		Key:        "1F64B-1F3FD-200D-2642-FE0F",
-		Value:      "🙋🏽‍♂️",
+		Value:      "🙋🏽\u200d♂️",
 		Descriptor: "Man Raising Hand: Medium Skin Tone",
 	},
 	"1F64B-1F3FE": {
@@ -9324,12 +9327,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64B-1F3FE-200D-2640-FE0F": {
 		Key:        "1F64B-1F3FE-200D-2640-FE0F",
-		Value:      "🙋🏾‍♀️",
+		Value:      "🙋🏾\u200d♀️",
 		Descriptor: "Woman Raising Hand: Medium-Dark Skin Tone",
 	},
 	"1F64B-1F3FE-200D-2642-FE0F": {
 		Key:        "1F64B-1F3FE-200D-2642-FE0F",
-		Value:      "🙋🏾‍♂️",
+		Value:      "🙋🏾\u200d♂️",
 		Descriptor: "Man Raising Hand: Medium-Dark Skin Tone",
 	},
 	"1F64B-1F3FF": {
@@ -9339,22 +9342,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64B-1F3FF-200D-2640-FE0F": {
 		Key:        "1F64B-1F3FF-200D-2640-FE0F",
-		Value:      "🙋🏿‍♀️",
+		Value:      "🙋🏿\u200d♀️",
 		Descriptor: "Woman Raising Hand: Dark Skin Tone",
 	},
 	"1F64B-1F3FF-200D-2642-FE0F": {
 		Key:        "1F64B-1F3FF-200D-2642-FE0F",
-		Value:      "🙋🏿‍♂️",
+		Value:      "🙋🏿\u200d♂️",
 		Descriptor: "Man Raising Hand: Dark Skin Tone",
 	},
 	"1F64B-200D-2640-FE0F": {
 		Key:        "1F64B-200D-2640-FE0F",
-		Value:      "🙋‍♀️",
+		Value:      "🙋\u200d♀️",
 		Descriptor: "Woman Raising Hand",
 	},
 	"1F64B-200D-2642-FE0F": {
 		Key:        "1F64B-200D-2642-FE0F",
-		Value:      "🙋‍♂️",
+		Value:      "🙋\u200d♂️",
 		Descriptor: "Man Raising Hand",
 	},
 	"1F64C": {
@@ -9399,12 +9402,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64D-1F3FB-200D-2640-FE0F": {
 		Key:        "1F64D-1F3FB-200D-2640-FE0F",
-		Value:      "🙍🏻‍♀️",
+		Value:      "🙍🏻\u200d♀️",
 		Descriptor: "Woman Frowning: Light Skin Tone",
 	},
 	"1F64D-1F3FB-200D-2642-FE0F": {
 		Key:        "1F64D-1F3FB-200D-2642-FE0F",
-		Value:      "🙍🏻‍♂️",
+		Value:      "🙍🏻\u200d♂️",
 		Descriptor: "Man Frowning: Light Skin Tone",
 	},
 	"1F64D-1F3FC": {
@@ -9414,12 +9417,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64D-1F3FC-200D-2640-FE0F": {
 		Key:        "1F64D-1F3FC-200D-2640-FE0F",
-		Value:      "🙍🏼‍♀️",
+		Value:      "🙍🏼\u200d♀️",
 		Descriptor: "Woman Frowning: Medium-Light Skin Tone",
 	},
 	"1F64D-1F3FC-200D-2642-FE0F": {
 		Key:        "1F64D-1F3FC-200D-2642-FE0F",
-		Value:      "🙍🏼‍♂️",
+		Value:      "🙍🏼\u200d♂️",
 		Descriptor: "Man Frowning: Medium-Light Skin Tone",
 	},
 	"1F64D-1F3FD": {
@@ -9429,12 +9432,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64D-1F3FD-200D-2640-FE0F": {
 		Key:        "1F64D-1F3FD-200D-2640-FE0F",
-		Value:      "🙍🏽‍♀️",
+		Value:      "🙍🏽\u200d♀️",
 		Descriptor: "Woman Frowning: Medium Skin Tone",
 	},
 	"1F64D-1F3FD-200D-2642-FE0F": {
 		Key:        "1F64D-1F3FD-200D-2642-FE0F",
-		Value:      "🙍🏽‍♂️",
+		Value:      "🙍🏽\u200d♂️",
 		Descriptor: "Man Frowning: Medium Skin Tone",
 	},
 	"1F64D-1F3FE": {
@@ -9444,12 +9447,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64D-1F3FE-200D-2640-FE0F": {
 		Key:        "1F64D-1F3FE-200D-2640-FE0F",
-		Value:      "🙍🏾‍♀️",
+		Value:      "🙍🏾\u200d♀️",
 		Descriptor: "Woman Frowning: Medium-Dark Skin Tone",
 	},
 	"1F64D-1F3FE-200D-2642-FE0F": {
 		Key:        "1F64D-1F3FE-200D-2642-FE0F",
-		Value:      "🙍🏾‍♂️",
+		Value:      "🙍🏾\u200d♂️",
 		Descriptor: "Man Frowning: Medium-Dark Skin Tone",
 	},
 	"1F64D-1F3FF": {
@@ -9459,22 +9462,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64D-1F3FF-200D-2640-FE0F": {
 		Key:        "1F64D-1F3FF-200D-2640-FE0F",
-		Value:      "🙍🏿‍♀️",
+		Value:      "🙍🏿\u200d♀️",
 		Descriptor: "Woman Frowning: Dark Skin Tone",
 	},
 	"1F64D-1F3FF-200D-2642-FE0F": {
 		Key:        "1F64D-1F3FF-200D-2642-FE0F",
-		Value:      "🙍🏿‍♂️",
+		Value:      "🙍🏿\u200d♂️",
 		Descriptor: "Man Frowning: Dark Skin Tone",
 	},
 	"1F64D-200D-2640-FE0F": {
 		Key:        "1F64D-200D-2640-FE0F",
-		Value:      "🙍‍♀️",
+		Value:      "🙍\u200d♀️",
 		Descriptor: "Woman Frowning",
 	},
 	"1F64D-200D-2642-FE0F": {
 		Key:        "1F64D-200D-2642-FE0F",
-		Value:      "🙍‍♂️",
+		Value:      "🙍\u200d♂️",
 		Descriptor: "Man Frowning",
 	},
 	"1F64E": {
@@ -9489,12 +9492,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64E-1F3FB-200D-2640-FE0F": {
 		Key:        "1F64E-1F3FB-200D-2640-FE0F",
-		Value:      "🙎🏻‍♀️",
+		Value:      "🙎🏻\u200d♀️",
 		Descriptor: "Woman Pouting: Light Skin Tone",
 	},
 	"1F64E-1F3FB-200D-2642-FE0F": {
 		Key:        "1F64E-1F3FB-200D-2642-FE0F",
-		Value:      "🙎🏻‍♂️",
+		Value:      "🙎🏻\u200d♂️",
 		Descriptor: "Man Pouting: Light Skin Tone",
 	},
 	"1F64E-1F3FC": {
@@ -9504,12 +9507,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64E-1F3FC-200D-2640-FE0F": {
 		Key:        "1F64E-1F3FC-200D-2640-FE0F",
-		Value:      "🙎🏼‍♀️",
+		Value:      "🙎🏼\u200d♀️",
 		Descriptor: "Woman Pouting: Medium-Light Skin Tone",
 	},
 	"1F64E-1F3FC-200D-2642-FE0F": {
 		Key:        "1F64E-1F3FC-200D-2642-FE0F",
-		Value:      "🙎🏼‍♂️",
+		Value:      "🙎🏼\u200d♂️",
 		Descriptor: "Man Pouting: Medium-Light Skin Tone",
 	},
 	"1F64E-1F3FD": {
@@ -9519,12 +9522,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64E-1F3FD-200D-2640-FE0F": {
 		Key:        "1F64E-1F3FD-200D-2640-FE0F",
-		Value:      "🙎🏽‍♀️",
+		Value:      "🙎🏽\u200d♀️",
 		Descriptor: "Woman Pouting: Medium Skin Tone",
 	},
 	"1F64E-1F3FD-200D-2642-FE0F": {
 		Key:        "1F64E-1F3FD-200D-2642-FE0F",
-		Value:      "🙎🏽‍♂️",
+		Value:      "🙎🏽\u200d♂️",
 		Descriptor: "Man Pouting: Medium Skin Tone",
 	},
 	"1F64E-1F3FE": {
@@ -9534,12 +9537,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64E-1F3FE-200D-2640-FE0F": {
 		Key:        "1F64E-1F3FE-200D-2640-FE0F",
-		Value:      "🙎🏾‍♀️",
+		Value:      "🙎🏾\u200d♀️",
 		Descriptor: "Woman Pouting: Medium-Dark Skin Tone",
 	},
 	"1F64E-1F3FE-200D-2642-FE0F": {
 		Key:        "1F64E-1F3FE-200D-2642-FE0F",
-		Value:      "🙎🏾‍♂️",
+		Value:      "🙎🏾\u200d♂️",
 		Descriptor: "Man Pouting: Medium-Dark Skin Tone",
 	},
 	"1F64E-1F3FF": {
@@ -9549,22 +9552,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F64E-1F3FF-200D-2640-FE0F": {
 		Key:        "1F64E-1F3FF-200D-2640-FE0F",
-		Value:      "🙎🏿‍♀️",
+		Value:      "🙎🏿\u200d♀️",
 		Descriptor: "Woman Pouting: Dark Skin Tone",
 	},
 	"1F64E-1F3FF-200D-2642-FE0F": {
 		Key:        "1F64E-1F3FF-200D-2642-FE0F",
-		Value:      "🙎🏿‍♂️",
+		Value:      "🙎🏿\u200d♂️",
 		Descriptor: "Man Pouting: Dark Skin Tone",
 	},
 	"1F64E-200D-2640-FE0F": {
 		Key:        "1F64E-200D-2640-FE0F",
-		Value:      "🙎‍♀️",
+		Value:      "🙎\u200d♀️",
 		Descriptor: "Woman Pouting",
 	},
 	"1F64E-200D-2642-FE0F": {
 		Key:        "1F64E-200D-2642-FE0F",
-		Value:      "🙎‍♂️",
+		Value:      "🙎\u200d♂️",
 		Descriptor: "Man Pouting",
 	},
 	"1F64F": {
@@ -9784,12 +9787,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6A3-1F3FB-200D-2640-FE0F": {
 		Key:        "1F6A3-1F3FB-200D-2640-FE0F",
-		Value:      "🚣🏻‍♀️",
+		Value:      "🚣🏻\u200d♀️",
 		Descriptor: "Woman Rowing Boat: Light Skin Tone",
 	},
 	"1F6A3-1F3FB-200D-2642-FE0F": {
 		Key:        "1F6A3-1F3FB-200D-2642-FE0F",
-		Value:      "🚣🏻‍♂️",
+		Value:      "🚣🏻\u200d♂️",
 		Descriptor: "Man Rowing Boat: Light Skin Tone",
 	},
 	"1F6A3-1F3FC": {
@@ -9799,12 +9802,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6A3-1F3FC-200D-2640-FE0F": {
 		Key:        "1F6A3-1F3FC-200D-2640-FE0F",
-		Value:      "🚣🏼‍♀️",
+		Value:      "🚣🏼\u200d♀️",
 		Descriptor: "Woman Rowing Boat: Medium-Light Skin Tone",
 	},
 	"1F6A3-1F3FC-200D-2642-FE0F": {
 		Key:        "1F6A3-1F3FC-200D-2642-FE0F",
-		Value:      "🚣🏼‍♂️",
+		Value:      "🚣🏼\u200d♂️",
 		Descriptor: "Man Rowing Boat: Medium-Light Skin Tone",
 	},
 	"1F6A3-1F3FD": {
@@ -9814,12 +9817,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6A3-1F3FD-200D-2640-FE0F": {
 		Key:        "1F6A3-1F3FD-200D-2640-FE0F",
-		Value:      "🚣🏽‍♀️",
+		Value:      "🚣🏽\u200d♀️",
 		Descriptor: "Woman Rowing Boat: Medium Skin Tone",
 	},
 	"1F6A3-1F3FD-200D-2642-FE0F": {
 		Key:        "1F6A3-1F3FD-200D-2642-FE0F",
-		Value:      "🚣🏽‍♂️",
+		Value:      "🚣🏽\u200d♂️",
 		Descriptor: "Man Rowing Boat: Medium Skin Tone",
 	},
 	"1F6A3-1F3FE": {
@@ -9829,12 +9832,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6A3-1F3FE-200D-2640-FE0F": {
 		Key:        "1F6A3-1F3FE-200D-2640-FE0F",
-		Value:      "🚣🏾‍♀️",
+		Value:      "🚣🏾\u200d♀️",
 		Descriptor: "Woman Rowing Boat: Medium-Dark Skin Tone",
 	},
 	"1F6A3-1F3FE-200D-2642-FE0F": {
 		Key:        "1F6A3-1F3FE-200D-2642-FE0F",
-		Value:      "🚣🏾‍♂️",
+		Value:      "🚣🏾\u200d♂️",
 		Descriptor: "Man Rowing Boat: Medium-Dark Skin Tone",
 	},
 	"1F6A3-1F3FF": {
@@ -9844,22 +9847,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6A3-1F3FF-200D-2640-FE0F": {
 		Key:        "1F6A3-1F3FF-200D-2640-FE0F",
-		Value:      "🚣🏿‍♀️",
+		Value:      "🚣🏿\u200d♀️",
 		Descriptor: "Woman Rowing Boat: Dark Skin Tone",
 	},
 	"1F6A3-1F3FF-200D-2642-FE0F": {
 		Key:        "1F6A3-1F3FF-200D-2642-FE0F",
-		Value:      "🚣🏿‍♂️",
+		Value:      "🚣🏿\u200d♂️",
 		Descriptor: "Man Rowing Boat: Dark Skin Tone",
 	},
 	"1F6A3-200D-2640-FE0F": {
 		Key:        "1F6A3-200D-2640-FE0F",
-		Value:      "🚣‍♀️",
+		Value:      "🚣\u200d♀️",
 		Descriptor: "Woman Rowing Boat",
 	},
 	"1F6A3-200D-2642-FE0F": {
 		Key:        "1F6A3-200D-2642-FE0F",
-		Value:      "🚣‍♂️",
+		Value:      "🚣\u200d♂️",
 		Descriptor: "Man Rowing Boat",
 	},
 	"1F6A4": {
@@ -9954,12 +9957,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B4-1F3FB-200D-2640-FE0F": {
 		Key:        "1F6B4-1F3FB-200D-2640-FE0F",
-		Value:      "🚴🏻‍♀️",
+		Value:      "🚴🏻\u200d♀️",
 		Descriptor: "Woman Biking: Light Skin Tone",
 	},
 	"1F6B4-1F3FB-200D-2642-FE0F": {
 		Key:        "1F6B4-1F3FB-200D-2642-FE0F",
-		Value:      "🚴🏻‍♂️",
+		Value:      "🚴🏻\u200d♂️",
 		Descriptor: "Man Biking: Light Skin Tone",
 	},
 	"1F6B4-1F3FC": {
@@ -9969,12 +9972,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B4-1F3FC-200D-2640-FE0F": {
 		Key:        "1F6B4-1F3FC-200D-2640-FE0F",
-		Value:      "🚴🏼‍♀️",
+		Value:      "🚴🏼\u200d♀️",
 		Descriptor: "Woman Biking: Medium-Light Skin Tone",
 	},
 	"1F6B4-1F3FC-200D-2642-FE0F": {
 		Key:        "1F6B4-1F3FC-200D-2642-FE0F",
-		Value:      "🚴🏼‍♂️",
+		Value:      "🚴🏼\u200d♂️",
 		Descriptor: "Man Biking: Medium-Light Skin Tone",
 	},
 	"1F6B4-1F3FD": {
@@ -9984,12 +9987,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B4-1F3FD-200D-2640-FE0F": {
 		Key:        "1F6B4-1F3FD-200D-2640-FE0F",
-		Value:      "🚴🏽‍♀️",
+		Value:      "🚴🏽\u200d♀️",
 		Descriptor: "Woman Biking: Medium Skin Tone",
 	},
 	"1F6B4-1F3FD-200D-2642-FE0F": {
 		Key:        "1F6B4-1F3FD-200D-2642-FE0F",
-		Value:      "🚴🏽‍♂️",
+		Value:      "🚴🏽\u200d♂️",
 		Descriptor: "Man Biking: Medium Skin Tone",
 	},
 	"1F6B4-1F3FE": {
@@ -9999,12 +10002,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B4-1F3FE-200D-2640-FE0F": {
 		Key:        "1F6B4-1F3FE-200D-2640-FE0F",
-		Value:      "🚴🏾‍♀️",
+		Value:      "🚴🏾\u200d♀️",
 		Descriptor: "Woman Biking: Medium-Dark Skin Tone",
 	},
 	"1F6B4-1F3FE-200D-2642-FE0F": {
 		Key:        "1F6B4-1F3FE-200D-2642-FE0F",
-		Value:      "🚴🏾‍♂️",
+		Value:      "🚴🏾\u200d♂️",
 		Descriptor: "Man Biking: Medium-Dark Skin Tone",
 	},
 	"1F6B4-1F3FF": {
@@ -10014,22 +10017,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B4-1F3FF-200D-2640-FE0F": {
 		Key:        "1F6B4-1F3FF-200D-2640-FE0F",
-		Value:      "🚴🏿‍♀️",
+		Value:      "🚴🏿\u200d♀️",
 		Descriptor: "Woman Biking: Dark Skin Tone",
 	},
 	"1F6B4-1F3FF-200D-2642-FE0F": {
 		Key:        "1F6B4-1F3FF-200D-2642-FE0F",
-		Value:      "🚴🏿‍♂️",
+		Value:      "🚴🏿\u200d♂️",
 		Descriptor: "Man Biking: Dark Skin Tone",
 	},
 	"1F6B4-200D-2640-FE0F": {
 		Key:        "1F6B4-200D-2640-FE0F",
-		Value:      "🚴‍♀️",
+		Value:      "🚴\u200d♀️",
 		Descriptor: "Woman Biking",
 	},
 	"1F6B4-200D-2642-FE0F": {
 		Key:        "1F6B4-200D-2642-FE0F",
-		Value:      "🚴‍♂️",
+		Value:      "🚴\u200d♂️",
 		Descriptor: "Man Biking",
 	},
 	"1F6B5": {
@@ -10044,12 +10047,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B5-1F3FB-200D-2640-FE0F": {
 		Key:        "1F6B5-1F3FB-200D-2640-FE0F",
-		Value:      "🚵🏻‍♀️",
+		Value:      "🚵🏻\u200d♀️",
 		Descriptor: "Woman Mountain Biking: Light Skin Tone",
 	},
 	"1F6B5-1F3FB-200D-2642-FE0F": {
 		Key:        "1F6B5-1F3FB-200D-2642-FE0F",
-		Value:      "🚵🏻‍♂️",
+		Value:      "🚵🏻\u200d♂️",
 		Descriptor: "Man Mountain Biking: Light Skin Tone",
 	},
 	"1F6B5-1F3FC": {
@@ -10059,12 +10062,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B5-1F3FC-200D-2640-FE0F": {
 		Key:        "1F6B5-1F3FC-200D-2640-FE0F",
-		Value:      "🚵🏼‍♀️",
+		Value:      "🚵🏼\u200d♀️",
 		Descriptor: "Woman Mountain Biking: Medium-Light Skin Tone",
 	},
 	"1F6B5-1F3FC-200D-2642-FE0F": {
 		Key:        "1F6B5-1F3FC-200D-2642-FE0F",
-		Value:      "🚵🏼‍♂️",
+		Value:      "🚵🏼\u200d♂️",
 		Descriptor: "Man Mountain Biking: Medium-Light Skin Tone",
 	},
 	"1F6B5-1F3FD": {
@@ -10074,12 +10077,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B5-1F3FD-200D-2640-FE0F": {
 		Key:        "1F6B5-1F3FD-200D-2640-FE0F",
-		Value:      "🚵🏽‍♀️",
+		Value:      "🚵🏽\u200d♀️",
 		Descriptor: "Woman Mountain Biking: Medium Skin Tone",
 	},
 	"1F6B5-1F3FD-200D-2642-FE0F": {
 		Key:        "1F6B5-1F3FD-200D-2642-FE0F",
-		Value:      "🚵🏽‍♂️",
+		Value:      "🚵🏽\u200d♂️",
 		Descriptor: "Man Mountain Biking: Medium Skin Tone",
 	},
 	"1F6B5-1F3FE": {
@@ -10089,12 +10092,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B5-1F3FE-200D-2640-FE0F": {
 		Key:        "1F6B5-1F3FE-200D-2640-FE0F",
-		Value:      "🚵🏾‍♀️",
+		Value:      "🚵🏾\u200d♀️",
 		Descriptor: "Woman Mountain Biking: Medium-Dark Skin Tone",
 	},
 	"1F6B5-1F3FE-200D-2642-FE0F": {
 		Key:        "1F6B5-1F3FE-200D-2642-FE0F",
-		Value:      "🚵🏾‍♂️",
+		Value:      "🚵🏾\u200d♂️",
 		Descriptor: "Man Mountain Biking: Medium-Dark Skin Tone",
 	},
 	"1F6B5-1F3FF": {
@@ -10104,22 +10107,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B5-1F3FF-200D-2640-FE0F": {
 		Key:        "1F6B5-1F3FF-200D-2640-FE0F",
-		Value:      "🚵🏿‍♀️",
+		Value:      "🚵🏿\u200d♀️",
 		Descriptor: "Woman Mountain Biking: Dark Skin Tone",
 	},
 	"1F6B5-1F3FF-200D-2642-FE0F": {
 		Key:        "1F6B5-1F3FF-200D-2642-FE0F",
-		Value:      "🚵🏿‍♂️",
+		Value:      "🚵🏿\u200d♂️",
 		Descriptor: "Man Mountain Biking: Dark Skin Tone",
 	},
 	"1F6B5-200D-2640-FE0F": {
 		Key:        "1F6B5-200D-2640-FE0F",
-		Value:      "🚵‍♀️",
+		Value:      "🚵\u200d♀️",
 		Descriptor: "Woman Mountain Biking",
 	},
 	"1F6B5-200D-2642-FE0F": {
 		Key:        "1F6B5-200D-2642-FE0F",
-		Value:      "🚵‍♂️",
+		Value:      "🚵\u200d♂️",
 		Descriptor: "Man Mountain Biking",
 	},
 	"1F6B6": {
@@ -10134,12 +10137,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B6-1F3FB-200D-2640-FE0F": {
 		Key:        "1F6B6-1F3FB-200D-2640-FE0F",
-		Value:      "🚶🏻‍♀️",
+		Value:      "🚶🏻\u200d♀️",
 		Descriptor: "Woman Walking: Light Skin Tone",
 	},
 	"1F6B6-1F3FB-200D-2642-FE0F": {
 		Key:        "1F6B6-1F3FB-200D-2642-FE0F",
-		Value:      "🚶🏻‍♂️",
+		Value:      "🚶🏻\u200d♂️",
 		Descriptor: "Man Walking: Light Skin Tone",
 	},
 	"1F6B6-1F3FC": {
@@ -10149,12 +10152,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B6-1F3FC-200D-2640-FE0F": {
 		Key:        "1F6B6-1F3FC-200D-2640-FE0F",
-		Value:      "🚶🏼‍♀️",
+		Value:      "🚶🏼\u200d♀️",
 		Descriptor: "Woman Walking: Medium-Light Skin Tone",
 	},
 	"1F6B6-1F3FC-200D-2642-FE0F": {
 		Key:        "1F6B6-1F3FC-200D-2642-FE0F",
-		Value:      "🚶🏼‍♂️",
+		Value:      "🚶🏼\u200d♂️",
 		Descriptor: "Man Walking: Medium-Light Skin Tone",
 	},
 	"1F6B6-1F3FD": {
@@ -10164,12 +10167,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B6-1F3FD-200D-2640-FE0F": {
 		Key:        "1F6B6-1F3FD-200D-2640-FE0F",
-		Value:      "🚶🏽‍♀️",
+		Value:      "🚶🏽\u200d♀️",
 		Descriptor: "Woman Walking: Medium Skin Tone",
 	},
 	"1F6B6-1F3FD-200D-2642-FE0F": {
 		Key:        "1F6B6-1F3FD-200D-2642-FE0F",
-		Value:      "🚶🏽‍♂️",
+		Value:      "🚶🏽\u200d♂️",
 		Descriptor: "Man Walking: Medium Skin Tone",
 	},
 	"1F6B6-1F3FE": {
@@ -10179,12 +10182,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B6-1F3FE-200D-2640-FE0F": {
 		Key:        "1F6B6-1F3FE-200D-2640-FE0F",
-		Value:      "🚶🏾‍♀️",
+		Value:      "🚶🏾\u200d♀️",
 		Descriptor: "Woman Walking: Medium-Dark Skin Tone",
 	},
 	"1F6B6-1F3FE-200D-2642-FE0F": {
 		Key:        "1F6B6-1F3FE-200D-2642-FE0F",
-		Value:      "🚶🏾‍♂️",
+		Value:      "🚶🏾\u200d♂️",
 		Descriptor: "Man Walking: Medium-Dark Skin Tone",
 	},
 	"1F6B6-1F3FF": {
@@ -10194,22 +10197,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F6B6-1F3FF-200D-2640-FE0F": {
 		Key:        "1F6B6-1F3FF-200D-2640-FE0F",
-		Value:      "🚶🏿‍♀️",
+		Value:      "🚶🏿\u200d♀️",
 		Descriptor: "Woman Walking: Dark Skin Tone",
 	},
 	"1F6B6-1F3FF-200D-2642-FE0F": {
 		Key:        "1F6B6-1F3FF-200D-2642-FE0F",
-		Value:      "🚶🏿‍♂️",
+		Value:      "🚶🏿\u200d♂️",
 		Descriptor: "Man Walking: Dark Skin Tone",
 	},
 	"1F6B6-200D-2640-FE0F": {
 		Key:        "1F6B6-200D-2640-FE0F",
-		Value:      "🚶‍♀️",
+		Value:      "🚶\u200d♀️",
 		Descriptor: "Woman Walking",
 	},
 	"1F6B6-200D-2642-FE0F": {
 		Key:        "1F6B6-200D-2642-FE0F",
-		Value:      "🚶‍♂️",
+		Value:      "🚶\u200d♂️",
 		Descriptor: "Man Walking",
 	},
 	"1F6B7": {
@@ -10844,12 +10847,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F926-1F3FB-200D-2640-FE0F": {
 		Key:        "1F926-1F3FB-200D-2640-FE0F",
-		Value:      "🤦🏻‍♀️",
+		Value:      "🤦🏻\u200d♀️",
 		Descriptor: "Woman Facepalming: Light Skin Tone",
 	},
 	"1F926-1F3FB-200D-2642-FE0F": {
 		Key:        "1F926-1F3FB-200D-2642-FE0F",
-		Value:      "🤦🏻‍♂️",
+		Value:      "🤦🏻\u200d♂️",
 		Descriptor: "Man Facepalming: Light Skin Tone",
 	},
 	"1F926-1F3FC": {
@@ -10859,12 +10862,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F926-1F3FC-200D-2640-FE0F": {
 		Key:        "1F926-1F3FC-200D-2640-FE0F",
-		Value:      "🤦🏼‍♀️",
+		Value:      "🤦🏼\u200d♀️",
 		Descriptor: "Woman Facepalming: Medium-Light Skin Tone",
 	},
 	"1F926-1F3FC-200D-2642-FE0F": {
 		Key:        "1F926-1F3FC-200D-2642-FE0F",
-		Value:      "🤦🏼‍♂️",
+		Value:      "🤦🏼\u200d♂️",
 		Descriptor: "Man Facepalming: Medium-Light Skin Tone",
 	},
 	"1F926-1F3FD": {
@@ -10874,12 +10877,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F926-1F3FD-200D-2640-FE0F": {
 		Key:        "1F926-1F3FD-200D-2640-FE0F",
-		Value:      "🤦🏽‍♀️",
+		Value:      "🤦🏽\u200d♀️",
 		Descriptor: "Woman Facepalming: Medium Skin Tone",
 	},
 	"1F926-1F3FD-200D-2642-FE0F": {
 		Key:        "1F926-1F3FD-200D-2642-FE0F",
-		Value:      "🤦🏽‍♂️",
+		Value:      "🤦🏽\u200d♂️",
 		Descriptor: "Man Facepalming: Medium Skin Tone",
 	},
 	"1F926-1F3FE": {
@@ -10889,12 +10892,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F926-1F3FE-200D-2640-FE0F": {
 		Key:        "1F926-1F3FE-200D-2640-FE0F",
-		Value:      "🤦🏾‍♀️",
+		Value:      "🤦🏾\u200d♀️",
 		Descriptor: "Woman Facepalming: Medium-Dark Skin Tone",
 	},
 	"1F926-1F3FE-200D-2642-FE0F": {
 		Key:        "1F926-1F3FE-200D-2642-FE0F",
-		Value:      "🤦🏾‍♂️",
+		Value:      "🤦🏾\u200d♂️",
 		Descriptor: "Man Facepalming: Medium-Dark Skin Tone",
 	},
 	"1F926-1F3FF": {
@@ -10904,22 +10907,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F926-1F3FF-200D-2640-FE0F": {
 		Key:        "1F926-1F3FF-200D-2640-FE0F",
-		Value:      "🤦🏿‍♀️",
+		Value:      "🤦🏿\u200d♀️",
 		Descriptor: "Woman Facepalming: Dark Skin Tone",
 	},
 	"1F926-1F3FF-200D-2642-FE0F": {
 		Key:        "1F926-1F3FF-200D-2642-FE0F",
-		Value:      "🤦🏿‍♂️",
+		Value:      "🤦🏿\u200d♂️",
 		Descriptor: "Man Facepalming: Dark Skin Tone",
 	},
 	"1F926-200D-2640-FE0F": {
 		Key:        "1F926-200D-2640-FE0F",
-		Value:      "🤦‍♀️",
+		Value:      "🤦\u200d♀️",
 		Descriptor: "Woman Facepalming",
 	},
 	"1F926-200D-2642-FE0F": {
 		Key:        "1F926-200D-2642-FE0F",
-		Value:      "🤦‍♂️",
+		Value:      "🤦\u200d♂️",
 		Descriptor: "Man Facepalming",
 	},
 	"1F927": {
@@ -11189,12 +11192,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F937-1F3FB-200D-2640-FE0F": {
 		Key:        "1F937-1F3FB-200D-2640-FE0F",
-		Value:      "🤷🏻‍♀️",
+		Value:      "🤷🏻\u200d♀️",
 		Descriptor: "Woman Shrugging: Light Skin Tone",
 	},
 	"1F937-1F3FB-200D-2642-FE0F": {
 		Key:        "1F937-1F3FB-200D-2642-FE0F",
-		Value:      "🤷🏻‍♂️",
+		Value:      "🤷🏻\u200d♂️",
 		Descriptor: "Man Shrugging: Light Skin Tone",
 	},
 	"1F937-1F3FC": {
@@ -11204,12 +11207,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F937-1F3FC-200D-2640-FE0F": {
 		Key:        "1F937-1F3FC-200D-2640-FE0F",
-		Value:      "🤷🏼‍♀️",
+		Value:      "🤷🏼\u200d♀️",
 		Descriptor: "Woman Shrugging: Medium-Light Skin Tone",
 	},
 	"1F937-1F3FC-200D-2642-FE0F": {
 		Key:        "1F937-1F3FC-200D-2642-FE0F",
-		Value:      "🤷🏼‍♂️",
+		Value:      "🤷🏼\u200d♂️",
 		Descriptor: "Man Shrugging: Medium-Light Skin Tone",
 	},
 	"1F937-1F3FD": {
@@ -11219,12 +11222,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F937-1F3FD-200D-2640-FE0F": {
 		Key:        "1F937-1F3FD-200D-2640-FE0F",
-		Value:      "🤷🏽‍♀️",
+		Value:      "🤷🏽\u200d♀️",
 		Descriptor: "Woman Shrugging: Medium Skin Tone",
 	},
 	"1F937-1F3FD-200D-2642-FE0F": {
 		Key:        "1F937-1F3FD-200D-2642-FE0F",
-		Value:      "🤷🏽‍♂️",
+		Value:      "🤷🏽\u200d♂️",
 		Descriptor: "Man Shrugging: Medium Skin Tone",
 	},
 	"1F937-1F3FE": {
@@ -11234,12 +11237,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F937-1F3FE-200D-2640-FE0F": {
 		Key:        "1F937-1F3FE-200D-2640-FE0F",
-		Value:      "🤷🏾‍♀️",
+		Value:      "🤷🏾\u200d♀️",
 		Descriptor: "Woman Shrugging: Medium-Dark Skin Tone",
 	},
 	"1F937-1F3FE-200D-2642-FE0F": {
 		Key:        "1F937-1F3FE-200D-2642-FE0F",
-		Value:      "🤷🏾‍♂️",
+		Value:      "🤷🏾\u200d♂️",
 		Descriptor: "Man Shrugging: Medium-Dark Skin Tone",
 	},
 	"1F937-1F3FF": {
@@ -11249,22 +11252,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F937-1F3FF-200D-2640-FE0F": {
 		Key:        "1F937-1F3FF-200D-2640-FE0F",
-		Value:      "🤷🏿‍♀️",
+		Value:      "🤷🏿\u200d♀️",
 		Descriptor: "Woman Shrugging: Dark Skin Tone",
 	},
 	"1F937-1F3FF-200D-2642-FE0F": {
 		Key:        "1F937-1F3FF-200D-2642-FE0F",
-		Value:      "🤷🏿‍♂️",
+		Value:      "🤷🏿\u200d♂️",
 		Descriptor: "Man Shrugging: Dark Skin Tone",
 	},
 	"1F937-200D-2640-FE0F": {
 		Key:        "1F937-200D-2640-FE0F",
-		Value:      "🤷‍♀️",
+		Value:      "🤷\u200d♀️",
 		Descriptor: "Woman Shrugging",
 	},
 	"1F937-200D-2642-FE0F": {
 		Key:        "1F937-200D-2642-FE0F",
-		Value:      "🤷‍♂️",
+		Value:      "🤷\u200d♂️",
 		Descriptor: "Man Shrugging",
 	},
 	"1F938": {
@@ -11279,12 +11282,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F938-1F3FB-200D-2640-FE0F": {
 		Key:        "1F938-1F3FB-200D-2640-FE0F",
-		Value:      "🤸🏻‍♀️",
+		Value:      "🤸🏻\u200d♀️",
 		Descriptor: "Woman Cartwheeling: Light Skin Tone",
 	},
 	"1F938-1F3FB-200D-2642-FE0F": {
 		Key:        "1F938-1F3FB-200D-2642-FE0F",
-		Value:      "🤸🏻‍♂️",
+		Value:      "🤸🏻\u200d♂️",
 		Descriptor: "Man Cartwheeling: Light Skin Tone",
 	},
 	"1F938-1F3FC": {
@@ -11294,12 +11297,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F938-1F3FC-200D-2640-FE0F": {
 		Key:        "1F938-1F3FC-200D-2640-FE0F",
-		Value:      "🤸🏼‍♀️",
+		Value:      "🤸🏼\u200d♀️",
 		Descriptor: "Woman Cartwheeling: Medium-Light Skin Tone",
 	},
 	"1F938-1F3FC-200D-2642-FE0F": {
 		Key:        "1F938-1F3FC-200D-2642-FE0F",
-		Value:      "🤸🏼‍♂️",
+		Value:      "🤸🏼\u200d♂️",
 		Descriptor: "Man Cartwheeling: Medium-Light Skin Tone",
 	},
 	"1F938-1F3FD": {
@@ -11309,12 +11312,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F938-1F3FD-200D-2640-FE0F": {
 		Key:        "1F938-1F3FD-200D-2640-FE0F",
-		Value:      "🤸🏽‍♀️",
+		Value:      "🤸🏽\u200d♀️",
 		Descriptor: "Woman Cartwheeling: Medium Skin Tone",
 	},
 	"1F938-1F3FD-200D-2642-FE0F": {
 		Key:        "1F938-1F3FD-200D-2642-FE0F",
-		Value:      "🤸🏽‍♂️",
+		Value:      "🤸🏽\u200d♂️",
 		Descriptor: "Man Cartwheeling: Medium Skin Tone",
 	},
 	"1F938-1F3FE": {
@@ -11324,12 +11327,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F938-1F3FE-200D-2640-FE0F": {
 		Key:        "1F938-1F3FE-200D-2640-FE0F",
-		Value:      "🤸🏾‍♀️",
+		Value:      "🤸🏾\u200d♀️",
 		Descriptor: "Woman Cartwheeling: Medium-Dark Skin Tone",
 	},
 	"1F938-1F3FE-200D-2642-FE0F": {
 		Key:        "1F938-1F3FE-200D-2642-FE0F",
-		Value:      "🤸🏾‍♂️",
+		Value:      "🤸🏾\u200d♂️",
 		Descriptor: "Man Cartwheeling: Medium-Dark Skin Tone",
 	},
 	"1F938-1F3FF": {
@@ -11339,22 +11342,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F938-1F3FF-200D-2640-FE0F": {
 		Key:        "1F938-1F3FF-200D-2640-FE0F",
-		Value:      "🤸🏿‍♀️",
+		Value:      "🤸🏿\u200d♀️",
 		Descriptor: "Woman Cartwheeling: Dark Skin Tone",
 	},
 	"1F938-1F3FF-200D-2642-FE0F": {
 		Key:        "1F938-1F3FF-200D-2642-FE0F",
-		Value:      "🤸🏿‍♂️",
+		Value:      "🤸🏿\u200d♂️",
 		Descriptor: "Man Cartwheeling: Dark Skin Tone",
 	},
 	"1F938-200D-2640-FE0F": {
 		Key:        "1F938-200D-2640-FE0F",
-		Value:      "🤸‍♀️",
+		Value:      "🤸\u200d♀️",
 		Descriptor: "Woman Cartwheeling",
 	},
 	"1F938-200D-2642-FE0F": {
 		Key:        "1F938-200D-2642-FE0F",
-		Value:      "🤸‍♂️",
+		Value:      "🤸\u200d♂️",
 		Descriptor: "Man Cartwheeling",
 	},
 	"1F939": {
@@ -11369,12 +11372,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F939-1F3FB-200D-2640-FE0F": {
 		Key:        "1F939-1F3FB-200D-2640-FE0F",
-		Value:      "🤹🏻‍♀️",
+		Value:      "🤹🏻\u200d♀️",
 		Descriptor: "Woman Juggling: Light Skin Tone",
 	},
 	"1F939-1F3FB-200D-2642-FE0F": {
 		Key:        "1F939-1F3FB-200D-2642-FE0F",
-		Value:      "🤹🏻‍♂️",
+		Value:      "🤹🏻\u200d♂️",
 		Descriptor: "Man Juggling: Light Skin Tone",
 	},
 	"1F939-1F3FC": {
@@ -11384,12 +11387,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F939-1F3FC-200D-2640-FE0F": {
 		Key:        "1F939-1F3FC-200D-2640-FE0F",
-		Value:      "🤹🏼‍♀️",
+		Value:      "🤹🏼\u200d♀️",
 		Descriptor: "Woman Juggling: Medium-Light Skin Tone",
 	},
 	"1F939-1F3FC-200D-2642-FE0F": {
 		Key:        "1F939-1F3FC-200D-2642-FE0F",
-		Value:      "🤹🏼‍♂️",
+		Value:      "🤹🏼\u200d♂️",
 		Descriptor: "Man Juggling: Medium-Light Skin Tone",
 	},
 	"1F939-1F3FD": {
@@ -11399,12 +11402,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F939-1F3FD-200D-2640-FE0F": {
 		Key:        "1F939-1F3FD-200D-2640-FE0F",
-		Value:      "🤹🏽‍♀️",
+		Value:      "🤹🏽\u200d♀️",
 		Descriptor: "Woman Juggling: Medium Skin Tone",
 	},
 	"1F939-1F3FD-200D-2642-FE0F": {
 		Key:        "1F939-1F3FD-200D-2642-FE0F",
-		Value:      "🤹🏽‍♂️",
+		Value:      "🤹🏽\u200d♂️",
 		Descriptor: "Man Juggling: Medium Skin Tone",
 	},
 	"1F939-1F3FE": {
@@ -11414,12 +11417,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F939-1F3FE-200D-2640-FE0F": {
 		Key:        "1F939-1F3FE-200D-2640-FE0F",
-		Value:      "🤹🏾‍♀️",
+		Value:      "🤹🏾\u200d♀️",
 		Descriptor: "Woman Juggling: Medium-Dark Skin Tone",
 	},
 	"1F939-1F3FE-200D-2642-FE0F": {
 		Key:        "1F939-1F3FE-200D-2642-FE0F",
-		Value:      "🤹🏾‍♂️",
+		Value:      "🤹🏾\u200d♂️",
 		Descriptor: "Man Juggling: Medium-Dark Skin Tone",
 	},
 	"1F939-1F3FF": {
@@ -11429,22 +11432,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F939-1F3FF-200D-2640-FE0F": {
 		Key:        "1F939-1F3FF-200D-2640-FE0F",
-		Value:      "🤹🏿‍♀️",
+		Value:      "🤹🏿\u200d♀️",
 		Descriptor: "Woman Juggling: Dark Skin Tone",
 	},
 	"1F939-1F3FF-200D-2642-FE0F": {
 		Key:        "1F939-1F3FF-200D-2642-FE0F",
-		Value:      "🤹🏿‍♂️",
+		Value:      "🤹🏿\u200d♂️",
 		Descriptor: "Man Juggling: Dark Skin Tone",
 	},
 	"1F939-200D-2640-FE0F": {
 		Key:        "1F939-200D-2640-FE0F",
-		Value:      "🤹‍♀️",
+		Value:      "🤹\u200d♀️",
 		Descriptor: "Woman Juggling",
 	},
 	"1F939-200D-2642-FE0F": {
 		Key:        "1F939-200D-2642-FE0F",
-		Value:      "🤹‍♂️",
+		Value:      "🤹\u200d♂️",
 		Descriptor: "Man Juggling",
 	},
 	"1F93A": {
@@ -11459,12 +11462,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93C-200D-2640-FE0F": {
 		Key:        "1F93C-200D-2640-FE0F",
-		Value:      "🤼‍♀️",
+		Value:      "🤼\u200d♀️",
 		Descriptor: "Women Wrestling",
 	},
 	"1F93C-200D-2642-FE0F": {
 		Key:        "1F93C-200D-2642-FE0F",
-		Value:      "🤼‍♂️",
+		Value:      "🤼\u200d♂️",
 		Descriptor: "Men Wrestling",
 	},
 	"1F93D": {
@@ -11479,12 +11482,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93D-1F3FB-200D-2640-FE0F": {
 		Key:        "1F93D-1F3FB-200D-2640-FE0F",
-		Value:      "🤽🏻‍♀️",
+		Value:      "🤽🏻\u200d♀️",
 		Descriptor: "Woman Playing Water Polo: Light Skin Tone",
 	},
 	"1F93D-1F3FB-200D-2642-FE0F": {
 		Key:        "1F93D-1F3FB-200D-2642-FE0F",
-		Value:      "🤽🏻‍♂️",
+		Value:      "🤽🏻\u200d♂️",
 		Descriptor: "Man Playing Water Polo: Light Skin Tone",
 	},
 	"1F93D-1F3FC": {
@@ -11494,12 +11497,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93D-1F3FC-200D-2640-FE0F": {
 		Key:        "1F93D-1F3FC-200D-2640-FE0F",
-		Value:      "🤽🏼‍♀️",
+		Value:      "🤽🏼\u200d♀️",
 		Descriptor: "Woman Playing Water Polo: Medium-Light Skin Tone",
 	},
 	"1F93D-1F3FC-200D-2642-FE0F": {
 		Key:        "1F93D-1F3FC-200D-2642-FE0F",
-		Value:      "🤽🏼‍♂️",
+		Value:      "🤽🏼\u200d♂️",
 		Descriptor: "Man Playing Water Polo: Medium-Light Skin Tone",
 	},
 	"1F93D-1F3FD": {
@@ -11509,12 +11512,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93D-1F3FD-200D-2640-FE0F": {
 		Key:        "1F93D-1F3FD-200D-2640-FE0F",
-		Value:      "🤽🏽‍♀️",
+		Value:      "🤽🏽\u200d♀️",
 		Descriptor: "Woman Playing Water Polo: Medium Skin Tone",
 	},
 	"1F93D-1F3FD-200D-2642-FE0F": {
 		Key:        "1F93D-1F3FD-200D-2642-FE0F",
-		Value:      "🤽🏽‍♂️",
+		Value:      "🤽🏽\u200d♂️",
 		Descriptor: "Man Playing Water Polo: Medium Skin Tone",
 	},
 	"1F93D-1F3FE": {
@@ -11524,12 +11527,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93D-1F3FE-200D-2640-FE0F": {
 		Key:        "1F93D-1F3FE-200D-2640-FE0F",
-		Value:      "🤽🏾‍♀️",
+		Value:      "🤽🏾\u200d♀️",
 		Descriptor: "Woman Playing Water Polo: Medium-Dark Skin Tone",
 	},
 	"1F93D-1F3FE-200D-2642-FE0F": {
 		Key:        "1F93D-1F3FE-200D-2642-FE0F",
-		Value:      "🤽🏾‍♂️",
+		Value:      "🤽🏾\u200d♂️",
 		Descriptor: "Man Playing Water Polo: Medium-Dark Skin Tone",
 	},
 	"1F93D-1F3FF": {
@@ -11539,22 +11542,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93D-1F3FF-200D-2640-FE0F": {
 		Key:        "1F93D-1F3FF-200D-2640-FE0F",
-		Value:      "🤽🏿‍♀️",
+		Value:      "🤽🏿\u200d♀️",
 		Descriptor: "Woman Playing Water Polo: Dark Skin Tone",
 	},
 	"1F93D-1F3FF-200D-2642-FE0F": {
 		Key:        "1F93D-1F3FF-200D-2642-FE0F",
-		Value:      "🤽🏿‍♂️",
+		Value:      "🤽🏿\u200d♂️",
 		Descriptor: "Man Playing Water Polo: Dark Skin Tone",
 	},
 	"1F93D-200D-2640-FE0F": {
 		Key:        "1F93D-200D-2640-FE0F",
-		Value:      "🤽‍♀️",
+		Value:      "🤽\u200d♀️",
 		Descriptor: "Woman Playing Water Polo",
 	},
 	"1F93D-200D-2642-FE0F": {
 		Key:        "1F93D-200D-2642-FE0F",
-		Value:      "🤽‍♂️",
+		Value:      "🤽\u200d♂️",
 		Descriptor: "Man Playing Water Polo",
 	},
 	"1F93E": {
@@ -11569,12 +11572,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93E-1F3FB-200D-2640-FE0F": {
 		Key:        "1F93E-1F3FB-200D-2640-FE0F",
-		Value:      "🤾🏻‍♀️",
+		Value:      "🤾🏻\u200d♀️",
 		Descriptor: "Woman Playing Handball: Light Skin Tone",
 	},
 	"1F93E-1F3FB-200D-2642-FE0F": {
 		Key:        "1F93E-1F3FB-200D-2642-FE0F",
-		Value:      "🤾🏻‍♂️",
+		Value:      "🤾🏻\u200d♂️",
 		Descriptor: "Man Playing Handball: Light Skin Tone",
 	},
 	"1F93E-1F3FC": {
@@ -11584,12 +11587,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93E-1F3FC-200D-2640-FE0F": {
 		Key:        "1F93E-1F3FC-200D-2640-FE0F",
-		Value:      "🤾🏼‍♀️",
+		Value:      "🤾🏼\u200d♀️",
 		Descriptor: "Woman Playing Handball: Medium-Light Skin Tone",
 	},
 	"1F93E-1F3FC-200D-2642-FE0F": {
 		Key:        "1F93E-1F3FC-200D-2642-FE0F",
-		Value:      "🤾🏼‍♂️",
+		Value:      "🤾🏼\u200d♂️",
 		Descriptor: "Man Playing Handball: Medium-Light Skin Tone",
 	},
 	"1F93E-1F3FD": {
@@ -11599,12 +11602,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93E-1F3FD-200D-2640-FE0F": {
 		Key:        "1F93E-1F3FD-200D-2640-FE0F",
-		Value:      "🤾🏽‍♀️",
+		Value:      "🤾🏽\u200d♀️",
 		Descriptor: "Woman Playing Handball: Medium Skin Tone",
 	},
 	"1F93E-1F3FD-200D-2642-FE0F": {
 		Key:        "1F93E-1F3FD-200D-2642-FE0F",
-		Value:      "🤾🏽‍♂️",
+		Value:      "🤾🏽\u200d♂️",
 		Descriptor: "Man Playing Handball: Medium Skin Tone",
 	},
 	"1F93E-1F3FE": {
@@ -11614,12 +11617,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93E-1F3FE-200D-2640-FE0F": {
 		Key:        "1F93E-1F3FE-200D-2640-FE0F",
-		Value:      "🤾🏾‍♀️",
+		Value:      "🤾🏾\u200d♀️",
 		Descriptor: "Woman Playing Handball: Medium-Dark Skin Tone",
 	},
 	"1F93E-1F3FE-200D-2642-FE0F": {
 		Key:        "1F93E-1F3FE-200D-2642-FE0F",
-		Value:      "🤾🏾‍♂️",
+		Value:      "🤾🏾\u200d♂️",
 		Descriptor: "Man Playing Handball: Medium-Dark Skin Tone",
 	},
 	"1F93E-1F3FF": {
@@ -11629,22 +11632,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F93E-1F3FF-200D-2640-FE0F": {
 		Key:        "1F93E-1F3FF-200D-2640-FE0F",
-		Value:      "🤾🏿‍♀️",
+		Value:      "🤾🏿\u200d♀️",
 		Descriptor: "Woman Playing Handball: Dark Skin Tone",
 	},
 	"1F93E-1F3FF-200D-2642-FE0F": {
 		Key:        "1F93E-1F3FF-200D-2642-FE0F",
-		Value:      "🤾🏿‍♂️",
+		Value:      "🤾🏿\u200d♂️",
 		Descriptor: "Man Playing Handball: Dark Skin Tone",
 	},
 	"1F93E-200D-2640-FE0F": {
 		Key:        "1F93E-200D-2640-FE0F",
-		Value:      "🤾‍♀️",
+		Value:      "🤾\u200d♀️",
 		Descriptor: "Woman Playing Handball",
 	},
 	"1F93E-200D-2642-FE0F": {
 		Key:        "1F93E-200D-2642-FE0F",
-		Value:      "🤾‍♂️",
+		Value:      "🤾\u200d♂️",
 		Descriptor: "Man Playing Handball",
 	},
 	"1F93F": {
@@ -12264,12 +12267,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9B8-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9B8-1F3FB-200D-2640-FE0F",
-		Value:      "🦸🏻‍♀️",
+		Value:      "🦸🏻\u200d♀️",
 		Descriptor: "Woman Superhero: Light Skin Tone",
 	},
 	"1F9B8-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9B8-1F3FB-200D-2642-FE0F",
-		Value:      "🦸🏻‍♂️",
+		Value:      "🦸🏻\u200d♂️",
 		Descriptor: "Man Superhero: Light Skin Tone",
 	},
 	"1F9B8-1F3FC": {
@@ -12279,12 +12282,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9B8-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9B8-1F3FC-200D-2640-FE0F",
-		Value:      "🦸🏼‍♀️",
+		Value:      "🦸🏼\u200d♀️",
 		Descriptor: "Woman Superhero: Medium-Light Skin Tone",
 	},
 	"1F9B8-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9B8-1F3FC-200D-2642-FE0F",
-		Value:      "🦸🏼‍♂️",
+		Value:      "🦸🏼\u200d♂️",
 		Descriptor: "Man Superhero: Medium-Light Skin Tone",
 	},
 	"1F9B8-1F3FD": {
@@ -12294,12 +12297,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9B8-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9B8-1F3FD-200D-2640-FE0F",
-		Value:      "🦸🏽‍♀️",
+		Value:      "🦸🏽\u200d♀️",
 		Descriptor: "Woman Superhero: Medium Skin Tone",
 	},
 	"1F9B8-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9B8-1F3FD-200D-2642-FE0F",
-		Value:      "🦸🏽‍♂️",
+		Value:      "🦸🏽\u200d♂️",
 		Descriptor: "Man Superhero: Medium Skin Tone",
 	},
 	"1F9B8-1F3FE": {
@@ -12309,12 +12312,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9B8-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9B8-1F3FE-200D-2640-FE0F",
-		Value:      "🦸🏾‍♀️",
+		Value:      "🦸🏾\u200d♀️",
 		Descriptor: "Woman Superhero: Medium-Dark Skin Tone",
 	},
 	"1F9B8-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9B8-1F3FE-200D-2642-FE0F",
-		Value:      "🦸🏾‍♂️",
+		Value:      "🦸🏾\u200d♂️",
 		Descriptor: "Man Superhero: Medium-Dark Skin Tone",
 	},
 	"1F9B8-1F3FF": {
@@ -12324,22 +12327,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9B8-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9B8-1F3FF-200D-2640-FE0F",
-		Value:      "🦸🏿‍♀️",
+		Value:      "🦸🏿\u200d♀️",
 		Descriptor: "Woman Superhero: Dark Skin Tone",
 	},
 	"1F9B8-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9B8-1F3FF-200D-2642-FE0F",
-		Value:      "🦸🏿‍♂️",
+		Value:      "🦸🏿\u200d♂️",
 		Descriptor: "Man Superhero: Dark Skin Tone",
 	},
 	"1F9B8-200D-2640-FE0F": {
 		Key:        "1F9B8-200D-2640-FE0F",
-		Value:      "🦸‍♀️",
+		Value:      "🦸\u200d♀️",
 		Descriptor: "Woman Superhero",
 	},
 	"1F9B8-200D-2642-FE0F": {
 		Key:        "1F9B8-200D-2642-FE0F",
-		Value:      "🦸‍♂️",
+		Value:      "🦸\u200d♂️",
 		Descriptor: "Man Superhero",
 	},
 	"1F9B9": {
@@ -12354,12 +12357,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9B9-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9B9-1F3FB-200D-2640-FE0F",
-		Value:      "🦹🏻‍♀️",
+		Value:      "🦹🏻\u200d♀️",
 		Descriptor: "Woman Supervillain: Light Skin Tone",
 	},
 	"1F9B9-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9B9-1F3FB-200D-2642-FE0F",
-		Value:      "🦹🏻‍♂️",
+		Value:      "🦹🏻\u200d♂️",
 		Descriptor: "Man Supervillain: Light Skin Tone",
 	},
 	"1F9B9-1F3FC": {
@@ -12369,12 +12372,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9B9-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9B9-1F3FC-200D-2640-FE0F",
-		Value:      "🦹🏼‍♀️",
+		Value:      "🦹🏼\u200d♀️",
 		Descriptor: "Woman Supervillain: Medium-Light Skin Tone",
 	},
 	"1F9B9-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9B9-1F3FC-200D-2642-FE0F",
-		Value:      "🦹🏼‍♂️",
+		Value:      "🦹🏼\u200d♂️",
 		Descriptor: "Man Supervillain: Medium-Light Skin Tone",
 	},
 	"1F9B9-1F3FD": {
@@ -12384,12 +12387,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9B9-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9B9-1F3FD-200D-2640-FE0F",
-		Value:      "🦹🏽‍♀️",
+		Value:      "🦹🏽\u200d♀️",
 		Descriptor: "Woman Supervillain: Medium Skin Tone",
 	},
 	"1F9B9-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9B9-1F3FD-200D-2642-FE0F",
-		Value:      "🦹🏽‍♂️",
+		Value:      "🦹🏽\u200d♂️",
 		Descriptor: "Man Supervillain: Medium Skin Tone",
 	},
 	"1F9B9-1F3FE": {
@@ -12399,12 +12402,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9B9-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9B9-1F3FE-200D-2640-FE0F",
-		Value:      "🦹🏾‍♀️",
+		Value:      "🦹🏾\u200d♀️",
 		Descriptor: "Woman Supervillain: Medium-Dark Skin Tone",
 	},
 	"1F9B9-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9B9-1F3FE-200D-2642-FE0F",
-		Value:      "🦹🏾‍♂️",
+		Value:      "🦹🏾\u200d♂️",
 		Descriptor: "Man Supervillain: Medium-Dark Skin Tone",
 	},
 	"1F9B9-1F3FF": {
@@ -12414,22 +12417,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9B9-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9B9-1F3FF-200D-2640-FE0F",
-		Value:      "🦹🏿‍♀️",
+		Value:      "🦹🏿\u200d♀️",
 		Descriptor: "Woman Supervillain: Dark Skin Tone",
 	},
 	"1F9B9-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9B9-1F3FF-200D-2642-FE0F",
-		Value:      "🦹🏿‍♂️",
+		Value:      "🦹🏿\u200d♂️",
 		Descriptor: "Man Supervillain: Dark Skin Tone",
 	},
 	"1F9B9-200D-2640-FE0F": {
 		Key:        "1F9B9-200D-2640-FE0F",
-		Value:      "🦹‍♀️",
+		Value:      "🦹\u200d♀️",
 		Descriptor: "Woman Supervillain",
 	},
 	"1F9B9-200D-2642-FE0F": {
 		Key:        "1F9B9-200D-2642-FE0F",
-		Value:      "🦹‍♂️",
+		Value:      "🦹\u200d♂️",
 		Descriptor: "Man Supervillain",
 	},
 	"1F9BA": {
@@ -12554,12 +12557,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CD-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9CD-1F3FB-200D-2640-FE0F",
-		Value:      "🧍🏻‍♀️",
+		Value:      "🧍🏻\u200d♀️",
 		Descriptor: "Woman Standing: Light Skin Tone",
 	},
 	"1F9CD-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9CD-1F3FB-200D-2642-FE0F",
-		Value:      "🧍🏻‍♂️",
+		Value:      "🧍🏻\u200d♂️",
 		Descriptor: "Man Standing: Light Skin Tone",
 	},
 	"1F9CD-1F3FC": {
@@ -12569,12 +12572,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CD-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9CD-1F3FC-200D-2640-FE0F",
-		Value:      "🧍🏼‍♀️",
+		Value:      "🧍🏼\u200d♀️",
 		Descriptor: "Woman Standing: Medium-Light Skin Tone",
 	},
 	"1F9CD-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9CD-1F3FC-200D-2642-FE0F",
-		Value:      "🧍🏼‍♂️",
+		Value:      "🧍🏼\u200d♂️",
 		Descriptor: "Man Standing: Medium-Light Skin Tone",
 	},
 	"1F9CD-1F3FD": {
@@ -12584,12 +12587,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CD-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9CD-1F3FD-200D-2640-FE0F",
-		Value:      "🧍🏽‍♀️",
+		Value:      "🧍🏽\u200d♀️",
 		Descriptor: "Woman Standing: Medium Skin Tone",
 	},
 	"1F9CD-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9CD-1F3FD-200D-2642-FE0F",
-		Value:      "🧍🏽‍♂️",
+		Value:      "🧍🏽\u200d♂️",
 		Descriptor: "Man Standing: Medium Skin Tone",
 	},
 	"1F9CD-1F3FE": {
@@ -12599,12 +12602,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CD-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9CD-1F3FE-200D-2640-FE0F",
-		Value:      "🧍🏾‍♀️",
+		Value:      "🧍🏾\u200d♀️",
 		Descriptor: "Woman Standing: Medium-Dark Skin Tone",
 	},
 	"1F9CD-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9CD-1F3FE-200D-2642-FE0F",
-		Value:      "🧍🏾‍♂️",
+		Value:      "🧍🏾\u200d♂️",
 		Descriptor: "Man Standing: Medium-Dark Skin Tone",
 	},
 	"1F9CD-1F3FF": {
@@ -12614,22 +12617,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CD-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9CD-1F3FF-200D-2640-FE0F",
-		Value:      "🧍🏿‍♀️",
+		Value:      "🧍🏿\u200d♀️",
 		Descriptor: "Woman Standing: Dark Skin Tone",
 	},
 	"1F9CD-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9CD-1F3FF-200D-2642-FE0F",
-		Value:      "🧍🏿‍♂️",
+		Value:      "🧍🏿\u200d♂️",
 		Descriptor: "Man Standing: Dark Skin Tone",
 	},
 	"1F9CD-200D-2640-FE0F": {
 		Key:        "1F9CD-200D-2640-FE0F",
-		Value:      "🧍‍♀️",
+		Value:      "🧍\u200d♀️",
 		Descriptor: "Woman Standing",
 	},
 	"1F9CD-200D-2642-FE0F": {
 		Key:        "1F9CD-200D-2642-FE0F",
-		Value:      "🧍‍♂️",
+		Value:      "🧍\u200d♂️",
 		Descriptor: "Man Standing",
 	},
 	"1F9CE": {
@@ -12644,12 +12647,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CE-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9CE-1F3FB-200D-2640-FE0F",
-		Value:      "🧎🏻‍♀️",
+		Value:      "🧎🏻\u200d♀️",
 		Descriptor: "Woman Kneeling: Light Skin Tone",
 	},
 	"1F9CE-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9CE-1F3FB-200D-2642-FE0F",
-		Value:      "🧎🏻‍♂️",
+		Value:      "🧎🏻\u200d♂️",
 		Descriptor: "Man Kneeling: Light Skin Tone",
 	},
 	"1F9CE-1F3FC": {
@@ -12659,12 +12662,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CE-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9CE-1F3FC-200D-2640-FE0F",
-		Value:      "🧎🏼‍♀️",
+		Value:      "🧎🏼\u200d♀️",
 		Descriptor: "Woman Kneeling: Medium-Light Skin Tone",
 	},
 	"1F9CE-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9CE-1F3FC-200D-2642-FE0F",
-		Value:      "🧎🏼‍♂️",
+		Value:      "🧎🏼\u200d♂️",
 		Descriptor: "Man Kneeling: Medium-Light Skin Tone",
 	},
 	"1F9CE-1F3FD": {
@@ -12674,12 +12677,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CE-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9CE-1F3FD-200D-2640-FE0F",
-		Value:      "🧎🏽‍♀️",
+		Value:      "🧎🏽\u200d♀️",
 		Descriptor: "Woman Kneeling: Medium Skin Tone",
 	},
 	"1F9CE-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9CE-1F3FD-200D-2642-FE0F",
-		Value:      "🧎🏽‍♂️",
+		Value:      "🧎🏽\u200d♂️",
 		Descriptor: "Man Kneeling: Medium Skin Tone",
 	},
 	"1F9CE-1F3FE": {
@@ -12689,12 +12692,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CE-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9CE-1F3FE-200D-2640-FE0F",
-		Value:      "🧎🏾‍♀️",
+		Value:      "🧎🏾\u200d♀️",
 		Descriptor: "Woman Kneeling: Medium-Dark Skin Tone",
 	},
 	"1F9CE-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9CE-1F3FE-200D-2642-FE0F",
-		Value:      "🧎🏾‍♂️",
+		Value:      "🧎🏾\u200d♂️",
 		Descriptor: "Man Kneeling: Medium-Dark Skin Tone",
 	},
 	"1F9CE-1F3FF": {
@@ -12704,22 +12707,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CE-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9CE-1F3FF-200D-2640-FE0F",
-		Value:      "🧎🏿‍♀️",
+		Value:      "🧎🏿\u200d♀️",
 		Descriptor: "Woman Kneeling: Dark Skin Tone",
 	},
 	"1F9CE-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9CE-1F3FF-200D-2642-FE0F",
-		Value:      "🧎🏿‍♂️",
+		Value:      "🧎🏿\u200d♂️",
 		Descriptor: "Man Kneeling: Dark Skin Tone",
 	},
 	"1F9CE-200D-2640-FE0F": {
 		Key:        "1F9CE-200D-2640-FE0F",
-		Value:      "🧎‍♀️",
+		Value:      "🧎\u200d♀️",
 		Descriptor: "Woman Kneeling",
 	},
 	"1F9CE-200D-2642-FE0F": {
 		Key:        "1F9CE-200D-2642-FE0F",
-		Value:      "🧎‍♂️",
+		Value:      "🧎\u200d♂️",
 		Descriptor: "Man Kneeling",
 	},
 	"1F9CF": {
@@ -12734,12 +12737,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CF-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9CF-1F3FB-200D-2640-FE0F",
-		Value:      "🧏🏻‍♀️",
+		Value:      "🧏🏻\u200d♀️",
 		Descriptor: "Deaf Woman: Light Skin Tone",
 	},
 	"1F9CF-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9CF-1F3FB-200D-2642-FE0F",
-		Value:      "🧏🏻‍♂️",
+		Value:      "🧏🏻\u200d♂️",
 		Descriptor: "Deaf Man: Light Skin Tone",
 	},
 	"1F9CF-1F3FC": {
@@ -12749,12 +12752,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CF-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9CF-1F3FC-200D-2640-FE0F",
-		Value:      "🧏🏼‍♀️",
+		Value:      "🧏🏼\u200d♀️",
 		Descriptor: "Deaf Woman: Medium-Light Skin Tone",
 	},
 	"1F9CF-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9CF-1F3FC-200D-2642-FE0F",
-		Value:      "🧏🏼‍♂️",
+		Value:      "🧏🏼\u200d♂️",
 		Descriptor: "Deaf Man: Medium-Light Skin Tone",
 	},
 	"1F9CF-1F3FD": {
@@ -12764,12 +12767,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CF-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9CF-1F3FD-200D-2640-FE0F",
-		Value:      "🧏🏽‍♀️",
+		Value:      "🧏🏽\u200d♀️",
 		Descriptor: "Deaf Woman: Medium Skin Tone",
 	},
 	"1F9CF-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9CF-1F3FD-200D-2642-FE0F",
-		Value:      "🧏🏽‍♂️",
+		Value:      "🧏🏽\u200d♂️",
 		Descriptor: "Deaf Man: Medium Skin Tone",
 	},
 	"1F9CF-1F3FE": {
@@ -12779,12 +12782,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CF-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9CF-1F3FE-200D-2640-FE0F",
-		Value:      "🧏🏾‍♀️",
+		Value:      "🧏🏾\u200d♀️",
 		Descriptor: "Deaf Woman: Medium-Dark Skin Tone",
 	},
 	"1F9CF-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9CF-1F3FE-200D-2642-FE0F",
-		Value:      "🧏🏾‍♂️",
+		Value:      "🧏🏾\u200d♂️",
 		Descriptor: "Deaf Man: Medium-Dark Skin Tone",
 	},
 	"1F9CF-1F3FF": {
@@ -12794,22 +12797,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9CF-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9CF-1F3FF-200D-2640-FE0F",
-		Value:      "🧏🏿‍♀️",
+		Value:      "🧏🏿\u200d♀️",
 		Descriptor: "Deaf Woman: Dark Skin Tone",
 	},
 	"1F9CF-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9CF-1F3FF-200D-2642-FE0F",
-		Value:      "🧏🏿‍♂️",
+		Value:      "🧏🏿\u200d♂️",
 		Descriptor: "Deaf Man: Dark Skin Tone",
 	},
 	"1F9CF-200D-2640-FE0F": {
 		Key:        "1F9CF-200D-2640-FE0F",
-		Value:      "🧏‍♀️",
+		Value:      "🧏\u200d♀️",
 		Descriptor: "Deaf Woman",
 	},
 	"1F9CF-200D-2642-FE0F": {
 		Key:        "1F9CF-200D-2642-FE0F",
-		Value:      "🧏‍♂️",
+		Value:      "🧏\u200d♂️",
 		Descriptor: "Deaf Man",
 	},
 	"1F9D0": {
@@ -12829,67 +12832,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-1F3FB-200D-1F33E": {
 		Key:        "1F9D1-1F3FB-200D-1F33E",
-		Value:      "🧑🏻‍🌾",
+		Value:      "🧑🏻\u200d🌾",
 		Descriptor: "Farmer: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F373": {
 		Key:        "1F9D1-1F3FB-200D-1F373",
-		Value:      "🧑🏻‍🍳",
+		Value:      "🧑🏻\u200d🍳",
 		Descriptor: "Cook: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F393": {
 		Key:        "1F9D1-1F3FB-200D-1F393",
-		Value:      "🧑🏻‍🎓",
+		Value:      "🧑🏻\u200d🎓",
 		Descriptor: "Student: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F3A4": {
 		Key:        "1F9D1-1F3FB-200D-1F3A4",
-		Value:      "🧑🏻‍🎤",
+		Value:      "🧑🏻\u200d🎤",
 		Descriptor: "Singer: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F3A8": {
 		Key:        "1F9D1-1F3FB-200D-1F3A8",
-		Value:      "🧑🏻‍🎨",
+		Value:      "🧑🏻\u200d🎨",
 		Descriptor: "Artist: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F3EB": {
 		Key:        "1F9D1-1F3FB-200D-1F3EB",
-		Value:      "🧑🏻‍🏫",
+		Value:      "🧑🏻\u200d🏫",
 		Descriptor: "Teacher: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F3ED": {
 		Key:        "1F9D1-1F3FB-200D-1F3ED",
-		Value:      "🧑🏻‍🏭",
+		Value:      "🧑🏻\u200d🏭",
 		Descriptor: "Factory Worker: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F4BB": {
 		Key:        "1F9D1-1F3FB-200D-1F4BB",
-		Value:      "🧑🏻‍💻",
+		Value:      "🧑🏻\u200d💻",
 		Descriptor: "Technologist: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F4BC": {
 		Key:        "1F9D1-1F3FB-200D-1F4BC",
-		Value:      "🧑🏻‍💼",
+		Value:      "🧑🏻\u200d💼",
 		Descriptor: "Office Worker: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F527": {
 		Key:        "1F9D1-1F3FB-200D-1F527",
-		Value:      "🧑🏻‍🔧",
+		Value:      "🧑🏻\u200d🔧",
 		Descriptor: "Mechanic: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F52C": {
 		Key:        "1F9D1-1F3FB-200D-1F52C",
-		Value:      "🧑🏻‍🔬",
+		Value:      "🧑🏻\u200d🔬",
 		Descriptor: "Scientist: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F680": {
 		Key:        "1F9D1-1F3FB-200D-1F680",
-		Value:      "🧑🏻‍🚀",
+		Value:      "🧑🏻\u200d🚀",
 		Descriptor: "Astronaut: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F692": {
 		Key:        "1F9D1-1F3FB-200D-1F692",
-		Value:      "🧑🏻‍🚒",
+		Value:      "🧑🏻\u200d🚒",
 		Descriptor: "Firefighter: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F91D-200D-1F9D1-1F3FB": {
@@ -12919,52 +12922,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-1F3FB-200D-1F9AF": {
 		Key:        "1F9D1-1F3FB-200D-1F9AF",
-		Value:      "🧑🏻‍🦯",
+		Value:      "🧑🏻\u200d🦯",
 		Descriptor: "Person With Probing Cane: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F9B0": {
 		Key:        "1F9D1-1F3FB-200D-1F9B0",
-		Value:      "🧑🏻‍🦰",
+		Value:      "🧑🏻\u200d🦰",
 		Descriptor: "Person: Light Skin Tone, Red Hair",
 	},
 	"1F9D1-1F3FB-200D-1F9B1": {
 		Key:        "1F9D1-1F3FB-200D-1F9B1",
-		Value:      "🧑🏻‍🦱",
+		Value:      "🧑🏻\u200d🦱",
 		Descriptor: "Person: Light Skin Tone, Curly Hair",
 	},
 	"1F9D1-1F3FB-200D-1F9B2": {
 		Key:        "1F9D1-1F3FB-200D-1F9B2",
-		Value:      "🧑🏻‍🦲",
+		Value:      "🧑🏻\u200d🦲",
 		Descriptor: "Person: Light Skin Tone, Bald",
 	},
 	"1F9D1-1F3FB-200D-1F9B3": {
 		Key:        "1F9D1-1F3FB-200D-1F9B3",
-		Value:      "🧑🏻‍🦳",
+		Value:      "🧑🏻\u200d🦳",
 		Descriptor: "Person: Light Skin Tone, White Hair",
 	},
 	"1F9D1-1F3FB-200D-1F9BC": {
 		Key:        "1F9D1-1F3FB-200D-1F9BC",
-		Value:      "🧑🏻‍🦼",
+		Value:      "🧑🏻\u200d🦼",
 		Descriptor: "Person in Motorized Wheelchair: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-1F9BD": {
 		Key:        "1F9D1-1F3FB-200D-1F9BD",
-		Value:      "🧑🏻‍🦽",
+		Value:      "🧑🏻\u200d🦽",
 		Descriptor: "Person in Manual Wheelchair: Light Skin Ton",
 	},
 	"1F9D1-1F3FB-200D-2695-FE0F": {
 		Key:        "1F9D1-1F3FB-200D-2695-FE0F",
-		Value:      "🧑🏻‍⚕️",
+		Value:      "🧑🏻\u200d⚕️",
 		Descriptor: "Health Worker: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-2696-FE0F": {
 		Key:        "1F9D1-1F3FB-200D-2696-FE0F",
-		Value:      "🧑🏻‍⚖️",
+		Value:      "🧑🏻\u200d⚖️",
 		Descriptor: "Judge: Light Skin Tone",
 	},
 	"1F9D1-1F3FB-200D-2708-FE0F": {
 		Key:        "1F9D1-1F3FB-200D-2708-FE0F",
-		Value:      "🧑🏻‍✈️",
+		Value:      "🧑🏻\u200d✈️",
 		Descriptor: "Pilot: Light Skin Tone",
 	},
 	"1F9D1-1F3FC": {
@@ -12974,67 +12977,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-1F3FC-200D-1F33E": {
 		Key:        "1F9D1-1F3FC-200D-1F33E",
-		Value:      "🧑🏼‍🌾",
+		Value:      "🧑🏼\u200d🌾",
 		Descriptor: "Farmer: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F373": {
 		Key:        "1F9D1-1F3FC-200D-1F373",
-		Value:      "🧑🏼‍🍳",
+		Value:      "🧑🏼\u200d🍳",
 		Descriptor: "Cook: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F393": {
 		Key:        "1F9D1-1F3FC-200D-1F393",
-		Value:      "🧑🏼‍🎓",
+		Value:      "🧑🏼\u200d🎓",
 		Descriptor: "Student: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F3A4": {
 		Key:        "1F9D1-1F3FC-200D-1F3A4",
-		Value:      "🧑🏼‍🎤",
+		Value:      "🧑🏼\u200d🎤",
 		Descriptor: "Singer: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F3A8": {
 		Key:        "1F9D1-1F3FC-200D-1F3A8",
-		Value:      "🧑🏼‍🎨",
+		Value:      "🧑🏼\u200d🎨",
 		Descriptor: "Artist: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F3EB": {
 		Key:        "1F9D1-1F3FC-200D-1F3EB",
-		Value:      "🧑🏼‍🏫",
+		Value:      "🧑🏼\u200d🏫",
 		Descriptor: "Teacher: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F3ED": {
 		Key:        "1F9D1-1F3FC-200D-1F3ED",
-		Value:      "🧑🏼‍🏭",
+		Value:      "🧑🏼\u200d🏭",
 		Descriptor: "Factory Worker: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F4BB": {
 		Key:        "1F9D1-1F3FC-200D-1F4BB",
-		Value:      "🧑🏼‍💻",
+		Value:      "🧑🏼\u200d💻",
 		Descriptor: "Technologist: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F4BC": {
 		Key:        "1F9D1-1F3FC-200D-1F4BC",
-		Value:      "🧑🏼‍💼",
+		Value:      "🧑🏼\u200d💼",
 		Descriptor: "Office Worker: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F527": {
 		Key:        "1F9D1-1F3FC-200D-1F527",
-		Value:      "🧑🏼‍🔧",
+		Value:      "🧑🏼\u200d🔧",
 		Descriptor: "Mechanic: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F52C": {
 		Key:        "1F9D1-1F3FC-200D-1F52C",
-		Value:      "🧑🏼‍🔬",
+		Value:      "🧑🏼\u200d🔬",
 		Descriptor: "Scientist: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F680": {
 		Key:        "1F9D1-1F3FC-200D-1F680",
-		Value:      "🧑🏼‍🚀",
+		Value:      "🧑🏼\u200d🚀",
 		Descriptor: "Astronaut: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F692": {
 		Key:        "1F9D1-1F3FC-200D-1F692",
-		Value:      "🧑🏼‍🚒",
+		Value:      "🧑🏼\u200d🚒",
 		Descriptor: "Firefighter: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F91D-200D-1F9D1-1F3FB": {
@@ -13064,52 +13067,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-1F3FC-200D-1F9AF": {
 		Key:        "1F9D1-1F3FC-200D-1F9AF",
-		Value:      "🧑🏼‍🦯",
+		Value:      "🧑🏼\u200d🦯",
 		Descriptor: "Person With Probing Cane: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F9B0": {
 		Key:        "1F9D1-1F3FC-200D-1F9B0",
-		Value:      "🧑🏼‍🦰",
+		Value:      "🧑🏼\u200d🦰",
 		Descriptor: "Person: Medium-Light Skin Tone, Red Hair",
 	},
 	"1F9D1-1F3FC-200D-1F9B1": {
 		Key:        "1F9D1-1F3FC-200D-1F9B1",
-		Value:      "🧑🏼‍🦱",
+		Value:      "🧑🏼\u200d🦱",
 		Descriptor: "Person: Medium-Light Skin Tone, Curly Hair",
 	},
 	"1F9D1-1F3FC-200D-1F9B2": {
 		Key:        "1F9D1-1F3FC-200D-1F9B2",
-		Value:      "🧑🏼‍🦲",
+		Value:      "🧑🏼\u200d🦲",
 		Descriptor: "Person: Medium-Light Skin Tone, Bald",
 	},
 	"1F9D1-1F3FC-200D-1F9B3": {
 		Key:        "1F9D1-1F3FC-200D-1F9B3",
-		Value:      "🧑🏼‍🦳",
+		Value:      "🧑🏼\u200d🦳",
 		Descriptor: "Person: Medium-Light Skin Tone, White Hair",
 	},
 	"1F9D1-1F3FC-200D-1F9BC": {
 		Key:        "1F9D1-1F3FC-200D-1F9BC",
-		Value:      "🧑🏼‍🦼",
+		Value:      "🧑🏼\u200d🦼",
 		Descriptor: "Person in Motorized Wheelchair: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-1F9BD": {
 		Key:        "1F9D1-1F3FC-200D-1F9BD",
-		Value:      "🧑🏼‍🦽",
+		Value:      "🧑🏼\u200d🦽",
 		Descriptor: "Person in Manual Wheelchair: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-2695-FE0F": {
 		Key:        "1F9D1-1F3FC-200D-2695-FE0F",
-		Value:      "🧑🏼‍⚕️",
+		Value:      "🧑🏼\u200d⚕️",
 		Descriptor: "Health Worker: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-2696-FE0F": {
 		Key:        "1F9D1-1F3FC-200D-2696-FE0F",
-		Value:      "🧑🏼‍⚖️",
+		Value:      "🧑🏼\u200d⚖️",
 		Descriptor: "Judge: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FC-200D-2708-FE0F": {
 		Key:        "1F9D1-1F3FC-200D-2708-FE0F",
-		Value:      "🧑🏼‍✈️",
+		Value:      "🧑🏼\u200d✈️",
 		Descriptor: "Pilot: Medium-Light Skin Tone",
 	},
 	"1F9D1-1F3FD": {
@@ -13119,67 +13122,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-1F3FD-200D-1F33E": {
 		Key:        "1F9D1-1F3FD-200D-1F33E",
-		Value:      "🧑🏽‍🌾",
+		Value:      "🧑🏽\u200d🌾",
 		Descriptor: "Farmer: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F373": {
 		Key:        "1F9D1-1F3FD-200D-1F373",
-		Value:      "🧑🏽‍🍳",
+		Value:      "🧑🏽\u200d🍳",
 		Descriptor: "Cook: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F393": {
 		Key:        "1F9D1-1F3FD-200D-1F393",
-		Value:      "🧑🏽‍🎓",
+		Value:      "🧑🏽\u200d🎓",
 		Descriptor: "Student: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F3A4": {
 		Key:        "1F9D1-1F3FD-200D-1F3A4",
-		Value:      "🧑🏽‍🎤",
+		Value:      "🧑🏽\u200d🎤",
 		Descriptor: "Singer: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F3A8": {
 		Key:        "1F9D1-1F3FD-200D-1F3A8",
-		Value:      "🧑🏽‍🎨",
+		Value:      "🧑🏽\u200d🎨",
 		Descriptor: "Artist: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F3EB": {
 		Key:        "1F9D1-1F3FD-200D-1F3EB",
-		Value:      "🧑🏽‍🏫",
+		Value:      "🧑🏽\u200d🏫",
 		Descriptor: "Teacher: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F3ED": {
 		Key:        "1F9D1-1F3FD-200D-1F3ED",
-		Value:      "🧑🏽‍🏭",
+		Value:      "🧑🏽\u200d🏭",
 		Descriptor: "Factory Worker: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F4BB": {
 		Key:        "1F9D1-1F3FD-200D-1F4BB",
-		Value:      "🧑🏽‍💻",
+		Value:      "🧑🏽\u200d💻",
 		Descriptor: "Technologist: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F4BC": {
 		Key:        "1F9D1-1F3FD-200D-1F4BC",
-		Value:      "🧑🏽‍💼",
+		Value:      "🧑🏽\u200d💼",
 		Descriptor: "Office Worker: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F527": {
 		Key:        "1F9D1-1F3FD-200D-1F527",
-		Value:      "🧑🏽‍🔧",
+		Value:      "🧑🏽\u200d🔧",
 		Descriptor: "Mechanic: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F52C": {
 		Key:        "1F9D1-1F3FD-200D-1F52C",
-		Value:      "🧑🏽‍🔬",
+		Value:      "🧑🏽\u200d🔬",
 		Descriptor: "Scientist: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F680": {
 		Key:        "1F9D1-1F3FD-200D-1F680",
-		Value:      "🧑🏽‍🚀",
+		Value:      "🧑🏽\u200d🚀",
 		Descriptor: "Astronaut: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F692": {
 		Key:        "1F9D1-1F3FD-200D-1F692",
-		Value:      "🧑🏽‍🚒",
+		Value:      "🧑🏽\u200d🚒",
 		Descriptor: "Firefighter: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F91D-200D-1F9D1-1F3FB": {
@@ -13209,52 +13212,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-1F3FD-200D-1F9AF": {
 		Key:        "1F9D1-1F3FD-200D-1F9AF",
-		Value:      "🧑🏽‍🦯",
+		Value:      "🧑🏽\u200d🦯",
 		Descriptor: "Person With Probing Cane: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F9B0": {
 		Key:        "1F9D1-1F3FD-200D-1F9B0",
-		Value:      "🧑🏽‍🦰",
+		Value:      "🧑🏽\u200d🦰",
 		Descriptor: "Person: Medium Skin Tone, Red Hair",
 	},
 	"1F9D1-1F3FD-200D-1F9B1": {
 		Key:        "1F9D1-1F3FD-200D-1F9B1",
-		Value:      "🧑🏽‍🦱",
+		Value:      "🧑🏽\u200d🦱",
 		Descriptor: "Person: Medium Skin Tone, Curly Hair",
 	},
 	"1F9D1-1F3FD-200D-1F9B2": {
 		Key:        "1F9D1-1F3FD-200D-1F9B2",
-		Value:      "🧑🏽‍🦲",
+		Value:      "🧑🏽\u200d🦲",
 		Descriptor: "Person: Medium Skin Tone, Bald",
 	},
 	"1F9D1-1F3FD-200D-1F9B3": {
 		Key:        "1F9D1-1F3FD-200D-1F9B3",
-		Value:      "🧑🏽‍🦳",
+		Value:      "🧑🏽\u200d🦳",
 		Descriptor: "Person: Medium Skin Tone, White Hair",
 	},
 	"1F9D1-1F3FD-200D-1F9BC": {
 		Key:        "1F9D1-1F3FD-200D-1F9BC",
-		Value:      "🧑🏽‍🦼",
+		Value:      "🧑🏽\u200d🦼",
 		Descriptor: "Person in Motorized Wheelchair: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-1F9BD": {
 		Key:        "1F9D1-1F3FD-200D-1F9BD",
-		Value:      "🧑🏽‍🦽",
+		Value:      "🧑🏽\u200d🦽",
 		Descriptor: "Person in Manual Wheelchair: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-2695-FE0F": {
 		Key:        "1F9D1-1F3FD-200D-2695-FE0F",
-		Value:      "🧑🏽‍⚕️",
+		Value:      "🧑🏽\u200d⚕️",
 		Descriptor: "Health Worker: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-2696-FE0F": {
 		Key:        "1F9D1-1F3FD-200D-2696-FE0F",
-		Value:      "🧑🏽‍⚖️",
+		Value:      "🧑🏽\u200d⚖️",
 		Descriptor: "Judge: Medium Skin Tone",
 	},
 	"1F9D1-1F3FD-200D-2708-FE0F": {
 		Key:        "1F9D1-1F3FD-200D-2708-FE0F",
-		Value:      "🧑🏽‍✈️",
+		Value:      "🧑🏽\u200d✈️",
 		Descriptor: "Pilot: Medium Skin Tone",
 	},
 	"1F9D1-1F3FE": {
@@ -13264,67 +13267,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-1F3FE-200D-1F33E": {
 		Key:        "1F9D1-1F3FE-200D-1F33E",
-		Value:      "🧑🏾‍🌾",
+		Value:      "🧑🏾\u200d🌾",
 		Descriptor: "Farmer: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F373": {
 		Key:        "1F9D1-1F3FE-200D-1F373",
-		Value:      "🧑🏾‍🍳",
+		Value:      "🧑🏾\u200d🍳",
 		Descriptor: "Cook: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F393": {
 		Key:        "1F9D1-1F3FE-200D-1F393",
-		Value:      "🧑🏾‍🎓",
+		Value:      "🧑🏾\u200d🎓",
 		Descriptor: "Student: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F3A4": {
 		Key:        "1F9D1-1F3FE-200D-1F3A4",
-		Value:      "🧑🏾‍🎤",
+		Value:      "🧑🏾\u200d🎤",
 		Descriptor: "Singer: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F3A8": {
 		Key:        "1F9D1-1F3FE-200D-1F3A8",
-		Value:      "🧑🏾‍🎨",
+		Value:      "🧑🏾\u200d🎨",
 		Descriptor: "Artist: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F3EB": {
 		Key:        "1F9D1-1F3FE-200D-1F3EB",
-		Value:      "🧑🏾‍🏫",
+		Value:      "🧑🏾\u200d🏫",
 		Descriptor: "Teacher: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F3ED": {
 		Key:        "1F9D1-1F3FE-200D-1F3ED",
-		Value:      "🧑🏾‍🏭",
+		Value:      "🧑🏾\u200d🏭",
 		Descriptor: "Factory Worker: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F4BB": {
 		Key:        "1F9D1-1F3FE-200D-1F4BB",
-		Value:      "🧑🏾‍💻",
+		Value:      "🧑🏾\u200d💻",
 		Descriptor: "Technologist: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F4BC": {
 		Key:        "1F9D1-1F3FE-200D-1F4BC",
-		Value:      "🧑🏾‍💼",
+		Value:      "🧑🏾\u200d💼",
 		Descriptor: "Office Worker: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F527": {
 		Key:        "1F9D1-1F3FE-200D-1F527",
-		Value:      "🧑🏾‍🔧",
+		Value:      "🧑🏾\u200d🔧",
 		Descriptor: "Mechanic: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F52C": {
 		Key:        "1F9D1-1F3FE-200D-1F52C",
-		Value:      "🧑🏾‍🔬",
+		Value:      "🧑🏾\u200d🔬",
 		Descriptor: "Scientist: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F680": {
 		Key:        "1F9D1-1F3FE-200D-1F680",
-		Value:      "🧑🏾‍🚀",
+		Value:      "🧑🏾\u200d🚀",
 		Descriptor: "Astronaut: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F692": {
 		Key:        "1F9D1-1F3FE-200D-1F692",
-		Value:      "🧑🏾‍🚒",
+		Value:      "🧑🏾\u200d🚒",
 		Descriptor: "Firefighter: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F91D-200D-1F9D1-1F3FB": {
@@ -13354,52 +13357,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-1F3FE-200D-1F9AF": {
 		Key:        "1F9D1-1F3FE-200D-1F9AF",
-		Value:      "🧑🏾‍🦯",
+		Value:      "🧑🏾\u200d🦯",
 		Descriptor: "Person With Probing Cane: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F9B0": {
 		Key:        "1F9D1-1F3FE-200D-1F9B0",
-		Value:      "🧑🏾‍🦰",
+		Value:      "🧑🏾\u200d🦰",
 		Descriptor: "Person: Medium-Dark Skin Tone, Red Hair",
 	},
 	"1F9D1-1F3FE-200D-1F9B1": {
 		Key:        "1F9D1-1F3FE-200D-1F9B1",
-		Value:      "🧑🏾‍🦱",
+		Value:      "🧑🏾\u200d🦱",
 		Descriptor: "Person: Medium-Dark Skin Tone, Curly Hair",
 	},
 	"1F9D1-1F3FE-200D-1F9B2": {
 		Key:        "1F9D1-1F3FE-200D-1F9B2",
-		Value:      "🧑🏾‍🦲",
+		Value:      "🧑🏾\u200d🦲",
 		Descriptor: "Person: Medium-Dark Skin Tone, Bald",
 	},
 	"1F9D1-1F3FE-200D-1F9B3": {
 		Key:        "1F9D1-1F3FE-200D-1F9B3",
-		Value:      "🧑🏾‍🦳",
+		Value:      "🧑🏾\u200d🦳",
 		Descriptor: "Person: Medium-Dark Skin Tone, White Hair",
 	},
 	"1F9D1-1F3FE-200D-1F9BC": {
 		Key:        "1F9D1-1F3FE-200D-1F9BC",
-		Value:      "🧑🏾‍🦼",
+		Value:      "🧑🏾\u200d🦼",
 		Descriptor: "Person in Motorized Wheelchair: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-1F9BD": {
 		Key:        "1F9D1-1F3FE-200D-1F9BD",
-		Value:      "🧑🏾‍🦽",
+		Value:      "🧑🏾\u200d🦽",
 		Descriptor: "Person in Manual Wheelchair: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-2695-FE0F": {
 		Key:        "1F9D1-1F3FE-200D-2695-FE0F",
-		Value:      "🧑🏾‍⚕️",
+		Value:      "🧑🏾\u200d⚕️",
 		Descriptor: "Health Worker: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-2696-FE0F": {
 		Key:        "1F9D1-1F3FE-200D-2696-FE0F",
-		Value:      "🧑🏾‍⚖️",
+		Value:      "🧑🏾\u200d⚖️",
 		Descriptor: "Judge: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FE-200D-2708-FE0F": {
 		Key:        "1F9D1-1F3FE-200D-2708-FE0F",
-		Value:      "🧑🏾‍✈️",
+		Value:      "🧑🏾\u200d✈️",
 		Descriptor: "Pilot: Medium-Dark Skin Tone",
 	},
 	"1F9D1-1F3FF": {
@@ -13409,67 +13412,67 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-1F3FF-200D-1F33E": {
 		Key:        "1F9D1-1F3FF-200D-1F33E",
-		Value:      "🧑🏿‍🌾",
+		Value:      "🧑🏿\u200d🌾",
 		Descriptor: "Farmer: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F373": {
 		Key:        "1F9D1-1F3FF-200D-1F373",
-		Value:      "🧑🏿‍🍳",
+		Value:      "🧑🏿\u200d🍳",
 		Descriptor: "Cook: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F393": {
 		Key:        "1F9D1-1F3FF-200D-1F393",
-		Value:      "🧑🏿‍🎓",
+		Value:      "🧑🏿\u200d🎓",
 		Descriptor: "Student: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F3A4": {
 		Key:        "1F9D1-1F3FF-200D-1F3A4",
-		Value:      "🧑🏿‍🎤",
+		Value:      "🧑🏿\u200d🎤",
 		Descriptor: "Singer: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F3A8": {
 		Key:        "1F9D1-1F3FF-200D-1F3A8",
-		Value:      "🧑🏿‍🎨",
+		Value:      "🧑🏿\u200d🎨",
 		Descriptor: "Artist: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F3EB": {
 		Key:        "1F9D1-1F3FF-200D-1F3EB",
-		Value:      "🧑🏿‍🏫",
+		Value:      "🧑🏿\u200d🏫",
 		Descriptor: "Teacher: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F3ED": {
 		Key:        "1F9D1-1F3FF-200D-1F3ED",
-		Value:      "🧑🏿‍🏭",
+		Value:      "🧑🏿\u200d🏭",
 		Descriptor: "Factory Worker: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F4BB": {
 		Key:        "1F9D1-1F3FF-200D-1F4BB",
-		Value:      "🧑🏿‍💻",
+		Value:      "🧑🏿\u200d💻",
 		Descriptor: "Technologist: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F4BC": {
 		Key:        "1F9D1-1F3FF-200D-1F4BC",
-		Value:      "🧑🏿‍💼",
+		Value:      "🧑🏿\u200d💼",
 		Descriptor: "Office Worker: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F527": {
 		Key:        "1F9D1-1F3FF-200D-1F527",
-		Value:      "🧑🏿‍🔧",
+		Value:      "🧑🏿\u200d🔧",
 		Descriptor: "Mechanic: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F52C": {
 		Key:        "1F9D1-1F3FF-200D-1F52C",
-		Value:      "🧑🏿‍🔬",
+		Value:      "🧑🏿\u200d🔬",
 		Descriptor: "Scientist: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F680": {
 		Key:        "1F9D1-1F3FF-200D-1F680",
-		Value:      "🧑🏿‍🚀",
+		Value:      "🧑🏿\u200d🚀",
 		Descriptor: "Astronaut: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F692": {
 		Key:        "1F9D1-1F3FF-200D-1F692",
-		Value:      "🧑🏿‍🚒",
+		Value:      "🧑🏿\u200d🚒",
 		Descriptor: "Firefighter: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F91D-200D-1F9D1-1F3FB": {
@@ -13499,117 +13502,117 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-1F3FF-200D-1F9AF": {
 		Key:        "1F9D1-1F3FF-200D-1F9AF",
-		Value:      "🧑🏿‍🦯",
+		Value:      "🧑🏿\u200d🦯",
 		Descriptor: "Person With Probing Cane: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F9B0": {
 		Key:        "1F9D1-1F3FF-200D-1F9B0",
-		Value:      "🧑🏿‍🦰",
+		Value:      "🧑🏿\u200d🦰",
 		Descriptor: "Person: Dark Skin Tone, Red Hair",
 	},
 	"1F9D1-1F3FF-200D-1F9B1": {
 		Key:        "1F9D1-1F3FF-200D-1F9B1",
-		Value:      "🧑🏿‍🦱",
+		Value:      "🧑🏿\u200d🦱",
 		Descriptor: "Person: Dark Skin Tone, Curly Hair",
 	},
 	"1F9D1-1F3FF-200D-1F9B2": {
 		Key:        "1F9D1-1F3FF-200D-1F9B2",
-		Value:      "🧑🏿‍🦲",
+		Value:      "🧑🏿\u200d🦲",
 		Descriptor: "Person: Dark Skin Tone, Bald",
 	},
 	"1F9D1-1F3FF-200D-1F9B3": {
 		Key:        "1F9D1-1F3FF-200D-1F9B3",
-		Value:      "🧑🏿‍🦳",
+		Value:      "🧑🏿\u200d🦳",
 		Descriptor: "Person: Dark Skin Tone, White Hair",
 	},
 	"1F9D1-1F3FF-200D-1F9BC": {
 		Key:        "1F9D1-1F3FF-200D-1F9BC",
-		Value:      "🧑🏿‍🦼",
+		Value:      "🧑🏿\u200d🦼",
 		Descriptor: "Person in Motorized Wheelchair: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-1F9BD": {
 		Key:        "1F9D1-1F3FF-200D-1F9BD",
-		Value:      "🧑🏿‍🦽",
+		Value:      "🧑🏿\u200d🦽",
 		Descriptor: "Person in Manual Wheelchair: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-2695-FE0F": {
 		Key:        "1F9D1-1F3FF-200D-2695-FE0F",
-		Value:      "🧑🏿‍⚕️",
+		Value:      "🧑🏿\u200d⚕️",
 		Descriptor: "Health Worker: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-2696-FE0F": {
 		Key:        "1F9D1-1F3FF-200D-2696-FE0F",
-		Value:      "🧑🏿‍⚖️",
+		Value:      "🧑🏿\u200d⚖️",
 		Descriptor: "Judge: Dark Skin Tone",
 	},
 	"1F9D1-1F3FF-200D-2708-FE0F": {
 		Key:        "1F9D1-1F3FF-200D-2708-FE0F",
-		Value:      "🧑🏿‍✈️",
+		Value:      "🧑🏿\u200d✈️",
 		Descriptor: "Pilot: Dark Skin Tone",
 	},
 	"1F9D1-200D-1F33E": {
 		Key:        "1F9D1-200D-1F33E",
-		Value:      "🧑‍🌾",
+		Value:      "🧑\u200d🌾",
 		Descriptor: "Farmer",
 	},
 	"1F9D1-200D-1F373": {
 		Key:        "1F9D1-200D-1F373",
-		Value:      "🧑‍🍳",
+		Value:      "🧑\u200d🍳",
 		Descriptor: "Cook",
 	},
 	"1F9D1-200D-1F393": {
 		Key:        "1F9D1-200D-1F393",
-		Value:      "🧑‍🎓",
+		Value:      "🧑\u200d🎓",
 		Descriptor: "Student",
 	},
 	"1F9D1-200D-1F3A4": {
 		Key:        "1F9D1-200D-1F3A4",
-		Value:      "🧑‍🎤",
+		Value:      "🧑\u200d🎤",
 		Descriptor: "Singer",
 	},
 	"1F9D1-200D-1F3A8": {
 		Key:        "1F9D1-200D-1F3A8",
-		Value:      "🧑‍🎨",
+		Value:      "🧑\u200d🎨",
 		Descriptor: "Artist",
 	},
 	"1F9D1-200D-1F3EB": {
 		Key:        "1F9D1-200D-1F3EB",
-		Value:      "🧑‍🏫",
+		Value:      "🧑\u200d🏫",
 		Descriptor: "Teacher",
 	},
 	"1F9D1-200D-1F3ED": {
 		Key:        "1F9D1-200D-1F3ED",
-		Value:      "🧑‍🏭",
+		Value:      "🧑\u200d🏭",
 		Descriptor: "Factory Worker",
 	},
 	"1F9D1-200D-1F4BB": {
 		Key:        "1F9D1-200D-1F4BB",
-		Value:      "🧑‍💻",
+		Value:      "🧑\u200d💻",
 		Descriptor: "Technologist",
 	},
 	"1F9D1-200D-1F4BC": {
 		Key:        "1F9D1-200D-1F4BC",
-		Value:      "🧑‍💼",
+		Value:      "🧑\u200d💼",
 		Descriptor: "Office Worker",
 	},
 	"1F9D1-200D-1F527": {
 		Key:        "1F9D1-200D-1F527",
-		Value:      "🧑‍🔧",
+		Value:      "🧑\u200d🔧",
 		Descriptor: "Mechanic",
 	},
 	"1F9D1-200D-1F52C": {
 		Key:        "1F9D1-200D-1F52C",
-		Value:      "🧑‍🔬",
+		Value:      "🧑\u200d🔬",
 		Descriptor: "Scientist",
 	},
 	"1F9D1-200D-1F680": {
 		Key:        "1F9D1-200D-1F680",
-		Value:      "🧑‍🚀",
+		Value:      "🧑\u200d🚀",
 		Descriptor: "Astronaut",
 	},
 	"1F9D1-200D-1F692": {
 		Key:        "1F9D1-200D-1F692",
-		Value:      "🧑‍🚒",
+		Value:      "🧑\u200d🚒",
 		Descriptor: "Firefighter",
 	},
 	"1F9D1-200D-1F91D-200D-1F9D1": {
@@ -13619,52 +13622,52 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D1-200D-1F9AF": {
 		Key:        "1F9D1-200D-1F9AF",
-		Value:      "🧑‍🦯",
+		Value:      "🧑\u200d🦯",
 		Descriptor: "Person With Probing Cane",
 	},
 	"1F9D1-200D-1F9B0": {
 		Key:        "1F9D1-200D-1F9B0",
-		Value:      "🧑‍🦰",
+		Value:      "🧑\u200d🦰",
 		Descriptor: "Person: Red Hair",
 	},
 	"1F9D1-200D-1F9B1": {
 		Key:        "1F9D1-200D-1F9B1",
-		Value:      "🧑‍🦱",
+		Value:      "🧑\u200d🦱",
 		Descriptor: "Person: Curly Hair",
 	},
 	"1F9D1-200D-1F9B2": {
 		Key:        "1F9D1-200D-1F9B2",
-		Value:      "🧑‍🦲",
+		Value:      "🧑\u200d🦲",
 		Descriptor: "Person: Bald",
 	},
 	"1F9D1-200D-1F9B3": {
 		Key:        "1F9D1-200D-1F9B3",
-		Value:      "🧑‍🦳",
+		Value:      "🧑\u200d🦳",
 		Descriptor: "Person: White Hair",
 	},
 	"1F9D1-200D-1F9BC": {
 		Key:        "1F9D1-200D-1F9BC",
-		Value:      "🧑‍🦼",
+		Value:      "🧑\u200d🦼",
 		Descriptor: "Person in Motorized Wheelchair",
 	},
 	"1F9D1-200D-1F9BD": {
 		Key:        "1F9D1-200D-1F9BD",
-		Value:      "🧑‍🦽",
+		Value:      "🧑\u200d🦽",
 		Descriptor: "Person in Manual Wheelchair",
 	},
 	"1F9D1-200D-2695-FE0F": {
 		Key:        "1F9D1-200D-2695-FE0F",
-		Value:      "🧑‍⚕️",
+		Value:      "🧑\u200d⚕️",
 		Descriptor: "Health Worker",
 	},
 	"1F9D1-200D-2696-FE0F": {
 		Key:        "1F9D1-200D-2696-FE0F",
-		Value:      "🧑‍⚖️",
+		Value:      "🧑\u200d⚖️",
 		Descriptor: "Judge",
 	},
 	"1F9D1-200D-2708-FE0F": {
 		Key:        "1F9D1-200D-2708-FE0F",
-		Value:      "🧑‍✈️",
+		Value:      "🧑\u200d✈️",
 		Descriptor: "Pilot",
 	},
 	"1F9D2": {
@@ -13799,12 +13802,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D6-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9D6-1F3FB-200D-2640-FE0F",
-		Value:      "🧖🏻‍♀️",
+		Value:      "🧖🏻\u200d♀️",
 		Descriptor: "Woman in Steamy Room: Light Skin Tone",
 	},
 	"1F9D6-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9D6-1F3FB-200D-2642-FE0F",
-		Value:      "🧖🏻‍♂️",
+		Value:      "🧖🏻\u200d♂️",
 		Descriptor: "Man in Steamy Room: Light Skin Tone",
 	},
 	"1F9D6-1F3FC": {
@@ -13814,12 +13817,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D6-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9D6-1F3FC-200D-2640-FE0F",
-		Value:      "🧖🏼‍♀️",
+		Value:      "🧖🏼\u200d♀️",
 		Descriptor: "Woman in Steamy Room: Medium-Light Skin Tone",
 	},
 	"1F9D6-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9D6-1F3FC-200D-2642-FE0F",
-		Value:      "🧖🏼‍♂️",
+		Value:      "🧖🏼\u200d♂️",
 		Descriptor: "Man in Steamy Room: Medium-Light Skin Tone",
 	},
 	"1F9D6-1F3FD": {
@@ -13829,12 +13832,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D6-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9D6-1F3FD-200D-2640-FE0F",
-		Value:      "🧖🏽‍♀️",
+		Value:      "🧖🏽\u200d♀️",
 		Descriptor: "Woman in Steamy Room: Medium Skin Tone",
 	},
 	"1F9D6-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9D6-1F3FD-200D-2642-FE0F",
-		Value:      "🧖🏽‍♂️",
+		Value:      "🧖🏽\u200d♂️",
 		Descriptor: "Man in Steamy Room: Medium Skin Tone",
 	},
 	"1F9D6-1F3FE": {
@@ -13844,12 +13847,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D6-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9D6-1F3FE-200D-2640-FE0F",
-		Value:      "🧖🏾‍♀️",
+		Value:      "🧖🏾\u200d♀️",
 		Descriptor: "Woman in Steamy Room: Medium-Dark Skin Tone",
 	},
 	"1F9D6-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9D6-1F3FE-200D-2642-FE0F",
-		Value:      "🧖🏾‍♂️",
+		Value:      "🧖🏾\u200d♂️",
 		Descriptor: "Man in Steamy Room: Medium-Dark Skin Tone",
 	},
 	"1F9D6-1F3FF": {
@@ -13859,22 +13862,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D6-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9D6-1F3FF-200D-2640-FE0F",
-		Value:      "🧖🏿‍♀️",
+		Value:      "🧖🏿\u200d♀️",
 		Descriptor: "Woman in Steamy Room: Dark Skin Tone",
 	},
 	"1F9D6-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9D6-1F3FF-200D-2642-FE0F",
-		Value:      "🧖🏿‍♂️",
+		Value:      "🧖🏿\u200d♂️",
 		Descriptor: "Man in Steamy Room: Dark Skin Tone",
 	},
 	"1F9D6-200D-2640-FE0F": {
 		Key:        "1F9D6-200D-2640-FE0F",
-		Value:      "🧖‍♀️",
+		Value:      "🧖\u200d♀️",
 		Descriptor: "Woman in Steamy Room",
 	},
 	"1F9D6-200D-2642-FE0F": {
 		Key:        "1F9D6-200D-2642-FE0F",
-		Value:      "🧖‍♂️",
+		Value:      "🧖\u200d♂️",
 		Descriptor: "Man in Steamy Room",
 	},
 	"1F9D7": {
@@ -13889,12 +13892,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D7-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9D7-1F3FB-200D-2640-FE0F",
-		Value:      "🧗🏻‍♀️",
+		Value:      "🧗🏻\u200d♀️",
 		Descriptor: "Woman Climbing: Light Skin Tone",
 	},
 	"1F9D7-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9D7-1F3FB-200D-2642-FE0F",
-		Value:      "🧗🏻‍♂️",
+		Value:      "🧗🏻\u200d♂️",
 		Descriptor: "Man Climbing: Light Skin Tone",
 	},
 	"1F9D7-1F3FC": {
@@ -13904,12 +13907,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D7-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9D7-1F3FC-200D-2640-FE0F",
-		Value:      "🧗🏼‍♀️",
+		Value:      "🧗🏼\u200d♀️",
 		Descriptor: "Woman Climbing: Medium-Light Skin Tone",
 	},
 	"1F9D7-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9D7-1F3FC-200D-2642-FE0F",
-		Value:      "🧗🏼‍♂️",
+		Value:      "🧗🏼\u200d♂️",
 		Descriptor: "Man Climbing: Medium-Light Skin Tone",
 	},
 	"1F9D7-1F3FD": {
@@ -13919,12 +13922,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D7-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9D7-1F3FD-200D-2640-FE0F",
-		Value:      "🧗🏽‍♀️",
+		Value:      "🧗🏽\u200d♀️",
 		Descriptor: "Woman Climbing: Medium Skin Tone",
 	},
 	"1F9D7-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9D7-1F3FD-200D-2642-FE0F",
-		Value:      "🧗🏽‍♂️",
+		Value:      "🧗🏽\u200d♂️",
 		Descriptor: "Man Climbing: Medium Skin Tone",
 	},
 	"1F9D7-1F3FE": {
@@ -13934,12 +13937,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D7-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9D7-1F3FE-200D-2640-FE0F",
-		Value:      "🧗🏾‍♀️",
+		Value:      "🧗🏾\u200d♀️",
 		Descriptor: "Woman Climbing: Medium-Dark Skin Tone",
 	},
 	"1F9D7-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9D7-1F3FE-200D-2642-FE0F",
-		Value:      "🧗🏾‍♂️",
+		Value:      "🧗🏾\u200d♂️",
 		Descriptor: "Man Climbing: Medium-Dark Skin Tone",
 	},
 	"1F9D7-1F3FF": {
@@ -13949,22 +13952,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D7-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9D7-1F3FF-200D-2640-FE0F",
-		Value:      "🧗🏿‍♀️",
+		Value:      "🧗🏿\u200d♀️",
 		Descriptor: "Woman Climbing: Dark Skin Tone",
 	},
 	"1F9D7-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9D7-1F3FF-200D-2642-FE0F",
-		Value:      "🧗🏿‍♂️",
+		Value:      "🧗🏿\u200d♂️",
 		Descriptor: "Man Climbing: Dark Skin Tone",
 	},
 	"1F9D7-200D-2640-FE0F": {
 		Key:        "1F9D7-200D-2640-FE0F",
-		Value:      "🧗‍♀️",
+		Value:      "🧗\u200d♀️",
 		Descriptor: "Woman Climbing",
 	},
 	"1F9D7-200D-2642-FE0F": {
 		Key:        "1F9D7-200D-2642-FE0F",
-		Value:      "🧗‍♂️",
+		Value:      "🧗\u200d♂️",
 		Descriptor: "Man Climbing",
 	},
 	"1F9D8": {
@@ -13979,12 +13982,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D8-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9D8-1F3FB-200D-2640-FE0F",
-		Value:      "🧘🏻‍♀️",
+		Value:      "🧘🏻\u200d♀️",
 		Descriptor: "Woman in Lotus Position: Light Skin Tone",
 	},
 	"1F9D8-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9D8-1F3FB-200D-2642-FE0F",
-		Value:      "🧘🏻‍♂️",
+		Value:      "🧘🏻\u200d♂️",
 		Descriptor: "Man in Lotus Position: Light Skin Tone",
 	},
 	"1F9D8-1F3FC": {
@@ -13994,12 +13997,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D8-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9D8-1F3FC-200D-2640-FE0F",
-		Value:      "🧘🏼‍♀️",
+		Value:      "🧘🏼\u200d♀️",
 		Descriptor: "Woman in Lotus Position: Medium-Light Skin Tone",
 	},
 	"1F9D8-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9D8-1F3FC-200D-2642-FE0F",
-		Value:      "🧘🏼‍♂️",
+		Value:      "🧘🏼\u200d♂️",
 		Descriptor: "Man in Lotus Position: Medium-Light Skin Tone",
 	},
 	"1F9D8-1F3FD": {
@@ -14009,12 +14012,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D8-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9D8-1F3FD-200D-2640-FE0F",
-		Value:      "🧘🏽‍♀️",
+		Value:      "🧘🏽\u200d♀️",
 		Descriptor: "Woman in Lotus Position: Medium Skin Tone",
 	},
 	"1F9D8-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9D8-1F3FD-200D-2642-FE0F",
-		Value:      "🧘🏽‍♂️",
+		Value:      "🧘🏽\u200d♂️",
 		Descriptor: "Man in Lotus Position: Medium Skin Tone",
 	},
 	"1F9D8-1F3FE": {
@@ -14024,12 +14027,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D8-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9D8-1F3FE-200D-2640-FE0F",
-		Value:      "🧘🏾‍♀️",
+		Value:      "🧘🏾\u200d♀️",
 		Descriptor: "Woman in Lotus Position: Medium-Dark Skin Tone",
 	},
 	"1F9D8-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9D8-1F3FE-200D-2642-FE0F",
-		Value:      "🧘🏾‍♂️",
+		Value:      "🧘🏾\u200d♂️",
 		Descriptor: "Man in Lotus Position: Medium-Dark Skin Tone",
 	},
 	"1F9D8-1F3FF": {
@@ -14039,22 +14042,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D8-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9D8-1F3FF-200D-2640-FE0F",
-		Value:      "🧘🏿‍♀️",
+		Value:      "🧘🏿\u200d♀️",
 		Descriptor: "Woman in Lotus Position: Dark Skin Tone",
 	},
 	"1F9D8-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9D8-1F3FF-200D-2642-FE0F",
-		Value:      "🧘🏿‍♂️",
+		Value:      "🧘🏿\u200d♂️",
 		Descriptor: "Man in Lotus Position: Dark Skin Tone",
 	},
 	"1F9D8-200D-2640-FE0F": {
 		Key:        "1F9D8-200D-2640-FE0F",
-		Value:      "🧘‍♀️",
+		Value:      "🧘\u200d♀️",
 		Descriptor: "Woman in Lotus Position",
 	},
 	"1F9D8-200D-2642-FE0F": {
 		Key:        "1F9D8-200D-2642-FE0F",
-		Value:      "🧘‍♂️",
+		Value:      "🧘\u200d♂️",
 		Descriptor: "Man in Lotus Position",
 	},
 	"1F9D9": {
@@ -14069,12 +14072,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D9-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9D9-1F3FB-200D-2640-FE0F",
-		Value:      "🧙🏻‍♀️",
+		Value:      "🧙🏻\u200d♀️",
 		Descriptor: "Woman Mage: Light Skin Tone",
 	},
 	"1F9D9-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9D9-1F3FB-200D-2642-FE0F",
-		Value:      "🧙🏻‍♂️",
+		Value:      "🧙🏻\u200d♂️",
 		Descriptor: "Man Mage: Light Skin Tone",
 	},
 	"1F9D9-1F3FC": {
@@ -14084,12 +14087,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D9-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9D9-1F3FC-200D-2640-FE0F",
-		Value:      "🧙🏼‍♀️",
+		Value:      "🧙🏼\u200d♀️",
 		Descriptor: "Woman Mage: Medium-Light Skin Tone",
 	},
 	"1F9D9-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9D9-1F3FC-200D-2642-FE0F",
-		Value:      "🧙🏼‍♂️",
+		Value:      "🧙🏼\u200d♂️",
 		Descriptor: "Man Mage: Medium-Light Skin Tone",
 	},
 	"1F9D9-1F3FD": {
@@ -14099,12 +14102,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D9-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9D9-1F3FD-200D-2640-FE0F",
-		Value:      "🧙🏽‍♀️",
+		Value:      "🧙🏽\u200d♀️",
 		Descriptor: "Woman Mage: Medium Skin Tone",
 	},
 	"1F9D9-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9D9-1F3FD-200D-2642-FE0F",
-		Value:      "🧙🏽‍♂️",
+		Value:      "🧙🏽\u200d♂️",
 		Descriptor: "Man Mage: Medium Skin Tone",
 	},
 	"1F9D9-1F3FE": {
@@ -14114,12 +14117,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D9-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9D9-1F3FE-200D-2640-FE0F",
-		Value:      "🧙🏾‍♀️",
+		Value:      "🧙🏾\u200d♀️",
 		Descriptor: "Woman Mage: Medium-Dark Skin Tone",
 	},
 	"1F9D9-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9D9-1F3FE-200D-2642-FE0F",
-		Value:      "🧙🏾‍♂️",
+		Value:      "🧙🏾\u200d♂️",
 		Descriptor: "Man Mage: Medium-Dark Skin Tone",
 	},
 	"1F9D9-1F3FF": {
@@ -14129,22 +14132,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9D9-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9D9-1F3FF-200D-2640-FE0F",
-		Value:      "🧙🏿‍♀️",
+		Value:      "🧙🏿\u200d♀️",
 		Descriptor: "Woman Mage: Dark Skin Tone",
 	},
 	"1F9D9-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9D9-1F3FF-200D-2642-FE0F",
-		Value:      "🧙🏿‍♂️",
+		Value:      "🧙🏿\u200d♂️",
 		Descriptor: "Man Mage: Dark Skin Tone",
 	},
 	"1F9D9-200D-2640-FE0F": {
 		Key:        "1F9D9-200D-2640-FE0F",
-		Value:      "🧙‍♀️",
+		Value:      "🧙\u200d♀️",
 		Descriptor: "Woman Mage",
 	},
 	"1F9D9-200D-2642-FE0F": {
 		Key:        "1F9D9-200D-2642-FE0F",
-		Value:      "🧙‍♂️",
+		Value:      "🧙\u200d♂️",
 		Descriptor: "Man Mage",
 	},
 	"1F9DA": {
@@ -14159,12 +14162,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DA-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9DA-1F3FB-200D-2640-FE0F",
-		Value:      "🧚🏻‍♀️",
+		Value:      "🧚🏻\u200d♀️",
 		Descriptor: "Woman Fairy: Light Skin Tone",
 	},
 	"1F9DA-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9DA-1F3FB-200D-2642-FE0F",
-		Value:      "🧚🏻‍♂️",
+		Value:      "🧚🏻\u200d♂️",
 		Descriptor: "Man Fairy: Light Skin Tone",
 	},
 	"1F9DA-1F3FC": {
@@ -14174,12 +14177,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DA-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9DA-1F3FC-200D-2640-FE0F",
-		Value:      "🧚🏼‍♀️",
+		Value:      "🧚🏼\u200d♀️",
 		Descriptor: "Woman Fairy: Medium-Light Skin Tone",
 	},
 	"1F9DA-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9DA-1F3FC-200D-2642-FE0F",
-		Value:      "🧚🏼‍♂️",
+		Value:      "🧚🏼\u200d♂️",
 		Descriptor: "Man Fairy: Medium-Light Skin Tone",
 	},
 	"1F9DA-1F3FD": {
@@ -14189,12 +14192,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DA-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9DA-1F3FD-200D-2640-FE0F",
-		Value:      "🧚🏽‍♀️",
+		Value:      "🧚🏽\u200d♀️",
 		Descriptor: "Woman Fairy: Medium Skin Tone",
 	},
 	"1F9DA-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9DA-1F3FD-200D-2642-FE0F",
-		Value:      "🧚🏽‍♂️",
+		Value:      "🧚🏽\u200d♂️",
 		Descriptor: "Man Fairy: Medium Skin Tone",
 	},
 	"1F9DA-1F3FE": {
@@ -14204,12 +14207,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DA-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9DA-1F3FE-200D-2640-FE0F",
-		Value:      "🧚🏾‍♀️",
+		Value:      "🧚🏾\u200d♀️",
 		Descriptor: "Woman Fairy: Medium-Dark Skin Tone",
 	},
 	"1F9DA-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9DA-1F3FE-200D-2642-FE0F",
-		Value:      "🧚🏾‍♂️",
+		Value:      "🧚🏾\u200d♂️",
 		Descriptor: "Man Fairy: Medium-Dark Skin Tone",
 	},
 	"1F9DA-1F3FF": {
@@ -14219,22 +14222,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DA-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9DA-1F3FF-200D-2640-FE0F",
-		Value:      "🧚🏿‍♀️",
+		Value:      "🧚🏿\u200d♀️",
 		Descriptor: "Woman Fairy: Dark Skin Tone",
 	},
 	"1F9DA-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9DA-1F3FF-200D-2642-FE0F",
-		Value:      "🧚🏿‍♂️",
+		Value:      "🧚🏿\u200d♂️",
 		Descriptor: "Man Fairy: Dark Skin Tone",
 	},
 	"1F9DA-200D-2640-FE0F": {
 		Key:        "1F9DA-200D-2640-FE0F",
-		Value:      "🧚‍♀️",
+		Value:      "🧚\u200d♀️",
 		Descriptor: "Woman Fairy",
 	},
 	"1F9DA-200D-2642-FE0F": {
 		Key:        "1F9DA-200D-2642-FE0F",
-		Value:      "🧚‍♂️",
+		Value:      "🧚\u200d♂️",
 		Descriptor: "Man Fairy",
 	},
 	"1F9DB": {
@@ -14249,12 +14252,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DB-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9DB-1F3FB-200D-2640-FE0F",
-		Value:      "🧛🏻‍♀️",
+		Value:      "🧛🏻\u200d♀️",
 		Descriptor: "Woman Vampire: Light Skin Tone",
 	},
 	"1F9DB-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9DB-1F3FB-200D-2642-FE0F",
-		Value:      "🧛🏻‍♂️",
+		Value:      "🧛🏻\u200d♂️",
 		Descriptor: "Man Vampire: Light Skin Tone",
 	},
 	"1F9DB-1F3FC": {
@@ -14264,12 +14267,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DB-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9DB-1F3FC-200D-2640-FE0F",
-		Value:      "🧛🏼‍♀️",
+		Value:      "🧛🏼\u200d♀️",
 		Descriptor: "Woman Vampire: Medium-Light Skin Tone",
 	},
 	"1F9DB-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9DB-1F3FC-200D-2642-FE0F",
-		Value:      "🧛🏼‍♂️",
+		Value:      "🧛🏼\u200d♂️",
 		Descriptor: "Man Vampire: Medium-Light Skin Tone",
 	},
 	"1F9DB-1F3FD": {
@@ -14279,12 +14282,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DB-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9DB-1F3FD-200D-2640-FE0F",
-		Value:      "🧛🏽‍♀️",
+		Value:      "🧛🏽\u200d♀️",
 		Descriptor: "Woman Vampire: Medium Skin Tone",
 	},
 	"1F9DB-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9DB-1F3FD-200D-2642-FE0F",
-		Value:      "🧛🏽‍♂️",
+		Value:      "🧛🏽\u200d♂️",
 		Descriptor: "Man Vampire: Medium Skin Tone",
 	},
 	"1F9DB-1F3FE": {
@@ -14294,12 +14297,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DB-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9DB-1F3FE-200D-2640-FE0F",
-		Value:      "🧛🏾‍♀️",
+		Value:      "🧛🏾\u200d♀️",
 		Descriptor: "Woman Vampire: Medium-Dark Skin Tone",
 	},
 	"1F9DB-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9DB-1F3FE-200D-2642-FE0F",
-		Value:      "🧛🏾‍♂️",
+		Value:      "🧛🏾\u200d♂️",
 		Descriptor: "Man Vampire: Medium-Dark Skin Tone",
 	},
 	"1F9DB-1F3FF": {
@@ -14309,22 +14312,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DB-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9DB-1F3FF-200D-2640-FE0F",
-		Value:      "🧛🏿‍♀️",
+		Value:      "🧛🏿\u200d♀️",
 		Descriptor: "Woman Vampire: Dark Skin Tone",
 	},
 	"1F9DB-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9DB-1F3FF-200D-2642-FE0F",
-		Value:      "🧛🏿‍♂️",
+		Value:      "🧛🏿\u200d♂️",
 		Descriptor: "Man Vampire: Dark Skin Tone",
 	},
 	"1F9DB-200D-2640-FE0F": {
 		Key:        "1F9DB-200D-2640-FE0F",
-		Value:      "🧛‍♀️",
+		Value:      "🧛\u200d♀️",
 		Descriptor: "Woman Vampire",
 	},
 	"1F9DB-200D-2642-FE0F": {
 		Key:        "1F9DB-200D-2642-FE0F",
-		Value:      "🧛‍♂️",
+		Value:      "🧛\u200d♂️",
 		Descriptor: "Man Vampire",
 	},
 	"1F9DC": {
@@ -14339,12 +14342,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DC-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9DC-1F3FB-200D-2640-FE0F",
-		Value:      "🧜🏻‍♀️",
+		Value:      "🧜🏻\u200d♀️",
 		Descriptor: "Mermaid: Light Skin Tone",
 	},
 	"1F9DC-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9DC-1F3FB-200D-2642-FE0F",
-		Value:      "🧜🏻‍♂️",
+		Value:      "🧜🏻\u200d♂️",
 		Descriptor: "Merman: Light Skin Tone",
 	},
 	"1F9DC-1F3FC": {
@@ -14354,12 +14357,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DC-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9DC-1F3FC-200D-2640-FE0F",
-		Value:      "🧜🏼‍♀️",
+		Value:      "🧜🏼\u200d♀️",
 		Descriptor: "Mermaid: Medium-Light Skin Tone",
 	},
 	"1F9DC-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9DC-1F3FC-200D-2642-FE0F",
-		Value:      "🧜🏼‍♂️",
+		Value:      "🧜🏼\u200d♂️",
 		Descriptor: "Merman: Medium-Light Skin Tone",
 	},
 	"1F9DC-1F3FD": {
@@ -14369,12 +14372,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DC-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9DC-1F3FD-200D-2640-FE0F",
-		Value:      "🧜🏽‍♀️",
+		Value:      "🧜🏽\u200d♀️",
 		Descriptor: "Mermaid: Medium Skin Tone",
 	},
 	"1F9DC-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9DC-1F3FD-200D-2642-FE0F",
-		Value:      "🧜🏽‍♂️",
+		Value:      "🧜🏽\u200d♂️",
 		Descriptor: "Merman: Medium Skin Tone",
 	},
 	"1F9DC-1F3FE": {
@@ -14384,12 +14387,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DC-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9DC-1F3FE-200D-2640-FE0F",
-		Value:      "🧜🏾‍♀️",
+		Value:      "🧜🏾\u200d♀️",
 		Descriptor: "Mermaid: Medium-Dark Skin Tone",
 	},
 	"1F9DC-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9DC-1F3FE-200D-2642-FE0F",
-		Value:      "🧜🏾‍♂️",
+		Value:      "🧜🏾\u200d♂️",
 		Descriptor: "Merman: Medium-Dark Skin Tone",
 	},
 	"1F9DC-1F3FF": {
@@ -14399,22 +14402,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DC-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9DC-1F3FF-200D-2640-FE0F",
-		Value:      "🧜🏿‍♀️",
+		Value:      "🧜🏿\u200d♀️",
 		Descriptor: "Mermaid: Dark Skin Tone",
 	},
 	"1F9DC-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9DC-1F3FF-200D-2642-FE0F",
-		Value:      "🧜🏿‍♂️",
+		Value:      "🧜🏿\u200d♂️",
 		Descriptor: "Merman: Dark Skin Tone",
 	},
 	"1F9DC-200D-2640-FE0F": {
 		Key:        "1F9DC-200D-2640-FE0F",
-		Value:      "🧜‍♀️",
+		Value:      "🧜\u200d♀️",
 		Descriptor: "Mermaid",
 	},
 	"1F9DC-200D-2642-FE0F": {
 		Key:        "1F9DC-200D-2642-FE0F",
-		Value:      "🧜‍♂️",
+		Value:      "🧜\u200d♂️",
 		Descriptor: "Merman",
 	},
 	"1F9DD": {
@@ -14429,12 +14432,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DD-1F3FB-200D-2640-FE0F": {
 		Key:        "1F9DD-1F3FB-200D-2640-FE0F",
-		Value:      "🧝🏻‍♀️",
+		Value:      "🧝🏻\u200d♀️",
 		Descriptor: "Woman Elf: Light Skin Tone",
 	},
 	"1F9DD-1F3FB-200D-2642-FE0F": {
 		Key:        "1F9DD-1F3FB-200D-2642-FE0F",
-		Value:      "🧝🏻‍♂️",
+		Value:      "🧝🏻\u200d♂️",
 		Descriptor: "Man Elf: Light Skin Tone",
 	},
 	"1F9DD-1F3FC": {
@@ -14444,12 +14447,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DD-1F3FC-200D-2640-FE0F": {
 		Key:        "1F9DD-1F3FC-200D-2640-FE0F",
-		Value:      "🧝🏼‍♀️",
+		Value:      "🧝🏼\u200d♀️",
 		Descriptor: "Woman Elf: Medium-Light Skin Tone",
 	},
 	"1F9DD-1F3FC-200D-2642-FE0F": {
 		Key:        "1F9DD-1F3FC-200D-2642-FE0F",
-		Value:      "🧝🏼‍♂️",
+		Value:      "🧝🏼\u200d♂️",
 		Descriptor: "Man Elf: Medium-Light Skin Tone",
 	},
 	"1F9DD-1F3FD": {
@@ -14459,12 +14462,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DD-1F3FD-200D-2640-FE0F": {
 		Key:        "1F9DD-1F3FD-200D-2640-FE0F",
-		Value:      "🧝🏽‍♀️",
+		Value:      "🧝🏽\u200d♀️",
 		Descriptor: "Woman Elf: Medium Skin Tone",
 	},
 	"1F9DD-1F3FD-200D-2642-FE0F": {
 		Key:        "1F9DD-1F3FD-200D-2642-FE0F",
-		Value:      "🧝🏽‍♂️",
+		Value:      "🧝🏽\u200d♂️",
 		Descriptor: "Man Elf: Medium Skin Tone",
 	},
 	"1F9DD-1F3FE": {
@@ -14474,12 +14477,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DD-1F3FE-200D-2640-FE0F": {
 		Key:        "1F9DD-1F3FE-200D-2640-FE0F",
-		Value:      "🧝🏾‍♀️",
+		Value:      "🧝🏾\u200d♀️",
 		Descriptor: "Woman Elf: Medium-Dark Skin Tone",
 	},
 	"1F9DD-1F3FE-200D-2642-FE0F": {
 		Key:        "1F9DD-1F3FE-200D-2642-FE0F",
-		Value:      "🧝🏾‍♂️",
+		Value:      "🧝🏾\u200d♂️",
 		Descriptor: "Man Elf: Medium-Dark Skin Tone",
 	},
 	"1F9DD-1F3FF": {
@@ -14489,22 +14492,22 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DD-1F3FF-200D-2640-FE0F": {
 		Key:        "1F9DD-1F3FF-200D-2640-FE0F",
-		Value:      "🧝🏿‍♀️",
+		Value:      "🧝🏿\u200d♀️",
 		Descriptor: "Woman Elf: Dark Skin Tone",
 	},
 	"1F9DD-1F3FF-200D-2642-FE0F": {
 		Key:        "1F9DD-1F3FF-200D-2642-FE0F",
-		Value:      "🧝🏿‍♂️",
+		Value:      "🧝🏿\u200d♂️",
 		Descriptor: "Man Elf: Dark Skin Tone",
 	},
 	"1F9DD-200D-2640-FE0F": {
 		Key:        "1F9DD-200D-2640-FE0F",
-		Value:      "🧝‍♀️",
+		Value:      "🧝\u200d♀️",
 		Descriptor: "Woman Elf",
 	},
 	"1F9DD-200D-2642-FE0F": {
 		Key:        "1F9DD-200D-2642-FE0F",
-		Value:      "🧝‍♂️",
+		Value:      "🧝\u200d♂️",
 		Descriptor: "Man Elf",
 	},
 	"1F9DE": {
@@ -14514,12 +14517,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DE-200D-2640-FE0F": {
 		Key:        "1F9DE-200D-2640-FE0F",
-		Value:      "🧞‍♀️",
+		Value:      "🧞\u200d♀️",
 		Descriptor: "Woman Genie",
 	},
 	"1F9DE-200D-2642-FE0F": {
 		Key:        "1F9DE-200D-2642-FE0F",
-		Value:      "🧞‍♂️",
+		Value:      "🧞\u200d♂️",
 		Descriptor: "Man Genie",
 	},
 	"1F9DF": {
@@ -14529,12 +14532,12 @@ var Emojis = map[string]Emoji{
 	},
 	"1F9DF-200D-2640-FE0F": {
 		Key:        "1F9DF-200D-2640-FE0F",
-		Value:      "🧟‍♀️",
+		Value:      "🧟\u200d♀️",
 		Descriptor: "Woman Zombie",
 	},
 	"1F9DF-200D-2642-FE0F": {
 		Key:        "1F9DF-200D-2642-FE0F",
-		Value:      "🧟‍♂️",
+		Value:      "🧟\u200d♂️",
 		Descriptor: "Man Zombie",
 	},
 	"1F9E0": {
@@ -15389,12 +15392,12 @@ var Emojis = map[string]Emoji{
 	},
 	"26F9-1F3FB-200D-2640-FE0F": {
 		Key:        "26F9-1F3FB-200D-2640-FE0F",
-		Value:      "⛹🏻‍♀️",
+		Value:      "⛹🏻\u200d♀️",
 		Descriptor: "Woman Bouncing Ball: Light Skin Tone",
 	},
 	"26F9-1F3FB-200D-2642-FE0F": {
 		Key:        "26F9-1F3FB-200D-2642-FE0F",
-		Value:      "⛹🏻‍♂️",
+		Value:      "⛹🏻\u200d♂️",
 		Descriptor: "Man Bouncing Ball: Light Skin Tone",
 	},
 	"26F9-1F3FC": {
@@ -15404,12 +15407,12 @@ var Emojis = map[string]Emoji{
 	},
 	"26F9-1F3FC-200D-2640-FE0F": {
 		Key:        "26F9-1F3FC-200D-2640-FE0F",
-		Value:      "⛹🏼‍♀️",
+		Value:      "⛹🏼\u200d♀️",
 		Descriptor: "Woman Bouncing Ball: Medium-Light Skin Tone",
 	},
 	"26F9-1F3FC-200D-2642-FE0F": {
 		Key:        "26F9-1F3FC-200D-2642-FE0F",
-		Value:      "⛹🏼‍♂️",
+		Value:      "⛹🏼\u200d♂️",
 		Descriptor: "Man Bouncing Ball: Medium-Light Skin Tone",
 	},
 	"26F9-1F3FD": {
@@ -15419,12 +15422,12 @@ var Emojis = map[string]Emoji{
 	},
 	"26F9-1F3FD-200D-2640-FE0F": {
 		Key:        "26F9-1F3FD-200D-2640-FE0F",
-		Value:      "⛹🏽‍♀️",
+		Value:      "⛹🏽\u200d♀️",
 		Descriptor: "Woman Bouncing Ball: Medium Skin Tone",
 	},
 	"26F9-1F3FD-200D-2642-FE0F": {
 		Key:        "26F9-1F3FD-200D-2642-FE0F",
-		Value:      "⛹🏽‍♂️",
+		Value:      "⛹🏽\u200d♂️",
 		Descriptor: "Man Bouncing Ball: Medium Skin Tone",
 	},
 	"26F9-1F3FE": {
@@ -15434,12 +15437,12 @@ var Emojis = map[string]Emoji{
 	},
 	"26F9-1F3FE-200D-2640-FE0F": {
 		Key:        "26F9-1F3FE-200D-2640-FE0F",
-		Value:      "⛹🏾‍♀️",
+		Value:      "⛹🏾\u200d♀️",
 		Descriptor: "Woman Bouncing Ball: Medium-Dark Skin Tone",
 	},
 	"26F9-1F3FE-200D-2642-FE0F": {
 		Key:        "26F9-1F3FE-200D-2642-FE0F",
-		Value:      "⛹🏾‍♂️",
+		Value:      "⛹🏾\u200d♂️",
 		Descriptor: "Man Bouncing Ball: Medium-Dark Skin Tone",
 	},
 	"26F9-1F3FF": {
@@ -15449,12 +15452,12 @@ var Emojis = map[string]Emoji{
 	},
 	"26F9-1F3FF-200D-2640-FE0F": {
 		Key:        "26F9-1F3FF-200D-2640-FE0F",
-		Value:      "⛹🏿‍♀️",
+		Value:      "⛹🏿\u200d♀️",
 		Descriptor: "Woman Bouncing Ball: Dark Skin Tone",
 	},
 	"26F9-1F3FF-200D-2642-FE0F": {
 		Key:        "26F9-1F3FF-200D-2642-FE0F",
-		Value:      "⛹🏿‍♂️",
+		Value:      "⛹🏿\u200d♂️",
 		Descriptor: "Man Bouncing Ball: Dark Skin Tone",
 	},
 	"26F9-FE0F": {
@@ -15464,12 +15467,12 @@ var Emojis = map[string]Emoji{
 	},
 	"26F9-FE0F-200D-2640-FE0F": {
 		Key:        "26F9-FE0F-200D-2640-FE0F",
-		Value:      "⛹️‍♀️",
+		Value:      "⛹️\u200d♀️",
 		Descriptor: "Woman Bouncing Ball",
 	},
 	"26F9-FE0F-200D-2642-FE0F": {
 		Key:        "26F9-FE0F-200D-2642-FE0F",
-		Value:      "⛹️‍♂️",
+		Value:      "⛹️\u200d♂️",
 		Descriptor: "Man Bouncing Ball",
 	},
 	"26FA": {

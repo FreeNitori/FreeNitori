@@ -5,6 +5,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/binaries/public"
 	"git.randomchars.net/RandomChars/FreeNitori/binaries/tmpl"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
+	// Register handlers.
 	_ "git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/handlers"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/routes"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/static"
@@ -30,6 +31,7 @@ func (logger) Write(p []byte) (n int, err error) {
 	return len(p), err
 }
 
+// Initialize early initializes web services.
 func Initialize() error {
 
 	// Set debug mode if debug log level and load certain middlewares

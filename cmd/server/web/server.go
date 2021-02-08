@@ -1,4 +1,4 @@
-// Web services.
+// Package web contains stuff related to web services.
 package web
 
 import (
@@ -13,8 +13,11 @@ import (
 )
 
 var err error
+
+// Server contains instance of an http.Server.
 var Server = http.Server{}
 
+// Serve serves web stuff.
 func Serve() {
 	<-state.DiscordReady
 

@@ -1,10 +1,11 @@
-// Logging functions and logger object.
+// Package log contains logging functions.
 package log
 
 import (
 	"github.com/sirupsen/logrus"
 )
 
+// Logger is the logger.
 var Logger = logrus.New()
 
 func init() {

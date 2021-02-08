@@ -1,4 +1,4 @@
-// Event multiplexer.
+// Package multiplexer does command related stuff.
 package multiplexer
 
 import (
@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// Context information passed to the handlers
+// Context holds information of an event.
 type Context struct {
 	Message           *discordgo.Message
 	Session           *discordgo.Session
@@ -27,16 +27,16 @@ type Context struct {
 	HasLeadingMention bool
 }
 
-// Structure the multiplexer
+// Multiplexer represents the command router.
 type Multiplexer struct {
 	Routes []*Route
 	Prefix string
 }
 
-// Function signature for functions that handle commands
+// CommandHandler represents the handler function of a Route.
 type CommandHandler func(*Context)
 
-// Information about a handler
+// Route represents a command route.
 type Route struct {
 	Pattern       string
 	AliasPatterns []string
@@ -45,30 +45,27 @@ type Route struct {
 	Handler       CommandHandler
 }
 
-// Command categories
+// CommandCategory represents a category of Route.
 type CommandCategory struct {
 	Routes      []*Route
 	Title       string
 	Description string
 }
 
-// Some structures to save some registering work
-type CommandHandlers struct{}
-
 func init() {
 	EventHandlers = append(EventHandlers,
-		Router.OnReady,
-		Router.HandleMessage,
-		Router.OnGuildMemberAdd,
-		Router.OnGuildMemberRemove,
-		Router.OnGuildDelete,
-		Router.OnMessageCreate,
-		Router.OnMessageDelete,
-		Router.OnMessageReactionAdd,
-		Router.OnMessageReactionRemove)
+		Router.onReady,
+		Router.handleMessage,
+		Router.onGuildMemberAdd,
+		Router.onGuildMemberRemove,
+		Router.onGuildDelete,
+		Router.onMessageCreate,
+		Router.onMessageDelete,
+		Router.onMessageReactionAdd,
+		Router.onMessageReactionRemove)
 }
 
-// Returns a new command category
+// NewCategory returns a new command category
 func NewCategory(name string, description string) *CommandCategory {
 	cat := &CommandCategory{
 		Title:       name,
@@ -77,21 +74,21 @@ func NewCategory(name string, description string) *CommandCategory {
 	return cat
 }
 
-// Returns a new message route multiplexer
+// New returns a router.
 func New() *Multiplexer {
 	return &Multiplexer{
 		Prefix: config.Config.System.Prefix,
 	}
 }
 
-// Register a route
+// Route registers a route to the router.
 func (mux *Multiplexer) Route(route *Route) *Route {
 	route.Category.Routes = append(route.Category.Routes, route)
 	mux.Routes = append(mux.Routes, route)
 	return route
 }
 
-// This matches routes for the message
+// MatchRoute fuzzy matches a message to a route.
 func (mux *Multiplexer) MatchRoute(message string) (*Route, []string) {
 	// Make a slice of words out of the message
 	fields := strings.Fields(message)
@@ -132,7 +129,7 @@ func (mux *Multiplexer) MatchRoute(message string) (*Route, []string) {
 	return route, fields[fieldIndex:]
 }
 
-func (mux *Multiplexer) HandleMessage(session *discordgo.Session, create *discordgo.MessageCreate) {
+func (mux *Multiplexer) handleMessage(session *discordgo.Session, create *discordgo.MessageCreate) {
 	var err error
 
 	// Ignore self and bot messages
@@ -156,12 +153,11 @@ func (mux *Multiplexer) HandleMessage(session *discordgo.Session, create *discor
 			if err != nil {
 				log.Errorf("Failed to fetch guild from API or cache, %s", err)
 				return
-			} else {
-				// Attempt caching the channel
-				err = session.State.GuildAdd(guild)
-				if err != nil {
-					log.Warnf("Failed to cache channel fetched from API, %s", err)
-				}
+			}
+			// Attempt caching the channel
+			err = session.State.GuildAdd(guild)
+			if err != nil {
+				log.Warnf("Failed to cache channel fetched from API, %s", err)
 			}
 		}
 	}
@@ -175,12 +171,11 @@ func (mux *Multiplexer) HandleMessage(session *discordgo.Session, create *discor
 		if err != nil {
 			log.Errorf("Failed to fetch channel from API or cache, %s", err)
 			return
-		} else {
-			// Attempt caching the channel
-			err = session.State.ChannelAdd(channel)
-			if err != nil {
-				log.Warnf("Failed to cache channel fetched from API, %s", err)
-			}
+		}
+		// Attempt caching the channel
+		err = session.State.ChannelAdd(channel)
+		if err != nil {
+			log.Warnf("Failed to cache channel fetched from API, %s", err)
 		}
 	}
 
@@ -278,7 +273,7 @@ func (mux *Multiplexer) HandleMessage(session *discordgo.Session, create *discor
 }
 
 // Event handler that fires when ready
-func (mux *Multiplexer) OnReady(session *discordgo.Session, ready *discordgo.Ready) {
+func (mux *Multiplexer) onReady(session *discordgo.Session, ready *discordgo.Ready) {
 	go func() {
 		for _, hook := range Ready {
 			hook(session, ready)
@@ -288,7 +283,7 @@ func (mux *Multiplexer) OnReady(session *discordgo.Session, ready *discordgo.Rea
 }
 
 // Event handler that fires when a guild member is added
-func (mux *Multiplexer) OnGuildMemberAdd(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
+func (mux *Multiplexer) onGuildMemberAdd(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
 	go func() {
 		for _, hook := range GuildMemberAdd {
 			hook(session, add)
@@ -298,7 +293,7 @@ func (mux *Multiplexer) OnGuildMemberAdd(session *discordgo.Session, add *discor
 }
 
 // Event handler that fires when a guild member is removed
-func (mux *Multiplexer) OnGuildMemberRemove(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
+func (mux *Multiplexer) onGuildMemberRemove(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
 	go func() {
 		for _, hook := range GuildMemberRemove {
 			hook(session, remove)
@@ -308,7 +303,7 @@ func (mux *Multiplexer) OnGuildMemberRemove(session *discordgo.Session, remove *
 }
 
 // Event handler that fires when a guild is deleted
-func (mux *Multiplexer) OnGuildDelete(session *discordgo.Session, delete *discordgo.GuildDelete) {
+func (mux *Multiplexer) onGuildDelete(session *discordgo.Session, delete *discordgo.GuildDelete) {
 	go func() {
 		for _, hook := range GuildDelete {
 			hook(session, delete)
@@ -318,7 +313,7 @@ func (mux *Multiplexer) OnGuildDelete(session *discordgo.Session, delete *discor
 }
 
 // Event handler that fires when a message is created
-func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *discordgo.MessageCreate) {
+func (mux *Multiplexer) onMessageCreate(session *discordgo.Session, create *discordgo.MessageCreate) {
 	go func() {
 		for _, hook := range MessageCreate {
 			hook(session, create)
@@ -328,7 +323,7 @@ func (mux *Multiplexer) OnMessageCreate(session *discordgo.Session, create *disc
 }
 
 // Event handler that fires when a message is deleted
-func (mux *Multiplexer) OnMessageDelete(session *discordgo.Session, delete *discordgo.MessageDelete) {
+func (mux *Multiplexer) onMessageDelete(session *discordgo.Session, delete *discordgo.MessageDelete) {
 	go func() {
 		for _, hook := range MessageDelete {
 			hook(session, delete)
@@ -338,7 +333,7 @@ func (mux *Multiplexer) OnMessageDelete(session *discordgo.Session, delete *disc
 }
 
 // Event handler that fires when a reaction is added
-func (mux *Multiplexer) OnMessageReactionAdd(session *discordgo.Session, add *discordgo.MessageReactionAdd) {
+func (mux *Multiplexer) onMessageReactionAdd(session *discordgo.Session, add *discordgo.MessageReactionAdd) {
 	go func() {
 		for _, hook := range MessageReactionAdd {
 			hook(session, add)
@@ -348,7 +343,7 @@ func (mux *Multiplexer) OnMessageReactionAdd(session *discordgo.Session, add *di
 }
 
 // Event handler that fires when a reaction is removed
-func (mux *Multiplexer) OnMessageReactionRemove(session *discordgo.Session, remove *discordgo.MessageReactionRemove) {
+func (mux *Multiplexer) onMessageReactionRemove(session *discordgo.Session, remove *discordgo.MessageReactionRemove) {
 	go func() {
 		for _, hook := range MessageReactionRemove {
 			hook(session, remove)

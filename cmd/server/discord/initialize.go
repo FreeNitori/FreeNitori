@@ -12,7 +12,7 @@ import (
 
 var err error
 
-// Initialize prepares Discord-related functionality
+// Initialize early initializes Discord-related functionalities.
 func Initialize() error {
 
 	// Load plugins if not window
@@ -35,6 +35,7 @@ func Initialize() error {
 	return nil
 }
 
+// LateInitialize late initializes Discord-related features.
 func LateInitialize() error {
 	// Authenticate and make session
 	err = state.RawSession.Open()

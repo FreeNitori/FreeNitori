@@ -15,18 +15,21 @@ import (
 
 var sessions = map[string]chan [2]string{}
 
+// CharacterInfo represents information on a character.
 type CharacterInfo struct {
 	Color        int
 	FriendlyName string
 	SearchString string
 }
 
+// CharacterArt represents a piece of artwork of a character.
 type CharacterArt struct {
 	ImageURL  string
 	SourceURL string
 	Character CharacterInfo
 }
 
+// CharacterList returns a slice of CharacterInfo.
 func CharacterList() []CharacterInfo {
 	return []CharacterInfo{
 		{Color: 0xb50404, FriendlyName: "Reimu", SearchString: "Hakurei_Reimu"},
@@ -198,9 +201,8 @@ func fetch(character CharacterInfo) (*CharacterArt, error) {
 		v, _ := strconv.Atoi(count)
 		if v < 100 {
 			return v
-		} else {
-			return 100
 		}
+		return 100
 	}()
 	if target <= 1 {
 		return nil, errors.New("no art available")
