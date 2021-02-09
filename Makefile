@@ -1,9 +1,10 @@
 all: deps assets build
-run: assets build start
+run: assets nowindowsgui build start
 
-LDFLAGS = "-s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'"
+LDFLAGS = -s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'
 ifeq ($(shell go env GOOS), windows)
    Suffix = ".exe"
+   WINDOW_LDFLAGS = -H windowsgui
 endif
 
 .PHONY: deps
@@ -23,12 +24,16 @@ plugins:
 	@echo "Building plugins..."
 	@for pl in $(shell sh -c "ls plugins/*/main.go"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
 
+.PHONY: nowindowsgui
+nowindowsgui:
+	$(eval WINDOW_LDFLAGS = )
+
 .PHONY: build
 build:
 	@echo "Building FreeNitori..."
-	@go build -tags=jsoniter -ldflags=$(LDFLAGS) -o build/freenitori$(Suffix) $$PWD/cmd/server
+	@go build -tags=jsoniter -ldflags="$(LDFLAGS) $(WINDOW_LDFLAGS)" -o build/freenitori$(Suffix) $$PWD/cmd/server
 	@echo "Building nitorictl..."
-	@go build -tags=jsoniter -ldflags=$(LDFLAGS) -o build/nitorictl$(Suffix) $$PWD/cmd/cli
+	@go build -tags=jsoniter -ldflags="$(LDFLAGS)" -o build/nitorictl$(Suffix) $$PWD/cmd/cli
 
 .PHONY: start
 start:

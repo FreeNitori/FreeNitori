@@ -112,6 +112,10 @@ func parseConfig() *Conf {
 		log.Fatalf("Configuration file syntax error, %s", err)
 		os.Exit(1)
 	}
+	if nitoriConf.Discord.Token == "INSERT_TOKEN_HERE" || nitoriConf.Discord.ClientSecret == "INSERT_CLIENT_SECRET_HERE" || nitoriConf.WebServer.Secret == "RANDOM_STRING" {
+		log.Warn("Please edit the configuration file before starting.")
+		firstRun(true)
+	}
 	return &nitoriConf
 }
 
@@ -134,7 +138,7 @@ func checkConfig() *types.Nil {
 		}
 		log.Warnf("Generated default configuration file at %s, "+
 			"please edit it before restarting FreeNitori.", nitoriConf)
-		select {}
+		firstRun(false)
 	}
 	return nil
 }

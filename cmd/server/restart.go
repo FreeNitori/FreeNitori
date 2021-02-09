@@ -8,6 +8,8 @@ import (
 	"syscall"
 )
 
+func abnormalExit() {}
+
 func restart() {
 	if _, err := os.Stat(execPath); err != nil {
 		log.Fatalf("Unable to get executable path, %s", err)

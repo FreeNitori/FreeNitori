@@ -6,6 +6,7 @@ import (
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/extension"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/rpc"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/ui"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
@@ -60,6 +61,13 @@ func init() {
 		_ = database.Database.Close()
 		os.Exit(1)
 	}
+
+	// Initialize UI
+	err = ui.Initialize()
+	if err != nil {
+		log.Fatalf("Unable to initialize UI, %s", err)
+		os.Exit(1)
+	}
 }
 
 func main() {
@@ -71,6 +79,7 @@ func main() {
 	go rpc.Serve()
 	go discord.Serve()
 	go web.Serve()
+	go ui.Serve()
 
 	// Print thing
 	log.Info("Begin late initialization.")
@@ -129,6 +138,7 @@ func main() {
 			cleanup()
 			restart()
 		}
+		abnormalExit()
 		os.Exit(exitCode)
 	}
 }

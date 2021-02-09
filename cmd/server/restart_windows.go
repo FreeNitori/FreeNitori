@@ -2,8 +2,13 @@ package main
 
 import (
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
 	"os"
 )
+
+func abnormalExit() {
+	<-state.ExitCode
+}
 
 func restart() {
 	if _, err := os.Stat(execPath); err != nil {
