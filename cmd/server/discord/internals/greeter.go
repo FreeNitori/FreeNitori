@@ -131,6 +131,9 @@ func init() {
 }
 
 func welcomeHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
+	if add.Member.User.Bot {
+		return
+	}
 	var embed embedutil.Embed
 	channelID, err := config.GetGuildConfValue(add.GuildID, "greet_channel")
 	if err != nil {
@@ -169,6 +172,9 @@ func welcomeHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
 }
 
 func removeHandler(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
+	if remove.Member.User.Bot {
+		return
+	}
 	var embed embedutil.Embed
 	channelID, err := config.GetGuildConfValue(remove.GuildID, "greet_channel")
 	if err != nil {
