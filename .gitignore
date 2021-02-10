@@ -4,6 +4,7 @@
 *.out
 /.idea/
 /binaries
+/cmd/server/freenitori.syso
 /build
 /plugins
 /extensions
