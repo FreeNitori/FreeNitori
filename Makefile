@@ -1,3 +1,5 @@
+.NOTPARALLEL: deps assets plugins nowindowsgui build start
+
 all: deps assets build
 run: assets nowindowsgui build start
 
