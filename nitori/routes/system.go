@@ -173,7 +173,7 @@ func invite(context *multiplexer.Context) {
 }
 
 func setStatus(_ *discordgo.Session, ready *discordgo.Ready) {
-	err = state.RawSession.UpdateStatus(0, config.Config.Discord.Presence)
+	err = state.RawSession.UpdateGameStatus(0, config.Config.Discord.Presence)
 	if err != nil {
 		log.Warnf("Unable to update presence, %s", err)
 	}

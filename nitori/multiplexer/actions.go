@@ -101,7 +101,7 @@ func (context *Context) HasPermission(permission int) bool {
 
 	// Check against the user
 	permissions, err := context.Session.State.UserChannelPermissions(context.Author.ID, context.Message.ChannelID)
-	return err == nil && (permissions&permission == permission)
+	return err == nil && (int(permissions)&permission == permission)
 }
 
 // IsOperator checks of a user is an operator.
