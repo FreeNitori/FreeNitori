@@ -61,6 +61,7 @@ func init() {
 		Router.onGuildDelete,
 		Router.onMessageCreate,
 		Router.onMessageDelete,
+		Router.onMessageUpdate,
 		Router.onMessageReactionAdd,
 		Router.onMessageReactionRemove)
 }
@@ -327,6 +328,16 @@ func (mux *Multiplexer) onMessageDelete(session *discordgo.Session, delete *disc
 	go func() {
 		for _, hook := range MessageDelete {
 			hook(session, delete)
+		}
+	}()
+	return
+}
+
+// Event handler that fires when a message is updated
+func (mux *Multiplexer) onMessageUpdate(session *discordgo.Session, update *discordgo.MessageUpdate) {
+	go func() {
+		for _, hook := range MessageUpdate {
+			hook(session, update)
 		}
 	}()
 	return
