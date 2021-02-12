@@ -39,6 +39,7 @@ func MakeSessions() error {
 		session.UserAgent = state.RawSession.UserAgent
 		session.ShouldReconnectOnError = state.RawSession.ShouldReconnectOnError
 		session.Identify.Intents = state.RawSession.Identify.Intents
+		session.State.MaxMessageCount = state.RawSession.State.MaxMessageCount
 		err = session.Open()
 		if err != nil {
 			return err

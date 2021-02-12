@@ -29,7 +29,7 @@ func (Context) NumericalRegex() *regexp.Regexp {
 
 // SendMessage sends a text message in the current channel and returns the message.
 func (context *Context) SendMessage(message string) *discordgo.Message {
-	permissions, err := context.Session.State.UserChannelPermissions(context.Author.ID, context.Message.ChannelID)
+	permissions, err := context.Session.State.UserChannelPermissions(context.Session.State.User.ID, context.Message.ChannelID)
 	if !(err == nil && (permissions&discordgo.PermissionSendMessages == discordgo.PermissionSendMessages)) {
 		return nil
 	}
@@ -47,7 +47,7 @@ func (context *Context) SendMessage(message string) *discordgo.Message {
 // SendEmbed sends an embedutil message in the current channel and returns the message.
 func (context *Context) SendEmbed(message string, embed embedutil.Embed) *discordgo.Message {
 	var err error
-	permissions, err := context.Session.State.UserChannelPermissions(context.Author.ID, context.Message.ChannelID)
+	permissions, err := context.Session.State.UserChannelPermissions(context.Session.State.User.ID, context.Message.ChannelID)
 	if !(err == nil && (permissions&discordgo.PermissionSendMessages == discordgo.PermissionSendMessages)) {
 		return nil
 	}

@@ -158,17 +158,11 @@ func welcomeHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
 		embed.Color = state.KappaColor
 		embed.SetImage(url)
 	}
-	_, _ = session.ChannelMessageSendComplex(channelID, &discordgo.MessageSend{
-		Content: strings.NewReplacer(
-			"$USERNAME", add.User.Username,
-			"$DISCRIMINATOR", add.User.Discriminator,
-			"$MENTION", add.User.Mention()).Replace(message),
-		Embed:           embed.MessageEmbed,
-		TTS:             false,
-		Files:           nil,
-		AllowedMentions: nil,
-		File:            nil,
-	})
+	context := &multiplexer.Context{Message: &discordgo.Message{ChannelID: channelID}, Session: session}
+	context.SendEmbed(strings.NewReplacer(
+		"$USERNAME", add.User.Username,
+		"$DISCRIMINATOR", add.User.Discriminator,
+		"$MENTION", add.User.Mention()).Replace(message), embed)
 }
 
 func removeHandler(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
@@ -199,15 +193,9 @@ func removeHandler(session *discordgo.Session, remove *discordgo.GuildMemberRemo
 		embed.Color = state.KappaColor
 		embed.SetImage(url)
 	}
-	_, _ = session.ChannelMessageSendComplex(channelID, &discordgo.MessageSend{
-		Content: strings.NewReplacer(
-			"$USERNAME", remove.User.Username,
-			"$DISCRIMINATOR", remove.User.Discriminator,
-			"$MENTION", remove.User.Mention()).Replace(message),
-		Embed:           embed.MessageEmbed,
-		TTS:             false,
-		Files:           nil,
-		AllowedMentions: nil,
-		File:            nil,
-	})
+	context := &multiplexer.Context{Message: &discordgo.Message{ChannelID: channelID}, Session: session}
+	context.SendEmbed(strings.NewReplacer(
+		"$USERNAME", remove.User.Username,
+		"$DISCRIMINATOR", remove.User.Discriminator,
+		"$MENTION", remove.User.Mention()).Replace(message), embed)
 }

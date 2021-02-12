@@ -30,6 +30,7 @@ func Initialize() error {
 		state.RawSession.Token = "Bot " + config.TokenOverride
 	}
 	state.RawSession.ShouldReconnectOnError = true
+	state.RawSession.State.MaxMessageCount = config.Config.Discord.CachePerChannel
 	state.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAll)
 
 	return nil

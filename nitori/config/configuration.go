@@ -55,11 +55,12 @@ type Conf struct {
 		RateLimitPeriod     int
 	}
 	Discord struct {
-		Token        string
-		ClientSecret string
-		Presence     string
-		Shard        bool
-		ShardCount   int
+		Token           string
+		ClientSecret    string
+		Presence        string
+		Shard           bool
+		ShardCount      int
+		CachePerChannel int
 	}
 	LastFM struct {
 		APIKey    string
