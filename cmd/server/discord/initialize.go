@@ -3,6 +3,7 @@ package discord
 import (
 	"errors"
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/sessioning"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
@@ -70,7 +71,7 @@ func LateInitialize() error {
 	}()
 
 	if config.Config.Discord.Shard {
-		err = MakeSessions()
+		err = sessioning.MakeSessions()
 		if err != nil {
 			return err
 		}

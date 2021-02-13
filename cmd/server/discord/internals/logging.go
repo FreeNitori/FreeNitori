@@ -2,6 +2,7 @@ package internals
 
 import (
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/sessioning"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
@@ -51,6 +52,9 @@ func messageDeleteLog(session *discordgo.Session, delete *discordgo.MessageDelet
 	if channelID == "" {
 		return
 	}
+	if sessioning.FetchChannel(sessioning.FetchGuild(delete.GuildID), "", channelID) == nil {
+		return
+	}
 	embed.Color = state.KappaColor
 	embed.SetAuthor(delete.BeforeDelete.Author.Username+"#"+delete.BeforeDelete.Author.Discriminator, delete.BeforeDelete.Author.AvatarURL("128"))
 	embed.SetFooter(fmt.Sprintf("Channel: %s Message: %s Author: %s", delete.ChannelID, delete.BeforeDelete.ID, delete.BeforeDelete.Author.ID))
@@ -63,6 +67,9 @@ func messageDeleteLog(session *discordgo.Session, delete *discordgo.MessageDelet
 	embed.AddField("Channel", fmt.Sprintf("<#%s>", delete.ChannelID), false)
 	context := &multiplexer.Context{Message: &discordgo.Message{ChannelID: channelID}, Session: session}
 	context.SendEmbed("", embed)
+	for _, e := range delete.BeforeDelete.Embeds {
+		context.SendEmbed("Embed included in previously deleted message.", embedutil.Embed{MessageEmbed: e})
+	}
 }
 
 func messageUpdateLog(session *discordgo.Session, update *discordgo.MessageUpdate) {
@@ -72,12 +79,22 @@ func messageUpdateLog(session *discordgo.Session, update *discordgo.MessageUpdat
 	if update.BeforeUpdate.Author.ID == state.RawSession.State.User.ID {
 		return
 	}
-	var embed = embedutil.NewEmbed("Message Update", "")
+	if update.Author == nil {
+		return
+	}
+	var embed = embedutil.NewEmbed("Message Update",
+		fmt.Sprintf("[Message Link](https://discord.com/channels/%s/%s/%s)",
+			update.BeforeUpdate.GuildID,
+			update.BeforeUpdate.ChannelID,
+			update.BeforeUpdate.ID))
 	channelID, err := config.GetGuildConfValue(update.GuildID, "log_channel")
 	if err != nil {
 		return
 	}
 	if channelID == "" {
+		return
+	}
+	if sessioning.FetchChannel(sessioning.FetchGuild(update.GuildID), "", channelID) == nil {
 		return
 	}
 	embed.Color = state.KappaColor
@@ -98,4 +115,7 @@ func messageUpdateLog(session *discordgo.Session, update *discordgo.MessageUpdat
 	embed.AddField("Channel", fmt.Sprintf("<#%s>", update.ChannelID), false)
 	context := &multiplexer.Context{Message: &discordgo.Message{ChannelID: channelID}, Session: session}
 	context.SendEmbed("", embed)
+	for _, e := range update.BeforeUpdate.Embeds {
+		context.SendEmbed("Embed included in previously updated message.", embedutil.Embed{MessageEmbed: e})
+	}
 }

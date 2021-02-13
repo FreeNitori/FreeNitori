@@ -3,8 +3,8 @@ package handlers
 import (
 	"encoding/json"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/db"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/internals"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/sessioning"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/oauth"
 	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/routes"
@@ -78,7 +78,7 @@ func apiStats(context *gin.Context) {
 }
 
 func apiUser(context *gin.Context) {
-	user, err := discord.FetchUser(context.Param("uid"))
+	user, err := sessioning.FetchUser(context.Param("uid"))
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, datatypes.H{
 			"error": err.Error(),
@@ -96,7 +96,7 @@ func apiUser(context *gin.Context) {
 }
 
 func apiGuild(context *gin.Context) {
-	guild := discord.FetchGuild(context.Param("gid"))
+	guild := sessioning.FetchGuild(context.Param("gid"))
 	if guild == nil {
 		context.JSON(http.StatusNotFound, datatypes.H{
 			"error": "not found",
@@ -123,7 +123,7 @@ func apiGuild(context *gin.Context) {
 }
 
 func apiGuildKey(context *gin.Context) {
-	guild := discord.FetchGuild(context.Param("gid"))
+	guild := sessioning.FetchGuild(context.Param("gid"))
 	if guild == nil {
 		context.JSON(http.StatusNotFound, datatypes.H{})
 		return

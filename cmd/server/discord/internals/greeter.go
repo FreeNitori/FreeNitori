@@ -2,6 +2,7 @@ package internals
 
 import (
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/sessioning"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
@@ -142,6 +143,9 @@ func welcomeHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
 	if channelID == "" {
 		return
 	}
+	if sessioning.FetchChannel(sessioning.FetchGuild(add.GuildID), "", channelID) == nil {
+		return
+	}
 	message, err := config.GetGuildConfValue(add.GuildID, "welcome_message")
 	if err != nil {
 		return
@@ -175,6 +179,9 @@ func removeHandler(session *discordgo.Session, remove *discordgo.GuildMemberRemo
 		return
 	}
 	if channelID == "" {
+		return
+	}
+	if sessioning.FetchChannel(sessioning.FetchGuild(remove.GuildID), "", channelID) == nil {
 		return
 	}
 	message, err := config.GetGuildConfValue(remove.GuildID, "goodbye_message")
