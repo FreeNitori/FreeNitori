@@ -273,6 +273,9 @@ func init() {
 }
 
 func memberAddRank(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
+	if add.User.Bot {
+		return
+	}
 	guild, err := session.State.Guild(add.GuildID)
 	if err != nil {
 		guild, err = session.Guild(add.GuildID)
