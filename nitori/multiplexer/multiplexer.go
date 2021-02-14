@@ -3,8 +3,8 @@ package multiplexer
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"github.com/bwmarrin/discordgo"
 	"regexp"
 	"strconv"

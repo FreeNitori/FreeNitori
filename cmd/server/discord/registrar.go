@@ -2,12 +2,12 @@ package discord
 
 import (
 	// Run all init functions from internals.
-	_ "git.randomchars.net/RandomChars/FreeNitori/cmd/server/discord/internals"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	_ "git.randomchars.net/FreeNitori/FreeNitori/cmd/server/discord/internals"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	// Register all routes.
-	_ "git.randomchars.net/RandomChars/FreeNitori/nitori/routes"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	_ "git.randomchars.net/FreeNitori/FreeNitori/nitori/routes"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 )
 
 func init() {

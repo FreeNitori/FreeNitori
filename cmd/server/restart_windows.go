@@ -1,8 +1,8 @@
 package main
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"os"
 )
 

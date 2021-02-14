@@ -1,10 +1,10 @@
 package sessioning
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"time"

@@ -2,7 +2,7 @@
 package main
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 )
 
 // CommandRoute contains information of a command route.

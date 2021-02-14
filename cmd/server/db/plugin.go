@@ -4,9 +4,9 @@ package db
 
 import (
 	"errors"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/database/badger"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database/badger"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"io/ioutil"
 	"os"
 	"plugin"

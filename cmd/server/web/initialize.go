@@ -2,15 +2,15 @@ package web
 
 import (
 	"errors"
-	"git.randomchars.net/RandomChars/FreeNitori/binaries/public"
-	"git.randomchars.net/RandomChars/FreeNitori/binaries/tmpl"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
+	"git.randomchars.net/FreeNitori/FreeNitori/binaries/public"
+	"git.randomchars.net/FreeNitori/FreeNitori/binaries/tmpl"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
 	// Register handlers.
-	_ "git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/handlers"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/routes"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/static"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	_ "git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/handlers"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/routes"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/static"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"

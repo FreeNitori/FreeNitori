@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"github.com/lxn/walk"
 	"github.com/sirupsen/logrus"
 	"go/types"

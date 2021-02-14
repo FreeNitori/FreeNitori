@@ -2,7 +2,7 @@
 package embedutil
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"github.com/bwmarrin/discordgo"
 )
 

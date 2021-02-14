@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/cli/client"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/cli/client"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"net/rpc"
 	"os"
 	"os/signal"

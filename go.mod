@@ -1,4 +1,4 @@
-module git.randomchars.net/RandomChars/FreeNitori
+module git.randomchars.net/FreeNitori/FreeNitori
 
 require (
 	github.com/BurntSushi/toml v0.3.1

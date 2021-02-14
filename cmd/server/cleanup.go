@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/rpc"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/rpc"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"os"
 	"time"
 )

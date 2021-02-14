@@ -2,10 +2,10 @@ package multiplexer
 
 import (
 	"errors"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"github.com/sirupsen/logrus"
 	"regexp"

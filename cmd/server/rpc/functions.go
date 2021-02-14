@@ -2,8 +2,8 @@ package rpc
 
 import (
 	"errors"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"strconv"
 )
 

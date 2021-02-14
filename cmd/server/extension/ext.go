@@ -2,8 +2,8 @@ package extension
 
 import (
 	"errors"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"go.starlark.net/starlark"
 	"io/ioutil"
 	"os"

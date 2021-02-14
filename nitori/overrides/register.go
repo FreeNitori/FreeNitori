@@ -1,6 +1,6 @@
 package overrides
 
-import "git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
+import "git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 
 var (
 	simpleEntries  []SimpleConfigurationEntry

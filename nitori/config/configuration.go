@@ -3,8 +3,8 @@ package config
 
 import (
 	"flag"
-	"git.randomchars.net/RandomChars/FreeNitori/binaries/confdefault"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/binaries/confdefault"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
 	"go/types"

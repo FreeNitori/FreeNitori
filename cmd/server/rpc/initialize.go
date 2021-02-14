@@ -2,7 +2,7 @@ package rpc
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"net"
 	"os"
 	"syscall"

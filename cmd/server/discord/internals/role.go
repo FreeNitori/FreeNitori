@@ -2,9 +2,9 @@ package internals
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/overrides"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
 	"github.com/bwmarrin/discordgo"
 )
 

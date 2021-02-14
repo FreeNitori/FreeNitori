@@ -3,7 +3,7 @@
 all: deps assets build
 run: assets nowindowsgui build start
 
-LDFLAGS = -s -w -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/RandomChars/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'
+LDFLAGS = -s -w -X 'git.randomchars.net/FreeNitori/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/FreeNitori/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'
 ifeq ($(shell go env GOOS), windows)
    Suffix = ".exe"
    WINDOW_LDFLAGS = -H windowsgui

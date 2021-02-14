@@ -2,8 +2,8 @@ package config
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/log"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"github.com/dgraph-io/badger/v2"
 	"strconv"
 )

@@ -1,8 +1,8 @@
 package db
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dgraph-io/badger/v2"
 	"strconv"

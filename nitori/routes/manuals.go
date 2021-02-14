@@ -2,9 +2,9 @@ package routes
 
 import (
 	"fmt"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/embedutil"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/multiplexer"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"strings"
 )
 

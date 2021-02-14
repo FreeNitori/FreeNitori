@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/datatypes"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/oauth"
-	"git.randomchars.net/RandomChars/FreeNitori/cmd/server/web/routes"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
-	"git.randomchars.net/RandomChars/FreeNitori/nitori/state"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/oauth"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/routes"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
