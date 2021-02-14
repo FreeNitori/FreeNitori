@@ -100,6 +100,11 @@ func stats(context *multiplexer.Context) {
 	embed.AddField("Goroutines", strconv.Itoa(stats.Process.NumGoroutine), true)
 	embed.AddField("Database Size", strconv.Itoa(int(stats.Process.DBSize)), true)
 
+	embed.AddField("Intents", strconv.Itoa(stats.Discord.Intents), true)
+	embed.AddField("Sharding", strconv.FormatBool(stats.Discord.Sharding), true)
+	embed.AddField("Shards", strconv.Itoa(stats.Discord.Shards), true)
+	embed.AddField("Guilds", strconv.Itoa(stats.Discord.Guilds), true)
+
 	embed.AddField("Operating System", stats.Platform.GOOS, true)
 	embed.AddField("Architecture", stats.Platform.GOARCH, true)
 	embed.AddField("Go Root", stats.Platform.GOROOT, true)

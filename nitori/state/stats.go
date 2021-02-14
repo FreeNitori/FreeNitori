@@ -2,6 +2,7 @@ package state
 
 import (
 	"fmt"
+	"git.randomchars.net/RandomChars/FreeNitori/nitori/config"
 	"git.randomchars.net/RandomChars/FreeNitori/nitori/database"
 	"os"
 	"runtime"
@@ -21,6 +22,12 @@ type SystemStats struct {
 		GOOS      string
 		GOARCH    string
 		GOROOT    string
+	}
+	Discord struct {
+		Intents  int
+		Sharding bool
+		Shards   int
+		Guilds   int
 	}
 	Mem struct {
 		Allocated string
@@ -71,6 +78,11 @@ func Stats() SystemStats {
 	systemStats.Platform.GOOS = runtime.GOOS
 	systemStats.Platform.GOARCH = runtime.GOARCH
 	systemStats.Platform.GOROOT = runtime.GOROOT()
+
+	systemStats.Discord.Intents = int(RawSession.Identify.Intents)
+	systemStats.Discord.Sharding = config.Config.Discord.Shard
+	systemStats.Discord.Shards = len(ShardSessions)
+	systemStats.Discord.Guilds = len(RawSession.State.Guilds)
 
 	var memStats runtime.MemStats
 	runtime.ReadMemStats(&memStats)

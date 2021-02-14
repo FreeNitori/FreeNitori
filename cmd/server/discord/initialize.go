@@ -31,8 +31,9 @@ func Initialize() error {
 		state.RawSession.Token = "Bot " + config.TokenOverride
 	}
 	state.RawSession.ShouldReconnectOnError = true
+	// FIXME: events not firing properly when this is set
 	state.RawSession.State.MaxMessageCount = config.Config.Discord.CachePerChannel
-	state.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAll)
+	state.RawSession.Identify.Intents = discordgo.IntentsAll
 
 	return nil
 }
@@ -43,7 +44,7 @@ func LateInitialize() error {
 	err = state.RawSession.Open()
 	if err != nil {
 		log.Warnf("Unable to open session with all intents, %s, Nitori will now fallback to unprivileged intents, some functionality will be unavailable.", err)
-		state.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAllWithoutPrivileged)
+		state.RawSession.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 		err = state.RawSession.Open()
 		if err != nil {
 			return errors.New("unable to open session with Discord")
