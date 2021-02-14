@@ -42,6 +42,7 @@ func LateInitialize() error {
 	// Authenticate and make session
 	err = state.RawSession.Open()
 	if err != nil {
+		log.Warnf("Unable to open session with all intents, %s, Nitori will now fallback to unprivileged intents, some functionality will be unavailable.", err)
 		state.RawSession.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsAllWithoutPrivileged)
 		err = state.RawSession.Open()
 		if err != nil {
@@ -71,6 +72,7 @@ func LateInitialize() error {
 	}()
 
 	if config.Config.Discord.Shard {
+		log.Infof("Sharding is enabled, starting %v shards.", config.Config.Discord.ShardCount)
 		err = sessioning.MakeSessions()
 		if err != nil {
 			return err
