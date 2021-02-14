@@ -13,9 +13,11 @@ import (
 )
 
 // Early initialization quirk
-var _ = flags()
-var _ = checkConfig()
-var _ = setLogLevel()
+var (
+	_ = flags()
+	_ = checkConfig()
+	_ = setLogLevel()
+)
 
 var (
 	// Config contains data loaded from configuration file.
