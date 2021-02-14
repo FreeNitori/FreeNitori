@@ -1,5 +1,5 @@
-// Package ui contains UI related stuff.
 // +build !windows
+// Package ui contains UI related stuff.
 
 package ui
 
