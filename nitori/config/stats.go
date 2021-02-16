@@ -1,9 +1,9 @@
-package state
+package config
 
 import (
 	"fmt"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"os"
 	"runtime"
 	"time"
@@ -70,7 +70,7 @@ func Stats() SystemStats {
 	var systemStats SystemStats
 
 	systemStats.Process.PID = os.Getpid()
-	systemStats.Process.Uptime = Uptime()
+	systemStats.Process.Uptime = state.Uptime()
 	systemStats.Process.NumGoroutine = runtime.NumGoroutine()
 	systemStats.Process.DBSize = database.Database.Size()
 
@@ -79,10 +79,10 @@ func Stats() SystemStats {
 	systemStats.Platform.GOARCH = runtime.GOARCH
 	systemStats.Platform.GOROOT = runtime.GOROOT()
 
-	systemStats.Discord.Intents = int(RawSession.Identify.Intents)
-	systemStats.Discord.Sharding = config.Config.Discord.Shard
-	systemStats.Discord.Shards = len(ShardSessions)
-	systemStats.Discord.Guilds = len(RawSession.State.Guilds)
+	systemStats.Discord.Intents = int(state.RawSession.Identify.Intents)
+	systemStats.Discord.Sharding = Config.Discord.Shard
+	systemStats.Discord.Shards = len(state.ShardSessions)
+	systemStats.Discord.Guilds = len(state.RawSession.State.Guilds)
 
 	var memStats runtime.MemStats
 	runtime.ReadMemStats(&memStats)

@@ -19,7 +19,6 @@ deps:
 .PHONY: assets
 assets:
 	@echo "Packaging assets..."
-	@$$(go env GOPATH)/bin/go-bindata -o binaries/confdefault/confdefault.go -pkg confdefault -prefix assets/ ./assets/nitori.conf
 	@$$(go env GOPATH)/bin/go-bindata -o binaries/tmpl/tmpl.go -pkg tmpl -prefix assets/web/templates/ ./assets/web/templates/*
 	@$$(go env GOPATH)/bin/go-bindata -fs -o binaries/public/public.go -pkg public -prefix assets/web/public/ ./assets/web/public/...
 

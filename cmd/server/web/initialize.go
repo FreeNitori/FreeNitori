@@ -34,23 +34,7 @@ func (logger) Write(p []byte) (n int, err error) {
 // Initialize early initializes web services.
 func Initialize() error {
 
-	// Set debug mode if debug log level and load certain middlewares
-	if config.LogLevel == logrus.DebugLevel {
-		gin.SetMode(gin.DebugMode)
-	} else {
-		gin.SetMode(gin.ReleaseMode)
-	}
-
-	router = gin.New()
-	router.ForwardedByClientIP = config.Config.WebServer.ForwardedByClientIP
-	router.Use(recovery())
-
-	store := cookie.NewStore([]byte(config.Config.WebServer.Secret))
-	router.Use(sessions.Sessions("nitori", store))
-
-	if config.LogLevel == logrus.DebugLevel {
-		router.Use(gin.LoggerWithWriter(logger{}))
-	}
+	router = ginSetup()
 
 	// Register templates
 	templates := template.New("/")
@@ -113,4 +97,25 @@ func Initialize() error {
 		router.Any(route.Pattern, route.Handlers...)
 	}
 	return nil
+}
+
+func ginSetup() *gin.Engine {
+	// Set debug mode if debug log level and load certain middlewares
+	if log.GetLevel() == logrus.DebugLevel {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	engine := gin.New()
+	engine.ForwardedByClientIP = config.Config.WebServer.ForwardedByClientIP
+	engine.Use(recovery())
+
+	store := cookie.NewStore([]byte(config.Config.WebServer.Secret))
+	engine.Use(sessions.Sessions("nitori", store))
+
+	if log.GetLevel() == logrus.DebugLevel {
+		engine.Use(gin.LoggerWithWriter(logger{}))
+	}
+	return engine
 }

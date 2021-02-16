@@ -89,7 +89,7 @@ func stats(context *multiplexer.Context) {
 		return
 	}
 
-	stats := state.Stats()
+	stats := config.Stats()
 
 	var embed embedutil.Embed
 

@@ -37,87 +37,21 @@ func init() {
 		AliasPatterns: []string{},
 		Description:   "",
 		Category:      multiplexer.ExperienceCategory,
-		Handler: func(context *multiplexer.Context) {
-			if !context.IsOperator() {
-				context.SendMessage(state.OperatorOnly)
-				return
-			}
-			if len(context.Fields) == 2 {
-				exp, err := strconv.Atoi(context.Fields[1])
-				if err != nil {
-					context.SendMessage(state.InvalidArgument)
-					return
-				}
-				context.SendMessage(fmt.Sprintf("%v exp is %v levels.", exp, ExpToLevel(exp)))
-			} else {
-				context.SendMessage(state.InvalidArgument)
-			}
-		},
+		Handler:       exp2level,
 	})
 	multiplexer.Router.Route(&multiplexer.Route{
 		Pattern:       "level2exp",
 		AliasPatterns: []string{},
 		Description:   "",
 		Category:      multiplexer.ExperienceCategory,
-		Handler: func(context *multiplexer.Context) {
-			if !context.IsOperator() {
-				context.SendMessage(state.OperatorOnly)
-				return
-			}
-			if len(context.Fields) == 2 {
-				lvl, err := strconv.Atoi(context.Fields[1])
-				if err != nil {
-					context.SendMessage(state.InvalidArgument)
-					return
-				}
-				context.SendMessage(fmt.Sprintf("%v levels is %v exp.", lvl, LevelToExp(lvl)))
-			} else {
-				context.SendMessage(state.InvalidArgument)
-			}
-		},
+		Handler:       level2exp,
 	})
 	multiplexer.Router.Route(&multiplexer.Route{
 		Pattern:       "setexp",
 		AliasPatterns: []string{},
 		Description:   "",
 		Category:      multiplexer.ExperienceCategory,
-		Handler: func(context *multiplexer.Context) {
-			if !context.IsOperator() {
-				context.SendMessage(state.OperatorOnly)
-				return
-			}
-			if context.IsPrivate {
-				context.SendMessage(state.GuildOnly)
-				return
-			}
-			enabled, err := db.ExpEnabled(context.Guild.ID)
-			if !context.HandleError(err) {
-				return
-			}
-			if !enabled {
-				context.SendMessage(state.FeatureDisabled)
-				return
-			}
-			if len(context.Fields) == 3 {
-				exp, err := strconv.Atoi(context.Fields[1])
-				if err != nil {
-					context.SendMessage(state.InvalidArgument)
-					return
-				}
-				member := context.GetMember(context.Fields[2])
-				if member == nil {
-					context.SendMessage(state.MissingUser)
-					return
-				}
-				err = db.SetMemberExp(member.User, context.Guild, exp)
-				if !context.HandleError(err) {
-					return
-				}
-				context.SendMessage(fmt.Sprintf("Successfully set experience of %s to %v.", member.User.Username, exp))
-			} else {
-				context.SendMessage(state.InvalidArgument)
-			}
-		},
+		Handler:       setexp,
 	})
 	overrides.RegisterComplexEntry(overrides.ComplexConfigurationEntry{
 		Name:         "experience",
@@ -447,6 +381,78 @@ func leaderboard(context *multiplexer.Context) {
 			context.Guild.ID))
 	embed.Color = state.KappaColor
 	context.SendEmbed("", embed)
+}
+
+func level2exp(context *multiplexer.Context) {
+	if !context.IsOperator() {
+		context.SendMessage(state.OperatorOnly)
+		return
+	}
+	if len(context.Fields) == 2 {
+		lvl, err := strconv.Atoi(context.Fields[1])
+		if err != nil {
+			context.SendMessage(state.InvalidArgument)
+			return
+		}
+		context.SendMessage(fmt.Sprintf("%v levels is %v exp.", lvl, LevelToExp(lvl)))
+	} else {
+		context.SendMessage(state.InvalidArgument)
+	}
+}
+
+func exp2level(context *multiplexer.Context) {
+	if !context.IsOperator() {
+		context.SendMessage(state.OperatorOnly)
+		return
+	}
+	if len(context.Fields) == 2 {
+		exp, err := strconv.Atoi(context.Fields[1])
+		if err != nil {
+			context.SendMessage(state.InvalidArgument)
+			return
+		}
+		context.SendMessage(fmt.Sprintf("%v exp is %v levels.", exp, ExpToLevel(exp)))
+	} else {
+		context.SendMessage(state.InvalidArgument)
+	}
+}
+
+func setexp(context *multiplexer.Context) {
+	if !context.IsOperator() {
+		context.SendMessage(state.OperatorOnly)
+		return
+	}
+	if context.IsPrivate {
+		context.SendMessage(state.GuildOnly)
+		return
+	}
+	enabled, err := db.ExpEnabled(context.Guild.ID)
+	if !context.HandleError(err) {
+		return
+	}
+	if !enabled {
+		context.SendMessage(state.FeatureDisabled)
+		return
+	}
+	if len(context.Fields) == 3 {
+		exp, err := strconv.Atoi(context.Fields[1])
+		if err != nil {
+			context.SendMessage(state.InvalidArgument)
+			return
+		}
+		member := context.GetMember(context.Fields[2])
+		if member == nil {
+			context.SendMessage(state.MissingUser)
+			return
+		}
+		err = db.SetMemberExp(member.User, context.Guild, exp)
+		if !context.HandleError(err) {
+			return
+		}
+		context.SendMessage(fmt.Sprintf("Successfully set experience of %s to %v.", member.User.Username, exp))
+	} else {
+		context.SendMessage(state.InvalidArgument)
+	}
 }
 
 // LevelToExp calculates amount of experience from a level integer.

@@ -113,13 +113,13 @@ func init() {
 							return
 						}
 						context.SendMessage("Successfully uninhibited the message.")
-					} else {
-						err = db.HighlightBindMessage(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID, "-")
-						if !context.HandleError(err) {
-							return
-						}
-						context.SendMessage("Successfully inhibited the message.")
+						return
 					}
+					err = db.HighlightBindMessage(context.Message.MessageReference.GuildID, context.Message.MessageReference.MessageID, "-")
+					if !context.HandleError(err) {
+						return
+					}
+					context.SendMessage("Successfully inhibited the message.")
 				},
 			},
 		},

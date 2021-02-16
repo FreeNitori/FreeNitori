@@ -3,7 +3,6 @@ package config
 
 import (
 	"flag"
-	"git.randomchars.net/FreeNitori/FreeNitori/binaries/confdefault"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
@@ -15,8 +14,6 @@ import (
 // Early initialization quirk
 var (
 	_ = flags()
-	_ = checkConfig()
-	_ = setLogLevel()
 )
 
 var (
@@ -28,8 +25,6 @@ var (
 	TokenOverride string
 	// VersionStartup indicates weather the program should display version information and exit.
 	VersionStartup bool
-	// LogLevel is the log level.
-	LogLevel = getLogLevel()
 )
 
 // MessageOutOfBounds represents an out of bounds message.
@@ -74,17 +69,13 @@ func flags() *types.Nil {
 	return nil
 }
 
-func setLogLevel() *types.Nil {
-	log.SetLevel(LogLevel)
-	return nil
-}
-
 func (err MessageOutOfBounds) Error() string {
 	return "message out of bounds"
 }
 
 // parseConfig parses the configuration file, generating one if none is present.
 func parseConfig() *Conf {
+	checkConfig()
 	var nitoriConf Conf
 	var config []byte
 	var err error
@@ -115,39 +106,35 @@ func parseConfig() *Conf {
 		log.Warn("Please edit the configuration file before starting.")
 		firstRun(true)
 	}
+	level, err := logrus.ParseLevel(nitoriConf.System.LogLevel)
+	if err != nil {
+		log.Fatalf("Unable to parse log level, %s", err)
+		os.Exit(1)
+	}
+	log.SetLevel(level)
 	return &nitoriConf
 }
 
 // checkConfig checks for a configuration file and generates default if not exists.
-func checkConfig() *types.Nil {
+func checkConfig() {
 	var nitoriConf = NitoriConfPath
 	if NitoriConfPath == "" {
 		nitoriConf = "nitori.conf"
 	}
 	if _, err := os.Stat(nitoriConf); os.IsNotExist(err) {
-		defaultConfigFile, err := confdefault.Asset("nitori.conf")
+		file, err := os.Create(nitoriConf)
 		if err != nil {
-			log.Fatalf("Failed to extract the default configuration file, %s", err)
+			log.Fatalf("Unable to create configuration file, %s", err)
 			os.Exit(1)
 		}
-		err = ioutil.WriteFile(nitoriConf, defaultConfigFile, 0644)
+		encoder := toml.NewEncoder(file)
+		err = encoder.Encode(confDefault)
 		if err != nil {
-			log.Fatalf("Failed to write the default configuration file, %s", err)
+			log.Fatalf("Unable to generate default configuration, %s", err)
 			os.Exit(1)
 		}
 		log.Warnf("Generated default configuration file at %s, "+
 			"please edit it before restarting FreeNitori.", nitoriConf)
 		firstRun(false)
 	}
-	return nil
-}
-
-// getLogLevel refers the log level configuration string to a log level integer.
-func getLogLevel() logrus.Level {
-	level, err := logrus.ParseLevel(Config.System.LogLevel)
-	if err != nil {
-		log.Fatalf("Unable to parse log level, %s", err)
-		os.Exit(1)
-	}
-	return level
 }
