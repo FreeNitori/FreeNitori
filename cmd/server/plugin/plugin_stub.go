@@ -1,6 +1,6 @@
 // +build !linux,!freebsd,!darwin
 
-package db
+package plugin
 
 import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
@@ -8,8 +8,8 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 )
 
-func loadDatabaseBackend() error {
-	log.Info("Plugins are not supported on this platform, using built-in database.")
+func Initialize() error {
+	log.Info("Plugins are not supported on this platform.")
 	database.Database = &badger.Database
 	return nil
 }

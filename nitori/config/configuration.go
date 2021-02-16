@@ -64,10 +64,6 @@ type Conf struct {
 		ShardCount      int
 		CachePerChannel int
 	}
-	LastFM struct {
-		APIKey    string
-		APISecret string
-	}
 }
 
 func flags() *types.Nil {

@@ -15,13 +15,6 @@ var err error
 
 // Initialize early initializes Discord-related functionalities.
 func Initialize() error {
-
-	// Load plugins if not window
-	err = loadPlugins()
-	if err != nil {
-		return err
-	}
-
 	// Setup some things
 	discordgo.Logger = log.DiscordGoLogger
 	state.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version() + ")"
