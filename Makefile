@@ -1,4 +1,4 @@
-.NOTPARALLEL: deps assets plugins nowindowsgui build start
+.NOTPARALLEL: deps assets nowindowsgui build start
 
 all: deps assets build
 run: assets nowindowsgui build start
@@ -22,11 +22,6 @@ assets:
 	@$$(go env GOPATH)/bin/go-bindata -o binaries/confdefault/confdefault.go -pkg confdefault -prefix assets/ ./assets/nitori.conf
 	@$$(go env GOPATH)/bin/go-bindata -o binaries/tmpl/tmpl.go -pkg tmpl -prefix assets/web/templates/ ./assets/web/templates/*
 	@$$(go env GOPATH)/bin/go-bindata -fs -o binaries/public/public.go -pkg public -prefix assets/web/public/ ./assets/web/public/...
-
-.PHONY: plugins
-plugins:
-	@echo "Building plugins..."
-	@for pl in $(shell sh -c "ls plugins/*/main.go"); do go build -ldflags="-s -w" --buildmode=plugin -o ./plugins $$PWD/$${pl::-7}; done;
 
 .PHONY: nowindowsgui
 nowindowsgui:

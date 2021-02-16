@@ -87,32 +87,6 @@ func UnsetRankBind(guild *discordgo.Guild, level string) error {
 	return err
 }
 
-// GetLastfm gets a user's lastfm username.
-func GetLastfm(user *discordgo.User, guild *discordgo.Guild) (string, error) {
-	result, err := database.Database.HGet("lastfm."+guild.ID, user.ID)
-	if err != nil {
-		if err == badger.ErrKeyNotFound {
-			return "", nil
-		}
-		return "", err
-	}
-	return result, err
-}
-
-// SetLastfm sets a user's lastfm username.
-func SetLastfm(user *discordgo.User, guild *discordgo.Guild, username string) error {
-	return database.Database.HSet("lastfm."+guild.ID, user.ID, username)
-}
-
-// ResetLastfm resets a user's lastfm username.
-func ResetLastfm(user *discordgo.User, guild *discordgo.Guild) error {
-	err := database.Database.HDel("lastfm."+guild.ID, []string{user.ID})
-	if err == badger.ErrKeyNotFound {
-		return nil
-	}
-	return err
-}
-
 // HighlightBindMessage binds a message with the highlight message.
 func HighlightBindMessage(gid, message, highlight string) error {
 	return database.Database.HSet("highlight."+gid, message, highlight)

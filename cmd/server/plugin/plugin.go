@@ -63,8 +63,14 @@ func processReturn(i interface{}, path os.FileInfo) {
 	} else if route, ok := i.(*multiplexer.Route); ok {
 		multiplexer.Router.Route(route)
 		log.Infof("Loaded plugin %s implementing command %s.", path.Name(), route.Pattern)
+	} else if err, ok := i.(error); ok {
+		log.Errorf("Plugin %s did not load properly, %s", path.Name(), err.Error())
 	} else {
-		log.Infof("Loaded plugin %s.", path.Name())
+		if i == nil {
+			log.Infof("Loaded plugin %s.", path.Name())
+		} else {
+			log.Warnf("Loaded plugin %s with unexpected return.", path.Name())
+		}
 	}
 }
 

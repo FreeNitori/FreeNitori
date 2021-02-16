@@ -159,13 +159,9 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 		return
 	}
 
-	message, err := session.State.Message(reaction.ChannelID, reaction.MessageID)
+	message, err := session.ChannelMessage(reaction.ChannelID, reaction.MessageID)
 	if err != nil {
-		message, err = session.ChannelMessage(reaction.ChannelID, reaction.MessageID)
-		if err != nil {
-			return
-		}
-		_ = session.State.MessageAdd(message)
+		return
 	}
 
 	if message.Author.ID == session.State.User.ID {

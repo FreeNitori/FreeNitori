@@ -24,7 +24,6 @@ func Initialize() error {
 		state.RawSession.Token = "Bot " + config.TokenOverride
 	}
 	state.RawSession.ShouldReconnectOnError = true
-	// FIXME: events not firing properly when this is set
 	state.RawSession.State.MaxMessageCount = config.Config.Discord.CachePerChannel
 	state.RawSession.Identify.Intents = discordgo.IntentsAll
 
