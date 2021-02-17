@@ -103,13 +103,7 @@ func main() {
 	// Load Discord extensions
 	err = extension.FindExtensions()
 	if err != nil {
-		log.Fatalf("Unable to find extensions, %s", err)
-		cleanup()
-		os.Exit(1)
-	}
-	err = extension.RegisterHandlers()
-	if err != nil {
-		log.Fatalf("Unable to register event handlers, %s", err)
+		log.Fatalf("Unable to register extensions, %s", err)
 		cleanup()
 		os.Exit(1)
 	}

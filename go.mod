@@ -19,11 +19,12 @@ require (
 	github.com/lxn/walk v0.0.0-20210112085537-c389da54e794
 	github.com/lxn/win v0.0.0-20201111105847-2a20daff6a55
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
+	github.com/robertkrimen/otto v0.0.0-20200922221731-ef014fd054ac
 	github.com/sirupsen/logrus v1.7.0
 	github.com/ulule/limiter/v3 v3.7.1
-	go.starlark.net v0.0.0-20201210151846-e81fc95f7bd5
 	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 	gopkg.in/Knetic/govaluate.v3 v3.0.0 // indirect
+	gopkg.in/sourcemap.v1 v1.0.5 // indirect
 )
 
 go 1.14
