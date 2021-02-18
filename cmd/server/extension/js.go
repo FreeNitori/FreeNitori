@@ -34,10 +34,22 @@ func registerJS(path, name string) *multiplexer.Route {
 func executeJS(plugin string, context *multiplexer.Context) error {
 	vm := otto.New()
 	err = vm.Set("context", struct {
-		Content     string
-		SendMessage func(call otto.FunctionCall) otto.Value
+		Fields            []string
+		Content           string
+		IsPrivate         bool
+		IsTargeted        bool
+		HasPrefix         bool
+		HasMention        bool
+		HasLeadingMention bool
+		SendMessage       func(call otto.FunctionCall) otto.Value
 	}{
-		Content: context.Content,
+		Fields:            context.Fields,
+		Content:           context.Content,
+		IsPrivate:         context.IsPrivate,
+		IsTargeted:        context.IsTargeted,
+		HasPrefix:         context.HasPrefix,
+		HasMention:        context.HasMention,
+		HasLeadingMention: context.HasLeadingMention,
 		SendMessage: func(call otto.FunctionCall) otto.Value {
 			if len(call.ArgumentList) != 1 {
 				return otto.Value{}

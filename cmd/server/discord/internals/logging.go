@@ -38,6 +38,9 @@ func init() {
 }
 
 func messageDeleteLog(session *discordgo.Session, delete *discordgo.MessageDelete) {
+	if delete.GuildID == "" {
+		return
+	}
 	if delete.BeforeDelete == nil {
 		return
 	}
@@ -73,6 +76,9 @@ func messageDeleteLog(session *discordgo.Session, delete *discordgo.MessageDelet
 }
 
 func messageUpdateLog(session *discordgo.Session, update *discordgo.MessageUpdate) {
+	if update.GuildID == "" {
+		return
+	}
 	if update.BeforeUpdate == nil {
 		return
 	}

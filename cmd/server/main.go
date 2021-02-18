@@ -133,7 +133,7 @@ func main() {
 		}
 	}()
 
-	// Exit if there's something on that channel
+	// Block until exit code is received, and exit with that code or restart if it is -1.
 	exitCode := <-state.ExitCode
 	if exitCode != 0 {
 		if exitCode == -1 {
