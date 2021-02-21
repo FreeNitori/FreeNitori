@@ -1,19 +1,64 @@
 package internals
 
 import (
+	"encoding/xml"
 	"errors"
 	"fmt"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
-	"github.com/anaskhan96/soup"
+	"io/ioutil"
 	"math/rand"
-	"strconv"
+	"net/http"
 	"strings"
 	"time"
 )
 
+const ImageBoardQueryURL = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&" +
+	"tags=solo+-underwear+-sideboob+-pov_feet+-underboob+-upskirt+-" +
+	"sexually_suggestive+-ass+-bikini+-6%2Bgirls+-comic+-greyscale+-" +
+	"huge_filesize+-lovestruck+-absurdres+-artificial_vagina+-cookie_%28touhou%29+-" +
+	"covering_breasts+-huge_breasts+-blood+-penetration_gesture+-" +
+	"animated+-audio+-webm+rating:safe+"
+
+var ErrNoArtAvailable = errors.New("no art available")
 var sessions = map[string]chan [2]string{}
+
+// BoardPosts represents an array of posts returned by the image board.
+type BoardPosts struct {
+	XMLName xml.Name    `xml:"posts"`
+	Posts   []BoardPost `xml:"post"`
+	Count   int         `xml:"count,attr"`
+	Offset  int         `xml:"offset,attr"`
+}
+
+// BoardPost represents a post on the image board.
+type BoardPost struct {
+	Height        int    `xml:"height,attr"`
+	Title         string `xml:"title,attr"`
+	Score         int    `xml:"score,attr"`
+	FileURL       string `xml:"file_url,attr"`
+	ParentID      int    `xml:"parent_id,attr"`
+	SampleURL     string `xml:"sample_url,attr"`
+	SampleWidth   int    `xml:"sample_width,attr"`
+	SampleHeight  int    `xml:"sample_height,attr"`
+	PreviewURL    string `xml:"preview_url,attr"`
+	Rating        string `xml:"rating,attr"`
+	Tags          string `xml:"tags,attr"`
+	ID            int    `xml:"id,attr"`
+	Width         int    `xml:"width,attr"`
+	Change        int    `xml:"change,attr"`
+	MD5           string `xml:"md5,attr"`
+	CreatorID     int    `xml:"creator_id,attr"`
+	HasChildren   bool   `xml:"has_children,attr"`
+	CreatedAt     string `xml:"created_at,attr"`
+	Status        string `xml:"status,attr"`
+	Source        string `xml:"source,attr"`
+	HasNotes      bool   `xml:"has_notes,attr"`
+	HasComments   bool   `xml:"has_comments,attr"`
+	PreviewWidth  int    `xml:"preview_width,attr"`
+	PreviewHeight int    `xml:"preview_height,attr"`
+}
 
 // CharacterInfo represents information on a character.
 type CharacterInfo struct {
@@ -178,39 +223,38 @@ func init() {
 	})
 }
 
-func fetch(character CharacterInfo) (*CharacterArt, error) {
-	response, err := soup.Get(
-		"https://gelbooru.com/index.php?page=dapi&s=post&q=index&" +
-			"tags=solo+-underwear+-sideboob+-pov_feet+-underboob+-upskirt+-" +
-			"sexually_suggestive+-ass+-bikini+-6%2Bgirls+-comic+-greyscale+-" +
-			"huge_filesize+-lovestruck+-absurdres+-artificial_vagina+-cookie_%28touhou%29+-" +
-			"covering_breasts+-huge_breasts+-blood+-penetration_gesture+-" +
-			"animated+-audio+-webm+rating:safe+" + character.SearchString)
+func fetch(character CharacterInfo) (CharacterArt, error) {
+	var (
+		response *http.Response
+		data     []byte
+		result   BoardPosts
+		post     BoardPost
+	)
+	response, err = http.Get(ImageBoardQueryURL + character.SearchString)
 	if err != nil {
-		return nil, err
+		return CharacterArt{}, err
 	}
-	document := soup.HTMLParse(response)
-	posts := document.Find("posts")
-	count, ok := posts.Attrs()["count"]
-	if !ok {
-		return nil, errors.New("unexpected response from upstream")
+	defer func() { _ = response.Body.Close() }()
+	data, err = ioutil.ReadAll(response.Body)
+	if err != nil {
+		return CharacterArt{}, err
 	}
-	images := posts.FindAll("post")
+	err = xml.Unmarshal(data, &result)
+	if err != nil {
+		return CharacterArt{}, err
+	}
 	rand.Seed(time.Now().UnixNano())
-	target := func() int {
-		v, _ := strconv.Atoi(count)
-		if v < 100 {
-			return v
-		}
-		return 100
-	}()
-	if target <= 1 {
-		return nil, errors.New("no art available")
+	if result.Count < 1 {
+		return CharacterArt{}, ErrNoArtAvailable
 	}
-	image := images[rand.Intn(target-1)].Attrs()
-	return &CharacterArt{
-		ImageURL:  image["file_url"],
-		SourceURL: image["source"],
+	if result.Count < 100 {
+		post = result.Posts[rand.Intn(result.Count-1)]
+	} else {
+		post = result.Posts[rand.Intn(99)]
+	}
+	return CharacterArt{
+		ImageURL:  post.FileURL,
+		SourceURL: post.Source,
 		Character: character,
 	}, nil
 }
@@ -235,7 +279,12 @@ func touhou(context *multiplexer.Context) {
 		char = CharacterList()[rand.Intn(len(CharacterList()))]
 	}
 
-	art, err := fetch(char)
+	var art CharacterArt
+	art, err = fetch(char)
+	if err == ErrNoArtAvailable {
+		context.SendMessage("No art available for this character.")
+		return
+	}
 	if !context.HandleError(err) {
 		return
 	}
@@ -271,8 +320,13 @@ func guess(context *multiplexer.Context) {
 	sessions[context.Message.ChannelID] = message
 	defer func() { delete(sessions, context.Message.ChannelID) }()
 
+	var art CharacterArt
 	char := CharacterList()[rand.Intn(len(CharacterList()))]
-	art, err := fetch(char)
+	art, err = fetch(char)
+	if err == ErrNoArtAvailable {
+		context.SendMessage("No art available for this character.")
+		return
+	}
 	if !context.HandleError(err) {
 		return
 	}

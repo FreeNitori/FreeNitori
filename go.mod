@@ -4,7 +4,6 @@ require (
 	github.com/BurntSushi/toml v0.3.1
 	github.com/abiosoft/ishell v2.0.0+incompatible
 	github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db // indirect
-	github.com/anaskhan96/soup v1.2.4
 	github.com/bwmarrin/discordgo v0.23.2
 	github.com/dgraph-io/badger/v2 v2.2007.2
 	github.com/fatih/color v1.10.0 // indirect

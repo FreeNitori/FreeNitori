@@ -221,6 +221,7 @@ func apiAuthUser(context *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
+	defer func() { _ = response.Body.Close() }()
 	if response.StatusCode == http.StatusUnauthorized {
 		oauth.RemoveToken(context)
 		context.JSON(http.StatusOK, datatypes.H{
