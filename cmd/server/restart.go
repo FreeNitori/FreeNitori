@@ -18,7 +18,7 @@ func restart() {
 	log.Infof("Program found at %s, re-executing...", execPath)
 	err = syscall.Exec(execPath, os.Args, os.Environ())
 	if err != nil {
-		log.Fatalf("Failed to re-execute, %s", err)
+		log.Fatalf("Error occurred while re-executing, %s", err)
 		os.Exit(1)
 	}
 }
