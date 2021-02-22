@@ -6,9 +6,13 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	imagefetch "git.randomchars.net/FreeNitori/ImageFetch"
-	"math/rand"
 	"strings"
 	"time"
+)
+
+const (
+	noCharacterMatch = "No character matched your query, displaying random character."
+	noArtAvailable   = "No art available for this character."
 )
 
 var sessions = map[string]chan [2]string{}
@@ -32,38 +36,44 @@ func init() {
 }
 
 func touhou(context *multiplexer.Context) {
-	var name string
-	var char imagefetch.CharacterInfo
+	var character imagefetch.CharacterInfo
+	var art imagefetch.CharacterArt
+	var ok bool
 	var text string
-
-	if len(context.Fields) > 1 {
-		name = strings.ToLower(context.Fields[1])
-	}
-
-	for _, character := range imagefetch.Touhou.Characters() {
-		if name == strings.ToLower(character.FriendlyName) {
-			char = character
+	var randomArt = func() {
+		character, art, err = imagefetch.FetchRandom(imagefetch.SafeTouhouQuery, imagefetch.Touhou)
+		if err == imagefetch.ErrNoArtAvailable {
+			context.SendMessage(noArtAvailable)
+			return
+		}
+		if !context.HandleError(err) {
+			return
 		}
 	}
 
-	if char.SearchString == "" {
-		text = "No character matched your query, displaying random character."
-		char = imagefetch.Touhou.Characters()[rand.Intn(len(imagefetch.Touhou.Characters()))]
+	if len(context.Fields) > 1 {
+		character, ok = imagefetch.Touhou.CharacterFriendly(context.Fields[1])
+		if !ok {
+			context.SendMessage(noCharacterMatch)
+			randomArt()
+		} else {
+			art, err = imagefetch.Fetch(imagefetch.SafeTouhouQuery, character)
+			if err == imagefetch.ErrNoArtAvailable {
+				context.SendMessage(noArtAvailable)
+				return
+			}
+			if !context.HandleError(err) {
+				return
+			}
+		}
+	} else {
+		randomArt()
 	}
 
-	var art imagefetch.CharacterArt
-	art, err = imagefetch.Fetch(char)
-	if err == imagefetch.ErrNoArtAvailable {
-		context.SendMessage("No art available for this character.")
-		return
-	}
-	if !context.HandleError(err) {
-		return
-	}
 	embed := embedutil.NewEmbed("", "")
-	embed.Color = char.Color
+	embed.Color = character.Color
 	embed.SetImage(art.ImageURL)
-	embed.SetAuthor(char.FriendlyName)
+	embed.SetAuthor(character.FriendlyName)
 	embed.SetFooter("Source URL: " + art.SourceURL)
 	context.SendEmbed(text, embed)
 }
@@ -93,8 +103,8 @@ func guess(context *multiplexer.Context) {
 	defer func() { delete(sessions, context.Message.ChannelID) }()
 
 	var art imagefetch.CharacterArt
-	char := imagefetch.Touhou.Characters()[rand.Intn(len(imagefetch.Touhou.Characters()))]
-	art, err = imagefetch.Fetch(char)
+	var character imagefetch.CharacterInfo
+	character, art, err = imagefetch.FetchRandom(imagefetch.SafeTouhouQuery, imagefetch.Touhou)
 	if err == imagefetch.ErrNoArtAvailable {
 		context.SendMessage("No art available for this character.")
 		return
@@ -104,7 +114,7 @@ func guess(context *multiplexer.Context) {
 	}
 
 	embed := embedutil.NewEmbed("Guess Character", "You have 15 seconds to decide.")
-	embed.Color = char.Color
+	embed.Color = character.Color
 	embed.SetImage(art.ImageURL)
 	context.SendEmbed("", embed)
 
@@ -114,12 +124,12 @@ func guess(context *multiplexer.Context) {
 	for {
 		select {
 		case <-end:
-			context.SendMessage(fmt.Sprintf("Time's up, the character is %s.", char.FriendlyName))
+			context.SendMessage(fmt.Sprintf("Time's up, the character is %s.", character.FriendlyName))
 			return
 		case msg := <-message:
-			if strings.ToLower(msg[0]) == strings.ToLower(char.FriendlyName) ||
-				strings.ToLower(msg[0]) == strings.Replace(strings.ToLower(char.SearchString), "_", " ", -1) {
-				context.SendMessage(fmt.Sprintf("%s correct! The character is %s.", msg[1], char.FriendlyName))
+			if strings.ToLower(msg[0]) == strings.ToLower(character.FriendlyName) ||
+				strings.ToLower(msg[0]) == strings.Replace(strings.ToLower(character.SearchString), "_", " ", -1) {
+				context.SendMessage(fmt.Sprintf("%s correct! The character is %s.", msg[1], character.FriendlyName))
 				return
 			}
 		}
