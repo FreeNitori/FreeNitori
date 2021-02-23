@@ -2,9 +2,9 @@ package internals
 
 import (
 	"fmt"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/discord/sessioning"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
@@ -47,7 +47,7 @@ func messageDeleteLog(session *discordgo.Session, delete *discordgo.MessageDelet
 	if delete.BeforeDelete.Author.ID == state.RawSession.State.User.ID {
 		return
 	}
-	var embed = embedutil.NewEmbed("Message Delete", "")
+	var embed = embedutil.New("Message Delete", "")
 	channelID, err := config.GetGuildConfValue(delete.GuildID, "log_channel")
 	if err != nil {
 		return
@@ -88,7 +88,7 @@ func messageUpdateLog(session *discordgo.Session, update *discordgo.MessageUpdat
 	if update.Author == nil {
 		return
 	}
-	var embed = embedutil.NewEmbed("Message Update",
+	var embed = embedutil.New("Message Update",
 		fmt.Sprintf("[Message Link](https://discord.com/channels/%s/%s/%s)",
 			update.BeforeUpdate.GuildID,
 			update.BeforeUpdate.ChannelID,

@@ -2,7 +2,7 @@ package internals
 
 import (
 	"fmt"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	imagefetch "git.randomchars.net/FreeNitori/ImageFetch"
@@ -70,7 +70,7 @@ func touhou(context *multiplexer.Context) {
 		randomArt()
 	}
 
-	embed := embedutil.NewEmbed("", "")
+	embed := embedutil.New("", "")
 	embed.Color = character.Color
 	embed.SetImage(art.ImageURL)
 	embed.SetAuthor(character.FriendlyName)
@@ -113,7 +113,7 @@ func guess(context *multiplexer.Context) {
 		return
 	}
 
-	embed := embedutil.NewEmbed("Guess Character", "You have 15 seconds to decide.")
+	embed := embedutil.New("Guess Character", "You have 15 seconds to decide.")
 	embed.Color = character.Color
 	embed.SetImage(art.ImageURL)
 	context.SendEmbed("", embed)

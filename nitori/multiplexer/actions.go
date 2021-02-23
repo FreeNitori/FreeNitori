@@ -2,8 +2,8 @@ package multiplexer
 
 import (
 	"errors"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"

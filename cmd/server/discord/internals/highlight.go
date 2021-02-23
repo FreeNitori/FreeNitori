@@ -2,9 +2,9 @@ package internals
 
 import (
 	"fmt"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/db"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/emoji"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
@@ -202,7 +202,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 
 	if sufficient {
 		content := fmt.Sprintf("**%d | **%s", reactions.Count, fmt.Sprintf("<#%s>", message.ChannelID))
-		embed := embedutil.NewEmbed("", message.Content)
+		embed := embedutil.New("", message.Content)
 		for _, attachment := range message.Attachments {
 			if attachment.Width != 0 && attachment.Height != 0 {
 				embed.SetImage(attachment.URL, attachment.ProxyURL)

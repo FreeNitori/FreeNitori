@@ -1,7 +1,7 @@
 package internals
 
 import (
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
@@ -61,7 +61,7 @@ func userinfo(context *multiplexer.Context) {
 
 	// Only generate the pfp stuff if that's what's required
 	if context.Fields[0] == "pfp" {
-		embed := embedutil.NewEmbed("", "")
+		embed := embedutil.New("", "")
 		embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
 		embed.SetAuthor(user.Username, user.AvatarURL("128"))
 		embed.SetImage(user.AvatarURL("4096"))
@@ -74,7 +74,7 @@ func userinfo(context *multiplexer.Context) {
 	if !context.HandleError(err) {
 		return
 	}
-	embed := embedutil.NewEmbed("User Information", "")
+	embed := embedutil.New("User Information", "")
 	embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
 	embed.SetThumbnail(user.AvatarURL("1024"))
 	embed.AddField("Username", user.Username+"#"+user.Discriminator, member != nil)
@@ -118,7 +118,7 @@ func guildinfo(context *multiplexer.Context) {
 	if !context.HandleError(err) {
 		return
 	}
-	embed := embedutil.NewEmbed("Guild Information", "")
+	embed := embedutil.New("Guild Information", "")
 	embed.Color = state.KappaColor
 	embed.SetThumbnail(context.Guild.IconURL())
 	embed.AddField("Guild Name", context.Guild.Name, true)

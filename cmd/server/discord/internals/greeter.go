@@ -2,9 +2,9 @@ package internals
 
 import (
 	"fmt"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/discord/sessioning"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
@@ -158,7 +158,7 @@ func welcomeHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
 		return
 	}
 	if url != "" {
-		embed = embedutil.NewEmbed("", "")
+		embed = embedutil.New("", "")
 		embed.Color = state.KappaColor
 		embed.SetImage(url)
 	}
@@ -196,7 +196,7 @@ func removeHandler(session *discordgo.Session, remove *discordgo.GuildMemberRemo
 		return
 	}
 	if url != "" {
-		embed = embedutil.NewEmbed("", "")
+		embed = embedutil.New("", "")
 		embed.Color = state.KappaColor
 		embed.SetImage(url)
 	}

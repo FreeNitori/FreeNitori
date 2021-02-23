@@ -2,8 +2,8 @@ package routes
 
 import (
 	"fmt"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
@@ -84,7 +84,7 @@ func init() {
 				}
 				context.SendMessage("Message `" + context.Fields[2] + "` has been reset.")
 			case 2:
-				embed := embedutil.NewEmbed("Messages", "Configurable messages.")
+				embed := embedutil.New("Messages", "Configurable messages.")
 				for identifier := range config.CustomizableMessages {
 					message, err := config.GetCustomizableMessage(context.Guild.ID, identifier)
 					if !context.HandleError(err) {
@@ -109,7 +109,7 @@ func configure(context *multiplexer.Context) {
 	}
 	switch length := len(context.Fields); length {
 	case 1:
-		embed := embedutil.NewEmbed("Configurator", "Configure per-guild overrides.")
+		embed := embedutil.New("Configurator", "Configure per-guild overrides.")
 		embed.Color = state.KappaColor
 		for _, entry := range overrides.GetSimpleEntries() {
 			embed.AddField(entry.Name, entry.Description, false)
@@ -124,7 +124,7 @@ func configure(context *multiplexer.Context) {
 	case 2:
 		for _, entry := range overrides.GetSimpleEntries() {
 			if context.Fields[1] == entry.Name {
-				embed := embedutil.NewEmbed(entry.FriendlyName, entry.Description)
+				embed := embedutil.New(entry.FriendlyName, entry.Description)
 				embed.Color = state.KappaColor
 				value, err := config.GetGuildConfValue(context.Guild.ID, entry.DatabaseKey)
 				if !context.HandleError(err) {
@@ -141,7 +141,7 @@ func configure(context *multiplexer.Context) {
 		}
 		for _, entry := range overrides.GetComplexEntries() {
 			if context.Fields[1] == entry.Name {
-				embed := embedutil.NewEmbed(entry.FriendlyName, entry.Description)
+				embed := embedutil.New(entry.FriendlyName, entry.Description)
 				embed.Color = state.KappaColor
 				for _, subEntry := range entry.Entries {
 					embed.AddField(subEntry.Name, subEntry.Description, false)
@@ -209,7 +209,7 @@ func configure(context *multiplexer.Context) {
 				for _, subEntry := range entry.Entries {
 					if context.Fields[2] == subEntry.Name {
 						if len(context.Fields) == 3 {
-							embed := embedutil.NewEmbed(subEntry.FriendlyName, subEntry.Description)
+							embed := embedutil.New(subEntry.FriendlyName, subEntry.Description)
 							embed.Color = state.KappaColor
 							value, err := config.GetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey)
 							if !context.HandleError(err) {

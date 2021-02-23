@@ -1,6 +1,7 @@
 module git.randomchars.net/FreeNitori/FreeNitori
 
 require (
+	git.randomchars.net/FreeNitori/EmbedUtil v1.0.0
 	git.randomchars.net/FreeNitori/ImageFetch v1.1.1
 	github.com/BurntSushi/toml v0.3.1
 	github.com/abiosoft/ishell v2.0.0+incompatible
@@ -19,7 +20,7 @@ require (
 	github.com/lxn/walk v0.0.0-20210112085537-c389da54e794
 	github.com/lxn/win v0.0.0-20201111105847-2a20daff6a55
 	github.com/robertkrimen/otto v0.0.0-20200922221731-ef014fd054ac
-	github.com/sirupsen/logrus v1.7.0
+	github.com/sirupsen/logrus v1.8.0
 	github.com/ulule/limiter/v3 v3.7.1
 	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 	gopkg.in/Knetic/govaluate.v3 v3.0.0 // indirect

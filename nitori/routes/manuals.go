@@ -2,7 +2,7 @@ package routes
 
 import (
 	"fmt"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"strings"
@@ -25,7 +25,7 @@ func manuals(context *multiplexer.Context) {
 	case len(context.Fields) == 1:
 		{
 			// Generate a list of all categories
-			embed := embedutil.NewEmbed("Manuals",
+			embed := embedutil.New("Manuals",
 				fmt.Sprintf("Issue `%sman <category>` for category-specific manuals.", guildPrefix))
 			embed.Color = 0x3492c4
 
@@ -66,7 +66,7 @@ func manuals(context *multiplexer.Context) {
 			}
 
 			// Generate list of all commands in one specific category
-			embed := embedutil.NewEmbed(desiredCat.Title,
+			embed := embedutil.New(desiredCat.Title,
 				desiredCat.Description)
 			embed.Color = state.KappaColor
 

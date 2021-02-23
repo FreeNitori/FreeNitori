@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
@@ -51,4 +52,7 @@ func init() {
 	}
 	hook = &logrusHook{lock: new(sync.Mutex)}
 	log.Logger.AddHook(hook)
+
+	// Set logger for some packages
+	embedutil.SetLogger(log.Logger)
 }

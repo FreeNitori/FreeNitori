@@ -2,9 +2,9 @@ package internals
 
 import (
 	"fmt"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/db"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
@@ -172,10 +172,10 @@ func init() {
 						}
 						var embed embedutil.Embed
 						if len(bindings) == 0 {
-							embed = embedutil.NewEmbed("Ranked Roles", "No ranked roles are set.")
+							embed = embedutil.New("Ranked Roles", "No ranked roles are set.")
 							embed.Color = state.KappaColor
 						} else {
-							embed = embedutil.NewEmbed("Ranked Roles", "")
+							embed = embedutil.New("Ranked Roles", "")
 							embed.Color = state.KappaColor
 							for level, roleID := range bindings {
 								var role *discordgo.Role
@@ -348,7 +348,7 @@ func level(context *multiplexer.Context) {
 	}
 
 	// Make the message
-	embed := embedutil.NewEmbed("Experience Level", member.User.Username+"#"+member.User.Discriminator)
+	embed := embedutil.New("Experience Level", member.User.Username+"#"+member.User.Discriminator)
 	embed.Color = context.Session.State.UserColor(context.Author.ID, context.Create.ChannelID)
 	expValue, err := db.GetMemberExp(member.User, context.Guild)
 	if !context.HandleError(err) {
@@ -375,7 +375,7 @@ func leaderboard(context *multiplexer.Context) {
 		context.SendMessage(state.FeatureDisabled)
 		return
 	}
-	embed := embedutil.NewEmbed("Leaderboard",
+	embed := embedutil.New("Leaderboard",
 		fmt.Sprintf("Click [here](%sleaderboard.html#%s) to view the leaderboard.",
 			config.Config.WebServer.BaseURL,
 			context.Guild.ID))

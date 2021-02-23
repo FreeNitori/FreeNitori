@@ -1,9 +1,12 @@
 package multiplexer
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
+	"github.com/bwmarrin/discordgo"
+)
 
 // Router is the command router instance.
-var Router = New()
+var Router = New(config.Config.System.Prefix)
 
 // Slice of event handlers.
 var (

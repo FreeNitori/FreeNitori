@@ -3,7 +3,6 @@ package multiplexer
 
 import (
 	"fmt"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"github.com/bwmarrin/discordgo"
 	"regexp"
@@ -76,9 +75,9 @@ func NewCategory(name string, description string) *CommandCategory {
 }
 
 // New returns a router.
-func New() *Multiplexer {
+func New(prefix string) *Multiplexer {
 	return &Multiplexer{
-		Prefix: config.Config.System.Prefix,
+		Prefix: prefix,
 	}
 }
 
@@ -136,12 +135,6 @@ func (mux *Multiplexer) handleMessage(session *discordgo.Session, create *discor
 	// Ignore self and bot messages
 	if create.Author.ID == session.State.User.ID || create.Author.Bot {
 		return
-	}
-
-	// Add to the counter if the message is valid
-	err = config.AdvanceTotalMessages()
-	if err != nil {
-		log.Warnf("Failed to increase the message counter, %s", err)
 	}
 
 	// Figure out the message guild

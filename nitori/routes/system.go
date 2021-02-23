@@ -2,8 +2,8 @@ package routes
 
 import (
 	"fmt"
+	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/embedutil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
@@ -14,6 +14,7 @@ import (
 
 func init() {
 	multiplexer.Ready = append(multiplexer.Ready, setStatus)
+	multiplexer.MessageCreate = append(multiplexer.MessageCreate, advanceCounter)
 	multiplexer.Router.Route(&multiplexer.Route{
 		Pattern:       "about",
 		AliasPatterns: []string{"info", "kappa", "information"},
@@ -52,7 +53,7 @@ func init() {
 }
 
 func about(context *multiplexer.Context) {
-	embed := embedutil.NewEmbed(context.Session.State.User.Username,
+	embed := embedutil.New(context.Session.State.User.Username,
 		"Open source, general purpose Discord utility.")
 	embed.Color = state.KappaColor
 	embed.AddField("Homepage", config.Config.WebServer.BaseURL, true)
@@ -93,7 +94,7 @@ func stats(context *multiplexer.Context) {
 
 	var embed embedutil.Embed
 
-	embed = embedutil.NewEmbed("System Stats", "")
+	embed = embedutil.New("System Stats", "")
 	embed.Color = state.KappaColor
 	embed.AddField("PID", strconv.Itoa(stats.Process.PID), true)
 	embed.AddField("Uptime", stats.Process.Uptime.Truncate(time.Second).String(), true)
@@ -111,7 +112,7 @@ func stats(context *multiplexer.Context) {
 	embed.AddField("Go Version", stats.Platform.GoVersion, true)
 	context.SendEmbed("", embed)
 
-	embed = embedutil.NewEmbed("", "")
+	embed = embedutil.New("", "")
 	embed.Color = state.KappaColor
 	embed.AddField("Current Memory Allocated", stats.Mem.Allocated, true)
 	embed.AddField("Total Memory Allocated", stats.Mem.Total, true)
@@ -138,7 +139,7 @@ func stats(context *multiplexer.Context) {
 	embed.AddField("Miscellaneous Off-heap Allocations", stats.Misc.OtherSys, true)
 	context.SendEmbed("", embed)
 
-	embed = embedutil.NewEmbed("", "")
+	embed = embedutil.New("", "")
 	embed.Color = state.KappaColor
 	embed.AddField("Next GC Recycle", stats.GC.NextGC, true)
 	embed.AddField("Time Since Last GC", stats.GC.LastGC, true)
@@ -173,7 +174,7 @@ func shutdown(context *multiplexer.Context) {
 }
 
 func invite(context *multiplexer.Context) {
-	embed := embedutil.NewEmbed("Invite", fmt.Sprintf("Click [this](%s) to invite Nitori.", state.InviteURL))
+	embed := embedutil.New("Invite", fmt.Sprintf("Click [this](%s) to invite Nitori.", state.InviteURL))
 	context.SendEmbed("", embed)
 }
 
@@ -185,4 +186,14 @@ func setStatus(_ *discordgo.Session, ready *discordgo.Ready) {
 
 	log.Debugf("Session %s ready.",
 		ready.SessionID)
+}
+
+func advanceCounter(session *discordgo.Session, create *discordgo.MessageCreate) {
+	if create.Author.ID == session.State.User.ID {
+		return
+	}
+	err = config.AdvanceTotalMessages()
+	if err != nil {
+		log.Errorf("Unable to advance message counter, %s", err)
+	}
 }
