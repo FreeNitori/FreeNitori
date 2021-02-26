@@ -71,6 +71,12 @@ func messageDeleteLog(context *multiplexer.Context) {
 	for _, attachment := range messageDelete.BeforeDelete.Attachments {
 		embed.AddField("Attachment Pre", fmt.Sprintf("[%s](%s)", attachment.Filename, attachment.URL), false)
 	}
+	if messageDelete.BeforeDelete.MessageReference != nil {
+		embed.AddField("References", fmt.Sprintf("[Message Link](https://discord.com/channels/%s/%s/%s)",
+			messageDelete.BeforeDelete.MessageReference.GuildID,
+			messageDelete.BeforeDelete.MessageReference.ChannelID,
+			messageDelete.BeforeDelete.MessageReference.MessageID), false)
+	}
 	embed.AddField("Channel", fmt.Sprintf("<#%s>", messageDelete.ChannelID), false)
 	context.Message = &discordgo.Message{ChannelID: channelID}
 	context.SendEmbed("", embed)
@@ -125,6 +131,12 @@ func messageUpdateLog(context *multiplexer.Context) {
 	}
 	for _, attachment := range update.Message.Attachments {
 		embed.AddField("Attachment Post", fmt.Sprintf("[%s](%s)", attachment.Filename, attachment.URL), false)
+	}
+	if update.BeforeUpdate.MessageReference != nil {
+		embed.AddField("References", fmt.Sprintf("[Message Link](https://discord.com/channels/%s/%s/%s)",
+			update.BeforeUpdate.MessageReference.GuildID,
+			update.BeforeUpdate.MessageReference.ChannelID,
+			update.BeforeUpdate.MessageReference.MessageID), false)
 	}
 	embed.AddField("Channel", fmt.Sprintf("<#%s>", update.ChannelID), false)
 	context.Message = &discordgo.Message{ChannelID: channelID}
