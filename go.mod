@@ -3,6 +3,7 @@ module git.randomchars.net/FreeNitori/FreeNitori
 require (
 	git.randomchars.net/FreeNitori/EmbedUtil v1.0.0
 	git.randomchars.net/FreeNitori/ImageFetch v1.1.1
+	git.randomchars.net/FreeNitori/Multiplexer v1.0.2
 	github.com/BurntSushi/toml v0.3.1
 	github.com/abiosoft/ishell v2.0.0+incompatible
 	github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db // indirect

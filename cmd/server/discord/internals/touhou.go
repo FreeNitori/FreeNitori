@@ -3,9 +3,9 @@ package internals
 import (
 	"fmt"
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	imagefetch "git.randomchars.net/FreeNitori/ImageFetch"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"strings"
 	"time"
 )
@@ -18,15 +18,15 @@ const (
 var sessions = map[string]chan [2]string{}
 
 func init() {
-	multiplexer.NotTargeted = append(multiplexer.NotTargeted, guessResponse)
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.NotTargeted = append(state.Multiplexer.NotTargeted, guessResponse)
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "touhou",
 		AliasPatterns: []string{"t", "th"},
 		Description:   "Finds picture of requested character.",
 		Category:      multiplexer.MediaCategory,
 		Handler:       touhou,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "guess",
 		AliasPatterns: []string{},
 		Description:   "Guess character based on artwork.",
@@ -83,12 +83,12 @@ func guessResponse(context *multiplexer.Context) {
 	if !ok {
 		return
 	}
-	channel <- [2]string{context.Content, context.Author.Mention()}
+	channel <- [2]string{context.Text, context.User.Mention()}
 }
 
 func guess(context *multiplexer.Context) {
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(multiplexer.GuildOnly)
 		return
 	}
 

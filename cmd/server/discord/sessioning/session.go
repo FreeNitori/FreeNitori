@@ -3,7 +3,6 @@ package sessioning
 import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
@@ -43,9 +42,7 @@ func MakeSessions() error {
 		if err != nil {
 			return err
 		}
-		for _, handler := range multiplexer.EventHandlers {
-			session.AddHandler(handler)
-		}
+		state.Multiplexer.SessionRegisterHandlers(session)
 		log.Infof("Shard %s ready.", strconv.Itoa(i))
 		state.ShardSessions = append(state.ShardSessions, session)
 	}

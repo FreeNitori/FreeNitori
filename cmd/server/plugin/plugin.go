@@ -7,7 +7,8 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database/badger"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"io/ioutil"
 	"os"
 	"plugin"
@@ -61,7 +62,7 @@ func processReturn(i interface{}, path os.FileInfo) {
 		database.Database = db
 		log.Infof("Loaded plugin %s implementing database backend %s.", path.Name(), db.DBType())
 	} else if route, ok := i.(*multiplexer.Route); ok {
-		multiplexer.Router.Route(route)
+		state.Multiplexer.Route(route)
 		log.Infof("Loaded plugin %s implementing command %s.", path.Name(), route.Pattern)
 	} else if err, ok := i.(error); ok {
 		log.Errorf("Plugin %s did not load properly, %s", path.Name(), err.Error())

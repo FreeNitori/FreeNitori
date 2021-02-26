@@ -5,9 +5,9 @@ import (
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/db"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"math"
 	"math/rand"
@@ -16,37 +16,37 @@ import (
 )
 
 func init() {
-	multiplexer.NotTargeted = append(multiplexer.NotTargeted, AdvanceExperience)
-	multiplexer.GuildMemberAdd = append(multiplexer.GuildMemberAdd, memberAddRank)
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.NotTargeted = append(state.Multiplexer.NotTargeted, AdvanceExperience)
+	state.Multiplexer.GuildMemberAdd = append(state.Multiplexer.GuildMemberAdd, memberAddRank)
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "level",
 		AliasPatterns: []string{"rank", "experience", "exp"},
 		Description:   "Query experience level.",
 		Category:      multiplexer.ExperienceCategory,
 		Handler:       level,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "leaderboard",
 		AliasPatterns: []string{"lb"},
 		Description:   "Display URL of leaderboard.",
 		Category:      multiplexer.ExperienceCategory,
 		Handler:       leaderboard,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "exp2level",
 		AliasPatterns: []string{},
 		Description:   "",
 		Category:      multiplexer.ExperienceCategory,
 		Handler:       exp2level,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "level2exp",
 		AliasPatterns: []string{},
 		Description:   "",
 		Category:      multiplexer.ExperienceCategory,
 		Handler:       level2exp,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "setexp",
 		AliasPatterns: []string{},
 		Description:   "",
@@ -108,7 +108,7 @@ func init() {
 						return
 					}
 					if !expEnabled {
-						context.SendMessage(state.FeatureDisabled)
+						context.SendMessage(multiplexer.FeatureDisabled)
 						return
 					}
 
@@ -116,11 +116,11 @@ func init() {
 					case 5:
 						level, err := strconv.Atoi(context.Fields[3])
 						if err != nil {
-							context.SendMessage(state.InvalidArgument)
+							context.SendMessage(multiplexer.InvalidArgument)
 							return
 						}
 						if level < 0 {
-							context.SendMessage(state.InvalidArgument)
+							context.SendMessage(multiplexer.InvalidArgument)
 							return
 						}
 						bindings, err := db.GetRankBinds(context.Guild)
@@ -128,13 +128,13 @@ func init() {
 							return
 						}
 						if len(bindings) > 16 {
-							context.SendMessage(state.InvalidArgument)
+							context.SendMessage(multiplexer.InvalidArgument)
 							return
 						}
 						for _, role := range context.Guild.Roles {
 							if context.Fields[4] == role.ID || context.Fields[4] == role.Name || context.Fields[4] == role.Mention() {
 								if role.Managed {
-									context.SendMessage(state.InvalidArgument)
+									context.SendMessage(multiplexer.InvalidArgument)
 									return
 								}
 								err = db.SetRankBind(context.Guild, level, role)
@@ -145,11 +145,11 @@ func init() {
 								return
 							}
 						}
-						context.SendMessage(state.InvalidArgument)
+						context.SendMessage(multiplexer.InvalidArgument)
 					case 4:
 						level, err := strconv.Atoi(context.Fields[3])
 						if err != nil {
-							context.SendMessage(state.InvalidArgument)
+							context.SendMessage(multiplexer.InvalidArgument)
 							return
 						}
 						binding, err := db.GetRankBind(context.Guild, level)
@@ -157,7 +157,7 @@ func init() {
 							return
 						}
 						if binding == "" {
-							context.SendMessage(state.InvalidArgument)
+							context.SendMessage(multiplexer.InvalidArgument)
 							return
 						}
 						err = db.UnsetRankBind(context.Guild, strconv.Itoa(level))
@@ -173,10 +173,10 @@ func init() {
 						var embed embedutil.Embed
 						if len(bindings) == 0 {
 							embed = embedutil.New("Ranked Roles", "No ranked roles are set.")
-							embed.Color = state.KappaColor
+							embed.Color = multiplexer.KappaColor
 						} else {
 							embed = embedutil.New("Ranked Roles", "")
-							embed.Color = state.KappaColor
+							embed.Color = multiplexer.KappaColor
 							for level, roleID := range bindings {
 								var role *discordgo.Role
 								for _, r := range context.Guild.Roles {
@@ -197,7 +197,7 @@ func init() {
 						}
 						context.SendEmbed("", embed)
 					default:
-						context.SendMessage(state.InvalidArgument)
+						context.SendMessage(multiplexer.InvalidArgument)
 						return
 					}
 				},
@@ -206,34 +206,26 @@ func init() {
 	})
 }
 
-func memberAddRank(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
-	if add.User.Bot {
+func memberAddRank(context *multiplexer.Context) {
+	if context.User.Bot {
 		return
 	}
-	guild, err := session.State.Guild(add.GuildID)
-	if err != nil {
-		guild, err = session.Guild(add.GuildID)
-		if err != nil {
-			return
-		}
-		_ = session.State.GuildAdd(guild)
-	}
 
-	if len(guild.Channels) == 0 {
+	if len(context.Guild.Channels) == 0 {
 		return
 	}
 
 	// If Nitori has permission
-	permissions, err := session.State.UserChannelPermissions(session.State.User.ID, guild.Channels[0].ID)
+	permissions, err := context.Session.State.UserChannelPermissions(context.Session.State.User.ID, context.Guild.Channels[0].ID)
 	if !(err == nil && (permissions&discordgo.PermissionManageRoles == discordgo.PermissionManageRoles)) {
 		return
 	}
 
-	exp, err := db.GetMemberExp(add.User, guild)
+	exp, err := db.GetMemberExp(context.User, context.Guild)
 	if err != nil {
 		return
 	}
-	bindings, err := db.GetRankBinds(guild)
+	bindings, err := db.GetRankBinds(context.Guild)
 	if err != nil {
 		return
 	}
@@ -241,9 +233,9 @@ func memberAddRank(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
 	for i := 0; i <= memberLevel; i++ {
 		roleID := bindings[strconv.Itoa(i)]
 		if roleID != "" {
-			for _, r := range guild.Roles {
+			for _, r := range context.Guild.Roles {
 				if r.ID == roleID {
-					err = session.GuildMemberRoleAdd(guild.ID, add.User.ID, roleID)
+					err = context.Session.GuildMemberRoleAdd(context.Guild.ID, context.User.ID, roleID)
 					if err != nil {
 						return
 					}
@@ -272,14 +264,14 @@ func AdvanceExperience(context *multiplexer.Context) {
 	}
 
 	// Obtain experience value of user
-	previousExp, err := db.GetMemberExp(context.Author, context.Guild)
+	previousExp, err := db.GetMemberExp(context.User, context.Guild)
 	if !context.HandleError(err) {
 		return
 	}
 
 	// Calculate and set new experience value
 	advancedExp := previousExp + rand.Intn(10) + 5
-	err = db.SetMemberExp(context.Author, context.Guild, advancedExp)
+	err = db.SetMemberExp(context.User, context.Guild, advancedExp)
 	if !context.HandleError(err) {
 		return
 	}
@@ -297,7 +289,7 @@ func AdvanceExperience(context *multiplexer.Context) {
 			if bindings[strconv.Itoa(advancedLevel)] != "" {
 				for _, r := range context.Guild.Roles {
 					if bindings[strconv.Itoa(advancedLevel)] == r.ID {
-						err = context.Session.GuildMemberRoleAdd(context.Guild.ID, context.Author.ID, r.ID)
+						err = context.Session.GuildMemberRoleAdd(context.Guild.ID, context.User.ID, r.ID)
 						if !context.HandleError(err) {
 							return
 						}
@@ -309,7 +301,7 @@ func AdvanceExperience(context *multiplexer.Context) {
 		if !context.HandleError(err) {
 			return
 		}
-		replacer := strings.NewReplacer("$USER", context.Author.Mention(), "$LEVEL", strconv.Itoa(advancedLevel))
+		replacer := strings.NewReplacer("$USER", context.User.Mention(), "$LEVEL", strconv.Itoa(advancedLevel))
 		context.SendMessage(replacer.Replace(levelupMessage))
 	}
 }
@@ -318,7 +310,7 @@ func level(context *multiplexer.Context) {
 
 	// Doesn't work in private messages
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(multiplexer.GuildOnly)
 		return
 	}
 
@@ -328,7 +320,7 @@ func level(context *multiplexer.Context) {
 		return
 	}
 	if !expEnabled {
-		context.SendMessage(state.FeatureDisabled)
+		context.SendMessage(multiplexer.FeatureDisabled)
 		return
 	}
 
@@ -337,19 +329,19 @@ func level(context *multiplexer.Context) {
 	if len(context.Fields) > 1 {
 		member = context.GetMember(context.StitchFields(1))
 	} else {
-		member = context.Create.Member
-		member.User = context.Author
+		member = context.Member
+		member.User = context.User
 	}
 
 	// Bail out if nothing is get
 	if member == nil {
-		context.SendMessage(state.MissingUser)
+		context.SendMessage(multiplexer.MissingUser)
 		return
 	}
 
 	// Make the message
 	embed := embedutil.New("Experience Level", member.User.Username+"#"+member.User.Discriminator)
-	embed.Color = context.Session.State.UserColor(context.Author.ID, context.Create.ChannelID)
+	embed.Color = context.Session.State.UserColor(context.User.ID, context.Channel.ID)
 	expValue, err := db.GetMemberExp(member.User, context.Guild)
 	if !context.HandleError(err) {
 		return
@@ -364,7 +356,7 @@ func level(context *multiplexer.Context) {
 
 func leaderboard(context *multiplexer.Context) {
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(multiplexer.GuildOnly)
 		return
 	}
 	enabled, err := db.ExpEnabled(context.Guild.ID)
@@ -372,58 +364,58 @@ func leaderboard(context *multiplexer.Context) {
 		return
 	}
 	if !enabled {
-		context.SendMessage(state.FeatureDisabled)
+		context.SendMessage(multiplexer.FeatureDisabled)
 		return
 	}
 	embed := embedutil.New("Leaderboard",
 		fmt.Sprintf("Click [here](%sleaderboard.html#%s) to view the leaderboard.",
 			config.Config.WebServer.BaseURL,
 			context.Guild.ID))
-	embed.Color = state.KappaColor
+	embed.Color = multiplexer.KappaColor
 	context.SendEmbed("", embed)
 }
 
 func level2exp(context *multiplexer.Context) {
 	if !context.IsOperator() {
-		context.SendMessage(state.OperatorOnly)
+		context.SendMessage(multiplexer.OperatorOnly)
 		return
 	}
 	if len(context.Fields) == 2 {
 		lvl, err := strconv.Atoi(context.Fields[1])
 		if err != nil {
-			context.SendMessage(state.InvalidArgument)
+			context.SendMessage(multiplexer.InvalidArgument)
 			return
 		}
 		context.SendMessage(fmt.Sprintf("%v levels is %v exp.", lvl, LevelToExp(lvl)))
 	} else {
-		context.SendMessage(state.InvalidArgument)
+		context.SendMessage(multiplexer.InvalidArgument)
 	}
 }
 
 func exp2level(context *multiplexer.Context) {
 	if !context.IsOperator() {
-		context.SendMessage(state.OperatorOnly)
+		context.SendMessage(multiplexer.OperatorOnly)
 		return
 	}
 	if len(context.Fields) == 2 {
 		exp, err := strconv.Atoi(context.Fields[1])
 		if err != nil {
-			context.SendMessage(state.InvalidArgument)
+			context.SendMessage(multiplexer.InvalidArgument)
 			return
 		}
 		context.SendMessage(fmt.Sprintf("%v exp is %v levels.", exp, ExpToLevel(exp)))
 	} else {
-		context.SendMessage(state.InvalidArgument)
+		context.SendMessage(multiplexer.InvalidArgument)
 	}
 }
 
 func setexp(context *multiplexer.Context) {
 	if !context.IsOperator() {
-		context.SendMessage(state.OperatorOnly)
+		context.SendMessage(multiplexer.OperatorOnly)
 		return
 	}
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(multiplexer.GuildOnly)
 		return
 	}
 	enabled, err := db.ExpEnabled(context.Guild.ID)
@@ -431,18 +423,18 @@ func setexp(context *multiplexer.Context) {
 		return
 	}
 	if !enabled {
-		context.SendMessage(state.FeatureDisabled)
+		context.SendMessage(multiplexer.FeatureDisabled)
 		return
 	}
 	if len(context.Fields) == 3 {
 		exp, err := strconv.Atoi(context.Fields[1])
 		if err != nil {
-			context.SendMessage(state.InvalidArgument)
+			context.SendMessage(multiplexer.InvalidArgument)
 			return
 		}
 		member := context.GetMember(context.Fields[2])
 		if member == nil {
-			context.SendMessage(state.MissingUser)
+			context.SendMessage(multiplexer.MissingUser)
 			return
 		}
 		err = db.SetMemberExp(member.User, context.Guild, exp)
@@ -451,7 +443,7 @@ func setexp(context *multiplexer.Context) {
 		}
 		context.SendMessage(fmt.Sprintf("Successfully set experience of %s to %v.", member.User.Username, exp))
 	} else {
-		context.SendMessage(state.InvalidArgument)
+		context.SendMessage(multiplexer.InvalidArgument)
 	}
 }
 

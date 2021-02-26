@@ -1,15 +1,15 @@
-package routes
+package internals
 
 import (
 	"fmt"
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"strings"
 )
 
 func init() {
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "man",
 		AliasPatterns: []string{"manuals", "help"},
 		Description:   "An interface to the system reference manuals.",
@@ -31,7 +31,7 @@ func manuals(context *multiplexer.Context) {
 
 			// The block of text with all categories
 			var catText string
-			for _, category := range multiplexer.Categories {
+			for _, category := range state.Multiplexer.Categories {
 
 				// Only display categories with description set
 				if category.Description == "" {
@@ -52,7 +52,7 @@ func manuals(context *multiplexer.Context) {
 
 			// Figure out if the category exist, and fallthrough if it doesn't
 			var desiredCat *multiplexer.CommandCategory
-			for _, cat := range multiplexer.Categories {
+			for _, cat := range state.Multiplexer.Categories {
 				if strings.EqualFold(cat.Title, context.Fields[1]) {
 					desiredCat = cat
 					break
@@ -61,14 +61,14 @@ func manuals(context *multiplexer.Context) {
 
 			// Break out of the case if no category was matched
 			if desiredCat == nil {
-				context.SendMessage(state.InvalidArgument)
+				context.SendMessage(multiplexer.InvalidArgument)
 				break
 			}
 
 			// Generate list of all commands in one specific category
 			embed := embedutil.New(desiredCat.Title,
 				desiredCat.Description)
-			embed.Color = state.KappaColor
+			embed.Color = multiplexer.KappaColor
 
 			for _, route := range desiredCat.Routes {
 
@@ -87,7 +87,7 @@ func manuals(context *multiplexer.Context) {
 	case len(context.Fields) > 2:
 		{
 			// Some catch-all case I guess, though there will be a command-specific thing later maybe
-			context.SendMessage(state.InvalidArgument)
+			context.SendMessage(multiplexer.InvalidArgument)
 		}
 	}
 }

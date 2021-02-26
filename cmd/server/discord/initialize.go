@@ -7,6 +7,7 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 )
@@ -16,6 +17,17 @@ var err error
 // Initialize early initializes Discord-related functionalities.
 func Initialize() error {
 	// Setup some things
+	multiplexer.SetLogger(log.Logger)
+	multiplexer.NoCommandMatched = func(context *multiplexer.Context) {
+		// If no command was matched, resort to either being annoyed by the ping or a command not found message
+		if context.HasMention {
+			context.SendMessage("<a:KyokoAngryPing:757399059114885180>")
+		} else {
+			context.SendMessage(fmt.Sprintf("This command does not exist! Issue `%sman` for a list of command manuals.",
+				context.Prefix()))
+		}
+	}
+	state.Multiplexer.Prefix = config.Config.System.Prefix
 	discordgo.Logger = log.DiscordGoLogger
 	state.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version() + ")"
 	if config.TokenOverride == "" {
@@ -43,14 +55,14 @@ func LateInitialize() error {
 		}
 	}
 	log.Info("Raw session with Discord opened.")
-	state.Administrator, err = state.RawSession.User(strconv.Itoa(config.Config.System.Administrator))
+	state.Multiplexer.Administrator, err = state.RawSession.User(strconv.Itoa(config.Config.System.Administrator))
 	if err != nil {
 		return errors.New("unable to get system administrator")
 	}
 	for _, id := range config.Config.System.Operator {
 		user, err := state.RawSession.User(strconv.Itoa(id))
 		if err == nil {
-			state.Operator = append(state.Operator, user)
+			state.Multiplexer.Operator = append(state.Multiplexer.Operator, user)
 		}
 	}
 	state.Application, err = state.RawSession.Application("@me")

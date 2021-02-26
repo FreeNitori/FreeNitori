@@ -2,7 +2,7 @@ package extension
 
 import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/robertkrimen/otto"
 	"io/ioutil"
 )
@@ -35,7 +35,7 @@ func executeJS(plugin string, context *multiplexer.Context) error {
 	vm := otto.New()
 	err = vm.Set("context", struct {
 		Fields            []string
-		Content           string
+		Text              string
 		IsPrivate         bool
 		IsTargeted        bool
 		HasPrefix         bool
@@ -44,7 +44,7 @@ func executeJS(plugin string, context *multiplexer.Context) error {
 		SendMessage       func(call otto.FunctionCall) otto.Value
 	}{
 		Fields:            context.Fields,
-		Content:           context.Content,
+		Text:              context.Text,
 		IsPrivate:         context.IsPrivate,
 		IsTargeted:        context.IsTargeted,
 		HasPrefix:         context.HasPrefix,

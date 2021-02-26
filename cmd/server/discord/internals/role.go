@@ -3,13 +3,14 @@ package internals
 import (
 	"fmt"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 )
 
 func init() {
-	multiplexer.GuildMemberAdd = append(multiplexer.GuildMemberAdd, autoRoleHandler)
+	state.Multiplexer.GuildMemberAdd = append(state.Multiplexer.GuildMemberAdd, autoRoleHandler)
 	overrides.RegisterComplexEntry(overrides.ComplexConfigurationEntry{
 		Name:         "role",
 		FriendlyName: "Role Assignment",
@@ -40,29 +41,20 @@ func init() {
 	})
 }
 
-func autoRoleHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
+func autoRoleHandler(context *multiplexer.Context) {
 
-	guild, err := session.State.Guild(add.GuildID)
-	if err != nil {
-		guild, err = session.Guild(add.GuildID)
-		if err != nil {
-			return
-		}
-		_ = session.State.GuildAdd(guild)
-	}
-
-	if len(guild.Channels) == 0 {
+	if len(context.Guild.Channels) == 0 {
 		return
 	}
 
 	// If Nitori has permission
-	permissions, err := session.State.UserChannelPermissions(session.State.User.ID, guild.Channels[0].ID)
+	permissions, err := context.Session.State.UserChannelPermissions(context.Session.State.User.ID, context.Guild.Channels[0].ID)
 	if !(err == nil && (permissions&discordgo.PermissionManageRoles == discordgo.PermissionManageRoles)) {
 		return
 	}
 
 	role := false
-	roleID, err := config.GetGuildConfValue(add.GuildID, "role_join")
+	roleID, err := config.GetGuildConfValue(context.Guild.ID, "role_join")
 	if err != nil {
 		return
 	}
@@ -70,7 +62,7 @@ func autoRoleHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) 
 		return
 	}
 
-	for _, r := range guild.Roles {
+	for _, r := range context.Guild.Roles {
 		if r.ID == roleID {
 			role = true
 		}
@@ -79,5 +71,5 @@ func autoRoleHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) 
 	if !role {
 		return
 	}
-	_ = session.GuildMemberRoleAdd(add.GuildID, add.User.ID, roleID)
+	_ = context.Session.GuildMemberRoleAdd(context.Guild.ID, context.User.ID, roleID)
 }

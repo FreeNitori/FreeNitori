@@ -5,16 +5,16 @@ import (
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/discord/sessioning"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"strings"
 )
 
 func init() {
-	multiplexer.GuildMemberAdd = append(multiplexer.GuildMemberAdd, welcomeHandler)
-	multiplexer.GuildMemberRemove = append(multiplexer.GuildMemberRemove, removeHandler)
+	state.Multiplexer.GuildMemberAdd = append(state.Multiplexer.GuildMemberAdd, welcomeHandler)
+	state.Multiplexer.GuildMemberRemove = append(state.Multiplexer.GuildMemberRemove, removeHandler)
 	overrides.RegisterComplexEntry(overrides.ComplexConfigurationEntry{
 		Name:         "greet",
 		FriendlyName: "Greeter",
@@ -131,78 +131,78 @@ func init() {
 	})
 }
 
-func welcomeHandler(session *discordgo.Session, add *discordgo.GuildMemberAdd) {
-	if add.Member.User.Bot {
+func welcomeHandler(context *multiplexer.Context) {
+	if context.Member.User.Bot {
 		return
 	}
 	var embed embedutil.Embed
-	channelID, err := config.GetGuildConfValue(add.GuildID, "greet_channel")
+	channelID, err := config.GetGuildConfValue(context.Guild.ID, "greet_channel")
 	if err != nil {
 		return
 	}
 	if channelID == "" {
 		return
 	}
-	if sessioning.FetchChannel(sessioning.FetchGuild(add.GuildID), "", channelID) == nil {
+	if sessioning.FetchChannel(context.Guild, "", channelID) == nil {
 		return
 	}
-	message, err := config.GetGuildConfValue(add.GuildID, "welcome_message")
+	message, err := config.GetGuildConfValue(context.Guild.ID, "welcome_message")
 	if err != nil {
 		return
 	}
 	if message == "" {
 		return
 	}
-	url, err := config.GetGuildConfValue(add.GuildID, "welcome_url")
+	url, err := config.GetGuildConfValue(context.Guild.ID, "welcome_url")
 	if err != nil {
 		return
 	}
 	if url != "" {
 		embed = embedutil.New("", "")
-		embed.Color = state.KappaColor
+		embed.Color = multiplexer.KappaColor
 		embed.SetImage(url)
 	}
-	context := &multiplexer.Context{Message: &discordgo.Message{ChannelID: channelID}, Session: session}
+	context.Message = &discordgo.Message{ChannelID: channelID}
 	context.SendEmbed(strings.NewReplacer(
-		"$USERNAME", add.User.Username,
-		"$DISCRIMINATOR", add.User.Discriminator,
-		"$MENTION", add.User.Mention()).Replace(message), embed)
+		"$USERNAME", context.Member.User.Username,
+		"$DISCRIMINATOR", context.Member.User.Discriminator,
+		"$MENTION", context.Member.User.Mention()).Replace(message), embed)
 }
 
-func removeHandler(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
-	if remove.Member.User.Bot {
+func removeHandler(context *multiplexer.Context) {
+	if context.Member.User.Bot {
 		return
 	}
 	var embed embedutil.Embed
-	channelID, err := config.GetGuildConfValue(remove.GuildID, "greet_channel")
+	channelID, err := config.GetGuildConfValue(context.Guild.ID, "greet_channel")
 	if err != nil {
 		return
 	}
 	if channelID == "" {
 		return
 	}
-	if sessioning.FetchChannel(sessioning.FetchGuild(remove.GuildID), "", channelID) == nil {
+	if sessioning.FetchChannel(sessioning.FetchGuild(context.Guild.ID), "", channelID) == nil {
 		return
 	}
-	message, err := config.GetGuildConfValue(remove.GuildID, "goodbye_message")
+	message, err := config.GetGuildConfValue(context.Guild.ID, "goodbye_message")
 	if err != nil {
 		return
 	}
 	if message == "" {
 		return
 	}
-	url, err := config.GetGuildConfValue(remove.GuildID, "goodbye_url")
+	url, err := config.GetGuildConfValue(context.Guild.ID, "goodbye_url")
 	if err != nil {
 		return
 	}
 	if url != "" {
 		embed = embedutil.New("", "")
-		embed.Color = state.KappaColor
+		embed.Color = multiplexer.KappaColor
 		embed.SetImage(url)
 	}
-	context := &multiplexer.Context{Message: &discordgo.Message{ChannelID: channelID}, Session: session}
+	context.Message = &discordgo.Message{ChannelID: channelID}
 	context.SendEmbed(strings.NewReplacer(
-		"$USERNAME", remove.User.Username,
-		"$DISCRIMINATOR", remove.User.Discriminator,
-		"$MENTION", remove.User.Mention()).Replace(message), embed)
+		"$USERNAME", context.Member.User.Username,
+		"$DISCRIMINATOR", context.Member.User.Discriminator,
+		"$MENTION", context.Member.User.Mention()).Replace(message), embed)
 }

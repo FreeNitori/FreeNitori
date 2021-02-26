@@ -2,7 +2,8 @@ package extension
 
 import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -43,13 +44,13 @@ func FindExtensions() error {
 			route := registerJS("extensions/commands/", path.Name())
 			if route != nil {
 				hasExtensions = true
-				multiplexer.Router.Route(route)
+				state.Multiplexer.Route(route)
 				log.Infof("Loaded JavaScript extension %s.", path.Name())
 			}
 		}
 	}
 	if hasExtensions {
-		multiplexer.Categories = append(multiplexer.Categories, ExtensionsCategory)
+		state.Multiplexer.Categories = append(state.Multiplexer.Categories, ExtensionsCategory)
 	}
 	return nil
 }

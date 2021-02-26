@@ -3,14 +3,14 @@ package internals
 import (
 	"fmt"
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"strconv"
 	"strings"
 )
 
 func init() {
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "ship",
 		AliasPatterns: []string{},
 		Description:   "Shipping two users via mathematics.",
@@ -21,17 +21,17 @@ func init() {
 
 func ship(context *multiplexer.Context) {
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(multiplexer.GuildOnly)
 		return
 	}
 	if len(context.Fields) != 3 {
-		context.SendMessage(state.InvalidArgument)
+		context.SendMessage(multiplexer.InvalidArgument)
 		return
 	}
 	member1 := context.GetMember(context.Fields[1])
 	member2 := context.GetMember(context.Fields[2])
 	if member1 == nil || member2 == nil {
-		context.SendMessage(state.MissingUser)
+		context.SendMessage(multiplexer.MissingUser)
 		return
 	}
 	res := (func() int { id, _ := strconv.Atoi(member1.User.ID); return id }() ^ func() int { id, _ := strconv.Atoi(member2.User.ID); return id }()) % 101

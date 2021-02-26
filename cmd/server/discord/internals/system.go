@@ -1,49 +1,49 @@
-package routes
+package internals
 
 import (
 	"fmt"
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"time"
 )
 
 func init() {
-	multiplexer.Ready = append(multiplexer.Ready, setStatus)
-	multiplexer.MessageCreate = append(multiplexer.MessageCreate, advanceCounter)
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Ready = append(state.Multiplexer.Ready, setStatus)
+	state.Multiplexer.MessageCreate = append(state.Multiplexer.MessageCreate, advanceCounter)
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "about",
 		AliasPatterns: []string{"info", "kappa", "information"},
 		Description:   "Display system information.",
 		Category:      multiplexer.SystemCategory,
 		Handler:       about,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "stats",
 		AliasPatterns: []string{},
 		Description:   "",
 		Category:      multiplexer.SystemCategory,
 		Handler:       stats,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "invite",
 		AliasPatterns: []string{"authorize", "oauth"},
 		Description:   "Display authorization URL.",
 		Category:      multiplexer.SystemCategory,
 		Handler:       invite,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "reset-guild",
 		AliasPatterns: []string{},
 		Description:   "Reset current guild configuration.",
 		Category:      multiplexer.SystemCategory,
 		Handler:       resetGuild,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "shutdown",
 		AliasPatterns: []string{"poweroff", "reboot", "restart"},
 		Description:   "",
@@ -55,21 +55,21 @@ func init() {
 func about(context *multiplexer.Context) {
 	embed := embedutil.New(context.Session.State.User.Username,
 		"Open source, general purpose Discord utility.")
-	embed.Color = state.KappaColor
+	embed.Color = multiplexer.KappaColor
 	embed.AddField("Homepage", config.Config.WebServer.BaseURL, true)
 	embed.AddField("Version", state.Version(), true)
 	embed.AddField("Commit Hash", state.Revision(), true)
 	embed.AddField("Processed Messages", strconv.Itoa(config.GetTotalMessages()), true)
-	if state.Administrator != nil {
-		embed.AddField("Administrator", state.Administrator.Username+"#"+state.Administrator.Discriminator, true)
+	if state.Multiplexer.Administrator != nil {
+		embed.AddField("Administrator", state.Multiplexer.Administrator.Username+"#"+state.Multiplexer.Administrator.Discriminator, true)
 	}
-	switch len(state.Operator) {
+	switch len(state.Multiplexer.Operator) {
 	case 0:
 	case 1:
-		embed.AddField("Operator", state.Operator[0].Username+"#"+state.Operator[0].Discriminator, true)
+		embed.AddField("Operator", state.Multiplexer.Operator[0].Username+"#"+state.Multiplexer.Operator[0].Discriminator, true)
 	default:
 		var usernames string
-		for i, user := range state.Operator {
+		for i, user := range state.Multiplexer.Operator {
 			switch i {
 			case 0:
 				usernames += user.Username + "#" + user.Discriminator
@@ -86,7 +86,7 @@ func about(context *multiplexer.Context) {
 
 func stats(context *multiplexer.Context) {
 	if !context.IsOperator() {
-		context.SendMessage(state.OperatorOnly)
+		context.SendMessage(multiplexer.OperatorOnly)
 		return
 	}
 
@@ -95,7 +95,7 @@ func stats(context *multiplexer.Context) {
 	var embed embedutil.Embed
 
 	embed = embedutil.New("System Stats", "")
-	embed.Color = state.KappaColor
+	embed.Color = multiplexer.KappaColor
 	embed.AddField("PID", strconv.Itoa(stats.Process.PID), true)
 	embed.AddField("Uptime", stats.Process.Uptime.Truncate(time.Second).String(), true)
 	embed.AddField("Goroutines", strconv.Itoa(stats.Process.NumGoroutine), true)
@@ -113,7 +113,7 @@ func stats(context *multiplexer.Context) {
 	context.SendEmbed("", embed)
 
 	embed = embedutil.New("", "")
-	embed.Color = state.KappaColor
+	embed.Color = multiplexer.KappaColor
 	embed.AddField("Current Memory Allocated", stats.Mem.Allocated, true)
 	embed.AddField("Total Memory Allocated", stats.Mem.Total, true)
 	embed.AddField("System Reported Allocation", stats.Mem.Sys, true)
@@ -140,7 +140,7 @@ func stats(context *multiplexer.Context) {
 	context.SendEmbed("", embed)
 
 	embed = embedutil.New("", "")
-	embed.Color = state.KappaColor
+	embed.Color = multiplexer.KappaColor
 	embed.AddField("Next GC Recycle", stats.GC.NextGC, true)
 	embed.AddField("Time Since Last GC", stats.GC.LastGC, true)
 	embed.AddField("Total GC Pause", stats.GC.PauseTotalNs, true)
@@ -151,7 +151,7 @@ func stats(context *multiplexer.Context) {
 
 func resetGuild(context *multiplexer.Context) {
 	if !context.IsOperator() {
-		context.SendMessage(state.OperatorOnly)
+		context.SendMessage(multiplexer.OperatorOnly)
 		return
 	}
 	config.ResetGuild(context.Guild.ID)
@@ -160,7 +160,7 @@ func resetGuild(context *multiplexer.Context) {
 
 func shutdown(context *multiplexer.Context) {
 	if !context.IsAdministrator() {
-		context.SendMessage(state.AdminOnly)
+		context.SendMessage(multiplexer.AdminOnly)
 		return
 	}
 	if map[string]bool{"reboot": true, "restart": true, "shutdown": false, "poweroff": false}[context.Fields[0]] {
@@ -178,7 +178,11 @@ func invite(context *multiplexer.Context) {
 	context.SendEmbed("", embed)
 }
 
-func setStatus(_ *discordgo.Session, ready *discordgo.Ready) {
+func setStatus(context *multiplexer.Context) {
+	ready, ok := context.Event.(*discordgo.Ready)
+	if !ok {
+		return
+	}
 	err = state.RawSession.UpdateGameStatus(0, config.Config.Discord.Presence)
 	if err != nil {
 		log.Warnf("Unable to update presence, %s", err)
@@ -188,8 +192,8 @@ func setStatus(_ *discordgo.Session, ready *discordgo.Ready) {
 		ready.SessionID)
 }
 
-func advanceCounter(session *discordgo.Session, create *discordgo.MessageCreate) {
-	if create.Author.ID == session.State.User.ID {
+func advanceCounter(context *multiplexer.Context) {
+	if context.User.ID == context.Session.State.User.ID {
 		return
 	}
 	err = config.AdvanceTotalMessages()

@@ -1,31 +1,31 @@
-package routes
+package internals
 
 import (
 	"fmt"
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"unicode"
 )
 
 func init() {
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "configure",
 		AliasPatterns: []string{"conf", "settings", "set"},
 		Description:   "Configure per-guild overrides.",
 		Category:      multiplexer.SystemCategory,
 		Handler:       configure,
 	})
-	multiplexer.GuildMemberRemove = append(multiplexer.GuildMemberRemove, func(session *discordgo.Session, remove *discordgo.GuildMemberRemove) {
-		if remove.User.ID == session.State.User.ID {
-			config.ResetGuild(remove.GuildID)
+	state.Multiplexer.GuildMemberRemove = append(state.Multiplexer.GuildMemberRemove, func(context *multiplexer.Context) {
+		if context.User.ID == context.Session.State.User.ID {
+			config.ResetGuild(context.Guild.ID)
 		}
 	})
-	multiplexer.GuildDelete = append(multiplexer.GuildDelete, func(session *discordgo.Session, delete *discordgo.GuildDelete) {
-		config.ResetGuild(delete.ID)
+	state.Multiplexer.GuildDelete = append(state.Multiplexer.GuildDelete, func(context *multiplexer.Context) {
+		config.ResetGuild(context.Guild.ID)
 	})
 	overrides.RegisterSimpleEntry(overrides.SimpleConfigurationEntry{
 		Name:         "prefix",
@@ -67,7 +67,7 @@ func init() {
 						return
 					}
 				case *config.MessageOutOfBounds:
-					context.SendMessage(state.InvalidArgument)
+					context.SendMessage(multiplexer.InvalidArgument)
 					return
 				}
 				context.SendMessage("Message `" + context.Fields[2] + "` has been set.")
@@ -79,7 +79,7 @@ func init() {
 						return
 					}
 				case *config.MessageOutOfBounds:
-					context.SendMessage(state.InvalidArgument)
+					context.SendMessage(multiplexer.InvalidArgument)
 					return
 				}
 				context.SendMessage("Message `" + context.Fields[2] + "` has been reset.")
@@ -100,17 +100,17 @@ func init() {
 
 func configure(context *multiplexer.Context) {
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(multiplexer.GuildOnly)
 		return
 	}
 	if !context.HasPermission(discordgo.PermissionAdministrator) {
-		context.SendMessage(state.PermissionDenied)
+		context.SendMessage(multiplexer.PermissionDenied)
 		return
 	}
 	switch length := len(context.Fields); length {
 	case 1:
 		embed := embedutil.New("Configurator", "Configure per-guild overrides.")
-		embed.Color = state.KappaColor
+		embed.Color = multiplexer.KappaColor
 		for _, entry := range overrides.GetSimpleEntries() {
 			embed.AddField(entry.Name, entry.Description, false)
 		}
@@ -125,7 +125,7 @@ func configure(context *multiplexer.Context) {
 		for _, entry := range overrides.GetSimpleEntries() {
 			if context.Fields[1] == entry.Name {
 				embed := embedutil.New(entry.FriendlyName, entry.Description)
-				embed.Color = state.KappaColor
+				embed.Color = multiplexer.KappaColor
 				value, err := config.GetGuildConfValue(context.Guild.ID, entry.DatabaseKey)
 				if !context.HandleError(err) {
 					return
@@ -142,7 +142,7 @@ func configure(context *multiplexer.Context) {
 		for _, entry := range overrides.GetComplexEntries() {
 			if context.Fields[1] == entry.Name {
 				embed := embedutil.New(entry.FriendlyName, entry.Description)
-				embed.Color = state.KappaColor
+				embed.Color = multiplexer.KappaColor
 				for _, subEntry := range entry.Entries {
 					embed.AddField(subEntry.Name, subEntry.Description, false)
 				}
@@ -165,7 +165,7 @@ func configure(context *multiplexer.Context) {
 		}
 
 		if length < 3 {
-			context.SendMessage(state.InvalidArgument)
+			context.SendMessage(multiplexer.InvalidArgument)
 			return
 		}
 
@@ -186,7 +186,7 @@ func configure(context *multiplexer.Context) {
 					return
 				}
 				if !valid {
-					context.SendMessage(state.InvalidArgument)
+					context.SendMessage(multiplexer.InvalidArgument)
 					return
 				}
 				err := config.SetGuildConfValue(context.Guild.ID, entry.DatabaseKey, input)
@@ -210,7 +210,7 @@ func configure(context *multiplexer.Context) {
 					if context.Fields[2] == subEntry.Name {
 						if len(context.Fields) == 3 {
 							embed := embedutil.New(subEntry.FriendlyName, subEntry.Description)
-							embed.Color = state.KappaColor
+							embed.Color = multiplexer.KappaColor
 							value, err := config.GetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey)
 							if !context.HandleError(err) {
 								return
@@ -238,7 +238,7 @@ func configure(context *multiplexer.Context) {
 							return
 						}
 						if !valid {
-							context.SendMessage(state.InvalidArgument)
+							context.SendMessage(multiplexer.InvalidArgument)
 							return
 						}
 						err := config.SetGuildConfValue(context.Guild.ID, subEntry.DatabaseKey, input)
@@ -252,6 +252,6 @@ func configure(context *multiplexer.Context) {
 				break
 			}
 		}
-		context.SendMessage(state.InvalidArgument)
+		context.SendMessage(multiplexer.InvalidArgument)
 	}
 }

@@ -5,15 +5,15 @@ import (
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/discord/sessioning"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 )
 
 func init() {
-	multiplexer.MessageDelete = append(multiplexer.MessageDelete, messageDeleteLog)
-	multiplexer.MessageUpdate = append(multiplexer.MessageUpdate, messageUpdateLog)
+	state.Multiplexer.MessageDelete = append(state.Multiplexer.MessageDelete, messageDeleteLog)
+	state.Multiplexer.MessageUpdate = append(state.Multiplexer.MessageUpdate, messageUpdateLog)
 	overrides.RegisterSimpleEntry(overrides.SimpleConfigurationEntry{
 		Name:         "logging",
 		FriendlyName: "Logging",
@@ -37,45 +37,53 @@ func init() {
 	})
 }
 
-func messageDeleteLog(session *discordgo.Session, delete *discordgo.MessageDelete) {
-	if delete.GuildID == "" {
+func messageDeleteLog(context *multiplexer.Context) {
+	messageDelete, ok := context.Event.(*discordgo.MessageDelete)
+	if !ok {
 		return
 	}
-	if delete.BeforeDelete == nil {
+	if messageDelete.GuildID == "" {
 		return
 	}
-	if delete.BeforeDelete.Author.ID == state.RawSession.State.User.ID {
+	if messageDelete.BeforeDelete == nil {
+		return
+	}
+	if messageDelete.BeforeDelete.Author.ID == state.RawSession.State.User.ID {
 		return
 	}
 	var embed = embedutil.New("Message Delete", "")
-	channelID, err := config.GetGuildConfValue(delete.GuildID, "log_channel")
+	channelID, err := config.GetGuildConfValue(messageDelete.GuildID, "log_channel")
 	if err != nil {
 		return
 	}
 	if channelID == "" {
 		return
 	}
-	if sessioning.FetchChannel(sessioning.FetchGuild(delete.GuildID), "", channelID) == nil {
+	if sessioning.FetchChannel(sessioning.FetchGuild(messageDelete.GuildID), "", channelID) == nil {
 		return
 	}
-	embed.Color = state.KappaColor
-	embed.SetAuthor(delete.BeforeDelete.Author.Username+"#"+delete.BeforeDelete.Author.Discriminator, delete.BeforeDelete.Author.AvatarURL("128"))
-	embed.SetFooter(fmt.Sprintf("Channel: %s Message: %s Author: %s", delete.ChannelID, delete.BeforeDelete.ID, delete.BeforeDelete.Author.ID))
-	if delete.BeforeDelete.Content != "" {
-		embed.AddField("Content Pre", delete.BeforeDelete.Content, false)
+	embed.Color = multiplexer.KappaColor
+	embed.SetAuthor(messageDelete.BeforeDelete.Author.Username+"#"+messageDelete.BeforeDelete.Author.Discriminator, messageDelete.BeforeDelete.Author.AvatarURL("128"))
+	embed.SetFooter(fmt.Sprintf("Channel: %s Message: %s Author: %s", messageDelete.ChannelID, messageDelete.BeforeDelete.ID, messageDelete.BeforeDelete.Author.ID))
+	if messageDelete.BeforeDelete.Content != "" {
+		embed.AddField("Content Pre", messageDelete.BeforeDelete.Content, false)
 	}
-	for _, attachment := range delete.BeforeDelete.Attachments {
+	for _, attachment := range messageDelete.BeforeDelete.Attachments {
 		embed.AddField("Attachment Pre", fmt.Sprintf("[%s](%s)", attachment.Filename, attachment.URL), false)
 	}
-	embed.AddField("Channel", fmt.Sprintf("<#%s>", delete.ChannelID), false)
-	context := &multiplexer.Context{Message: &discordgo.Message{ChannelID: channelID}, Session: session}
+	embed.AddField("Channel", fmt.Sprintf("<#%s>", messageDelete.ChannelID), false)
+	context.Message = &discordgo.Message{ChannelID: channelID}
 	context.SendEmbed("", embed)
-	for _, e := range delete.BeforeDelete.Embeds {
+	for _, e := range messageDelete.BeforeDelete.Embeds {
 		context.SendEmbed("Embed included in previously deleted message.", embedutil.Embed{MessageEmbed: e})
 	}
 }
 
-func messageUpdateLog(session *discordgo.Session, update *discordgo.MessageUpdate) {
+func messageUpdateLog(context *multiplexer.Context) {
+	update, ok := context.Event.(*discordgo.MessageUpdate)
+	if !ok {
+		return
+	}
 	if update.GuildID == "" {
 		return
 	}
@@ -103,7 +111,7 @@ func messageUpdateLog(session *discordgo.Session, update *discordgo.MessageUpdat
 	if sessioning.FetchChannel(sessioning.FetchGuild(update.GuildID), "", channelID) == nil {
 		return
 	}
-	embed.Color = state.KappaColor
+	embed.Color = multiplexer.KappaColor
 	embed.SetAuthor(update.BeforeUpdate.Author.Username+"#"+update.BeforeUpdate.Author.Discriminator, update.BeforeUpdate.Author.AvatarURL("128"))
 	embed.SetFooter(fmt.Sprintf("Channel: %s Message: %s Author: %s", update.ChannelID, update.BeforeUpdate.ID, update.BeforeUpdate.Author.ID))
 	if update.BeforeUpdate.Content != "" {
@@ -119,7 +127,7 @@ func messageUpdateLog(session *discordgo.Session, update *discordgo.MessageUpdat
 		embed.AddField("Attachment Post", fmt.Sprintf("[%s](%s)", attachment.Filename, attachment.URL), false)
 	}
 	embed.AddField("Channel", fmt.Sprintf("<#%s>", update.ChannelID), false)
-	context := &multiplexer.Context{Message: &discordgo.Message{ChannelID: channelID}, Session: session}
+	context.Message = &discordgo.Message{ChannelID: channelID}
 	context.SendEmbed("", embed)
 	for _, e := range update.BeforeUpdate.Embeds {
 		context.SendEmbed("Embed included in previously updated message.", embedutil.Embed{MessageEmbed: e})

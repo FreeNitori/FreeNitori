@@ -2,29 +2,29 @@ package internals
 
 import (
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"time"
 )
 
 func init() {
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "userinfo",
 		AliasPatterns: []string{"whois", "lookup", "pfp"},
 		Description:   "Lookup a user's detailed information by username, nickname or snowflake.",
 		Category:      multiplexer.ModerationCategory,
 		Handler:       userinfo,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "guildinfo",
 		AliasPatterns: []string{"pfp"},
 		Description:   "Lookup a guild's detailed information by snowflake.",
 		Category:      multiplexer.ModerationCategory,
 		Handler:       guildinfo,
 	})
-	multiplexer.Router.Route(&multiplexer.Route{
+	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "ban",
 		AliasPatterns: []string{""},
 		Description:   "Ban a user from the guild",
@@ -39,9 +39,9 @@ func userinfo(context *multiplexer.Context) {
 
 	// Just use the author if there's no arguments
 	if len(context.Fields) == 1 {
-		user = context.Author
+		user = context.User
 		if !context.IsPrivate {
-			member = context.Create.Member
+			member = context.Member
 		}
 	} else {
 		argument := context.StitchFields(1)
@@ -55,14 +55,14 @@ func userinfo(context *multiplexer.Context) {
 
 	// Fail if unable to make sense of the arguments passed
 	if user == nil {
-		context.SendMessage(state.MissingUser)
+		context.SendMessage(multiplexer.MissingUser)
 		return
 	}
 
 	// Only generate the pfp stuff if that's what's required
 	if context.Fields[0] == "pfp" {
 		embed := embedutil.New("", "")
-		embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
+		embed.Color = context.Session.State.UserColor(user.ID, context.Channel.ID)
 		embed.SetAuthor(user.Username, user.AvatarURL("128"))
 		embed.SetImage(user.AvatarURL("4096"))
 		context.SendEmbed("", embed)
@@ -75,7 +75,7 @@ func userinfo(context *multiplexer.Context) {
 		return
 	}
 	embed := embedutil.New("User Information", "")
-	embed.Color = context.Session.State.UserColor(user.ID, context.Create.ChannelID)
+	embed.Color = context.Session.State.UserColor(user.ID, context.Channel.ID)
 	embed.SetThumbnail(user.AvatarURL("1024"))
 	embed.AddField("Username", user.Username+"#"+user.Discriminator, member != nil)
 	if member != nil {
@@ -111,7 +111,7 @@ func userinfo(context *multiplexer.Context) {
 func guildinfo(context *multiplexer.Context) {
 	// Guild only
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(multiplexer.GuildOnly)
 		return
 	}
 	guildID, err := strconv.Atoi(context.Guild.ID)
@@ -119,7 +119,7 @@ func guildinfo(context *multiplexer.Context) {
 		return
 	}
 	embed := embedutil.New("Guild Information", "")
-	embed.Color = state.KappaColor
+	embed.Color = multiplexer.KappaColor
 	embed.SetThumbnail(context.Guild.IconURL())
 	embed.AddField("Guild Name", context.Guild.Name, true)
 	embed.AddField("Member Count", strconv.Itoa(context.Guild.MemberCount), true)
@@ -140,24 +140,24 @@ func guildinfo(context *multiplexer.Context) {
 func ban(context *multiplexer.Context) {
 	// Guild only
 	if context.IsPrivate {
-		context.SendMessage(state.GuildOnly)
+		context.SendMessage(multiplexer.GuildOnly)
 		return
 	}
 
 	// Has permission
 	if !context.HasPermission(discordgo.PermissionBanMembers) {
-		context.SendMessage(state.PermissionDenied)
+		context.SendMessage(multiplexer.PermissionDenied)
 		return
 	}
 
 	query := context.StitchFields(1)
 	err = context.Ban(query)
 	if err == discordgo.ErrUnauthorized {
-		context.SendMessage(state.LackingPermission)
+		context.SendMessage(multiplexer.LackingPermission)
 		return
 	}
 	if err == multiplexer.ErrUserNotFound {
-		context.SendMessage(state.MissingUser)
+		context.SendMessage(multiplexer.MissingUser)
 		return
 	}
 	if !context.HandleError(err) {

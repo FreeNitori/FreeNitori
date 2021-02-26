@@ -6,17 +6,17 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/db"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/emoji"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/multiplexer"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/overrides"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"unicode/utf8"
 )
 
 func init() {
-	multiplexer.MessageReactionAdd = append(multiplexer.MessageReactionAdd, addReaction)
-	multiplexer.MessageReactionRemove = append(multiplexer.MessageReactionRemove, removeReaction)
+	state.Multiplexer.MessageReactionAdd = append(state.Multiplexer.MessageReactionAdd, handleHighlightReaction)
+	state.Multiplexer.MessageReactionRemove = append(state.Multiplexer.MessageReactionRemove, handleHighlightReaction)
 	overrides.RegisterComplexEntry(overrides.ComplexConfigurationEntry{
 		Name:         "highlight",
 		FriendlyName: "Message Highlighting",
@@ -126,12 +126,25 @@ func init() {
 	})
 }
 
-func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.MessageReaction) {
-	channelID, err := config.GetGuildConfValue(reaction.GuildID, "highlight_channel")
+func handleHighlightReaction(context *multiplexer.Context) {
+	if context.Message.Author.ID == context.Session.State.User.ID {
+		return
+	}
+
+	var reaction *discordgo.MessageReaction
+	if event, ok := context.Event.(*discordgo.MessageReactionAdd); ok {
+		reaction = event.MessageReaction
+	} else if event, ok := context.Event.(*discordgo.MessageReactionRemove); ok {
+		reaction = event.MessageReaction
+	} else {
+		return
+	}
+
+	channelID, err := config.GetGuildConfValue(context.Guild.ID, "highlight_channel")
 	if err != nil {
 		return
 	}
-	amountString, err := config.GetGuildConfValue(reaction.GuildID, "highlight_amount")
+	amountString, err := config.GetGuildConfValue(context.Guild.ID, "highlight_amount")
 	if err != nil {
 		return
 	}
@@ -139,40 +152,12 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 	if err != nil {
 		return
 	}
-	guild, err := session.State.Guild(reaction.GuildID)
-	if err != nil {
-		guild, err = session.Guild(reaction.GuildID)
-		if err != nil {
-			return
-		}
-		_ = session.State.GuildAdd(guild)
-	}
-
-	var channel *discordgo.Channel
-	for _, c := range guild.Channels {
-		if channelID == c.ID {
-			channel = c
-			break
-		}
-	}
-	if channel == nil {
-		return
-	}
-
-	message, err := session.ChannelMessage(reaction.ChannelID, reaction.MessageID)
-	if err != nil {
-		return
-	}
-
-	if message.Author.ID == session.State.User.ID {
-		return
-	}
 
 	if reaction.Emoji.ID != "" {
 		return
 	}
 
-	e, err := config.GetGuildConfValue(guild.ID, "highlight_emoji")
+	e, err := config.GetGuildConfValue(context.Guild.ID, "highlight_emoji")
 	if err != nil {
 		return
 	}
@@ -180,7 +165,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 		return
 	}
 
-	binding, err := db.HighlightGetBinding(guild.ID, message.ID)
+	binding, err := db.HighlightGetBinding(context.Guild.ID, context.Message.ID)
 	if err != nil {
 		return
 	}
@@ -189,7 +174,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 	}
 
 	sufficient, reactions := func() (bool, *discordgo.MessageReactions) {
-		for _, react := range message.Reactions {
+		for _, react := range context.Message.Reactions {
 			if react.Emoji.Name == e {
 				if react.Count >= amount {
 					return true, react
@@ -201,21 +186,21 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 	}()
 
 	if sufficient {
-		content := fmt.Sprintf("**%d | **%s", reactions.Count, fmt.Sprintf("<#%s>", message.ChannelID))
-		embed := embedutil.New("", message.Content)
-		for _, attachment := range message.Attachments {
+		content := fmt.Sprintf("**%d | **%s", reactions.Count, fmt.Sprintf("<#%s>", context.Message.ChannelID))
+		embed := embedutil.New("", context.Message.Content)
+		for _, attachment := range context.Message.Attachments {
 			if attachment.Width != 0 && attachment.Height != 0 {
 				embed.SetImage(attachment.URL, attachment.ProxyURL)
 			}
 			embed.AddField("Attachment", fmt.Sprintf("[%s](%s)", attachment.Filename, attachment.URL), false)
 		}
-		embed.SetAuthor(message.Author.Username+"#"+message.Author.Discriminator, message.Author.AvatarURL("128"))
-		embed.SetFooter(fmt.Sprintf("Author: %s", message.Author.ID))
-		embed.Color = state.KappaColor
-		embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", guild.ID, message.ChannelID, message.ID), false)
+		embed.SetAuthor(context.Message.Author.Username+"#"+context.Message.Author.Discriminator, context.Message.Author.AvatarURL("128"))
+		embed.SetFooter(fmt.Sprintf("Author: %s", context.Message.Author.ID))
+		embed.Color = multiplexer.KappaColor
+		embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", context.Guild.ID, context.Message.ChannelID, context.Message.ID), false)
 
 		if binding == "" {
-			highlight, err := session.ChannelMessageSendComplex(channel.ID, &discordgo.MessageSend{
+			highlight, err := context.Session.ChannelMessageSendComplex(context.Channel.ID, &discordgo.MessageSend{
 				Content:         content,
 				Embed:           embed.MessageEmbed,
 				TTS:             false,
@@ -226,25 +211,25 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 			if err != nil {
 				return
 			}
-			err = db.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
+			err = db.HighlightBindMessage(context.Guild.ID, context.Message.ID, highlight.ID)
 			if err != nil {
 				return
 			}
 		} else {
-			_, err = session.ChannelMessageEditComplex(&discordgo.MessageEdit{
+			_, err = context.Session.ChannelMessageEditComplex(&discordgo.MessageEdit{
 				Content:         &content,
 				Embed:           embed.MessageEmbed,
 				AllowedMentions: nil,
 				ID:              binding,
-				Channel:         channel.ID,
+				Channel:         context.Channel.ID,
 			})
 
 			if fmt.Sprint(err) == "HTTP 404 Not Found, {\"message\": \"Unknown Message\", \"code\": 10008}" {
-				err = db.HighlightUnbindMessage(guild.ID, message.ID)
+				err = db.HighlightUnbindMessage(context.Guild.ID, context.Message.ID)
 				if err != nil {
 					return
 				}
-				highlight, err := session.ChannelMessageSendComplex(channel.ID, &discordgo.MessageSend{
+				highlight, err := context.Session.ChannelMessageSendComplex(context.Channel.ID, &discordgo.MessageSend{
 					Content:         content,
 					Embed:           embed.MessageEmbed,
 					TTS:             false,
@@ -255,7 +240,7 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 				if err != nil {
 					return
 				}
-				err = db.HighlightBindMessage(guild.ID, message.ID, highlight.ID)
+				err = db.HighlightBindMessage(context.Guild.ID, context.Message.ID, highlight.ID)
 				if err != nil {
 					return
 				}
@@ -263,19 +248,11 @@ func handleHighlightReaction(session *discordgo.Session, reaction *discordgo.Mes
 		}
 	} else {
 		if binding != "" {
-			_ = session.ChannelMessageDelete(channelID, binding)
-			err = db.HighlightUnbindMessage(guild.ID, binding)
+			_ = context.Session.ChannelMessageDelete(channelID, binding)
+			err = db.HighlightUnbindMessage(context.Guild.ID, binding)
 			if err != nil {
 				return
 			}
 		}
 	}
-}
-
-func addReaction(session *discordgo.Session, add *discordgo.MessageReactionAdd) {
-	handleHighlightReaction(session, add.MessageReaction)
-}
-
-func removeReaction(session *discordgo.Session, remove *discordgo.MessageReactionRemove) {
-	handleHighlightReaction(session, remove.MessageReaction)
 }
