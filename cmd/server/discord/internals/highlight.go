@@ -200,13 +200,9 @@ func handleHighlightReaction(context *multiplexer.Context) {
 		embed.AddField("Original Message", fmt.Sprintf("[Redirect](https://discord.com/channels/%s/%s/%s)", context.Guild.ID, context.Message.ChannelID, context.Message.ID), false)
 
 		if binding == "" {
-			highlight, err := context.Session.ChannelMessageSendComplex(context.Channel.ID, &discordgo.MessageSend{
-				Content:         content,
-				Embed:           embed.MessageEmbed,
-				TTS:             false,
-				Files:           nil,
-				AllowedMentions: nil,
-				File:            nil,
+			highlight, err := context.Session.ChannelMessageSendComplex(channelID, &discordgo.MessageSend{
+				Content: content,
+				Embed:   embed.MessageEmbed,
 			})
 			if err != nil {
 				return
@@ -229,13 +225,9 @@ func handleHighlightReaction(context *multiplexer.Context) {
 				if err != nil {
 					return
 				}
-				highlight, err := context.Session.ChannelMessageSendComplex(context.Channel.ID, &discordgo.MessageSend{
-					Content:         content,
-					Embed:           embed.MessageEmbed,
-					TTS:             false,
-					Files:           nil,
-					AllowedMentions: nil,
-					File:            nil,
+				highlight, err := context.Session.ChannelMessageSendComplex(channelID, &discordgo.MessageSend{
+					Content: content,
+					Embed:   embed.MessageEmbed,
 				})
 				if err != nil {
 					return
