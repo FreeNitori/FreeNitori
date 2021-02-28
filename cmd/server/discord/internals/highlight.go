@@ -217,7 +217,7 @@ func handleHighlightReaction(context *multiplexer.Context) {
 				Embed:           embed.MessageEmbed,
 				AllowedMentions: nil,
 				ID:              binding,
-				Channel:         context.Channel.ID,
+				Channel:         channelID,
 			})
 
 			if fmt.Sprint(err) == "HTTP 404 Not Found, {\"message\": \"Unknown Message\", \"code\": 10008}" {
