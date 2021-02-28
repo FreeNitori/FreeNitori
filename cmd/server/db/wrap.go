@@ -3,6 +3,8 @@ package db
 import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dgraph-io/badger/v2"
 	"strconv"
@@ -11,6 +13,20 @@ import (
 func init() {
 	config.Prefixes = append(config.Prefixes, "exp", "rank", "exp_bl", "lastfm", "ra_metadata", "highlight")
 	config.CustomizableMessages["levelup"] = "Congratulations $USER on reaching level $LEVEL."
+	multiplexer.GetPrefix = func(context *multiplexer.Context) string {
+		prefix, err := database.Database.HGet("conf."+context.Guild.ID, "prefix")
+		if err != nil {
+			if err == badger.ErrKeyNotFound {
+				return config.Config.System.Prefix
+			}
+			log.Warnf("Unable to obtain prefix in guild %s, %s", context.Guild.ID, err)
+			return config.Config.System.Prefix
+		}
+		if prefix == "" {
+			return config.Config.System.Prefix
+		}
+		return prefix
+	}
 }
 
 // ExpEnabled queries whether the experience system is enabled for a guild.

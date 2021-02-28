@@ -85,14 +85,14 @@ func SetCustomizableMessage(gid string, key string, message string) error {
 	return err
 }
 
-// GetTotalMessages gets the total amount of messages processed.
+// GetTotalMessages gets the message counter.
 func GetTotalMessages() int {
 	messageAmount, err := database.Database.HGet("nitori", "total_messages")
 	if err != nil {
 		if err == badger.ErrKeyNotFound {
 			return 0
 		}
-		log.Warnf("Failed to obtain total amount of messages processed, %s", err)
+		log.Warnf("Unable to obtain message counter, %s", err)
 		return 0
 	}
 	if messageAmount == "" {
@@ -100,31 +100,15 @@ func GetTotalMessages() int {
 	}
 	amountInteger, err := strconv.Atoi(messageAmount)
 	if err != nil {
-		log.Warnf("Malformed amount of messages processed, %s", err)
+		log.Warnf("Malformed message counter, %s", err)
 		return 0
 	}
 	return amountInteger
 }
 
-// AdvanceTotalMessages advances the total messages processed counter.
+// AdvanceTotalMessages advances the message counter.
 func AdvanceTotalMessages() error {
 	return database.Database.HSet("nitori", "total_messages", strconv.Itoa(GetTotalMessages()+1))
-}
-
-// GetPrefix gets the command prefix of a guild and returns the default if none is set.
-func GetPrefix(gid string) string {
-	prefix, err := database.Database.HGet("conf."+gid, "prefix")
-	if err != nil {
-		if err == badger.ErrKeyNotFound {
-			return Config.System.Prefix
-		}
-		log.Warnf("Failed to obtain prefix in guild %s, %s", gid, err)
-		return Config.System.Prefix
-	}
-	if prefix == "" {
-		return Config.System.Prefix
-	}
-	return prefix
 }
 
 // GetGuildConfValue gets a configuration value for a specific guild
