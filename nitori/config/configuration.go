@@ -3,7 +3,7 @@ package config
 
 import (
 	"flag"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	log "git.randomchars.net/FreeNitori/Log"
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
 	"go/types"

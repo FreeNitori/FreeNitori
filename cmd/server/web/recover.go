@@ -2,7 +2,7 @@ package web
 
 import (
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	log "git.randomchars.net/FreeNitori/Log"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

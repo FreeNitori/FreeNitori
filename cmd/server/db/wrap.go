@@ -3,7 +3,7 @@ package db
 import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	log "git.randomchars.net/FreeNitori/Log"
 	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dgraph-io/badger/v2"

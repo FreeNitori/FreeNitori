@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/discord/sessioning"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	log "git.randomchars.net/FreeNitori/Log"
 	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
+	"github.com/sirupsen/logrus"
 	"strconv"
 )
 
@@ -17,7 +18,6 @@ var err error
 // Initialize early initializes Discord-related functionalities.
 func Initialize() error {
 	// Setup some things
-	multiplexer.SetLogger(log.Logger)
 	multiplexer.NoCommandMatched = func(context *multiplexer.Context) {
 		// If no command was matched, resort to either being annoyed by the ping or a command not found message
 		if context.HasMention {
@@ -28,7 +28,20 @@ func Initialize() error {
 		}
 	}
 	state.Multiplexer.Prefix = config.Config.System.Prefix
-	discordgo.Logger = log.DiscordGoLogger
+	discordgo.Logger = func(msgL, _ int, format string, a ...interface{}) {
+		var level logrus.Level
+		switch msgL {
+		case discordgo.LogDebug:
+			level = logrus.DebugLevel
+		case discordgo.LogInformational:
+			level = logrus.InfoLevel
+		case discordgo.LogWarning:
+			level = logrus.WarnLevel
+		case discordgo.LogError:
+			level = logrus.ErrorLevel
+		}
+		log.Instance.Log(level, fmt.Sprintf(format, a...))
+	}
 	state.RawSession.UserAgent = "DiscordBot (FreeNitori " + state.Version() + ")"
 	if config.TokenOverride == "" {
 		state.RawSession.Token = "Bot " + config.Config.Discord.Token

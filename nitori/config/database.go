@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	log "git.randomchars.net/FreeNitori/Log"
 	"github.com/dgraph-io/badger/v2"
 	"strconv"
 )

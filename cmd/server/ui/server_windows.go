@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	log "git.randomchars.net/FreeNitori/FreeNitori/Log"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"

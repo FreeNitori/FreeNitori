@@ -1,8 +1,8 @@
 package extension
 
 import (
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	log "git.randomchars.net/FreeNitori/Log"
 	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"io/ioutil"
 	"os"

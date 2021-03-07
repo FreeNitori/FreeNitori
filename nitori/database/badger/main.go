@@ -2,7 +2,7 @@
 package badger
 
 import (
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	log "git.randomchars.net/FreeNitori/Log"
 	"github.com/dgraph-io/badger/v2"
 	"github.com/dgraph-io/badger/v2/options"
 	"strings"
@@ -27,7 +27,7 @@ func (db *Badger) DBType() string {
 func (db *Badger) Open(path string) error {
 	opts := badger.DefaultOptions(path)
 	opts.Dir = path
-	opts.Logger = log.Logger
+	opts.Logger = log.Instance
 	opts.ValueDir = path
 	opts.Truncate = true
 	opts.SyncWrites = false

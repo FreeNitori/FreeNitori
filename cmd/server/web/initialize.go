@@ -5,12 +5,13 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/binaries/public"
 	"git.randomchars.net/FreeNitori/FreeNitori/binaries/tmpl"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
+	log "git.randomchars.net/FreeNitori/Log"
+
 	// Register handlers.
 	_ "git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/handlers"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/routes"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/static"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"

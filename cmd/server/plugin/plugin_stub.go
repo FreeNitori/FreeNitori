@@ -5,7 +5,7 @@ package plugin
 import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database/badger"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	log "git.randomchars.net/FreeNitori/Log"
 )
 
 func Initialize() error {

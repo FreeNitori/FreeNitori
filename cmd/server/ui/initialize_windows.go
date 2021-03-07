@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	log "git.randomchars.net/FreeNitori/FreeNitori/Log"
 	"github.com/lxn/walk"
 	"github.com/sirupsen/logrus"
 	"go/types"
@@ -27,7 +27,7 @@ func (w windowLogViewHook) Fire(entry *logrus.Entry) error {
 }
 
 func init() {
-	log.Logger.AddHook(windowLogViewHook{})
+	log.Instance.AddHook(windowLogViewHook{})
 }
 
 // Initialize initializes UI.

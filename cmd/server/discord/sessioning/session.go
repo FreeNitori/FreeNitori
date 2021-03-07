@@ -2,8 +2,8 @@ package sessioning
 
 import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	log "git.randomchars.net/FreeNitori/Log"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"time"

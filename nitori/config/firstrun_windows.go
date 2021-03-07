@@ -1,8 +1,8 @@
 package config
 
 import (
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	log "git.randomchars.net/FreeNitori/Log"
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
 	"github.com/lxn/win"

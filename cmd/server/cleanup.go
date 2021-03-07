@@ -5,8 +5,8 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/rpc"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	log "git.randomchars.net/FreeNitori/Log"
 	"os"
 	"time"
 )

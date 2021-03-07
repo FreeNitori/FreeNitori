@@ -3,7 +3,7 @@
 package main
 
 import (
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/log"
+	log "git.randomchars.net/FreeNitori/Log"
 	"os"
 	"syscall"
 )
