@@ -21,9 +21,11 @@ func cleanup() {
 	log.Info("Running cleanups.")
 
 	// Close RPC connection
-	err = rpc.Listener.Close()
-	if err != nil {
-		log.Errorf("Error while closing RPC listener, %s", err)
+	if rpc.Listener != nil {
+		err = rpc.Listener.Close()
+		if err != nil {
+			log.Errorf("Error while closing RPC listener, %s", err)
+		}
 	}
 
 	// Shutdown web server
