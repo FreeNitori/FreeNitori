@@ -21,6 +21,7 @@ func Serve() {
 	Listener, err = net.Listen("unix", config.Config.System.Socket)
 	if err != nil {
 		log.Warnf("RPC server was unable to start, %s", err)
+		return
 	}
 	_ = http.Serve(Listener, nil)
 }
