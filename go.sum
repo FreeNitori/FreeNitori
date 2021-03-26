@@ -10,6 +10,8 @@ git.randomchars.net/FreeNitori/Multiplexer v1.0.2 h1:JaYOErnnpSW7gGlKt0ATc5Wyhvr
 git.randomchars.net/FreeNitori/Multiplexer v1.0.2/go.mod h1:p3hph/Q5Mm+SkfE1OhAk5d1Z+xJDrl05Gt0m1EPixbg=
 git.randomchars.net/FreeNitori/Multiplexer v1.0.4 h1:IJLPbygCDL84G/wjln1eXrDA8Z9xfU3zOdWd1Al3zfk=
 git.randomchars.net/FreeNitori/Multiplexer v1.0.4/go.mod h1:Mta0yHohgjMHFxjaGvkaEYS5cpUNYyEAwaPE5/VuYas=
+git.randomchars.net/FreeNitori/Multiplexer v1.0.5 h1:jOE64rQy7UNvtGpcwRDdnXiD+uZbNGZryWwhAfGGGiQ=
+git.randomchars.net/FreeNitori/Multiplexer v1.0.5/go.mod h1:Mta0yHohgjMHFxjaGvkaEYS5cpUNYyEAwaPE5/VuYas=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/DataDog/zstd v1.4.1 h1:3oxKN3wbHibqx897utPC2LTQU4J+IHWWJO+glkAkpFM=

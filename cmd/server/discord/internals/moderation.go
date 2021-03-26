@@ -151,6 +151,10 @@ func ban(context *multiplexer.Context) {
 	}
 
 	query := context.StitchFields(1)
+	if query == "" {
+		context.SendMessage(multiplexer.InvalidArgument)
+		return
+	}
 	err = context.Ban(query)
 	if err == discordgo.ErrUnauthorized {
 		context.SendMessage(multiplexer.LackingPermission)
