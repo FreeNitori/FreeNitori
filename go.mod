@@ -14,7 +14,6 @@ require (
 	github.com/flynn-archive/go-shlex v0.0.0-20150515145356-3f9db97f8568 // indirect
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.6.3
-	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
 	github.com/google/uuid v1.1.5
 	github.com/json-iterator/go v1.1.9
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
@@ -29,4 +28,4 @@ require (
 	gopkg.in/sourcemap.v1 v1.0.5 // indirect
 )
 
-go 1.14
+go 1.16

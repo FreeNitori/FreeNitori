@@ -1,7 +1,7 @@
-.NOTPARALLEL: deps assets nowindowsgui build start
+.NOTPARALLEL: nowindowsgui build start
 
-all: deps assets build
-run: assets nowindowsgui build start
+all: build
+run: nowindowsgui build start
 
 LDFLAGS = -s -w -X 'git.randomchars.net/FreeNitori/FreeNitori/nitori/state.version=$(shell echo -n `git describe --tags`; if ! [ "`git status -s`" = '' ]; then echo -n '-dirty'; fi)' -X 'git.randomchars.net/FreeNitori/FreeNitori/nitori/state.revision=$(shell git rev-parse --short HEAD)'
 ifeq ($(shell go env GOOS), windows)
@@ -9,17 +9,6 @@ ifeq ($(shell go env GOOS), windows)
    WINDOW_SYSO_REMOVE = rm -f cmd/server/freenitori.syso
    $(shell cp assets/freenitori.syso cmd/server/freenitori.syso)
 endif
-
-.PHONY: deps
-deps:
-	@echo "Downloading dependencies..."
-	@go get -u github.com/go-bindata/go-bindata/...
-
-.PHONY: assets
-assets:
-	@echo "Packaging assets..."
-	@$$(go env GOPATH)/bin/go-bindata -o binaries/tmpl/tmpl.go -pkg tmpl -prefix assets/web/templates/ ./assets/web/templates/*
-	@$$(go env GOPATH)/bin/go-bindata -fs -o binaries/public/public.go -pkg public -prefix assets/web/public/ ./assets/web/public/...
 
 .PHONY: nowindowsgui
 nowindowsgui:

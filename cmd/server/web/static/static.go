@@ -59,7 +59,7 @@ func ServeRoot(urlPrefix, root string) gin.HandlerFunc {
 	return Serve(urlPrefix, LocalFile(root, false))
 }
 
-// Serve returns a middleware handler that serves static files in the given directory.
+// Serve returns a middleware handler that serves static files in the provided filesystem.
 func Serve(urlPrefix string, fs ServeFileSystem) gin.HandlerFunc {
 	fileServer := http.FileServer(fs)
 	if urlPrefix != "" {

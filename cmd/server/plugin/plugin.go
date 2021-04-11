@@ -19,7 +19,15 @@ import (
 func Initialize() error {
 	stat, err := os.Stat("plugins")
 	if os.IsNotExist(err) {
-		return errors.New("plugins directory does not exist")
+		log.Warn("Creating plugins directory since it does not exist.")
+		err = os.Mkdir("plugins", 0700)
+		if err != nil {
+			return err
+		}
+		stat, err = os.Stat("plugins")
+		if err != nil {
+			return err
+		}
 	}
 	if !stat.IsDir() {
 		return errors.New("plugins path is not a directory")

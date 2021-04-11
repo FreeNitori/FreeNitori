@@ -1,14 +1,15 @@
 package web
 
 import (
-	"errors"
-	"git.randomchars.net/FreeNitori/FreeNitori/binaries/public"
-	"git.randomchars.net/FreeNitori/FreeNitori/binaries/tmpl"
+	"embed"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
 	log "git.randomchars.net/FreeNitori/Log"
+	"io/fs"
 
 	// Register handlers.
 	_ "git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/handlers"
+	// Process embeds
+	_ "embed"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/routes"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/static"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
@@ -20,10 +21,12 @@ import (
 	"html/template"
 	"net/http"
 	"os"
-	"strings"
 )
 
 var router *gin.Engine
+
+//go:embed assets
+var assets embed.FS
 
 type logger types.Nil
 
@@ -38,27 +41,26 @@ func Initialize() error {
 	router = ginSetup()
 
 	// Register templates
-	templates := template.New("/")
-	for _, path := range tmpl.AssetNames() {
-		if strings.HasPrefix(path, "") {
-			templateBin, _ := tmpl.Asset(path)
-			templates, err = templates.New(path).Parse(string(templateBin))
-			if err != nil {
-				return errors.New("unable to parse templates")
-			}
-		}
+	templates, err := template.ParseFS(assets, "assets/templates/*")
+	if err != nil {
+		return err
 	}
 	router.SetHTMLTemplate(templates)
 
 	// Register static
-	var serveFileSystem static.ServeFileSystem
-	serveFileSystem = static.FileSystem(public.AssetFile())
 	if stat, err := os.Stat("assets/web/public"); err == nil {
+		log.Info("Serving assets from filesystem.")
 		if stat.IsDir() {
-			serveFileSystem = static.LocalFile("assets/web/public", false)
+			router.Use(static.ServeRoot("/", "assets/web/public"))
 		}
+	} else {
+		log.Info("Serving bundled assets.")
+		public, err := fs.Sub(assets, "assets/public")
+		if err != nil {
+			return err
+		}
+		router.Use(static.Serve("/", static.FileSystem(http.FS(public))))
 	}
-	router.Use(static.Serve("/", serveFileSystem))
 
 	// Register error page
 	router.NoRoute(func(context *gin.Context) {

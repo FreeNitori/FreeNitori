@@ -17,8 +17,10 @@ func (instance *HTTPFileSystem) Open(name string) (http.File, error) {
 
 // Exists returns if a path exists or not.
 func (instance *HTTPFileSystem) Exists(prefix string, filepath string) bool {
-
 	if p := strings.TrimPrefix(filepath, prefix); len(p) < len(filepath) {
+		if filepath == prefix {
+			p = filepath
+		}
 		if _, err := instance.filesystem.Open(p); err != nil {
 			return false
 		}
