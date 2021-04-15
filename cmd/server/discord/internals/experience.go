@@ -254,6 +254,15 @@ func AdvanceExperience(context *multiplexer.Context) {
 		return
 	}
 
+	// Check if Channel is EXPBL
+	if context.Channel != nil {
+		if strings.HasSuffix(context.Channel.Topic, "[EXPBL]") {
+			return
+		}
+	} else {
+		return
+	}
+
 	// Also don't do anything if experience system is disabled
 	expEnabled, err := db.ExpEnabled(context.Guild.ID)
 	if err != nil {
