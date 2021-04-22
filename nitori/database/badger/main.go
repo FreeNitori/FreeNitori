@@ -3,8 +3,7 @@ package badger
 
 import (
 	log "git.randomchars.net/FreeNitori/Log"
-	"github.com/dgraph-io/badger/v2"
-	"github.com/dgraph-io/badger/v2/options"
+	"github.com/dgraph-io/badger/v3"
 	"strings"
 )
 
@@ -29,12 +28,8 @@ func (db *Badger) Open(path string) error {
 	opts.Dir = path
 	opts.Logger = log.Instance
 	opts.ValueDir = path
-	opts.Truncate = true
 	opts.SyncWrites = false
-	opts.TableLoadingMode = options.MemoryMap
-	opts.ValueLogLoadingMode = options.FileIO
 	opts.NumMemtables = 2
-	opts.MaxTableSize = 10 << 20
 	opts.NumLevelZeroTables = 2
 	opts.ValueThreshold = 1
 

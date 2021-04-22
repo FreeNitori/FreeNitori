@@ -6,7 +6,7 @@ import (
 	log "git.randomchars.net/FreeNitori/Log"
 	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
-	"github.com/dgraph-io/badger/v2"
+	"github.com/dgraph-io/badger/v3"
 	"strconv"
 )
 

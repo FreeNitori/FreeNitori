@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
 	log "git.randomchars.net/FreeNitori/Log"
-	"github.com/dgraph-io/badger/v2"
+	"github.com/dgraph-io/badger/v3"
 	"strconv"
 )
 
