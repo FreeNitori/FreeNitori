@@ -33,13 +33,14 @@ type MessageOutOfBounds struct{}
 // Conf represents data of a configuration file.
 type Conf struct {
 	System struct {
-		LogLevel      string
-		LogPath       string
-		Socket        string
-		Database      string
-		Prefix        string
-		Administrator int
-		Operator      []int
+		LogLevel       string
+		LogPath        string
+		Socket         string
+		Database       string
+		Prefix         string
+		BackupInterval int
+		Administrator  int
+		Operator       []int
 	}
 	WebServer struct {
 		Host                string
