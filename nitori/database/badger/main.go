@@ -2,17 +2,13 @@
 package badger
 
 import (
-	"fmt"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	log "git.randomchars.net/FreeNitori/Log"
 	"github.com/dgraph-io/badger/v3"
-	"os"
 	"strings"
 	"time"
 )
 
 var err error
-var backupTicker *time.Ticker
 
 // Database is an instance of the database backend.
 var Database Badger
@@ -29,66 +25,40 @@ func (db *Badger) DBType() string {
 
 // Open opens the database.
 func (db *Badger) Open(path string) error {
-	opts := badger.DefaultOptions(path)
-	opts.Dir = path
-	opts.Logger = log.Instance
-	opts.ValueDir = path
-	opts.SyncWrites = false
-	opts.NumMemtables = 2
-	opts.NumLevelZeroTables = 2
-	opts.ValueThreshold = 1
+	opts := badger.DefaultOptions(path).
+		WithDir(path).
+		WithLogger(log.Instance).
+		WithValueDir(path).
+		WithSyncWrites(false).
+		WithNumMemtables(2).
+		WithNumLevelZeroTables(2).
+		WithValueThreshold(1)
 
 	db.DB, err = badger.Open(opts)
-
 	if err != nil {
 		return err
 	}
 
 	go (func() {
-		for db.DB.RunValueLogGC(0.5) == nil {
+		for {
+			if err = db.DB.RunValueLogGC(0.5); err == nil {
+				time.Sleep(100 * time.Millisecond)
+			} else {
+				switch err {
+				case badger.ErrRejected:
+					log.Warn("Value log garbage collection rejected.")
+				case badger.ErrNoRewrite:
+				default:
+					log.Warnf("Unexpected error while performing value log garbage collection, %s", err)
+				}
+				time.Sleep(30 * time.Second)
+			}
 		}
 	})()
 
-	if config.Config.System.BackupInterval > 0 {
-		log.Infof("Periodical database backup interval %v second(s).", config.Config.System.BackupInterval)
-		if _, err := os.Stat("backup"); os.IsNotExist(err) {
-			err = os.Mkdir("backup", 0700)
-			if err != nil {
-				return err
-			}
-		}
-		backupTicker = time.NewTicker(time.Duration(config.Config.System.BackupInterval) * time.Second)
-		go func() {
-			for {
-				select {
-				case <-backupTicker.C:
-					intermediate, err := os.Create("backup/.intermediate")
-					if err != nil {
-						log.Errorf("Unable to create intermediate backup file, %s", err)
-						continue
-					}
-					ver, err := db.DB.Backup(intermediate, 0)
-					if err != nil {
-						log.Errorf("Unable to generate intermediate backup, %s", err)
-						continue
-					}
-					err = os.Rename("backup/.intermediate", fmt.Sprintf("backup/%v", ver))
-					if err != nil {
-						log.Errorf("Unable to rename intermediate backup, %s", err)
-						err = os.Remove("backup/.intermediate")
-						if err != nil {
-							log.Errorf("Unable to remove intermediate file, %s", err)
-							log.Warnf("Backup has been disabled, please resolve the issue above and restart FreeNitori.")
-							break
-						}
-						continue
-					}
-					log.Infof("Successfully backed up database, version %v", ver)
-				}
-			}
-		}()
-	} else {
-		log.Infof("Periodical database backup is not enabled.")
+	err = setupBackup(db)
+	if err != nil {
+		return err
 	}
 
 	return nil
