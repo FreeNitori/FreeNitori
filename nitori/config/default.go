@@ -16,7 +16,7 @@ var confDefault = Conf{
 		LogLevel:       "info",
 		LogPath:        "/var/log/freenitori",
 		Socket:         "/tmp/nitori",
-		Database:       "/var/lib/freenitori/db",
+		Database:       "/var/db/freenitori",
 		Prefix:         "env ",
 		BackupInterval: 28800,
 		Administrator:  0,
