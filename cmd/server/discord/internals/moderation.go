@@ -18,6 +18,7 @@ type MemberWarning struct {
 	GuildID   string    `json:"guild_id"`
 	ChannelID string    `json:"channel_id"`
 	MessageID string    `json:"message_id"`
+	UserID    string    `json:"user_id"`
 }
 
 func init() {
@@ -242,9 +243,11 @@ func warn(context *multiplexer.Context) {
 			embed := embedutil.New("Warnings", "List of warnings of "+member.User.Username)
 			embed.Color = multiplexer.KappaColor
 			for index, warn := range warns {
-				embed.AddField(fmt.Sprintf("(%v) Warning on %s",
-					index+1, warn.Time.UTC().Format("Mon Jan 2 15:04:05 2006")),
-					fmt.Sprintf("[%s](https://discord.com/channels/%s/%s/%s)", warn.Text,
+				embed.AddField(fmt.Sprintf("Warning on %s (%v)",
+					warn.Time.UTC().Format("Mon Jan 2 15:04:05 2006"), index+1),
+					fmt.Sprintf("Issuer: <@%s> \nReason: [%s](https://discord.com/channels/%s/%s/%s)",
+						warn.UserID,
+						warn.Text,
 						warn.GuildID,
 						warn.ChannelID,
 						warn.MessageID), false)
@@ -253,6 +256,10 @@ func warn(context *multiplexer.Context) {
 		default:
 			if len(warns) == 25 {
 				context.SendMessage("Limit of 25 warnings per user reached, please clear some warnings and try again.")
+				return
+			}
+			err = context.Session.ChannelMessageDelete(context.Channel.ID, context.Message.ID)
+			if !context.HandleError(err) {
 				return
 			}
 			message := context.StitchFields(2)
@@ -266,6 +273,7 @@ func warn(context *multiplexer.Context) {
 				GuildID:   context.Guild.ID,
 				ChannelID: m.ChannelID,
 				MessageID: m.ID,
+				UserID:    context.User.ID,
 			})
 			b, err := json.Marshal(warns)
 			if !context.HandleError(err) {
