@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	config.Prefixes = append(config.Prefixes, "exp", "rank", "exp_bl", "lastfm", "ra_metadata", "highlight")
+	config.Prefixes = append(config.Prefixes, "exp", "rank", "exp_bl", "lastfm", "ra_metadata", "highlight", "warns")
 	config.CustomizableMessages["levelup"] = "Congratulations $USER on reaching level $LEVEL."
 	multiplexer.GetPrefix = func(context *multiplexer.Context) string {
 		prefix, err := database.Database.HGet("conf."+context.Guild.ID, "prefix")
@@ -96,7 +96,7 @@ func SetRankBind(guild *discordgo.Guild, level int, role *discordgo.Role) error 
 
 // UnsetRankBind unbinds a role from a level.
 func UnsetRankBind(guild *discordgo.Guild, level string) error {
-	err := database.Database.HDel("rank."+guild.ID, []string{level})
+	err = database.Database.HDel("rank."+guild.ID, []string{level})
 	if err == badger.ErrKeyNotFound {
 		return nil
 	}
@@ -110,7 +110,7 @@ func HighlightBindMessage(gid, message, highlight string) error {
 
 // HighlightUnbindMessage unbinds a message with the highlight message.
 func HighlightUnbindMessage(gid, message string) error {
-	err := database.Database.HDel("highlight."+gid, []string{message})
+	err = database.Database.HDel("highlight."+gid, []string{message})
 	if err == badger.ErrKeyNotFound {
 		return nil
 	}
@@ -120,6 +120,20 @@ func HighlightUnbindMessage(gid, message string) error {
 // HighlightGetBinding gets the binding of a message.
 func HighlightGetBinding(gid, message string) (string, error) {
 	value, err := database.Database.HGet("highlight."+gid, message)
+	if err == badger.ErrKeyNotFound {
+		return "", nil
+	}
+	return value, err
+}
+
+// SetWarning sets warning data of a user.
+func SetWarning(gid, uid, body string) error {
+	return database.Database.HSet("warns."+gid, uid, body)
+}
+
+// GetWarning gets warning data of a user.
+func GetWarning(gid, uid string) (string, error) {
+	value, err := database.Database.HGet("warns."+gid, uid)
 	if err == badger.ErrKeyNotFound {
 		return "", nil
 	}

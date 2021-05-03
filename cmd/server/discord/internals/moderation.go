@@ -1,13 +1,24 @@
 package internals
 
 import (
+	"encoding/json"
+	"fmt"
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/db"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"strconv"
 	"time"
 )
+
+type MemberWarning struct {
+	Text      string    `json:"text"`
+	Time      time.Time `json:"time"`
+	GuildID   string    `json:"guild_id"`
+	ChannelID string    `json:"channel_id"`
+	MessageID string    `json:"message_id"`
+}
 
 func init() {
 	state.Multiplexer.Route(&multiplexer.Route{
@@ -23,6 +34,13 @@ func init() {
 		Description:   "Lookup a guild's detailed information by snowflake.",
 		Category:      multiplexer.ModerationCategory,
 		Handler:       guildinfo,
+	})
+	state.Multiplexer.Route(&multiplexer.Route{
+		Pattern:       "warn",
+		AliasPatterns: []string{"warnings", "warning"},
+		Description:   "Lookup warnings associated with a user or assign/clear warning.",
+		Category:      multiplexer.ModerationCategory,
+		Handler:       warn,
 	})
 	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "ban",
@@ -135,6 +153,130 @@ func guildinfo(context *multiplexer.Context) {
 	embed.AddField("Creation Date", time.Unix(int64(((guildID>>22)+1420070400000)/1000), 0).UTC().Format("Mon, 02 Jan 2006 15:04:05"), true)
 	embed.SetFooter("ID: " + context.Guild.ID)
 	context.SendEmbed("", embed)
+}
+
+func warn(context *multiplexer.Context) {
+	// Guild only
+	if context.IsPrivate {
+		context.SendMessage(multiplexer.GuildOnly)
+		return
+	}
+
+	// Has permission
+	if !context.HasPermission(discordgo.PermissionBanMembers) {
+		context.SendMessage(multiplexer.PermissionDenied)
+		return
+	}
+	if len(context.Fields) < 2 {
+		context.SendMessage(multiplexer.InvalidArgument)
+		return
+	}
+	switch context.Fields[1] {
+	case "clear":
+		if len(context.Fields) != 4 {
+			context.SendMessage(multiplexer.InvalidArgument)
+			return
+		}
+		index, err := strconv.Atoi(context.Fields[3])
+		if err != nil {
+			context.SendMessage(multiplexer.InvalidArgument)
+			return
+		}
+		index = index - 1
+		if index < 0 || index > 24 {
+			context.SendMessage(multiplexer.InvalidArgument)
+			return
+		}
+		member := context.GetMember(context.Fields[2])
+		if member == nil {
+			context.SendMessage(multiplexer.MissingUser)
+			return
+		}
+		body, err := db.GetWarning(member.GuildID, member.User.ID)
+		if !context.HandleError(err) {
+			return
+		}
+		if body == "" {
+			context.SendMessage(multiplexer.InvalidArgument)
+			return
+		}
+		var warns []MemberWarning
+		err = json.Unmarshal([]byte(body), &warns)
+		if !context.HandleError(err) {
+			return
+		}
+		if index > len(warns) {
+			context.SendMessage(multiplexer.InvalidArgument)
+			return
+		}
+		n := append(warns[:index], warns[index+1:]...)
+		b, err := json.Marshal(n)
+		if !context.HandleError(err) {
+			return
+		}
+		err = db.SetWarning(member.GuildID, member.User.ID, string(b))
+		if !context.HandleError(err) {
+			return
+		}
+		context.SendMessage(fmt.Sprintf("Successfully cleared warning number %v.", index+1))
+	default:
+		member := context.GetMember(context.Fields[1])
+		if member == nil {
+			context.SendMessage(multiplexer.MissingUser)
+			return
+		}
+		body, err := db.GetWarning(member.GuildID, member.User.ID)
+		if !context.HandleError(err) {
+			return
+		}
+		if body == "" {
+			body = "[]"
+		}
+		var warns []MemberWarning
+		err = json.Unmarshal([]byte(body), &warns)
+		if !context.HandleError(err) {
+			return
+		}
+		switch len(context.Fields) {
+		case 2:
+			embed := embedutil.New("Warnings", "List of warnings of "+member.User.Username)
+			embed.Color = multiplexer.KappaColor
+			for index, warn := range warns {
+				embed.AddField(fmt.Sprintf("(%v) Warning on %s",
+					index+1, warn.Time.UTC().Format("Mon Jan 2 15:04:05 2006")),
+					fmt.Sprintf("[%s](https://discord.com/channels/%s/%s/%s)", warn.Text,
+						warn.GuildID,
+						warn.ChannelID,
+						warn.MessageID), false)
+			}
+			context.SendEmbed("", embed)
+		default:
+			if len(warns) == 25 {
+				context.SendMessage("Limit of 25 warnings per user reached, please clear some warnings and try again.")
+				return
+			}
+			message := context.StitchFields(2)
+			m := context.SendMessage(fmt.Sprintf("Warning issued against %s with the reason `%s`.", member.Mention(), message))
+			if m == nil {
+				return
+			}
+			warns = append(warns, MemberWarning{
+				Text:      message,
+				Time:      time.Now(),
+				GuildID:   context.Guild.ID,
+				ChannelID: m.ChannelID,
+				MessageID: m.ID,
+			})
+			b, err := json.Marshal(warns)
+			if !context.HandleError(err) {
+				return
+			}
+			err = db.SetWarning(member.GuildID, member.User.ID, string(b))
+			if !context.HandleError(err) {
+				return
+			}
+		}
+	}
 }
 
 func ban(context *multiplexer.Context) {
