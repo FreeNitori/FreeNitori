@@ -240,7 +240,7 @@ func warn(context *multiplexer.Context) {
 		}
 		switch len(context.Fields) {
 		case 2:
-			embed := embedutil.New("Warnings", "List of warnings of "+member.User.Username)
+			embed := embedutil.New("Warnings", "List of warnings against "+member.User.Username)
 			embed.Color = multiplexer.KappaColor
 			for index, warn := range warns {
 				embed.AddField(fmt.Sprintf("Warning on %s (%v)",
