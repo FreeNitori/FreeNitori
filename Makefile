@@ -1,4 +1,5 @@
 .NOTPARALLEL: static-arg nowindowsgui build start
+SHELL = sh
 
 all: build
 static: static-arg build
