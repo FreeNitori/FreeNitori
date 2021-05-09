@@ -1,8 +1,9 @@
+<!doctype html>
 <html lang="en">
 <head>
     <title>FreeNitori</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/img/favicon.ico">
     <link rel="icon" type="image/png" href="/img/icon.png">
     <meta property="og:title" content="FreeNitori"/>
@@ -17,76 +18,106 @@
     <meta name="twitter:image" content="/favicon.png"/>
     <meta name="twitter:title" content="FreeNitori"/>
     <meta name="twitter:description" content="Open source, general purpose Discord utility."/>
-    <link href="https://modesta.alexflipnote.dev/css/modesta.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css"
+          integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/grids-responsive-min.css"
+          integrity="sha384-TxqXEM39LKAlr6mwXYlM8+n31/tjeQXzvjbORoLHWeLhkNhWoa9WkMJO/IIghaek"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"
+          integrity="sha384-+2PnMSZobRWHUFuaarq2tDCtf7FFSZpeMRVRe7C0l8bRZMBTjUinKl1AuYRON/A2"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/home.css">
 </head>
-<body class="github-font-standard">
-<div class="fullscreen">
-    <div class="background" style="background-image: url('/img/background.png');"></div>
-    <div class="center-object">
-        <div class="container">
-            <section class="me">
-                <div class="avatar-container scroll-in from-top">
-                    <img alt="Nitori" draggable="false" src="/img/icon.png" class="image-title">
-                </div>
-                <div class="scroll-in from-front">
-                    <h1 class="title monospace">FreeNitori</h1>
-                </div>
-            </section>
-            <div class="buttons scroll-in from-bottom">
-                <a id="inviteURL" class="btn hover-scale-inset aqua-blue" href="">Invite</a>
-                <!--suppress HtmlUnknownTarget -->
-                <a class="btn hover-scale-inset orange" href="/auth/login">Login</a>
+<body>
+<div class="header">
+    <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading" href="">FreeNitori</a>
+
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item pure-menu-selected"><a href="#" class="pure-menu-link">Home</a></li>
+            <li class="pure-menu-item"><!--suppress HtmlUnknownTarget -->
+                <a href="/auth/login" class="pure-menu-link">Login</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="splash-container">
+    <div class="splash">
+        <h1 class="splash-head">Nitori</h1>
+        <p class="splash-subhead">
+            Open source, general purpose Discord bot.
+        </p>
+        <p>
+            <a id="inviteURL" href="" class="pure-button pure-button-primary">Invite</a>
+        </p>
+    </div>
+</div>
+
+<div class="content-wrapper">
+    <div class="content">
+        <h2 class="content-head is-center">Statistics</h2>
+
+        <div class="pure-g">
+            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+
+                <h3 class="content-subhead">
+                    <i class="fa fa-info"></i>
+                    Version
+                </h3>
+                <p id="programVersion"></p>
+            </div>
+            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                <h3 class="content-subhead">
+                    <i class="fa fa-bookmark"></i>
+                    Commit Hash
+                </h3>
+                <p id="programRevision"></p>
+            </div>
+            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                <h3 class="content-subhead">
+                    <i class="fa fa-comments"></i>
+                    Messages Handled
+                </h3>
+                <p id="messageTotal"></p>
+            </div>
+            <div class="l-box pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
+                <h3 class="content-subhead">
+                    <i class="fa fa-users"></i>
+                    Guilds Deployed
+                </h3>
+                <p id="guildsDeployed"></p>
             </div>
         </div>
     </div>
-</div>
-<section class="markdown-container" id="stats">
-    <h1 class="center-text">Statistics</h1>
-    <div class="flex-grid">
-        <div class="col-xs">
-            <section class="parallax-container">
-                <div class="parallax small"
-                     style="background-image: url('/img/parallax.png')"></div>
-                <div class="content">
-                    <h1 class="center-text">Messages Handled</h1>
-                    <p id="messageTotal" class="center-text"></p>
-                </div>
-            </section>
+
+    <div class="ribbon l-box-lrg pure-g">
+        <div class="l-box-lrg is-center pure-u-1 pure-u-md-1-2 pure-u-lg-2-5">
+            <!--suppress CheckImageSize -->
+            <img width="200" alt="Nitori Icon" class="pure-img-responsive" src="/img/icon.png">
         </div>
-        <div class="col-xs">
-            <section class="parallax-container">
-                <div class="parallax small"
-                     style="background-image: url('/img/parallax.png')"></div>
-                <div class="content">
-                    <h1 class="center-text">Version</h1>
-                    <p id="programVersion" class="center-text"></p>
-                </div>
-            </section>
-        </div>
-        <div class="col-xs">
-            <section class="parallax-container">
-                <div class="parallax small"
-                     style="background-image: url('/img/parallax.png')"></div>
-                <div class="content">
-                    <h1 class="center-text">Guilds Deployed</h1>
-                    <p id="guildsDeployed" class="center-text"></p>
-                </div>
-            </section>
+        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-3-5">
+
+            <h2 class="content-head content-head-ribbon">Open Source</h2>
+
+            <p>
+                Nitori is an open source platform, any contribution is welcome.
+                If you have any ideas, or a problem you want to report,
+                please open an issue in the repository.
+                Any pull request is also welcome.
+                <br>
+                <br>
+                If you have any questions regarding the usage, or just want to discuss,
+                join our Discord group.
+            </p>
         </div>
     </div>
-</section>
-<section class="markdown-container" id="contrib">
-    <h1 class="center-text">Contribute</h1>
-    <p>If you have any ideas, or a bug you want to report, please open an issue in the <a
-                href="https://git.randomchars.net/FreeNitori/FreeNitori" target="_blank">repository</a>. You can also
-        push your code if you want to join the development.</p>
-</section>
-<footer class="center box-container primary no-border-radius">
-    <p class="no-margin">
-        Developed and maintained by <a href="https://random.chars.jp/" target="_blank">RandomChars</a>.
-    </p>
-</footer>
-<script src="https://modesta.alexflipnote.dev/js/modesta.js" type="text/javascript" charset="utf-8"></script>
+
+    <div class="footer l-box is-center">
+        The <a href="https://git.randomchars.net/FreeNitori/FreeNitori">FreeNitori</a> open source project.
+        <a href="https://discord.gg/Tap77D3" target="_blank">Discord group</a>
+    </div>
+</div>
 <script src="/js/fetch.js"></script>
 <script src="/js/index.js"></script>
 </body>
