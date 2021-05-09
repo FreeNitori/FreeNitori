@@ -23,18 +23,19 @@ type LeaderboardEntry struct {
 
 // GuildInfo represents information of a guild.
 type GuildInfo struct {
-	Name    string
-	ID      string
-	IconURL string
-	Members []UserInfo
+	Name         string
+	ID           string
+	CreationTime time.Time
+	IconURL      string
+	Members      []UserInfo
 }
 
 // UserInfo represents information of a user.
 type UserInfo struct {
 	Name          string
 	ID            string
+	CreationTime  time.Time
 	AvatarURL     string
 	Discriminator string
-	CreationTime  time.Time
 	Bot           bool
 }

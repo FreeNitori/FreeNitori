@@ -5,6 +5,7 @@ import (
 	"fmt"
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/db"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
@@ -133,7 +134,6 @@ func guildinfo(context *multiplexer.Context) {
 		context.SendMessage(multiplexer.GuildOnly)
 		return
 	}
-	guildID, err := strconv.Atoi(context.Guild.ID)
 	if !context.HandleError(err) {
 		return
 	}
@@ -151,7 +151,7 @@ func guildinfo(context *multiplexer.Context) {
 	}
 	embed.AddField("Region", context.Guild.Region, true)
 	embed.AddField("Locale", context.Guild.PreferredLocale, true)
-	embed.AddField("Creation Date", time.Unix(int64(((guildID>>22)+1420070400000)/1000), 0).UTC().Format("Mon, 02 Jan 2006 15:04:05"), true)
+	embed.AddField("Creation Date", config.CreationTime(context.Guild.ID).UTC().Format("Mon, 02 Jan 2006 15:04:05"), true)
 	embed.SetFooter("ID: " + context.Guild.ID)
 	context.SendEmbed("", embed)
 }

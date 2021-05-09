@@ -4,6 +4,16 @@
     box-sizing: border-box;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 a:link,
 a:visited,
 a:hover,
@@ -39,19 +49,19 @@ label {
     text-align: center;
 }
 
-.pure-form label {
-    margin: 1em 0 0;
-    font-weight: bold;
-    font-size: 100%;
-}
+/*.pure-form label {*/
+/*    margin: 1em 0 0;*/
+/*    font-weight: bold;*/
+/*    font-size: 100%;*/
+/*}*/
 
-.pure-form input[type] {
-    border: 2px solid #ddd;
-    box-shadow: none;
-    font-size: 100%;
-    width: 100%;
-    margin-bottom: 1em;
-}
+/*.pure-form input[type] {*/
+/*    border: 2px solid #ddd;*/
+/*    box-shadow: none;*/
+/*    font-size: 100%;*/
+/*    width: 100%;*/
+/*    margin-bottom: 1em;*/
+/*}*/
 
 .pure-button {
     background-color: #77A44F;

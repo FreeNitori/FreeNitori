@@ -1,78 +1,79 @@
 package handlers
 
 import (
+	"encoding/json"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/oauth"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/routes"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
-	"github.com/gin-contrib/sessions"
+	"github.com/bwmarrin/discordgo"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
-	"golang.org/x/oauth2"
+	"io/ioutil"
 	"net/http"
 )
 
-var oauthConf *oauth2.Config
-
 func init() {
-
-	go func() {
-		<-state.DiscordReady
-		oauthConf = &oauth2.Config{
-			ClientID:     state.Application.ID,
-			ClientSecret: config.Config.Discord.ClientSecret,
-			Endpoint:     oauth.Endpoint(),
-			RedirectURL:  config.Config.WebServer.BaseURL + "auth/callback",
-			Scopes:       []string{oauth.ScopeIdentify, oauth.ScopeGuilds},
-		}
-	}()
-
 	routes.GetRoutes = append(routes.GetRoutes,
 		routes.WebRoute{
-			Pattern:  "/auth/logout",
-			Handlers: []gin.HandlerFunc{authLogout},
+			Pattern:  "/api/auth",
+			Handlers: []gin.HandlerFunc{apiAuth},
 		},
 		routes.WebRoute{
-			Pattern:  "/auth/login",
-			Handlers: []gin.HandlerFunc{authLogin},
-		},
-		routes.WebRoute{
-			Pattern:  "/auth/callback",
-			Handlers: []gin.HandlerFunc{authCallback},
+			Pattern:  "/api/auth/user",
+			Handlers: []gin.HandlerFunc{apiAuthUser},
 		},
 	)
 }
 
-func authLogout(context *gin.Context) {
-	oauth.RemoveToken(context)
-	context.Redirect(http.StatusTemporaryRedirect, "/")
+func apiAuth(context *gin.Context) {
+	context.JSON(http.StatusOK, datatypes.H{
+		"authorized": oauth.GetToken(context) != nil,
+	})
 }
 
-func authLogin(context *gin.Context) {
-	session := sessions.Default(context)
-	oauthState := uuid.New().String()
-	session.Set("state", oauthState)
-	_ = session.Save()
-	context.Redirect(http.StatusTemporaryRedirect, oauthConf.AuthCodeURL(oauthState))
-}
-
-func authCallback(context *gin.Context) {
-	session := sessions.Default(context)
-	if context.Request.FormValue("state") != session.Get("state") {
-		context.HTML(http.StatusBadRequest, "error.tmpl", datatypes.H{
-			"Title":    datatypes.BadRequest,
-			"Subtitle": "State doesn't seem to match.",
-			"Message":  "Trying to be sneaky...?",
+func apiAuthUser(context *gin.Context) {
+	token := oauth.GetToken(context)
+	if token == nil {
+		context.JSON(http.StatusOK, datatypes.H{
+			"authorized": false,
+			"user":       datatypes.UserInfo{},
 		})
 		return
 	}
-	session.Delete("state")
-	token, err := oauthConf.Exchange(context, context.Request.FormValue("code"))
+	client := oauth.Client(context, oauthConf)
+	response, err := client.Get(discordgo.EndpointUser("@me"))
 	if err != nil {
 		panic(err)
 	}
-	oauth.StoreToken(context, token)
-	_ = session.Save()
-	context.Redirect(http.StatusTemporaryRedirect, "/")
+	defer func() { _ = response.Body.Close() }()
+	if response.StatusCode == http.StatusUnauthorized {
+		oauth.RemoveToken(context)
+		context.JSON(http.StatusOK, datatypes.H{
+			"authorized": false,
+			"user":       datatypes.UserInfo{},
+		})
+		return
+	}
+
+	var user discordgo.User
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(data, &user)
+	if err != nil {
+		panic(err)
+	}
+
+	context.JSON(http.StatusOK, datatypes.H{
+		"authorized": true,
+		"user": datatypes.UserInfo{
+			Name:          user.Username,
+			ID:            user.ID,
+			AvatarURL:     user.AvatarURL("4096"),
+			Discriminator: user.Discriminator,
+			CreationTime:  config.CreationTime(user.ID),
+			Bot:           user.Bot,
+		},
+	})
 }

@@ -14,10 +14,10 @@ function lookup(snowflake) {
 
         for (i in data) {
             let li = document.createElement("LI");
-            if (data.AvatarURL == data[i]) {
+            if (data["AvatarURL"] === data[i]) {
                 let userAvatar = document.createElement("IMG");
-                userAvatar.setAttribute("src", data.AvatarURL);
-                userAvatar.setAttribute("alt", "data.AvatarURL");
+                userAvatar.setAttribute("src", data["AvatarURL"]);
+                userAvatar.setAttribute("alt", "avatar URL");
 
                 li.appendChild(userAvatar);
             } else {
