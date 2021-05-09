@@ -92,6 +92,11 @@ a.pure-button-primary {
     z-index: 4;
 }
 
+.pure-menu-link,
+.pure-menu-link:visited {
+    color: white;
+}
+
 .home-menu .pure-menu-heading {
     color: white;
     font-weight: 400;

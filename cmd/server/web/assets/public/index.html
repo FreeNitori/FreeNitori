@@ -36,8 +36,7 @@
 
         <ul class="pure-menu-list">
             <li class="pure-menu-item pure-menu-selected"><a href="#" class="pure-menu-link">Home</a></li>
-            <li class="pure-menu-item"><!--suppress HtmlUnknownTarget -->
-                <a href="/auth/login" class="pure-menu-link">Login</a></li>
+            <li class="pure-menu-item"><a id="oauthButton" href="" class="pure-menu-link"></a></li>
         </ul>
     </div>
 </div>
@@ -124,7 +123,8 @@
                         <label>
                             <input id="userLookupField" type="number" placeholder="User ID (Snowflake)"/>
                         </label>
-                        <button id="userLookupButton" type="submit" class="pure-button pure-button-primary">Lookup</button>
+                        <button id="userLookupButton" type="submit" class="pure-button pure-button-primary">Lookup
+                        </button>
                     </fieldset>
                 </form>
                 <form class="pure-form" onsubmit="lookupGuild(); return false;">
@@ -133,7 +133,8 @@
                         <label>
                             <input id="guildLookupField" type="number" placeholder="Guild ID (Snowflake)"/>
                         </label>
-                        <button id="guildLookupButton" type="submit" class="pure-button pure-button-primary">Lookup</button>
+                        <button id="guildLookupButton" type="submit" class="pure-button pure-button-primary">Lookup
+                        </button>
                     </fieldset>
                 </form>
             </div>

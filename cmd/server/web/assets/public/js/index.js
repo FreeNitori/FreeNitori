@@ -11,6 +11,17 @@ fetchJSON("/api/stats").then(function (data) {
     document.getElementById("guildsDeployed").textContent = data["guilds_deployed"];
 });
 
+// Populate from /api/auth
+fetchJSON("/api/auth").then(function (data) {
+    if (!data["authorized"]) {
+        document.getElementById("oauthButton").innerText = "Login";
+        document.getElementById("oauthButton").href = "/auth/login";
+    } else {
+        document.getElementById("oauthButton").innerText = "Logout";
+        document.getElementById("oauthButton").href = "/auth/logout";
+    }
+});
+
 // Wipe results area
 function wipeResults() {
     document.getElementById("lookupResultTitle0").textContent = "";
