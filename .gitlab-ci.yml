@@ -12,6 +12,7 @@ build:
   stage: build
   script:
     - GOPATH=$PWD/build/go make;
+    - GOPATH=$PWD/build/go GOOS=windows make;
     - cd build; tar zcf freenitori.tar.gz freenitori nitorictl; cd ../
   artifacts:
     paths:

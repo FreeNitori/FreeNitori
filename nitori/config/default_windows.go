@@ -2,21 +2,23 @@ package config
 
 var confDefault = Conf{
 	System: struct {
-		LogLevel      string
-		LogPath       string
-		Socket        string
-		Database      string
-		Prefix        string
-		Administrator int
-		Operator      []int
+		LogLevel       string
+		LogPath        string
+		Socket         string
+		Database       string
+		Prefix         string
+		BackupInterval int
+		Administrator  int
+		Operator       []int
 	}{
-		LogLevel:      "info",
-		LogPath:       "log",
-		Socket:        "sock",
-		Database:      "db",
-		Prefix:        "env ",
-		Administrator: 0,
-		Operator:      []int{},
+		LogLevel:       "info",
+		LogPath:        "log",
+		Socket:         "sock",
+		Database:       "db",
+		Prefix:         "env ",
+		BackupInterval: 0,
+		Administrator:  0,
+		Operator:       []int{},
 	},
 	WebServer: struct {
 		Host                string
