@@ -13,12 +13,34 @@ fetchJSON("/api/stats").then(function (data) {
 
 // Populate from /api/auth
 fetchJSON("/api/auth").then(function (data) {
+    let button = document.getElementById("oauthButton");
     if (!data["authorized"]) {
-        document.getElementById("oauthButton").innerText = "Login";
-        document.getElementById("oauthButton").href = "/auth/login";
+        button.innerText = "Login";
+        button.href = "/auth/login";
+        button.setAttribute("style", "color: white;");
     } else {
-        document.getElementById("oauthButton").innerText = "Logout";
-        document.getElementById("oauthButton").href = "/auth/logout";
+        button.href = "#";
+        button.onclick = function () {
+            return false;
+        };
+        fetchJSON("/api/auth/user").then(function (data) {
+            let menu = document.getElementById("oauthMenu");
+            menu.classList.add("pure-menu-has-children");
+            menu.classList.add("pure-menu-allow-hover");
+            button.innerText = data["user"]["Name"];
+            let options = document.createElement("ul");
+            options.classList.add("pure-menu-children");
+            let logout = document.createElement("li");
+            logout.classList.add("pure-menu-item");
+            let logoutLink = document.createElement("a");
+            logoutLink.classList.add("pure-menu-link");
+            logoutLink.href = "/auth/logout";
+            logoutLink.innerText = "Logout";
+            logoutLink.setAttribute("style", "color: black;");
+            logout.appendChild(logoutLink);
+            options.appendChild(logout);
+            menu.appendChild(options);
+        });
     }
 });
 
@@ -38,12 +60,12 @@ function wipeResults() {
 function lookupUser() {
     wipeResults();
     let snowflake = document.getElementById("userLookupField").value;
-    if (parseInt(snowflake)>>>22 <= 0) {
+    if (parseInt(snowflake) >>> 22 <= 0) {
         document.getElementById("lookupResultTitle0").textContent = "Error";
         document.getElementById("lookupResultContent0").textContent = "Invalid snowflake.";
         return null;
     }
-    fetchJSON("/api/user/"+snowflake).then(function (data) {
+    fetchJSON("/api/user/" + snowflake).then(function (data) {
         if (data["error"] != null) {
             document.getElementById("lookupResultTitle0").textContent = "Error";
             document.getElementById("lookupResultContent0").textContent = data["error"];
@@ -64,12 +86,12 @@ function lookupUser() {
 function lookupGuild() {
     wipeResults();
     let snowflake = document.getElementById("guildLookupField").value;
-    if (parseInt(snowflake)>>>22 <= 0) {
+    if (parseInt(snowflake) >>> 22 <= 0) {
         document.getElementById("lookupResultTitle0").textContent = "Error";
         document.getElementById("lookupResultContent0").textContent = "Invalid snowflake.";
         return null;
     }
-    fetchJSON("/api/guild/"+snowflake).then(function (data) {
+    fetchJSON("/api/guild/" + snowflake).then(function (data) {
         if (data["error"] != null) {
             document.getElementById("lookupResultTitle0").textContent = "Error";
             document.getElementById("lookupResultContent0").textContent = data["error"];
