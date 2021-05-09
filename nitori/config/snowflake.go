@@ -12,7 +12,7 @@ func CreationTime(snowflake string) time.Time {
 		log.Debugf("Unexpected snowflake passed to CreationTime.")
 		return time.Unix(0, 0)
 	}
-	return time.Unix(int64(((id>>22)+1420070400000)/1000), 0)
+	return time.Unix(int64(((id>>22)+1420070400000)/1000), 0).UTC()
 }
 
 func ValidateSnowflake(snowflake string) bool {

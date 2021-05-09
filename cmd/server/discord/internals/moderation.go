@@ -90,7 +90,6 @@ func userinfo(context *multiplexer.Context) {
 	}
 
 	// Make the message
-	userID, err := strconv.Atoi(user.ID)
 	if !context.HandleError(err) {
 		return
 	}
@@ -116,7 +115,7 @@ func userinfo(context *multiplexer.Context) {
 		}
 		embed.AddField("Roles", roles, false)
 	}
-	embed.AddField("Registration Date", time.Unix(int64(((userID>>22)+1420070400000)/1000), 0).UTC().Format("Mon, 02 Jan 2006 15:04:05"), true)
+	embed.AddField("Registration Date", config.CreationTime(user.ID).Format("Mon, 02 Jan 2006 15:04:05"), true)
 	if member != nil {
 		joinTime, err := member.JoinedAt.Parse()
 		if !context.HandleError(err) {
@@ -151,7 +150,7 @@ func guildinfo(context *multiplexer.Context) {
 	}
 	embed.AddField("Region", context.Guild.Region, true)
 	embed.AddField("Locale", context.Guild.PreferredLocale, true)
-	embed.AddField("Creation Date", config.CreationTime(context.Guild.ID).UTC().Format("Mon, 02 Jan 2006 15:04:05"), true)
+	embed.AddField("Creation Date", config.CreationTime(context.Guild.ID).Format("Mon, 02 Jan 2006 15:04:05"), true)
 	embed.SetFooter("ID: " + context.Guild.ID)
 	context.SendEmbed("", embed)
 }

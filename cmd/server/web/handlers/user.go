@@ -10,8 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"sort"
-	"strconv"
-	"time"
 )
 
 func init() {
@@ -51,7 +49,7 @@ func apiUser(context *gin.Context) {
 		ID:            user.ID,
 		AvatarURL:     user.AvatarURL("4096"),
 		Discriminator: user.Discriminator,
-		CreationTime:  time.Unix(int64(((func() (id int) { id, _ = strconv.Atoi(user.ID); return }()>>22)+1420070400000)/1000), 0).UTC(),
+		CreationTime:  config.CreationTime(user.ID),
 		Bot:           user.Bot,
 	})
 }
