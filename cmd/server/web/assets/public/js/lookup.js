@@ -1,12 +1,12 @@
 document.getElementById("snowflake").addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
-	clearBox('result');
+        clearBox('result');
         lookup(document.getElementById('snowflake').value);
     }
 }, false);
 
 function lookup(snowflake) {
-    let userInfo = fetchJSON("http://localhost:7777/api/user/" + snowflake)
+    let userInfo = fetchJSON("/api/user/" + snowflake)
     userInfo.then(function (data) {
 
         let userData = document.getElementById("result");
@@ -14,16 +14,16 @@ function lookup(snowflake) {
 
         for (i in data) {
             let li = document.createElement("LI");
-if(data.AvatarURL == data[i]){
-let userAvatar = document.createElement("IMG");
-userAvatar.setAttribute("src",data.AvatarURL);
-userAvatar.setAttribute("alt","data.AvatarURL");
+            if (data.AvatarURL == data[i]) {
+                let userAvatar = document.createElement("IMG");
+                userAvatar.setAttribute("src", data.AvatarURL);
+                userAvatar.setAttribute("alt", "data.AvatarURL");
 
-li.appendChild(userAvatar);
-}else{
-            let userText = document.createTextNode(i + ': ' + data[i]);
-            li.appendChild(userText);
-}
+                li.appendChild(userAvatar);
+            } else {
+                let userText = document.createTextNode(i + ': ' + data[i]);
+                li.appendChild(userText);
+            }
             ul.appendChild(li);
         }
 
@@ -33,16 +33,15 @@ li.appendChild(userAvatar);
 }
 
 
-function clearBox(elementID) { 
+function clearBox(elementID) {
 
-            var div = document.getElementById(elementID); 
+    var div = document.getElementById(elementID);
 
 
+    while (div.firstChild) {
 
-            while(div.firstChild) { 
+        div.removeChild(div.firstChild);
 
-                div.removeChild(div.firstChild); 
+    }
 
-            } 
-
-        }
+}

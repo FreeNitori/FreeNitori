@@ -7,7 +7,7 @@ const maxEntries = 50;
 
 if (self.fetch) {
     const request = async () => {
-	let GuildID = ((window.location.hash).substr(1)).replace('/','');
+        let GuildID = ((window.location.hash).substr(1)).replace('/', '');
         const response = await fetch("/api/guild/" + GuildID + "/leaderboard", {method: 'GET'});
         leaderboard = await response.json();
         HeadAppend();
