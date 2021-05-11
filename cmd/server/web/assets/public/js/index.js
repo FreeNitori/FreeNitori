@@ -11,39 +11,6 @@ fetchJSON("/api/stats").then(function (data) {
     document.getElementById("guildsDeployed").textContent = data["guilds_deployed"];
 });
 
-// Populate from /api/auth
-fetchJSON("/api/auth").then(function (data) {
-    let button = document.getElementById("oauthButton");
-    if (!data["authorized"]) {
-        button.innerText = "Login";
-        button.href = "/auth/login";
-        button.setAttribute("style", "color: white;");
-    } else {
-        button.href = "#";
-        button.onclick = function () {
-            return false;
-        };
-        fetchJSON("/api/auth/user").then(function (data) {
-            let menu = document.getElementById("oauthMenu");
-            menu.classList.add("pure-menu-has-children");
-            menu.classList.add("pure-menu-allow-hover");
-            button.innerText = data["user"]["Name"];
-            let options = document.createElement("ul");
-            options.classList.add("pure-menu-children");
-            let logout = document.createElement("li");
-            logout.classList.add("pure-menu-item");
-            let logoutLink = document.createElement("a");
-            logoutLink.classList.add("pure-menu-link");
-            logoutLink.href = "/auth/logout";
-            logoutLink.innerText = "Logout";
-            logoutLink.setAttribute("style", "color: black;");
-            logout.appendChild(logoutLink);
-            options.appendChild(logout);
-            menu.appendChild(options);
-        });
-    }
-});
-
 // Wipe results area
 function wipeResults() {
     document.getElementById("lookupResultTitle0").textContent = "";

@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 func init() {
@@ -49,8 +50,9 @@ func apiAuthUser(context *gin.Context) {
 	if response.StatusCode == http.StatusUnauthorized {
 		oauth.RemoveToken(context)
 		context.JSON(http.StatusOK, datatypes.H{
-			"authorized": false,
-			"user":       datatypes.UserInfo{},
+			"authorized":    false,
+			"administrator": false,
+			"user":          datatypes.UserInfo{},
 		})
 		return
 	}
@@ -66,7 +68,8 @@ func apiAuthUser(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, datatypes.H{
-		"authorized": true,
+		"authorized":    true,
+		"administrator": user.ID == strconv.Itoa(config.Config.System.Administrator),
 		"user": datatypes.UserInfo{
 			Name:          user.Username,
 			ID:            user.ID,
