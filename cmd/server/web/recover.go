@@ -13,10 +13,8 @@ func recovery() gin.HandlerFunc {
 			p := recover()
 			if p != nil {
 				log.Errorf("Panic occurred in web server, %s", p)
-				context.HTML(http.StatusInternalServerError, "error.tmpl", datatypes.H{
-					"Title":    datatypes.InternalServerError,
-					"Subtitle": "PANIC!!! Something terribly wrong has occurred!!!",
-					"Message":  p,
+				context.JSON(http.StatusInternalServerError, datatypes.H{
+					"error": p,
 				})
 			}
 		}()
