@@ -35,6 +35,10 @@ func init() {
 			Pattern:  "/api/nitori",
 			Handlers: []gin.HandlerFunc{apiNitoriUpdate},
 		},
+		routes.WebRoute{
+			Pattern:  "/api/nitori/action",
+			Handlers: []gin.HandlerFunc{apiNitoriAction},
+		},
 	)
 }
 
@@ -82,5 +86,37 @@ func apiNitoriUpdate(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, datatypes.H{"error": "invalid json"})
 		return
 	}
-	// TODO: implement user info update
+	user, err = state.RawSession.UserUpdate("", "", newInfo.Name, "", "")
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, datatypes.H{"error": err})
+		return
+	}
+	state.RawSession.State.User = user
+	context.JSON(http.StatusOK, datatypes.H{"state": "ok"})
+}
+
+func apiNitoriAction(context *gin.Context) {
+	user := oauth.GetSelf(context)
+	if user.ID != state.Multiplexer.Administrator.ID {
+		context.JSON(http.StatusForbidden, datatypes.H{"error": "permission denied"})
+		return
+	}
+	var action struct {
+		Action string `json:"action"`
+	}
+	err := context.BindJSON(&action)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, datatypes.H{"error": "invalid json"})
+		return
+	}
+	switch action.Action {
+	case "restart":
+		context.JSON(http.StatusOK, datatypes.H{"state": "ok"})
+		state.ExitCode <- -1
+	case "shutdown":
+		context.JSON(http.StatusOK, datatypes.H{"state": "ok"})
+		state.ExitCode <- 0
+	default:
+		context.JSON(http.StatusBadRequest, datatypes.H{"error": "invalid action"})
+	}
 }

@@ -1,6 +1,13 @@
 {{template "header" .}}
 <div class="content-wrapper-simple">
     <div class="content">
+        <form class="pure-form" onsubmit="return false;">
+            <fieldset>
+                <legend>Actions</legend>
+                <button type="button" class="pure-button pure-button-primary" onclick="executeAction('restart');">Restart</button>
+                <button type="button" class="pure-button pure-button-primary" onclick="executeAction('shutdown');">Shutdown</button>
+            </fieldset>
+        </form>
         <form class="pure-form" onsubmit="changeUsername(); return false;">
             <fieldset>
                 <legend>Username</legend>
@@ -8,9 +15,7 @@
                     <input type="text" placeholder="Username" id="newUsername"/>
                 </label>
                 #
-                <label>
-                    <input type="number" placeholder="Discriminator" id="newDiscriminator"/>
-                </label>
+                <a id="discriminator"></a>
                 <button type="submit" class="pure-button pure-button-primary">Submit</button>
             </fieldset>
         </form>
