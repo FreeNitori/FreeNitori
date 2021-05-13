@@ -29,6 +29,10 @@ func init() {
 			Pattern:  "/api/nitori",
 			Handlers: []gin.HandlerFunc{apiNitori},
 		},
+		routes.WebRoute{
+			Pattern:  "/api/nitori/stats",
+			Handlers: []gin.HandlerFunc{apiNitoriStats},
+		},
 	)
 	routes.PostRoutes = append(routes.PostRoutes,
 		routes.WebRoute{
@@ -76,7 +80,7 @@ func apiNitori(context *gin.Context) {
 
 func apiNitoriUpdate(context *gin.Context) {
 	user := oauth.GetSelf(context)
-	if user.ID != state.Multiplexer.Administrator.ID {
+	if user == nil || user.ID != state.Multiplexer.Administrator.ID {
 		context.JSON(http.StatusForbidden, datatypes.H{"error": "permission denied"})
 		return
 	}
@@ -97,7 +101,7 @@ func apiNitoriUpdate(context *gin.Context) {
 
 func apiNitoriAction(context *gin.Context) {
 	user := oauth.GetSelf(context)
-	if user.ID != state.Multiplexer.Administrator.ID {
+	if user == nil || user.ID != state.Multiplexer.Administrator.ID {
 		context.JSON(http.StatusForbidden, datatypes.H{"error": "permission denied"})
 		return
 	}
@@ -119,4 +123,13 @@ func apiNitoriAction(context *gin.Context) {
 	default:
 		context.JSON(http.StatusBadRequest, datatypes.H{"error": "invalid action"})
 	}
+}
+
+func apiNitoriStats(context *gin.Context) {
+	user := oauth.GetSelf(context)
+	if user == nil || user.ID != state.Multiplexer.Administrator.ID {
+		context.JSON(http.StatusForbidden, datatypes.H{"error": "permission denied"})
+		return
+	}
+	context.JSON(http.StatusOK, config.Stats())
 }
