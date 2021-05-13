@@ -4,8 +4,12 @@
         <form class="pure-form" onsubmit="return false;">
             <fieldset>
                 <legend>Actions</legend>
-                <button type="button" class="pure-button pure-button-primary" onclick="executeAction('restart');">Restart</button>
-                <button type="button" class="pure-button pure-button-primary" onclick="executeAction('shutdown');">Shutdown</button>
+                <button type="button" class="pure-button pure-button-primary" onclick="executeAction('restart');">
+                    Restart
+                </button>
+                <button type="button" class="pure-button pure-button-primary" onclick="executeAction('shutdown');">
+                    Shutdown
+                </button>
             </fieldset>
         </form>
         <form class="pure-form" onsubmit="changeUsername(); return false;">
@@ -19,6 +23,60 @@
                 <button type="submit" class="pure-button pure-button-primary">Submit</button>
             </fieldset>
         </form>
+
+        <h3>Process</h3>
+        <table class="pure-table">
+            <tbody>
+            <tr>
+                <th>PID</th>
+                <th>Uptime</th>
+                <th>Goroutines</th>
+                <th>Database Size</th>
+            </tr>
+            <tr>
+                <td id="PID"></td>
+                <td id="Uptime"></td>
+                <td id="NumGoroutine"></td>
+                <td id="DBSize"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h3>Platform</h3>
+        <table class="pure-table">
+            <tbody>
+            <tr>
+                <th>Go Version</th>
+                <th>Operating System</th>
+                <th>Architecture</th>
+                <th>Go Root</th>
+            </tr>
+            <tr>
+                <td id="GoVersion"></td>
+                <td id="GOOS"></td>
+                <td id="GOARCH"></td>
+                <td id="GOROOT"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h3>Discord</h3>
+        <table class="pure-table">
+            <tbody>
+            <tr>
+                <th>Intents</th>
+                <th>Sharding</th>
+                <th>Shards</th>
+                <th>Guilds</th>
+            </tr>
+            <tr>
+                <td id="Intents"></td>
+                <td id="Sharding"></td>
+                <td id="Shards"></td>
+                <td id="Guilds"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <script src="/js/admin.js"></script>
