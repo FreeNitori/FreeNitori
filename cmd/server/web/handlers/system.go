@@ -116,10 +116,10 @@ func apiNitoriAction(context *gin.Context) {
 	switch action.Action {
 	case "restart":
 		context.JSON(http.StatusOK, datatypes.H{"state": "ok"})
-		state.ExitCode <- -1
+		go func() { state.ExitCode <- -1 }()
 	case "shutdown":
 		context.JSON(http.StatusOK, datatypes.H{"state": "ok"})
-		state.ExitCode <- 0
+		go func() { state.ExitCode <- 0 }()
 	default:
 		context.JSON(http.StatusBadRequest, datatypes.H{"error": "invalid action"})
 	}
