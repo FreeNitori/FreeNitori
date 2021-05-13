@@ -13,13 +13,11 @@ import (
 	"net/http"
 )
 
-var oauthConf *oauth2.Config
-
 func init() {
 
 	go func() {
 		<-state.DiscordReady
-		oauthConf = &oauth2.Config{
+		oauth.Conf = &oauth2.Config{
 			ClientID:     state.Application.ID,
 			ClientSecret: config.Config.Discord.ClientSecret,
 			Endpoint:     oauth.Endpoint(),
@@ -41,6 +39,10 @@ func init() {
 			Pattern:  "/auth/callback",
 			Handlers: []gin.HandlerFunc{authCallback},
 		},
+		routes.WebRoute{
+			Pattern:  "/auth/admin",
+			Handlers: []gin.HandlerFunc{authAdmin},
+		},
 	)
 }
 
@@ -54,7 +56,7 @@ func authLogin(context *gin.Context) {
 	oauthState := uuid.New().String()
 	session.Set("state", oauthState)
 	_ = session.Save()
-	context.Redirect(http.StatusTemporaryRedirect, oauthConf.AuthCodeURL(oauthState))
+	context.Redirect(http.StatusTemporaryRedirect, oauth.Conf.AuthCodeURL(oauthState))
 }
 
 func authCallback(context *gin.Context) {
@@ -68,11 +70,26 @@ func authCallback(context *gin.Context) {
 		return
 	}
 	session.Delete("state")
-	token, err := oauthConf.Exchange(context, context.Request.FormValue("code"))
+	token, err := oauth.Conf.Exchange(context, context.Request.FormValue("code"))
 	if err != nil {
 		panic(err)
 	}
 	oauth.StoreToken(context, token)
 	_ = session.Save()
 	context.Redirect(http.StatusTemporaryRedirect, "/")
+}
+
+func authAdmin(context *gin.Context) {
+	user := oauth.GetSelf(context)
+	if user.ID != state.Multiplexer.Administrator.ID {
+		context.HTML(http.StatusForbidden, "error.tmpl", datatypes.H{
+			"Title":    "Forbidden",
+			"Subtitle": "This place is only for the system administrator.",
+			"Message":  "What do you want...?",
+		})
+		return
+	}
+	context.HTML(http.StatusOK, "admin.tmpl", datatypes.H{
+		"Title": "FreeNitori System",
+	})
 }

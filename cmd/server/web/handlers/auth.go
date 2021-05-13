@@ -1,16 +1,13 @@
 package handlers
 
 import (
-	"encoding/json"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/oauth"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/routes"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
-	"github.com/bwmarrin/discordgo"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	"github.com/gin-gonic/gin"
-	"io/ioutil"
 	"net/http"
-	"strconv"
 )
 
 func init() {
@@ -33,22 +30,8 @@ func apiAuth(context *gin.Context) {
 }
 
 func apiAuthUser(context *gin.Context) {
-	token := oauth.GetToken(context)
-	if token == nil {
-		context.JSON(http.StatusOK, datatypes.H{
-			"authorized": false,
-			"user":       datatypes.UserInfo{},
-		})
-		return
-	}
-	client := oauth.Client(context, oauthConf)
-	response, err := client.Get(discordgo.EndpointUser("@me"))
-	if err != nil {
-		panic(err)
-	}
-	defer func() { _ = response.Body.Close() }()
-	if response.StatusCode == http.StatusUnauthorized {
-		oauth.RemoveToken(context)
+	user := oauth.GetSelf(context)
+	if user == nil {
 		context.JSON(http.StatusOK, datatypes.H{
 			"authorized":    false,
 			"administrator": false,
@@ -57,19 +40,9 @@ func apiAuthUser(context *gin.Context) {
 		return
 	}
 
-	var user discordgo.User
-	data, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		panic(err)
-	}
-	err = json.Unmarshal(data, &user)
-	if err != nil {
-		panic(err)
-	}
-
 	context.JSON(http.StatusOK, datatypes.H{
 		"authorized":    true,
-		"administrator": user.ID == strconv.Itoa(config.Config.System.Administrator),
+		"administrator": user.ID == state.Multiplexer.Administrator.ID,
 		"user": datatypes.UserInfo{
 			Name:          user.Username,
 			ID:            user.ID,

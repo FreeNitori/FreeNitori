@@ -1,12 +1,14 @@
 package oauth
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	jsoniter "github.com/json-iterator/go"
 	"golang.org/x/oauth2"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -25,6 +27,9 @@ const (
 	ScopeRPCNotificationsRead = "rpc.notifications.read"
 	ScopeWebhookIncoming      = "webhook.Incoming"
 )
+
+// Conf stores configuration of OAuth with Discord.
+var Conf *oauth2.Config
 
 var endpoint = oauth2.Endpoint{
 	AuthURL:  discordgo.EndpointOauth2 + "authorize",
@@ -68,6 +73,35 @@ func RemoveToken(context *gin.Context) {
 }
 
 // Client returns pointer to an http.Client.
-func Client(context *gin.Context, conf *oauth2.Config) *http.Client {
-	return conf.Client(context, GetToken(context))
+func Client(context *gin.Context) *http.Client {
+	return Conf.Client(context, GetToken(context))
+}
+
+// GetSelf returns UserInfo of authenticated user.
+func GetSelf(context *gin.Context) *discordgo.User {
+	token := GetToken(context)
+	if token == nil {
+		return nil
+	}
+	client := Client(context)
+	response, err := client.Get(discordgo.EndpointUser("@me"))
+	if err != nil {
+		panic(err)
+	}
+	defer func() { _ = response.Body.Close() }()
+	if response.StatusCode == http.StatusUnauthorized {
+		RemoveToken(context)
+		return nil
+	}
+
+	var user *discordgo.User
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(data, &user)
+	if err != nil {
+		panic(err)
+	}
+	return user
 }

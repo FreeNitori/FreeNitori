@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/oauth"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/routes"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
@@ -23,6 +24,16 @@ func init() {
 		routes.WebRoute{
 			Pattern:  "/api/stats",
 			Handlers: []gin.HandlerFunc{apiStats},
+		},
+		routes.WebRoute{
+			Pattern:  "/api/nitori",
+			Handlers: []gin.HandlerFunc{apiNitori},
+		},
+	)
+	routes.PostRoutes = append(routes.PostRoutes,
+		routes.WebRoute{
+			Pattern:  "/api/nitori",
+			Handlers: []gin.HandlerFunc{apiNitoriUpdate},
 		},
 	)
 }
@@ -46,4 +57,30 @@ func apiStats(context *gin.Context) {
 		"total_messages":  config.GetTotalMessages(),
 		"guilds_deployed": strconv.Itoa(len(state.RawSession.State.Guilds)),
 	})
+}
+
+func apiNitori(context *gin.Context) {
+	context.JSON(http.StatusOK, datatypes.UserInfo{
+		Name:          state.RawSession.State.User.Username,
+		ID:            state.RawSession.State.User.ID,
+		CreationTime:  config.CreationTime(state.RawSession.State.User.ID),
+		AvatarURL:     state.RawSession.State.User.AvatarURL("4096"),
+		Discriminator: state.RawSession.State.User.Discriminator,
+		Bot:           state.RawSession.State.User.Bot,
+	})
+}
+
+func apiNitoriUpdate(context *gin.Context) {
+	user := oauth.GetSelf(context)
+	if user.ID != state.Multiplexer.Administrator.ID {
+		context.JSON(http.StatusForbidden, datatypes.H{"error": "permission denied"})
+		return
+	}
+	var newInfo datatypes.UserInfo
+	err := context.BindJSON(&newInfo)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, datatypes.H{"error": "invalid json"})
+		return
+	}
+	// TODO: implement user info update
 }

@@ -1,0 +1,21 @@
+{{template "header" .}}
+<div class="content-wrapper-simple">
+    <div class="content">
+        <form class="pure-form" onsubmit="changeUsername(); return false;">
+            <fieldset>
+                <legend>Username</legend>
+                <label>
+                    <input type="text" placeholder="Username" id="newUsername"/>
+                </label>
+                #
+                <label>
+                    <input type="number" placeholder="Discriminator" id="newDiscriminator"/>
+                </label>
+                <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<script src="/js/admin.js"></script>
+{{template "intermediate"}}
+{{template "footer"}}

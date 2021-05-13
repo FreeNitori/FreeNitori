@@ -93,7 +93,18 @@ a.pure-button-primary {
 }
 
 .pure-menu-link,
-.pure-menu-link:visited {
+.pure-menu-link:link,
+.pure-menu-link:visited,
+.pure-menu-link:hover,
+.pure-menu-link:active {
+    color: white;
+}
+
+.pure-menu-selected,
+.pure-menu-selected:link,
+.pure-menu-selected:visited,
+.pure-menu-selected:hover,
+.pure-menu-selected:active {
     color: white;
 }
 
@@ -171,7 +182,15 @@ a.pure-button-primary {
     min-height: 12%;
     z-index: 2;
     background: white;
+}
 
+.content-wrapper-simple {
+    position: absolute;
+    top: 3em;
+    width: 100%;
+    min-height: 12%;
+    z-index: 2;
+    background: white;
 }
 
 .content {
