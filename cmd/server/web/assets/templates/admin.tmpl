@@ -24,6 +24,18 @@
         </fieldset>
     </form>
 
+    <form class="pure-form" onsubmit="sendBroadcast(false); return false;">
+        <fieldset>
+            <legend>Announcement</legend>
+            <label>
+                <textarea id="broadcast" class="pure-input-1" style="resize: none; color: black; height: auto;"></textarea>
+            </label>
+            <button type="button" class="pure-button pure-button-primary" onclick="sendBroadcast(false);">Broadcast</button>
+            <button type="button" class="pure-button pure-button-primary" onclick="sendBroadcast(true);" style="background: dimgrey;">Broadcast Silently</button>
+            <button type="button" class="pure-button pure-button-primary" onclick="clearBroadcastBuffer();" style="background: red;">Clear</button>
+        </fieldset>
+    </form>
+
     {{template "log-viewer"}}
 
     <h3>Process</h3>
@@ -82,4 +94,5 @@
 </div>
 <script src="/js/logs.js"></script>
 <script src="/js/admin.js"></script>
+<script src="/js/broadcast.js"></script>
 {{template "footer"}}

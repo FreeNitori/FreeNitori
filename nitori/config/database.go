@@ -111,6 +111,21 @@ func AdvanceTotalMessages() error {
 	return database.Database.HSet("nitori", "total_messages", strconv.Itoa(GetTotalMessages()+1))
 }
 
+// GetBroadcastMessage gets the broadcast buffer.
+func GetBroadcastMessage() (string, error) {
+	return database.Database.HGet("nitori", "broadcast")
+}
+
+// SetBroadcastMessage sets the broadcast buffer.
+func SetBroadcastMessage(message string) error {
+	return database.Database.HSet("nitori", "broadcast", message)
+}
+
+// ClearBroadcastMessage clears the broadcast buffer.
+func ClearBroadcastMessage() error {
+	return database.Database.HDel("nitori", []string{"broadcast"})
+}
+
 // GetGuildConfValue gets a configuration value for a specific guild
 func GetGuildConfValue(id, key string) (string, error) {
 	result, err := database.Database.HGet("conf."+id, key)

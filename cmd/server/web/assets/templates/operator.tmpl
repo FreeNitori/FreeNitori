@@ -4,9 +4,19 @@
 {{template "intermediate"}}
 <div class="content">
 
+    <form class="pure-form" onsubmit="return false;">
+        <fieldset>
+            <legend>Announcement</legend>
+            <label>
+                <textarea id="broadcast" class="pure-input-1" style="resize: none; color: black; height: auto;" disabled></textarea>
+            </label>
+        </fieldset>
+    </form>
+
     {{template "log-viewer"}}
 
 </div>
 <script src="/js/logs.js"></script>
 <script src="/js/operator.js"></script>
+<script src="/js/broadcast.js"></script>
 {{template "footer"}}

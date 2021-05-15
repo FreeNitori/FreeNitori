@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/oauth"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/routes"
@@ -8,9 +9,11 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	log "git.randomchars.net/FreeNitori/Log"
+	"github.com/dgraph-io/badger/v3"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func init() {
@@ -39,6 +42,10 @@ func init() {
 			Pattern:  "/api/nitori/logs",
 			Handlers: []gin.HandlerFunc{apiNitoriLogs},
 		},
+		routes.WebRoute{
+			Pattern:  "/api/nitori/broadcast",
+			Handlers: []gin.HandlerFunc{apiNitoriBroadcast},
+		},
 	)
 	routes.PostRoutes = append(routes.PostRoutes,
 		routes.WebRoute{
@@ -49,12 +56,16 @@ func init() {
 			Pattern:  "/api/nitori/action",
 			Handlers: []gin.HandlerFunc{apiNitoriAction},
 		},
+		routes.WebRoute{
+			Pattern:  "/api/nitori/broadcast",
+			Handlers: []gin.HandlerFunc{apiNitoriBroadcastUpdate},
+		},
 	)
 }
 
 func api(context *gin.Context) {
 	context.JSON(http.StatusOK, datatypes.H{
-		"status": "OK!",
+		"nitori": "Rand!",
 	})
 }
 
@@ -98,7 +109,7 @@ func apiNitoriUpdate(context *gin.Context) {
 	}
 	user, err = state.RawSession.UserUpdate("", "", newInfo.Name, "", "")
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, datatypes.H{"error": err})
+		context.JSON(http.StatusInternalServerError, datatypes.H{"error": err.Error()})
 		return
 	}
 	state.RawSession.State.User = user
@@ -151,4 +162,68 @@ func apiNitoriLogs(context *gin.Context) {
 		log.Debugf("Error while handling log web socket, %s", err)
 		return
 	}
+}
+
+func apiNitoriBroadcast(context *gin.Context) {
+	user := oauth.GetSelf(context)
+	if user == nil || !state.Multiplexer.IsOperator(user.ID) {
+		context.JSON(http.StatusForbidden, datatypes.H{"error": datatypes.PermissionDeniedAPI})
+		return
+	}
+	message, err := config.GetBroadcastMessage()
+	if err != nil && err != badger.ErrKeyNotFound {
+		context.JSON(http.StatusInternalServerError, datatypes.H{"error": err.Error()})
+		return
+	}
+	if err == badger.ErrKeyNotFound || message == "" {
+		context.JSON(http.StatusOK, datatypes.H{"content": "There is no content in the broadcast buffer."})
+		return
+	}
+	context.JSON(http.StatusOK, datatypes.H{"content": message})
+}
+
+func apiNitoriBroadcastUpdate(context *gin.Context) {
+	user := oauth.GetSelf(context)
+	if user == nil || !state.Multiplexer.IsAdministrator(user.ID) {
+		context.JSON(http.StatusForbidden, datatypes.H{"error": datatypes.PermissionDeniedAPI})
+		return
+	}
+	var broadcastPayload struct {
+		Alert   bool   `json:"alert"`
+		Content string `json:"content"`
+	}
+	err := context.BindJSON(&broadcastPayload)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, datatypes.H{"error": datatypes.BadRequestAPI})
+		return
+	}
+	err = config.SetBroadcastMessage(broadcastPayload.Content)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, datatypes.H{"error": err.Error()})
+		return
+	}
+	if broadcastPayload.Alert {
+		now := time.Now().UTC()
+		for _, user := range state.Multiplexer.Operator {
+			id, err := state.RawSession.UserChannelCreate(user.ID)
+			if err != nil {
+				log.Errorf("Error while creating user channel for operator %s, %s", user.ID, err)
+				continue
+			}
+			_, err = state.RawSession.ChannelMessageSend(id.ID,
+				fmt.Sprintf("Broadcast by system administrator %s (%s) at `%s`:\n"+
+					"```"+
+					"%s"+
+					"```"+
+					"View this broadcast at %sauth/operator.",
+					state.Multiplexer.Administrator.Username,
+					state.Multiplexer.Administrator.ID,
+					now, broadcastPayload.Content,
+					config.Config.WebServer.BaseURL))
+			if err != nil {
+				log.Errorf("Error while broadcasting to operator %s, %s", user.ID, err)
+			}
+		}
+	}
+	context.JSON(http.StatusOK, datatypes.H{"state": "ok"})
 }

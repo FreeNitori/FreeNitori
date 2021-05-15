@@ -85,6 +85,10 @@ func authCallback(context *gin.Context) {
 
 func authAdmin(context *gin.Context) {
 	user := oauth.GetSelf(context)
+	if user == nil {
+		context.Redirect(http.StatusTemporaryRedirect, "/auth/login")
+		return
+	}
 	if !state.Multiplexer.IsAdministrator(user.ID) {
 		context.HTML(http.StatusForbidden, "error.tmpl", datatypes.H{
 			"Title":    "Forbidden",
@@ -100,6 +104,10 @@ func authAdmin(context *gin.Context) {
 
 func authOperator(context *gin.Context) {
 	user := oauth.GetSelf(context)
+	if user == nil {
+		context.Redirect(http.StatusTemporaryRedirect, "/auth/login")
+		return
+	}
 	if !state.Multiplexer.IsOperator(user.ID) {
 		context.HTML(http.StatusForbidden, "error.tmpl", datatypes.H{
 			"Title":    "Forbidden",
