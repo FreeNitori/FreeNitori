@@ -81,7 +81,7 @@ func apiNitori(context *gin.Context) {
 func apiNitoriUpdate(context *gin.Context) {
 	user := oauth.GetSelf(context)
 	if user == nil || user.ID != state.Multiplexer.Administrator.ID {
-		context.JSON(http.StatusForbidden, datatypes.H{"error": "permission denied"})
+		context.JSON(http.StatusForbidden, datatypes.H{"error": datatypes.PermissionDeniedAPI})
 		return
 	}
 	var newInfo datatypes.UserInfo
@@ -102,7 +102,7 @@ func apiNitoriUpdate(context *gin.Context) {
 func apiNitoriAction(context *gin.Context) {
 	user := oauth.GetSelf(context)
 	if user == nil || user.ID != state.Multiplexer.Administrator.ID {
-		context.JSON(http.StatusForbidden, datatypes.H{"error": "permission denied"})
+		context.JSON(http.StatusForbidden, datatypes.H{"error": datatypes.PermissionDeniedAPI})
 		return
 	}
 	var action struct {
@@ -110,7 +110,7 @@ func apiNitoriAction(context *gin.Context) {
 	}
 	err := context.BindJSON(&action)
 	if err != nil {
-		context.JSON(http.StatusBadRequest, datatypes.H{"error": "invalid json"})
+		context.JSON(http.StatusBadRequest, datatypes.H{"error": datatypes.BadRequestAPI})
 		return
 	}
 	switch action.Action {
@@ -121,14 +121,14 @@ func apiNitoriAction(context *gin.Context) {
 		context.JSON(http.StatusOK, datatypes.H{"state": "ok"})
 		go func() { state.ExitCode <- 0 }()
 	default:
-		context.JSON(http.StatusBadRequest, datatypes.H{"error": "invalid action"})
+		context.JSON(http.StatusBadRequest, datatypes.H{"error": datatypes.BadRequestAPI})
 	}
 }
 
 func apiNitoriStats(context *gin.Context) {
 	user := oauth.GetSelf(context)
 	if user == nil || user.ID != state.Multiplexer.Administrator.ID {
-		context.JSON(http.StatusForbidden, datatypes.H{"error": "permission denied"})
+		context.JSON(http.StatusForbidden, datatypes.H{"error": datatypes.PermissionDeniedAPI})
 		return
 	}
 	context.JSON(http.StatusOK, config.Stats())

@@ -51,6 +51,13 @@ func init() {
 		Category:      multiplexer.ModerationCategory,
 		Handler:       ban,
 	})
+	state.Multiplexer.Route(&multiplexer.Route{
+		Pattern:       "bulk",
+		AliasPatterns: []string{"bulkdelete", "purge"},
+		Description:   "Bulk delete a specific amount of messages.",
+		Category:      multiplexer.ModerationCategory,
+		Handler:       bulk,
+	})
 }
 
 func userinfo(context *multiplexer.Context) {
@@ -317,4 +324,50 @@ func ban(context *multiplexer.Context) {
 		return
 	}
 	context.SendMessage("Successfully performed ban on specified user.")
+}
+
+func bulk(context *multiplexer.Context) {
+	// Guild only
+	if context.IsPrivate {
+		context.SendMessage(multiplexer.GuildOnly)
+		return
+	}
+
+	// Has permission
+	if !context.HasPermission(discordgo.PermissionManageMessages) {
+		context.SendMessage(multiplexer.PermissionDenied)
+		return
+	}
+
+	if len(context.Fields) != 2 {
+		context.SendMessage(multiplexer.InvalidArgument)
+		return
+	}
+
+	amount, err := strconv.Atoi(context.Fields[1])
+	if err != nil {
+		context.SendMessage(multiplexer.InvalidArgument)
+		return
+	}
+	if amount > 100 || amount < 0 {
+		context.SendMessage(multiplexer.InvalidArgument)
+		return
+	}
+
+	st, err := context.Session.ChannelMessages(context.Channel.ID, amount, context.Message.ID, "", "")
+	if !context.HandleError(err) {
+		return
+	}
+	var messages []string
+	for _, message := range st {
+		if (config.CreationTime(message.ID).Sub(time.Now().UTC()).Hours() / 24) > 14 {
+			continue
+		}
+		messages = append(messages, message.ID)
+	}
+	err = context.Session.ChannelMessagesBulkDelete(context.Channel.ID, messages)
+	if !context.HandleError(err) {
+		return
+	}
+	context.SendMessage(fmt.Sprintf("Successfully deleted %v messages.", len(messages)))
 }

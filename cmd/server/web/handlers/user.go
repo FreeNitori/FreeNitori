@@ -103,8 +103,6 @@ func apiGuildKey(context *gin.Context) {
 		return
 	}
 	switch context.Param("key") {
-	case "id":
-		context.JSON(http.StatusOK, guild.ID)
 	case "name":
 		context.JSON(http.StatusOK, guild.Name)
 	case "icon_url":

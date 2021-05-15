@@ -11,6 +11,12 @@ const (
 	BadRequest            = "Bad Request"
 )
 
+// API error messages.
+const (
+	BadRequestAPI       = "bad request"
+	PermissionDeniedAPI = "permission denied"
+)
+
 // H is a shortcut to a string to interface map.
 type H map[string]interface{}
 
