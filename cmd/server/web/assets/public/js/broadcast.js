@@ -1,6 +1,6 @@
 // Populate from /api/nitori/broadcast
 fetchJSON("/api/nitori/broadcast").then(function (data) {
-    document.getElementById("broadcast").innerText = data["content"];
+    document.getElementById("broadcast").value = data["content"];
 });
 
 function sendBroadcast(silent) {
