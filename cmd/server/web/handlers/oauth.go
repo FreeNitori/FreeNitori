@@ -43,6 +43,10 @@ func init() {
 			Pattern:  "/auth/admin",
 			Handlers: []gin.HandlerFunc{authAdmin},
 		},
+		routes.WebRoute{
+			Pattern:  "/auth/operator",
+			Handlers: []gin.HandlerFunc{authOperator},
+		},
 	)
 }
 
@@ -81,7 +85,7 @@ func authCallback(context *gin.Context) {
 
 func authAdmin(context *gin.Context) {
 	user := oauth.GetSelf(context)
-	if user.ID != state.Multiplexer.Administrator.ID {
+	if !state.Multiplexer.IsAdministrator(user.ID) {
 		context.HTML(http.StatusForbidden, "error.tmpl", datatypes.H{
 			"Title":    "Forbidden",
 			"Subtitle": "This place is only for the system administrator.",
@@ -90,6 +94,21 @@ func authAdmin(context *gin.Context) {
 		return
 	}
 	context.HTML(http.StatusOK, "admin.tmpl", datatypes.H{
+		"Title": "FreeNitori System",
+	})
+}
+
+func authOperator(context *gin.Context) {
+	user := oauth.GetSelf(context)
+	if !state.Multiplexer.IsOperator(user.ID) {
+		context.HTML(http.StatusForbidden, "error.tmpl", datatypes.H{
+			"Title":    "Forbidden",
+			"Subtitle": "This place is only for operators.",
+			"Message":  "What do you want...?",
+		})
+		return
+	}
+	context.HTML(http.StatusOK, "operator.tmpl", datatypes.H{
 		"Title": "FreeNitori System",
 	})
 }

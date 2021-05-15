@@ -8,6 +8,8 @@ git.randomchars.net/FreeNitori/Log v1.0.0 h1:xifupyu15si9/5oNwLUz8aKMEiyvdlEMCiC
 git.randomchars.net/FreeNitori/Log v1.0.0/go.mod h1:d2oS6xzbzH2YIb7x2ZRYVaaLAgEqBTmu6BCqDcfyzzU=
 git.randomchars.net/FreeNitori/Multiplexer v1.0.5 h1:jOE64rQy7UNvtGpcwRDdnXiD+uZbNGZryWwhAfGGGiQ=
 git.randomchars.net/FreeNitori/Multiplexer v1.0.5/go.mod h1:Mta0yHohgjMHFxjaGvkaEYS5cpUNYyEAwaPE5/VuYas=
+git.randomchars.net/FreeNitori/Multiplexer v1.0.7 h1:96wPQGWXuPYHshJlv4DPaDY9QXssj30Yl1P+4u8i7PY=
+git.randomchars.net/FreeNitori/Multiplexer v1.0.7/go.mod h1:wXHDJdlKFC15Bh+f0FsFuQKTXyTxVIfkTt749oDcSk0=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/DataDog/zstd v1.4.1 h1:3oxKN3wbHibqx897utPC2LTQU4J+IHWWJO+glkAkpFM=
@@ -352,6 +354,8 @@ gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15/go.mod h1:Co6ibVJAznAaIkqp8
 gopkg.in/fsnotify.v1 v1.4.7/go.mod h1:Tz8NjZHkW78fSQdbUxIjBTcgA1z1m8ZHf0WmKUhAMys=
 gopkg.in/go-playground/assert.v1 v1.2.1/go.mod h1:9RXL0bg/zibRAgZUYszZSwO/z8Y/a8bDuhia5mkpMnE=
 gopkg.in/go-playground/validator.v9 v9.29.1/go.mod h1:+c9/zcJMFNgbLvly1L1V+PpxWdVbfP1avr/N00E2vyQ=
+gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376 h1:sY2a+y0j4iDrajJcorb+a0hJIQ6uakU5gybjfLWHlXo=
+gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376/go.mod h1:BHKOc1m5wm8WwQkMqYBoo4vNxhmF7xg8+xhG8L+Cy3M=
 gopkg.in/sourcemap.v1 v1.0.5 h1:inv58fC9f9J3TK2Y2R1NPntXEn3/wjWHkonhIUODNTI=
 gopkg.in/sourcemap.v1 v1.0.5/go.mod h1:2RlvNNSMglmRrcvhfuzp4hQHwOtjxlbjX7UPY/GXb78=
 gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7/go.mod h1:dt/ZhP58zS4L8KSrWDmTeBkI65Dw0HsyUHuEVlX15mw=

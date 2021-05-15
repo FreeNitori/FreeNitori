@@ -18,6 +18,8 @@ fetchJSON("/api/auth").then(function (data) {
             let options = makeOptions();
             if (data["administrator"]) {
                 options.appendChild(makeMenuEntry("Administration", "/auth/admin"));
+            } else if (data["operator"]) {
+                options.appendChild(makeMenuEntry("Administration", "/auth/operator"));
             }
             options.appendChild(makeMenuEntry("Logout", "/auth/logout"));
             menu.appendChild(options);

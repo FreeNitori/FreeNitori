@@ -1,0 +1,12 @@
+{{template "header" .}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.12.0/css/xterm.css"/>
+<script src="https://cdn.jsdelivr.net/npm/xterm@4.12.0/lib/xterm.js"></script>
+{{template "intermediate"}}
+<div class="content">
+
+    {{template "log-viewer"}}
+
+</div>
+<script src="/js/logs.js"></script>
+<script src="/js/operator.js"></script>
+{{template "footer"}}

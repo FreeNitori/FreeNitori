@@ -4,8 +4,10 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/oauth"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/routes"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/ws"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
+	log "git.randomchars.net/FreeNitori/Log"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -32,6 +34,10 @@ func init() {
 		routes.WebRoute{
 			Pattern:  "/api/nitori/stats",
 			Handlers: []gin.HandlerFunc{apiNitoriStats},
+		},
+		routes.WebRoute{
+			Pattern:  "/api/nitori/logs",
+			Handlers: []gin.HandlerFunc{apiNitoriLogs},
 		},
 	)
 	routes.PostRoutes = append(routes.PostRoutes,
@@ -80,7 +86,7 @@ func apiNitori(context *gin.Context) {
 
 func apiNitoriUpdate(context *gin.Context) {
 	user := oauth.GetSelf(context)
-	if user == nil || user.ID != state.Multiplexer.Administrator.ID {
+	if user == nil || !state.Multiplexer.IsAdministrator(user.ID) {
 		context.JSON(http.StatusForbidden, datatypes.H{"error": datatypes.PermissionDeniedAPI})
 		return
 	}
@@ -101,7 +107,7 @@ func apiNitoriUpdate(context *gin.Context) {
 
 func apiNitoriAction(context *gin.Context) {
 	user := oauth.GetSelf(context)
-	if user == nil || user.ID != state.Multiplexer.Administrator.ID {
+	if user == nil || !state.Multiplexer.IsAdministrator(user.ID) {
 		context.JSON(http.StatusForbidden, datatypes.H{"error": datatypes.PermissionDeniedAPI})
 		return
 	}
@@ -127,9 +133,22 @@ func apiNitoriAction(context *gin.Context) {
 
 func apiNitoriStats(context *gin.Context) {
 	user := oauth.GetSelf(context)
-	if user == nil || user.ID != state.Multiplexer.Administrator.ID {
+	if user == nil || !state.Multiplexer.IsAdministrator(user.ID) {
 		context.JSON(http.StatusForbidden, datatypes.H{"error": datatypes.PermissionDeniedAPI})
 		return
 	}
 	context.JSON(http.StatusOK, config.Stats())
+}
+
+func apiNitoriLogs(context *gin.Context) {
+	user := oauth.GetSelf(context)
+	if user == nil || !state.Multiplexer.IsOperator(user.ID) {
+		context.JSON(http.StatusForbidden, datatypes.H{"error": datatypes.PermissionDeniedAPI})
+		return
+	}
+	err := ws.WS.HandleRequest(context.Writer, context.Request)
+	if err != nil {
+		log.Debugf("Error while handling log web socket, %s", err)
+		return
+	}
 }

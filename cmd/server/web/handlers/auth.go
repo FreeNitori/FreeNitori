@@ -34,6 +34,7 @@ func apiAuthUser(context *gin.Context) {
 	if user == nil {
 		context.JSON(http.StatusOK, datatypes.H{
 			"authorized":    false,
+			"operator":      false,
 			"administrator": false,
 			"user":          datatypes.UserInfo{},
 		})
@@ -42,7 +43,8 @@ func apiAuthUser(context *gin.Context) {
 
 	context.JSON(http.StatusOK, datatypes.H{
 		"authorized":    true,
-		"administrator": user.ID == state.Multiplexer.Administrator.ID,
+		"operator":      state.Multiplexer.IsOperator(user.ID),
+		"administrator": state.Multiplexer.IsAdministrator(user.ID),
 		"user": datatypes.UserInfo{
 			Name:          user.Username,
 			ID:            user.ID,

@@ -4,7 +4,7 @@ require (
 	git.randomchars.net/FreeNitori/EmbedUtil v1.0.1
 	git.randomchars.net/FreeNitori/ImageFetch v1.1.1
 	git.randomchars.net/FreeNitori/Log v1.0.0
-	git.randomchars.net/FreeNitori/Multiplexer v1.0.5
+	git.randomchars.net/FreeNitori/Multiplexer v1.0.7
 	github.com/BurntSushi/toml v0.3.1
 	github.com/abiosoft/ishell v2.0.0+incompatible
 	github.com/abiosoft/readline v0.0.0-20180607040430-155bce2042db // indirect
@@ -25,6 +25,7 @@ require (
 	github.com/ulule/limiter/v3 v3.7.1
 	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 	gopkg.in/Knetic/govaluate.v3 v3.0.0 // indirect
+	gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376
 	gopkg.in/sourcemap.v1 v1.0.5 // indirect
 )
 
