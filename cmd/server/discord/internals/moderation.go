@@ -369,5 +369,16 @@ func bulk(context *multiplexer.Context) {
 	if !context.HandleError(err) {
 		return
 	}
-	context.SendMessage(fmt.Sprintf("Successfully deleted %v messages.", len(messages)))
+
+	err = context.Session.ChannelMessageDelete(context.Channel.ID, context.Message.ID)
+	if !context.HandleError(err) {
+		return
+	}
+
+	indicator := context.SendMessage(fmt.Sprintf("Successfully deleted %v messages.", len(messages)))
+	time.Sleep(5 * time.Second)
+	err = context.Session.ChannelMessageDelete(context.Channel.ID, indicator.ID)
+	if !context.HandleError(err) {
+		return
+	}
 }
