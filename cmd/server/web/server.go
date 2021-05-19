@@ -3,6 +3,7 @@ package web
 
 import (
 	"fmt"
+	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/handlers"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	log "git.randomchars.net/FreeNitori/Log"
@@ -20,6 +21,9 @@ var Server = http.Server{}
 // Serve serves web stuff.
 func Serve() {
 	<-state.DiscordReady
+
+	// Populate /api/info payload.
+	handlers.PopulateInfoPayload()
 
 	var listener net.Listener
 	switch config.Config.WebServer.Unix {

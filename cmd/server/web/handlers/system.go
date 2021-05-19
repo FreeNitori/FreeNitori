@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/oauth"
@@ -15,6 +16,25 @@ import (
 	"strconv"
 	"time"
 )
+
+var infoPayload string
+
+// PopulateInfoPayload populates /api/info payload.
+func PopulateInfoPayload() {
+	payload, err := json.Marshal(struct {
+		Version   string `json:"nitori_version"`
+		Revision  string `json:"nitori_revision"`
+		InviteURL string `json:"invite_url"`
+	}{
+		Version:   state.Version(),
+		Revision:  state.Revision(),
+		InviteURL: state.InviteURL,
+	})
+	if err != nil {
+		panic(err)
+	}
+	infoPayload = string(payload)
+}
 
 func init() {
 	routes.GetRoutes = append(routes.GetRoutes,
@@ -70,11 +90,7 @@ func api(context *gin.Context) {
 }
 
 func apiInfo(context *gin.Context) {
-	context.JSON(http.StatusOK, datatypes.H{
-		"nitori_version":  state.Version(),
-		"nitori_revision": state.Revision(),
-		"invite_url":      state.InviteURL,
-	})
+	context.String(http.StatusOK, infoPayload)
 }
 
 func apiStats(context *gin.Context) {
