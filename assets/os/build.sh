@@ -14,6 +14,7 @@ LOOP=$(sudo losetup -f)
 sudo parted nitori.img -- mktable gpt
 sudo parted nitori.img -- mkpart efi fat32 1MiB 100%
 sudo parted nitori.img -- set 1 esp on
+sgdisk --partition-guid=1:726c8d61-f9e6-429a-86b6-d33f774e91b4 nitori.img
 
 # Attach loop device
 sudo losetup --partscan "$LOOP" nitori.img
