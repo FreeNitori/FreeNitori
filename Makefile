@@ -17,6 +17,11 @@ endif
 static-arg:
 	$(eval STATIC_LDFLAGS = -extldflags "-static")
 
+.PHONY: image
+image:
+	CGO_ENABLED=0 go build -tags netgo -ldflags="-w -extldflags \"-static\"" -o build/init $$PWD/cmd/init
+	sh assets/os/build.sh
+
 .PHONY: nowindowsgui
 nowindowsgui:
 	$(eval WINDOW_LDFLAGS = )
