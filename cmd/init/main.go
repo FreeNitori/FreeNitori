@@ -4,13 +4,19 @@ import (
 	log "git.randomchars.net/FreeNitori/Log"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
-	"time"
+	"os"
+	"os/exec"
+	"syscall"
 )
 
 type out struct{}
 
 func (out) Write(p []byte) (n int, err error) {
-	return len(p), ioutil.WriteFile("/dev/tty1", p, 0644)
+	if ioutil.WriteFile("/dev/console", p, 0644) == nil {
+		return len(p), ioutil.WriteFile("/dev/tty1", p, 0644)
+	} else {
+		panic("cannot write to console")
+	}
 }
 
 func init() {
@@ -34,9 +40,33 @@ func init() {
 	}
 }
 
+var err error
+
 func main() {
-	log.Info("Nitori!")
-	for {
-		time.Sleep(100 * time.Millisecond)
+	// Only run as init
+	if os.Getpid() != 1 {
+		println("This program must be ran as PID 0.")
+		os.Exit(9)
 	}
+
+	log.Info("FreeNitori System Management and Initialization program starting.")
+
+	// Start FreeNitori server
+	s := exec.Command("/bin/freenitori")
+	s.Stdout = os.Stdout
+	err = s.Run()
+	if err != nil {
+		log.Errorf("Unable to start FreeNitori server, %s.", err)
+		err = syscall.Reboot(syscall.LINUX_REBOOT_CMD_HALT)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	// Shutdown
+	err = syscall.Reboot(syscall.LINUX_REBOOT_CMD_HALT)
+	if err != nil {
+		panic(err)
+	}
+
 }
