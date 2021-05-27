@@ -8,7 +8,7 @@ ESP_SIZE=16777216
 rm -f nitori.img
 
 # Prepare root
-mkdir -p root/{dev,bin,sbin}
+mkdir -p root/{dev,bin,sbin,var}
 cp init root/sbin/
 cp freenitori nitorictl root/bin/
 

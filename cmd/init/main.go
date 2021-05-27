@@ -51,22 +51,28 @@ func main() {
 
 	log.Info("FreeNitori System Management and Initialization program starting.")
 
-	// Start FreeNitori server
-	s := exec.Command("/bin/freenitori")
-	s.Stdout = os.Stdout
+	startServer("/bin/freenitori")
+
+	// Shutdown
+	err = syscall.Reboot(syscall.LINUX_REBOOT_CMD_POWER_OFF)
+	if err != nil {
+		panic(err)
+	}
+
+}
+
+func startServer(path string) {
+	// Start server
+	s := exec.Command(path)
+	s.Stdout = out{}
+	s.Stderr = out{}
+	s.Stdin = os.Stdin
 	err = s.Run()
 	if err != nil {
-		log.Errorf("Unable to start FreeNitori server, %s.", err)
+		log.Errorf("Unable to start server, %s.", err)
 		err = syscall.Reboot(syscall.LINUX_REBOOT_CMD_HALT)
 		if err != nil {
 			panic(err)
 		}
 	}
-
-	// Shutdown
-	err = syscall.Reboot(syscall.LINUX_REBOOT_CMD_HALT)
-	if err != nil {
-		panic(err)
-	}
-
 }
