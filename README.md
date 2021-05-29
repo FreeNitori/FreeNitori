@@ -4,7 +4,7 @@
 
 ---
 
-An open source, general purpose modular Discord bot written in go.
+Open source, general purpose Discord utility written in go.
 
 **[Website](https://freenitori.jp/) [Wiki](https://wiki.freenitori.jp/) [Discord](https://discord.com/invite/Tap77D3)**
 
