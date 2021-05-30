@@ -53,7 +53,7 @@ func init() {
 	})
 	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "bulk",
-		AliasPatterns: []string{"bulkdelete", "purge"},
+		AliasPatterns: []string{"bulkdelete", "purge", "prune", "delete", "del"},
 		Description:   "Bulk delete a specific amount of messages.",
 		Category:      multiplexer.ModerationCategory,
 		Handler:       bulk,
