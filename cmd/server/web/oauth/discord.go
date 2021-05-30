@@ -86,7 +86,8 @@ func GetSelf(context *gin.Context) *discordgo.User {
 	client := Client(context)
 	response, err := client.Get(discordgo.EndpointUser("@me"))
 	if err != nil {
-		panic(err)
+		RemoveToken(context)
+		return nil
 	}
 	defer func() { _ = response.Body.Close() }()
 	if response.StatusCode == http.StatusUnauthorized {
