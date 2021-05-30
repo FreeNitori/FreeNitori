@@ -21,14 +21,14 @@ func callDatabaseHashmap(action string, data []string) (reply []map[string]strin
 
 // Size returns the size.
 func Size() int {
-	reply, _ := callDatabase("size", []string{""})
+	reply, _ := callDatabase("size", []string{})
 	result, _ := strconv.Atoi(reply[0])
 	return result
 }
 
 // GC starts the garbage collection.
 func GC() error {
-	_, err := callDatabase("gc", []string{""})
+	_, err := callDatabase("gc", []string{})
 	return err
 }
 

@@ -72,13 +72,20 @@ func manuals(context *multiplexer.Context) {
 
 			for _, route := range desiredCat.Routes {
 
-				// Only display routes with proper description
+				// Only display routes with non-empty description
 				if route.Description == "" {
 					continue
 				}
 
-				// Just add the stuff as an entry, it will do on this level
-				embed.AddField(route.Pattern, route.Description, false)
+				var aliases string
+				if len(route.AliasPatterns) > 0 {
+					aliases = " (alias patterns:"
+					for _, alias := range route.AliasPatterns {
+						aliases += " `" + alias + "`"
+					}
+					aliases += ")"
+				}
+				embed.AddField(route.Pattern+aliases, route.Description, false)
 			}
 			context.SendEmbed("", embed)
 

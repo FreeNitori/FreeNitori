@@ -46,7 +46,7 @@ func init() {
 	})
 	state.Multiplexer.Route(&multiplexer.Route{
 		Pattern:       "ban",
-		AliasPatterns: []string{""},
+		AliasPatterns: []string{},
 		Description:   "Ban a user from the guild",
 		Category:      multiplexer.ModerationCategory,
 		Handler:       ban,
