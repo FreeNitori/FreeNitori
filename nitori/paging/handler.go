@@ -29,7 +29,8 @@ func handlePage(context *multiplexer.Context) {
 	}
 
 	// Do not handle if not author or overriding user
-	if message.Invoker.ID != reactionAdd.UserID && !context.HasPermission(discordgo.PermissionManageMessages) {
+	context.User.ID = reactionAdd.UserID
+	if reactionAdd.UserID != message.Invoker.ID && !context.HasPermission(discordgo.PermissionManageMessages) {
 		return
 	}
 
