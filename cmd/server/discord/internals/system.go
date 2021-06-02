@@ -164,7 +164,10 @@ func shutdown(context *multiplexer.Context) {
 		return
 	}
 	if map[string]bool{"reboot": true, "restart": true, "shutdown": false, "poweroff": false}[context.Fields[0]] {
-		context.SendMessage("Attempting restart...")
+		message := context.SendMessage("Attempting restart...")
+		if message != nil {
+			state.Reincarnation = message.ChannelID + "\t" + message.ID + "\t" + "Restart complete."
+		}
 		state.ExitCode <- -1
 		return
 	}

@@ -10,7 +10,9 @@ import (
 	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
 	"github.com/sirupsen/logrus"
+	"os"
 	"strconv"
+	"strings"
 )
 
 var err error
@@ -96,6 +98,28 @@ func LateInitialize() error {
 			return err
 		}
 	}
+
+	for _, variable := range os.Environ() {
+		if strings.HasPrefix(variable, "REINCARNATION=") {
+			log.Infof("Reincarnation payload found: %s", variable)
+			err = os.Unsetenv("REINCARNATION")
+			if err != nil {
+				log.Errorf("Error while unsetting reincarnation variable, %s", err)
+			}
+			split := strings.Split(variable[14:], "\t")
+			if len(split) != 3 {
+				log.Error("Reincarnation payload has incorrect format.")
+				break
+			}
+			_, err = state.RawSession.ChannelMessageEdit(split[0], split[1], split[2])
+			if err != nil {
+				log.Errorf("Error while editing message of previous incarnation, %s", err)
+				break
+			}
+			break
+		}
+	}
+
 	log.Infof("Nitori has successfully logged in as %s#%s (%s).",
 		state.RawSession.State.User.Username,
 		state.RawSession.State.User.Discriminator,

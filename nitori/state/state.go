@@ -17,6 +17,9 @@ var (
 // InviteURL contains the invite URL of the bot.
 var InviteURL string
 
+// Reincarnation contains data used by the next incarnation.
+var Reincarnation string
+
 // Version returns the version of Nitori.
 func Version() string { return version }
 
