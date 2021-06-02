@@ -6,6 +6,8 @@ import (
 	embedutil "git.randomchars.net/FreeNitori/EmbedUtil"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/db"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/paging"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	multiplexer "git.randomchars.net/FreeNitori/Multiplexer"
 	"github.com/bwmarrin/discordgo"
@@ -174,6 +176,69 @@ func warn(context *multiplexer.Context) {
 		context.SendMessage(multiplexer.PermissionDenied)
 		return
 	}
+
+	if len(context.Fields) == 1 {
+		users, err := database.Database.HGetAll("warns." + context.Guild.ID)
+		if !context.HandleError(err) {
+			return
+		}
+		pages := &paging.PagedMessage{
+			Pages:   []embedutil.Embed{},
+			Page:    0,
+			Session: context.Session,
+			Invoker: context.Message.Author,
+			Message: nil,
+		}
+		for user, body := range users {
+			if body == "" {
+				body = "[]"
+			}
+			var warns []MemberWarning
+			err = json.Unmarshal([]byte(body), &warns)
+			if !context.HandleError(err) {
+				return
+			}
+			if len(warns) == 0 {
+				continue
+			}
+
+			member := context.GetMember(user)
+			var ident string
+			if member == nil {
+				ident = user
+			} else {
+				ident = member.Mention() + " (ID: " + member.User.ID + ")"
+			}
+
+			embed := embedutil.New("All warnings", ident)
+			embed.Color = multiplexer.KappaColor
+			for index, warn := range warns {
+				embed.AddField(fmt.Sprintf("Warning on %s (%v)",
+					warn.Time.UTC().Format("Mon Jan 2 15:04:05 2006"), index+1),
+					fmt.Sprintf("Issuer: <@%s> \nReason: [%s](https://discord.com/channels/%s/%s/%s)",
+						warn.UserID,
+						warn.Text,
+						warn.GuildID,
+						warn.ChannelID,
+						warn.MessageID), false)
+			}
+			pages.Pages = append(pages.Pages, embed)
+		}
+
+		if len(pages.Pages) == 0 {
+			context.SendMessage("There are no warnings.")
+			return
+		}
+
+		message := context.SendEmbed("", pages.Pages[0])
+		if message == nil {
+			return
+		}
+		pages.Message = message
+		paging.RegisterMessage(pages)
+		return
+	}
+
 	if len(context.Fields) < 2 {
 		context.SendMessage(multiplexer.InvalidArgument)
 		return
