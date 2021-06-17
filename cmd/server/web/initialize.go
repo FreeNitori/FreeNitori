@@ -48,11 +48,9 @@ func Initialize() error {
 	router.SetHTMLTemplate(templates)
 
 	// Register static
-	if stat, err := os.Stat("assets/web/public"); err == nil {
+	if stat, err := os.Stat("assets/web/public"); err == nil && stat.IsDir() {
 		log.Info("Serving assets from filesystem.")
-		if stat.IsDir() {
-			router.Use(static.ServeRoot("/", "assets/web/public"))
-		}
+		router.Use(static.ServeRoot("/", "assets/web/public"))
 	} else {
 		log.Info("Serving bundled assets.")
 		public, err := fs.Sub(assets, "assets/public")
