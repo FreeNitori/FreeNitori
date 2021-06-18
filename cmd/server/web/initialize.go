@@ -2,9 +2,12 @@ package web
 
 import (
 	"embed"
+	"fmt"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/datatypes"
 	log "git.randomchars.net/FreeNitori/Log"
 	"io/fs"
+	"net"
+	"syscall"
 
 	// Register handlers.
 	_ "git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web/handlers"
@@ -37,6 +40,22 @@ func (logger) Write(p []byte) (n int, err error) {
 
 // Initialize early initializes web services.
 func Initialize() error {
+
+	// Check for an existing instance if using socket
+	if config.Config.WebServer.Unix {
+		if _, err = os.Stat(config.Config.System.Socket); os.IsNotExist(err) {
+		} else {
+			_, err = net.Dial("unix", config.Config.WebServer.Host)
+			if err != nil {
+				err = syscall.Unlink(config.Config.WebServer.Host)
+				if err != nil {
+					return err
+				}
+			} else {
+				return fmt.Errorf("another program is listening on %s", config.Config.WebServer.Host)
+			}
+		}
+	}
 
 	router = ginSetup()
 
