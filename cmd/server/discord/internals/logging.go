@@ -48,6 +48,9 @@ func messageDeleteLog(context *multiplexer.Context) {
 	if messageDelete.BeforeDelete == nil {
 		return
 	}
+	if messageDelete.BeforeDelete.Author == nil {
+		return
+	}
 	if messageDelete.BeforeDelete.Author.ID == state.RawSession.State.User.ID {
 		return
 	}
@@ -94,6 +97,9 @@ func messageUpdateLog(context *multiplexer.Context) {
 		return
 	}
 	if update.BeforeUpdate == nil {
+		return
+	}
+	if update.BeforeUpdate.Author == nil {
 		return
 	}
 	if update.BeforeUpdate.Author.ID == state.RawSession.State.User.ID {
