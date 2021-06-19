@@ -3,6 +3,8 @@ package config
 
 import (
 	"flag"
+	"fmt"
+	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	log "git.randomchars.net/FreeNitori/Log"
 	"github.com/BurntSushi/toml"
 	"github.com/sirupsen/logrus"
@@ -23,8 +25,6 @@ var (
 	NitoriConfPath string
 	// TokenOverride contains the override token passed from command-line arguments.
 	TokenOverride string
-	// VersionStartup indicates weather the program should display version information and exit.
-	VersionStartup bool
 )
 
 // MessageOutOfBounds represents an out of bounds message.
@@ -63,10 +63,16 @@ type Conf struct {
 }
 
 func flags() *types.Nil {
-	flag.BoolVar(&VersionStartup, "v", false, "Display Version information and exit")
+	var version bool
+	flag.BoolVar(&version, "v", false, "Display version information and exit")
 	flag.StringVar(&TokenOverride, "a", "", "Override Discord Authorization Token")
 	flag.StringVar(&NitoriConfPath, "c", "", "Specify configuration file path")
 	flag.Parse()
+
+	if version {
+		fmt.Printf("%s (%s)", state.Version(), state.Revision())
+		os.Exit(0)
+	}
 	return nil
 }
 

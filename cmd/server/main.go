@@ -9,24 +9,15 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/rpc"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/ui"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/server/web"
-	"git.randomchars.net/FreeNitori/FreeNitori/nitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/state"
 	log "git.randomchars.net/FreeNitori/Log"
-	"go/types"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
 var err error
-var _ = func() *types.Nil {
-	if config.VersionStartup {
-		println(state.Version() + " (" + state.Revision() + ")")
-		os.Exit(0)
-	}
-	return nil
-}()
 
 func init() {
 
