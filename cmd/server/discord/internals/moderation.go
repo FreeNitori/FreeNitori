@@ -99,9 +99,6 @@ func userinfo(context *multiplexer.Context) {
 	}
 
 	// Make the message
-	if !context.HandleError(err) {
-		return
-	}
 	embed := embedutil.New("User Information", "")
 	embed.Color = context.Session.State.UserColor(user.ID, context.Channel.ID)
 	embed.SetThumbnail(user.AvatarURL("1024"))
@@ -140,9 +137,6 @@ func guildinfo(context *multiplexer.Context) {
 	// Guild only
 	if context.IsPrivate {
 		context.SendMessage(multiplexer.GuildOnly)
-		return
-	}
-	if !context.HandleError(err) {
 		return
 	}
 	embed := embedutil.New("Guild Information", "")
@@ -376,17 +370,18 @@ func ban(context *multiplexer.Context) {
 		context.SendMessage(multiplexer.InvalidArgument)
 		return
 	}
-	err = context.Ban(query)
-	if err == discordgo.ErrUnauthorized {
+	err := context.Ban(query)
+	switch err {
+	case discordgo.ErrUnauthorized:
 		context.SendMessage(multiplexer.LackingPermission)
 		return
-	}
-	if err == multiplexer.ErrUserNotFound {
+	case multiplexer.ErrUserNotFound:
 		context.SendMessage(multiplexer.MissingUser)
 		return
-	}
-	if !context.HandleError(err) {
-		return
+	default:
+		if !context.HandleError(err) {
+			return
+		}
 	}
 	context.SendMessage("Successfully performed ban on specified user.")
 }

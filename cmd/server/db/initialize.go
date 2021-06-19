@@ -6,15 +6,11 @@ import (
 	"git.randomchars.net/FreeNitori/FreeNitori/nitori/database"
 )
 
-var err error
-
 // Initialize prepares database.
 func Initialize() error {
 	// Open the database
-	err = database.Database.Open(config.Config.System.Database)
-	if err != nil {
+	if err := database.Database.Open(config.Config.System.Database); err != nil {
 		return err
 	}
-
 	return nil
 }

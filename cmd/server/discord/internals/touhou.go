@@ -36,10 +36,13 @@ func init() {
 }
 
 func touhou(context *multiplexer.Context) {
-	var character imagefetch.CharacterInfo
-	var art imagefetch.CharacterArt
-	var ok bool
-	var text string
+	var (
+		character imagefetch.CharacterInfo
+		art       imagefetch.CharacterArt
+		text      string
+		ok        bool
+		err       error
+	)
 	var randomArt = func() {
 		character, art, err = imagefetch.FetchRandom(imagefetch.SafeTouhouQuery, imagefetch.Touhou)
 		if err == imagefetch.ErrNoArtAvailable {
@@ -102,8 +105,11 @@ func guess(context *multiplexer.Context) {
 	sessions[context.Message.ChannelID] = message
 	defer func() { delete(sessions, context.Message.ChannelID) }()
 
-	var art imagefetch.CharacterArt
-	var character imagefetch.CharacterInfo
+	var (
+		art       imagefetch.CharacterArt
+		character imagefetch.CharacterInfo
+		err       error
+	)
 	character, art, err = imagefetch.FetchRandom(imagefetch.SafeTouhouQuery, imagefetch.Touhou)
 	if err == imagefetch.ErrNoArtAvailable {
 		context.SendMessage("No art available for this character.")

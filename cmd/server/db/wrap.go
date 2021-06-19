@@ -16,9 +16,6 @@ func init() {
 	multiplexer.GetPrefix = func(context *multiplexer.Context) string {
 		prefix, err := database.Database.HGet("conf."+context.Guild.ID, "prefix")
 		if err != nil {
-			if err == badger.ErrKeyNotFound {
-				return config.Config.System.Prefix
-			}
 			log.Warnf("Unable to obtain prefix in guild %s, %s", context.Guild.ID, err)
 			return config.Config.System.Prefix
 		}
@@ -33,9 +30,6 @@ func init() {
 func ExpEnabled(gid string) (enabled bool, err error) {
 	result, err := database.Database.HGet("conf."+gid, "exp_enable")
 	if err != nil {
-		if err == badger.ErrKeyNotFound {
-			return false, nil
-		}
 		return false, err
 	}
 	if result == "" {
@@ -49,9 +43,6 @@ func ExpEnabled(gid string) (enabled bool, err error) {
 func GetMemberExp(user *discordgo.User, guild *discordgo.Guild) (int, error) {
 	result, err := database.Database.HGet("exp."+guild.ID, user.ID)
 	if err != nil {
-		if err == badger.ErrKeyNotFound {
-			return 0, nil
-		}
 		return 0, err
 	}
 	if result == "" {
@@ -69,9 +60,6 @@ func SetMemberExp(user *discordgo.User, guild *discordgo.Guild, exp int) error {
 func GetRankBinds(guild *discordgo.Guild) (map[string]string, error) {
 	result, err := database.Database.HGetAll("rank." + guild.ID)
 	if err != nil {
-		if err == badger.ErrKeyNotFound {
-			return nil, nil
-		}
 		return nil, err
 	}
 	return result, err
@@ -81,9 +69,6 @@ func GetRankBinds(guild *discordgo.Guild) (map[string]string, error) {
 func GetRankBind(guild *discordgo.Guild, level int) (string, error) {
 	result, err := database.Database.HGet("rank."+guild.ID, strconv.Itoa(level))
 	if err != nil {
-		if err == badger.ErrKeyNotFound {
-			return "", nil
-		}
 		return "", err
 	}
 	return result, err
@@ -96,11 +81,7 @@ func SetRankBind(guild *discordgo.Guild, level int, role *discordgo.Role) error 
 
 // UnsetRankBind unbinds a role from a level.
 func UnsetRankBind(guild *discordgo.Guild, level string) error {
-	err = database.Database.HDel("rank."+guild.ID, []string{level})
-	if err == badger.ErrKeyNotFound {
-		return nil
-	}
-	return err
+	return database.Database.HDel("rank."+guild.ID, []string{level})
 }
 
 // HighlightBindMessage binds a message with the highlight message.
@@ -110,11 +91,7 @@ func HighlightBindMessage(gid, message, highlight string) error {
 
 // HighlightUnbindMessage unbinds a message with the highlight message.
 func HighlightUnbindMessage(gid, message string) error {
-	err = database.Database.HDel("highlight."+gid, []string{message})
-	if err == badger.ErrKeyNotFound {
-		return nil
-	}
-	return err
+	return database.Database.HDel("highlight."+gid, []string{message})
 }
 
 // HighlightGetBinding gets the binding of a message.

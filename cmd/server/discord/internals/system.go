@@ -186,7 +186,7 @@ func setStatus(context *multiplexer.Context) {
 	if !ok {
 		return
 	}
-	err = state.RawSession.UpdateGameStatus(0, config.Config.Discord.Presence)
+	err := state.RawSession.UpdateGameStatus(0, config.Config.Discord.Presence)
 	if err != nil {
 		log.Warnf("Unable to update presence, %s", err)
 	}
@@ -199,7 +199,7 @@ func advanceCounter(context *multiplexer.Context) {
 	if context.User.ID == context.Session.State.User.ID {
 		return
 	}
-	err = config.AdvanceTotalMessages()
+	err := config.AdvanceTotalMessages()
 	if err != nil {
 		log.Errorf("Unable to advance message counter, %s", err)
 	}

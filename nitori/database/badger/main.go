@@ -141,7 +141,11 @@ func (db *Badger) HSet(hashmap, key, value string) error {
 
 // HGet gets the value of a key from a hashmap.
 func (db *Badger) HGet(hashmap, key string) (string, error) {
-	return db.Get(hashmap + "/{HASH}/" + key)
+	data, err := db.Get(hashmap + "/{HASH}/" + key)
+	if err == badger.ErrKeyNotFound {
+		return "", nil
+	}
+	return data, err
 }
 
 // HDel deletes a key from a hashmap.
@@ -156,10 +160,17 @@ func (db *Badger) HDel(hashmap string, keys []string) error {
 			return true
 		})
 		if err != nil {
+			if err == badger.ErrKeyNotFound {
+				return nil
+			}
 			return err
 		}
 	}
-	return db.Del(keys)
+	if err := db.Del(keys); err == badger.ErrKeyNotFound {
+		return nil
+	} else {
+		return err
+	}
 }
 
 // HGetAll gets all key-value pairs of a hashmap.
@@ -174,6 +185,9 @@ func (db *Badger) HGetAll(hashmap string) (map[string]string, error) {
 			result[fields[1]] = value
 			return true
 		})
+	if err == badger.ErrKeyNotFound {
+		return nil, nil
+	}
 	return result, err
 }
 
