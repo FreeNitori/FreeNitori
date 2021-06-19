@@ -8,8 +8,6 @@ import (
 	"time"
 )
 
-var err error
-
 // Database is an instance of the database backend.
 var Database Badger
 
@@ -34,6 +32,7 @@ func (db *Badger) Open(path string) error {
 		WithNumLevelZeroTables(2).
 		WithValueThreshold(1)
 
+	var err error
 	db.DB, err = badger.Open(opts)
 	if err != nil {
 		return err
@@ -130,7 +129,7 @@ func (db *Badger) Del(keys []string) error {
 			}
 		}
 
-		return err
+		return nil
 	})
 }
 
