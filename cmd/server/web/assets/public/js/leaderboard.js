@@ -3,7 +3,7 @@ let guildname;
 let guildicon;
 let counter = 0;
 let page = 1;
-const maxEntries = 50;
+const maxEntries = 20;
 
 if (self.fetch) {
     const request = async () => {
@@ -23,7 +23,6 @@ if (self.fetch) {
     HeadAppend();
     renderLeaderboard(1);
 }
-
 
 function makeEntry(key) {
     let entry = leaderboard["Leaderboard"][key];
@@ -80,19 +79,19 @@ function makeEntry(key) {
 
 function renderLeaderboard(pageNumber) {
 
-    let leaderboardlist = document.getElementById("leaderboard-list");
+    let leaderboardList = document.getElementById("leaderboard-list");
     let fragment = document.createDocumentFragment();
 
 
     for (let i = ((pageNumber - 1) * (maxEntries)); i < ((pageNumber) * (maxEntries)); i++) {
 
         counter++;
-        if (i < leaderboard.Leaderboard.length) {
+        if (i < leaderboard["Leaderboard"].length) {
             fragment.appendChild(makeEntry(i));
 
         }
     }
-    leaderboardlist.appendChild(fragment);
+    leaderboardList.appendChild(fragment);
     page = pageNumber;
 
 }
@@ -107,7 +106,6 @@ document.body.addEventListener("keydown", function (event) {
             clearBox('leaderboard-list');
             renderLeaderboard(page + 1)
         }
-        ;
     } else if (event.key === "ArrowLeft") {
 
         if (page > 1) {
@@ -119,10 +117,31 @@ document.body.addEventListener("keydown", function (event) {
     }
 }, false);
 
+document.getElementById("leftButton").addEventListener("click", function () {
+
+    if (page > 1) {
+        clearBox('leaderboard-list');
+        counter -= 2 * maxEntries;
+
+        renderLeaderboard(page - 1);
+    }
+
+}, false);
+
+document.getElementById("rightButton").addEventListener("click", function () {
+
+
+    if (page > 0 && ((page) * (maxEntries)) < leaderboard["Leaderboard"].length) {
+
+        clearBox('leaderboard-list');
+        renderLeaderboard(page + 1)
+    }
+
+}, false);
 
 function clearBox(elementID) {
 
-    var div = document.getElementById(elementID);
+    let div = document.getElementById(elementID);
 
 
     while (div.firstChild) {
@@ -139,7 +158,7 @@ function HeadAppend() {
     guildicon = leaderboard["GuildInfo"]["IconURL"];
 
     let title = document.createElement("title");
-    titleText = document.createTextNode(guildname + ' Leaderboard');
+    let titleText = document.createTextNode(guildname + ' Leaderboard');
     title.appendChild(titleText);
     (document.head).appendChild(title);
 
@@ -223,14 +242,14 @@ function HeadAppend() {
     meta10.setAttribute("content", guildname + ' Leaderboard');
     (document.head).appendChild(meta11);
 
-    meta12 = document.createElement("meta");
+    let meta12 = document.createElement("meta");
     meta12.setAttribute("name", "twitter:description");
     meta12.setAttribute("content", 'Experience Leaderboard of ' + guildname);
     (document.head).appendChild(meta12);
 
-    let guildiconID = document.getElementsByClassName('guild-icon')[0];
-    guildiconID.style.background = 'url(' + guildicon + ')  50% no-repeat';
-};
+    let guildIconID = document.getElementsByClassName('guild-icon')[0];
+    guildIconID.style.background = 'url(' + guildicon + ')  50% no-repeat';
+}
 
 function layoutTitle() {
     let title = document.getElementsByClassName("mdl-layout__title")[1];
