@@ -46,11 +46,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Setup log rotation
-	setupLogRotate()
-
 	// Check config file for first run placeholders
 	config.CheckPlaceholders()
+
+	// Setup log rotation
+	setupLogRotate()
 
 	// Start GUI
 	go ui.Serve()
