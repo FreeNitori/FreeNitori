@@ -29,17 +29,14 @@ func Revision() string { return revision }
 // Uptime returns the duration the instance has been online.
 func Uptime() time.Duration { return time.Since(start) }
 
-// Channels
-var (
-	ExitCode     = make(chan int)
-	DiscordReady = make(chan bool)
-)
+// Exit is used to exit.
+var Exit = make(chan int)
 
 // Multiplexer is the Discord event multiplexer.
 var Multiplexer = multiplexer.New()
 
-// RawSession is the raw session with Discord.
-var RawSession, _ = discordgo.New()
+// Session is a session without sharding.
+var Session, _ = discordgo.New()
 
 // ShardSessions is the slice of sessions of each shard.
 var ShardSessions []*discordgo.Session

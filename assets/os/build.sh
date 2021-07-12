@@ -40,7 +40,7 @@ mkdir "mount"
 sudo mount -t vfat "$LOOP"p1 mount || exit 1
 
 # Prepare ESP
-sudo cp -r ../assets/os/esp/* mount/
+sudo cp -r ../../Boot/* mount/
 
 # Unmount and cleanup
 sudo umount mount

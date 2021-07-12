@@ -18,7 +18,7 @@ func handlePage(context *multiplexer.Context) {
 	if reactionAdd.GuildID == "" {
 		return
 	}
-	if reactionAdd.UserID == state.RawSession.State.User.ID {
+	if reactionAdd.UserID == state.Session.State.User.ID {
 		return
 	}
 

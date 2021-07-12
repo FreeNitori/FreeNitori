@@ -10,8 +10,8 @@ LDFLAGS = -s -w -X 'git.randomchars.net/FreeNitori/FreeNitori/nitori/state.versi
 
 ifeq ($(shell go env GOOS), windows)
    WINDOW_LDFLAGS = -H windowsgui
-   WINDOW_SYSO_REMOVE = rm -f cmd/server/freenitori.syso
-   $(shell cp assets/freenitori.syso cmd/server/freenitori.syso)
+   WINDOW_SYSO_REMOVE = rm -f cmd/freenitori/freenitori.syso
+   $(shell cp assets/freenitori.syso cmd/freenitori/freenitori.syso)
 endif
 
 .PHONY: static-arg
@@ -34,7 +34,7 @@ nowindowsgui:
 .PHONY: build
 build:
 	@echo "Building FreeNitori..."
-	@go build -tags=jsoniter -ldflags="$(LDFLAGS) $(STATIC_LDFLAGS) $(WINDOW_LDFLAGS)" -o build/freenitori$(shell go env GOEXE) $$PWD/cmd/server
+	@go build -tags=jsoniter -ldflags="$(LDFLAGS) $(STATIC_LDFLAGS) $(WINDOW_LDFLAGS)" -o build/freenitori$(shell go env GOEXE) $$PWD/cmd/freenitori
 	@echo "Building nitorictl..."
 	@go build -tags=jsoniter -ldflags="$(LDFLAGS)" -o build/nitorictl$(shell go env GOEXE) $$PWD/cmd/cli
 	@$(WINDOW_SYSO_REMOVE)
