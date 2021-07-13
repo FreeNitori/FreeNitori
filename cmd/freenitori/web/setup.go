@@ -29,9 +29,8 @@ import (
 func Open() error {
 	// Check for an existing instance if listening on unix socket
 	if config.WebServer.Unix {
-		if _, err := os.Stat(config.System.Socket); !os.IsNotExist(err) {
-			_, err = net.Dial("unix", config.WebServer.Host)
-			if err != nil {
+		if _, err := os.Stat(config.System.Socket); err != nil && !os.IsNotExist(err) {
+			if _, err = net.Dial("unix", config.WebServer.Host); err != nil {
 				err = syscall.Unlink(config.WebServer.Host)
 				if err != nil {
 					return err
