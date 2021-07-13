@@ -91,7 +91,7 @@ func Open() error {
 	})
 
 	// Register rate limiting middleware
-	router.Use(rateMiddleware)
+	router.Use(rateMiddleware())
 
 	// Register routes
 	for _, route := range routes.GetRoutes {

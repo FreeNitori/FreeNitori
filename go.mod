@@ -22,7 +22,7 @@ require (
 	github.com/lxn/win v0.0.0-20201111105847-2a20daff6a55
 	github.com/robertkrimen/otto v0.0.0-20200922221731-ef014fd054ac
 	github.com/sirupsen/logrus v1.8.0
-	github.com/ulule/limiter/v3 v3.7.1
+	github.com/ulule/limiter/v3 v3.8.0
 	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 	gopkg.in/Knetic/govaluate.v3 v3.0.0 // indirect
 	gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376
