@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"git.randomchars.net/FreeNitori/FreeNitori/cmd/freenitori/config"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/freenitori/web/oauth"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/freenitori/web/routes"
 	"git.randomchars.net/FreeNitori/FreeNitori/cmd/freenitori/web/structs"
@@ -9,21 +8,10 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"golang.org/x/oauth2"
 	"net/http"
 )
 
 func init() {
-
-	go func() {
-		oauth.Conf = &oauth2.Config{
-			ClientSecret: config.Discord.ClientSecret,
-			Endpoint:     oauth.Endpoint(),
-			RedirectURL:  config.WebServer.BaseURL + "auth/callback",
-			Scopes:       []string{oauth.ScopeIdentify, oauth.ScopeGuilds},
-		}
-	}()
-
 	routes.GetRoutes = append(routes.GetRoutes,
 		routes.WebRoute{
 			Pattern:  "/auth/logout",

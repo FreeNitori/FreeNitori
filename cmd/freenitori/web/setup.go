@@ -13,6 +13,7 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/oauth2"
 	"html/template"
 	"io/fs"
 	"net/http"
@@ -120,7 +121,13 @@ func Open() error {
 	}
 
 	// Set oauth client ID
-	oauth.Conf.ClientID = state.Application.ID
+	oauth.Conf = &oauth2.Config{
+		ClientID:     state.Application.ID,
+		ClientSecret: config.Discord.ClientSecret,
+		Endpoint:     oauth.Endpoint(),
+		RedirectURL:  config.WebServer.BaseURL + "auth/callback",
+		Scopes:       []string{oauth.ScopeIdentify, oauth.ScopeGuilds},
+	}
 
 	// Start server
 	go serve()
